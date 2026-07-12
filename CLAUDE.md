@@ -56,8 +56,9 @@ Small steps, beginner pace on code.
   tuned on one cloud will not transfer to a cloud at a different scale.
 - Segment only AFTER isolating ground and walls must be removed before roof
   segmentation, or RANSAC grabs the wallsground instead of the roof.
-- Always stop ODM at `odm_filterpoints` (`--end-with odm_filterpoints`). The mesh
-  is expensive and this pipeline never uses it.
+- Always stop ODM at `odm_georeferencing` (`--end-with odm_georeferencing --skip-3dmodel`). That is the stage
+  that writes the georeferenced `.laz` this pipeline reads; it runs AFTER meshing/texturing in ODM's fixed
+  stage order, so `--skip-3dmodel` is required to actually skip the mesh, which this pipeline never uses.
 
 ## Environment
 - Python 3.12 in a native Windows venv (`.venv`).

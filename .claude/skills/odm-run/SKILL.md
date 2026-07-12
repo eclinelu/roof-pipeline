@@ -30,7 +30,7 @@ Run these before starting. They cost seconds and can save an hour of wasted comp
 ## The command
 
 ```powershell
-docker run -ti --rm -v C:/odm/datasets:/datasets opendronemap/odm --project-path /datasets <project_name> --end-with odm_filterpoints --pc-quality high --feature-quality high
+docker run -ti --rm -v C:/odm/datasets:/datasets opendronemap/odm --project-path /datasets <project_name> --end-with odm_georeferencing --skip-3dmodel --pc-quality high --feature-quality high
 ```
 
 | Flag | Why it is there |
@@ -40,14 +40,34 @@ docker run -ti --rm -v C:/odm/datasets:/datasets opendronemap/odm --project-path
 | `-v C:/odm/datasets:/datasets` | Mounts the Windows data folder into the container. Use FORWARD slashes even on Windows; backslashes fail. |
 | `--project-path /datasets` | Where ODM looks for projects, as seen from INSIDE the container. Not a Windows path. |
 | `<project_name>` | Folder name only, not a full path. ODM expects `/datasets/<project_name>/images/` to exist. |
-| `--end-with odm_filterpoints` | ALWAYS use this. See below. |
+| `--end-with odm_georeferencing` | ALWAYS use this. See below. |
+| `--skip-3dmodel` | ALWAYS use this too. See below. |
 | `--pc-quality high` | Controls point cloud density. The flag that matters most for this project. |
 
-## Always stop at odm_filterpoints
+## Stop at odm_georeferencing, and skip the 3D model
 
-This project never uses the mesh, the texture, or the orthophoto. It consumes the filtered point cloud and nothing else.
+This project never uses the mesh, the texture, or the orthophoto. It consumes the georeferenced point cloud and nothing else. That file, `odm_georeferencing/odm_georeferenced_model.laz`, is written by the `odm_georeferencing` stage, which runs AFTER `odm_meshing` and `mvs_texturing` in ODM's fixed pipeline order:
 
-Letting ODM run to completion spends substantial extra time building artifacts that are immediately ignored. `--end-with odm_filterpoints` stops the pipeline the moment the useful output exists.
+```
+odm_filterpoints -> odm_meshing -> mvs_texturing -> odm_georeferencing -> odm_dem -> odm_orthophoto -> odm_report -> odm_postprocess
+```
+
+This means two things:
+
+1. `--end-with odm_filterpoints` is WRONG. Stopping there happens before georeferencing ever runs, so `odm_georeferenced_model.laz` would never be written. `--end-with odm_georeferencing` is the correct stop point: it's the earliest stage after which the file this project actually reads exists.
+2. Because meshing and texturing sit *before* georeferencing, `--end-with` alone cannot skip them. `--skip-3dmodel` is what tells ODM not to build the mesh/texture branch at all. Without it, ODM still burns the time building a mesh nobody reads before it gets to georeferencing. On a real run (tyco_house, 77 images), `odm_meshing` alone took 27.5 minutes, more than opensfm and openmvs combined.
+
+Skipping the mesh/texture branch has no effect on the point cloud itself. Georeferencing converts `odm_filterpoints/point_cloud.ply` directly to `.laz`; meshing and texturing are a separate, parallel branch that consumes the same filtered cloud as input but never feeds back into it. Same points, same density, same coordinates, just without the wasted detour.
+
+### If PoissonRecon still runs even with `--skip-3dmodel` in the command
+
+This has happened before (`big_house` run): the mesh ran despite intending to skip it. The cause was not a flaw in the flag or in ODM's stage order, it was that the flag was never actually passed to that particular `docker run` invocation. Do not re-theorize the stage order again, verify the flag landed:
+
+1. Open `<project>/log.json`.
+2. Check `options.skip_3dmodel`. If it reads `false`, the flag was not applied on that run, full stop; check the exact command that was typed/run.
+3. `options.rerun` and `options.rerun_all` are also worth checking: a `--rerun-from` invocation reuses cached stage outputs and can mask which flags were actually in effect for that specific run.
+
+`log.json` is ground truth for what a run actually did. It records the fully-resolved `options` dict and the real stage sequence with timestamps, use it to check a hypothesis before touching commands or docs again.
 
 ## Where the output lands
 
