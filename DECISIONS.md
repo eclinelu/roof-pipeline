@@ -3,15 +3,59 @@
 ## Current state
 
 - **Phase:** 2, roof isolation
-- **Active blocker:** Roof not yet isolated from the point cloud. Vegetation, not walls, is the primary adversary.
+- **Active blocker:** None. Design for isolation through measurement is reviewed and approved: `docs/superpowers/specs/2026-07-12-roof-isolation-design.md`.
 - **Last thing verified working:** ODM reconstruction of `big_house` (232 Mavic Mini nadir images) produced an 80 MB georeferenced point cloud. Visually confirmed: dense roof, thin walls, heavy tree overhang.
-- **Next action:** Design the roof isolation strategy. Then per-facet plane segmentation, area, and pitch.
+- **Next action:** Implementation plan, then stage-by-stage build with visual checks. Stage 7a (polygon area) before 7b (dimensions).
 
 ---
 
 ## Decision log
 
 _Append only. Newest at the top. Past entries are never edited. A reversal is a new entry that references the one it overturns._
+
+### 2026-07-12: Deliverable is a dimension sheet; area ships first as stage 7a
+
+**Decision:** Lengths (eave, ridge, rake, hole dimensions) are the primary reported quantity; areas are derived from them. Measurement is split into 7a (polygon area per facet via alpha shape, built first) and 7b (edge fitting and dimensions, built second). 7a plus per-facet pitch satisfies the done-definition on its own.
+
+**Why:** A tape measure validates lengths directly, so the error report compares like with like. Length errors are linear where area errors are quadratic, so a dimension sheet localizes error to a specific edge instead of hiding it in an aggregate. 7a is built first because edge extraction from a ragged, tree-occluded boundary is likely the hardest stage in the pipeline, and 7a is the afternoon-scale integration test that catches upstream contamination before a week is spent on 7b. Once both exist, 7b-derived areas and 7a polygon areas cross-check each other.
+
+**Rejected:** Area-only definitions (holes-open undercounts by point density rather than geometry; holes-filled is validatable but hides error structure; dormers-as-facets adds small fragile segments). Also rejected: building 7b directly, because the better version must not prevent the finished version.
+
+**Evidence:** Reasoning, not measurement. The claim that 7b is the hardest stage is a judgment call.
+
+**Cost if wrong:** If 7b proves intractable, the project still finishes at 7a. That is the point of the split.
+
+---
+
+### 2026-07-12: Vegetation removed by color then planarity; rests on the roof-is-not-green assumption
+
+**Decision:** Two sequential per-point filters before segmentation: Excess Green (`ExG = 2G - R - B`, unitless) removes the green canopy bulk, then a local planarity score (neighborhood covariance eigenvalues, unitless cutoff, radius derived from median point spacing) removes the gray/brown residue.
+
+**Why:** Trees touch the roof, so position filters cannot separate them; only per-point signals can. Color and local geometry are independent signals with non-overlapping failure modes: color misses shadowed and dead foliage, planarity erodes roof edges and ridges. A foliage point must be both non-green and locally sheet-like to survive both, which is rare in canopy.
+
+**Explicit assumption:** the roof is not green. True for big_house (gray shingle, verified visually) and this is the only reason ExG works. It fails outright on a green-painted, moss-covered, or copper-patina roof; on such a roof stage 3 must be disabled and planarity carries the whole job.
+
+**Rejected:** RANSAC alone (foliage within the inlier band of a real facet gets counted as roof, inflating area and skewing pitch, silently). Normal-direction filtering (foliage normals are random, per the 2026-07-12 adversary entry). Planarity alone (its edge-erosion failure mode would have no backstop).
+
+**Evidence:** Visual inspection: gray shingle roof, green July canopy. Filter effectiveness on this cloud is assumption, not verified; the per-stage visual checks are the verification plan.
+
+**Cost if wrong:** Surviving foliage contaminates facets and inflates area; over-aggressive filtering erodes facet boundaries and shrinks it. Both are caught by the stage 7a integration test if the visual checks miss them.
+
+---
+
+### 2026-07-12: No ground-plane RANSAC; vertical is georeferenced Z behind a symmetry gate
+
+**Decision:** Ground and walls are removed by crop plus height cutoff only. The vertical reference for pitch is the cloud's georeferenced Z axis, and it is gated, not trusted: on a gable, half the pitch difference between opposing facets measures residual Z tilt. Residual at or below 1 degree: accept Z, report the residual as the pitch uncertainty floor. Above 1 degree: reject Z and level using the bisector of the opposing facet normals.
+
+**Why:** Two independent reasons to drop the tyco ground-plane method here. Removal: on fragmented sloped woodland, the largest plane RANSAC finds may be a roof facet, not ground, since the roof is the densest continuous surface. Leveling: ground normal equals up only on flat ground; leveling to this hillside would inject the terrain slope into every pitch. Meanwhile georeferenced Z comes from meter-grade GPS whose accuracy as a gravity reference is unquantified, so it must be measured before any pitch is reported. The building's own symmetry is the instrument. The 1 degree gate is scale-independent (an angle) and sits comfortably below the roughly 3 degree spacing of adjacent standard pitches, so a passing residual cannot cause a pitch-class misread.
+
+**Rejected:** `fit_ground_plane` plus `level_cloud` as used on tyco (both premises broken on this site). CSF cloth-simulation ground filtering (handles slope but adds a dependency this cloud does not need).
+
+**Evidence:** Terrain slope and roof density from visual inspection of the rendered cloud. Georeferenced Z accuracy: assumption, not verified; the gate exists precisely because of that.
+
+**Cost if wrong:** If the gate threshold is too loose, every pitch carries up to 1 degree of hidden bias. If the house turns out to have no symmetric gable pair, the gate has no instrument and a fallback reference must be designed.
+
+---
 
 ### 2026-07-12: The adversary is vegetation, not walls
 
