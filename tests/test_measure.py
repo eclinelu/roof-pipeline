@@ -2,7 +2,7 @@ import numpy as np
 from scipy.spatial.transform import Rotation
 from roofkit.measure import (tilt_degrees, opposing_pairs, z_tilt_residual,
                              vertical_from_pair, project_to_plane,
-                             alpha_shape_area, facet_area)
+                             alpha_shape_area, facet_area, azimuth_degrees)
 
 
 def gable_facets(pitch_deg=30.0, tilt_about_ridge_deg=0.0):
@@ -55,6 +55,17 @@ def test_vertical_from_pair_recovers_true_up():
     up = vertical_from_pair(facets[0], facets[1])
     true_up = Rotation.from_euler("y", 2.0, degrees=True).apply([0.0, 0.0, 1.0])
     assert np.degrees(np.arccos(np.clip(up @ true_up, -1, 1))) < 0.05
+
+
+def test_azimuth_east_south_and_sign_flip():
+    p = np.radians(30.0)
+    east = np.array([np.sin(p), 0.0, np.cos(p)])       # faces +X = east
+    south = np.array([0.0, -np.sin(p), np.cos(p)])     # faces -Y = south
+    assert abs(azimuth_degrees(east) - 90.0) < 1e-6
+    assert abs(azimuth_degrees(south) - 180.0) < 1e-6
+    # RANSAC sign ambiguity: a downward copy of the same normal must give
+    # the same compass bearing.
+    assert abs(azimuth_degrees(-east) - 90.0) < 1e-6
 
 
 def unit_square_grid(spacing=0.02):

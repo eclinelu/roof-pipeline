@@ -100,17 +100,42 @@ def find_roof_planes(points, distance_threshold=0.2, min_points=300,
             mine = pool[owner == k]
             if len(mine) < 3:                 # a plane needs 3 points; keep RANSAC's answer
                 continue
-            # Refit: the plane normal is the direction the point set spreads
-            # LEAST along. SVD of the centered points gives the three spread
-            # directions sorted largest to smallest; row 2 is the smallest,
-            # i.e. the normal. (Same eigen-idea as the planarity filter.)
-            centered = mine - mine.mean(axis=0)
-            _, _, vt = np.linalg.svd(centered, full_matrices=False)
             f["points"] = mine
-            f["normal"] = vt[2]
-            f["pitch"] = tilt_degrees(vt[2])
+            f["normal"] = fit_plane_svd(mine)
+            f["pitch"] = tilt_degrees(f["normal"])
 
     return facets
+
+
+def fit_plane_svd(points):
+    """Least-squares plane normal for a point set: the direction the set
+    spreads LEAST along. SVD of the centered points gives the three spread
+    directions sorted largest to smallest; row 2 is the smallest, i.e. the
+    normal. (Same eigen-idea as the planarity filter.)"""
+    centered = points - points.mean(axis=0)
+    _, _, vt = np.linalg.svd(centered, full_matrices=False)
+    return vt[2]
+
+
+def assign_to_planes(points, facets, max_dist):
+    """Give every point to its NEAREST facet plane (the plane through each
+    facet's centroid with its normal). Returns (owner, dist): owner is the
+    facet index per point, -1 where the nearest plane is farther than
+    max_dist; dist is the distance to that nearest plane.
+
+    Loops over facets (few) rather than building an N x n_facets distance
+    matrix, so memory stays flat on multi-million-point clouds. This is how
+    a plane fit discovered on a SUBSAMPLE gets its full-resolution
+    membership: fit small, assign big."""
+    best = np.full(len(points), np.inf)
+    owner = np.full(len(points), -1, dtype=np.int64)
+    for k, f in enumerate(facets):
+        d = _point_plane_dist(points, f)
+        better = d < best
+        best[better] = d[better]
+        owner[better] = k
+    owner[best > max_dist] = -1
+    return owner, best
 
 
 def _point_plane_dist(points, facet):

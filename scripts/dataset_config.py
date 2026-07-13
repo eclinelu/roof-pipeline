@@ -22,6 +22,10 @@ DEFAULTS = {
     "alpha_mult": 4.0,       # alpha shape radius = alpha_mult * spacing
     # --- density-dependent ---
     "min_points_frac": 0.03, # a facet must hold this fraction of roof points
+    "fit_sample": 200000,    # RANSAC discovery subsample; membership, refit,
+                             # pitch and area always use the full cloud
+    "max_planes": 12,        # safety ceiling on the peeling loop; the real
+                             # floor is min_points_frac
     # --- design constants ---
     "gate_limit_deg": 1.0,   # reject georeferenced Z above this residual
 }

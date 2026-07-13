@@ -13,7 +13,7 @@
 - `roofkit/io.py` is the ONLY module that touches point cloud formats. Everything else consumes and returns plain NumPy arrays.
 - The pipeline is dataset-agnostic. No dataset name appears in any module, script name, or constant. Site-specific numbers (crop box, height cutoff, tuned cutoffs) live in `<dataset>\roofkit.json` next to the data; scripts take the dataset directory as an argument.
 - Scale-dependent thresholds (planarity radius, RANSAC band, alpha) are NEVER hardcoded lengths. They are multiples of `median_nn_spacing(points)`.
-- EXPLANATION GATE (decision 2026-07-12): Tasks 2 through 7 produce analysis core. After each of these tasks, STOP and give Emmett a plain-language walkthrough covering the approach, every threshold, and each threshold's scale-dependence. NO QUIZZING: end with an invitation for questions, and proceed when he says to continue. Do not batch gates.
+- EXPLANATION GATE (decision 2026-07-12): Tasks 2 through 7 produce analysis core. After each of these tasks, STOP and give Emmett a plain-language walkthrough covering the approach, every threshold, and each threshold's scale-dependence. NO QUIZZING: end with an invitation for questions plus a brief preview of the next task, and proceed when he says to continue. Do not batch gates.
 - Visual verification on the real cloud (Tasks 8 and 9) before any stage's output is trusted downstream.
 - Stage 7b (edge fitting and dimensions) is OUT OF SCOPE for this plan. Do not start it.
 - Test synthetic clouds live in `tests/`; drivers and per-dataset glue live in `scripts/`; reusable analysis lives in `roofkit/`. Do not mix (CLAUDE.md).
@@ -935,6 +935,12 @@ git commit -m "feat: dataset-agnostic staged isolation script with per-dataset c
 ---
 
 ### Task 9: Measurement script: segmentation, gate, pitch, area (stage 7a complete)
+
+**AMENDED 2026-07-13 (approved by Emmett; supersedes the script body below where they differ):**
+- The isolated cloud is 9.3M points. Plane DISCOVERY runs on a `fit_sample` (200k) random subsample; membership, refit, pitch, azimuth, and area use the full cloud. New `roofkit.segment` functions: `fit_plane_svd`, `assign_to_planes`.
+- Band diagnostics print BEFORE any render: median spacing (full and subsample), band width in physical units, and per-facet point scatter (median and p90 perpendicular distance in a 5x band window) with an explicit verdict when the band is thinner than the sheet.
+- The gate does NOT auto-level on failure. Residual prints as a number with a per-pair evidence table (azimuths, pitches, counts); above `gate_limit_deg` the script stops and leveling is Emmett's decision.
+- Report gains rise:run and azimuth columns.
 
 **Files:**
 - Create: `scripts/measure_roof.py`

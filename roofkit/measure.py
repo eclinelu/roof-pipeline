@@ -96,6 +96,18 @@ def z_tilt_residual(facets, direction_tol_deg=15.0, pitch_tol_deg=10.0):
     return max(residuals), pairs
 
 
+def azimuth_degrees(normal):
+    """Compass bearing of a facet's downhill direction: the horizontal
+    component of its normal, as degrees clockwise from north. In a UTM
+    frame x is easting and y is northing, so bearing = atan2(east, north).
+    The normal is oriented upward first, because RANSAC's sign is a coin
+    flip and both signs describe the same facet."""
+    n = np.asarray(normal, float)
+    if n[2] < 0:
+        n = -n
+    return float(np.degrees(np.arctan2(n[0], n[1])) % 360.0)
+
+
 def vertical_from_pair(facet_a, facet_b):
     """True up recovered from a symmetric gable: the bisector of the two
     opposing facet normals. Valid exactly when the two real-world pitches
