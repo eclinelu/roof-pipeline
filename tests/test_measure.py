@@ -1,7 +1,8 @@
 import numpy as np
 from scipy.spatial.transform import Rotation
 from roofkit.measure import (tilt_degrees, opposing_pairs, z_tilt_residual,
-                             vertical_from_pair)
+                             vertical_from_pair, project_to_plane,
+                             alpha_shape_area, facet_area)
 
 
 def gable_facets(pitch_deg=30.0, tilt_about_ridge_deg=0.0):
@@ -54,3 +55,34 @@ def test_vertical_from_pair_recovers_true_up():
     up = vertical_from_pair(facets[0], facets[1])
     true_up = Rotation.from_euler("y", 2.0, degrees=True).apply([0.0, 0.0, 1.0])
     assert np.degrees(np.arccos(np.clip(up @ true_up, -1, 1))) < 0.05
+
+
+def unit_square_grid(spacing=0.02):
+    xs, ys = np.meshgrid(np.arange(0, 1 + spacing / 2, spacing),
+                         np.arange(0, 1 + spacing / 2, spacing))
+    return np.column_stack([xs.ravel(), ys.ravel()])
+
+
+def test_unit_square_area():
+    pts = unit_square_grid()
+    assert abs(alpha_shape_area(pts, alpha=0.06) - 1.0) < 0.02
+
+
+def test_hole_wider_than_alpha_stays_open():
+    pts = unit_square_grid()
+    hole = (np.abs(pts[:, 0] - 0.5) < 0.15) & (np.abs(pts[:, 1] - 0.5) < 0.15)
+    area = alpha_shape_area(pts[~hole], alpha=0.06)
+    assert abs(area - (1.0 - 0.09)) < 0.02  # the 0.3 x 0.3 hole is excluded
+
+
+def test_facet_area_of_a_tilted_plane():
+    # A 2 x 3 rectangle tilted 40 degrees: projected area must be 6, the
+    # SLOPE area, not the footprint. This is why we project into the
+    # facet's own plane instead of measuring the footprint.
+    grid = unit_square_grid()
+    rect = np.column_stack([grid[:, 0] * 2.0, grid[:, 1] * 3.0,
+                            np.zeros(len(grid))])
+    rot = Rotation.from_euler("x", 40.0, degrees=True)
+    tilted = rot.apply(rect)
+    normal = rot.apply([0.0, 0.0, 1.0])
+    assert abs(facet_area(tilted, normal, alpha=0.15) - 6.0) < 0.1

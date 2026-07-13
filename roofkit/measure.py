@@ -1,5 +1,5 @@
 import numpy as np
-from scipy.spatial import ConvexHull
+from scipy.spatial import ConvexHull, Delaunay
 
 def tilt_degrees(normal):
     """Angle of a surface from horizontal, given its normal (a, b, c).
@@ -38,12 +38,6 @@ def _facet_in_plane(points, normal, max_share=0.02):
         else:
             break                                  # no spike left, done
     return uv, pts3d
-
-
-def facet_area(points, normal):
-    """True surface area of a roof facet, in square meters."""
-    uv, _ = _facet_in_plane(points, normal)
-    return ConvexHull(uv).volume
 
 
 def facet_boundary(points, normal):
@@ -109,3 +103,53 @@ def vertical_from_pair(facet_a, facet_b):
     Feed the result to level_cloud if the gate rejects georeferenced Z."""
     up = _up_normal(facet_a) + _up_normal(facet_b)
     return up / np.linalg.norm(up)
+
+
+# --- Stage 7a: polygon area per facet (decision 2026-07-12) ---
+# Area is measured IN THE FACET'S OWN PLANE (slope area, what shingles
+# cover), not the ground footprint. The alpha shape is a shrink-wrapped
+# outline: keep Delaunay triangles whose circumradius is at most alpha,
+# sum their areas. Gaps narrower than ~2*alpha get bridged (point noise,
+# small occlusions); gaps wider stay open (chimney and dormer holes).
+# This REPLACES the earlier convex-hull facet_area: a hull is a rubber
+# band that cannot follow concave outlines and silently fills holes.
+
+
+def project_to_plane(points, normal):
+    """2D coordinates of points in the facet's own plane. Build an
+    orthonormal basis (u, v) perpendicular to the normal and express each
+    centered point in it. Distances within the plane are preserved, so
+    areas and lengths measured in 2D are the true slope quantities."""
+    n = np.asarray(normal, float)
+    n = n / np.linalg.norm(n)
+    helper = np.array([1.0, 0.0, 0.0]) if abs(n[0]) < 0.9 else np.array([0.0, 1.0, 0.0])
+    u = np.cross(n, helper)
+    u = u / np.linalg.norm(u)
+    v = np.cross(n, u)
+    centered = points - points.mean(axis=0)
+    return np.column_stack([centered @ u, centered @ v])
+
+
+def alpha_shape_area(pts2d, alpha):
+    """Area of the alpha shape of 2D points: the sum of Delaunay triangles
+    with circumradius at most alpha. Alpha is a LENGTH and therefore
+    scale-dependent: callers derive it from median_nn_spacing."""
+    tri = Delaunay(pts2d).simplices
+    a, b, c = pts2d[tri[:, 0]], pts2d[tri[:, 1]], pts2d[tri[:, 2]]
+    ab, ac, bc = b - a, c - a, c - b
+    cross = ab[:, 0] * ac[:, 1] - ab[:, 1] * ac[:, 0]
+    tri_area = np.abs(cross) / 2.0
+    la = np.linalg.norm(bc, axis=1)
+    lb = np.linalg.norm(ac, axis=1)
+    lc = np.linalg.norm(ab, axis=1)
+    # Circumradius R = (product of side lengths) / (4 * area); degenerate
+    # slivers (area ~ 0) get R = inf so they are never kept.
+    with np.errstate(divide="ignore", invalid="ignore"):
+        circum_r = np.where(tri_area > 1e-15, la * lb * lc / (4.0 * tri_area),
+                            np.inf)
+    return float(tri_area[circum_r <= alpha].sum())
+
+
+def facet_area(points, normal, alpha):
+    """Slope area of one facet: project into its plane, alpha-shape, sum."""
+    return alpha_shape_area(project_to_plane(points, normal), alpha)
