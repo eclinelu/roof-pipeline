@@ -39,6 +39,9 @@ def main():
     points, colors = load_xyz_rgb(cfg["cloud_path"])
     print(f"raw cloud: {len(points):,} points")
     print_bbox(points, "raw")
+    # Fixed origin for the relative printout: the RAW cloud's min corner,
+    # so relative numbers mean the same thing on cropped and uncropped runs.
+    origin = points.min(axis=0)
 
     if cfg["crop_min"] is not None and cfg["crop_max"] is not None:
         points, mask = crop_box(points, cfg["crop_min"], cfg["crop_max"])
@@ -74,9 +77,14 @@ def main():
         print("no points picked")
         return
     pts = points[picked]
-    print("\npicked points (in click order):")
+    # Open3D's own click log prints 2-significant-figure scientific notation,
+    # useless at UTM magnitudes. These lines are the real numbers.
+    print("\npicked points (in click order), absolute UTM and relative to the "
+          "raw cloud's min corner:")
     for i, p in enumerate(pts):
-        print(f"  {i}: x {p[0]:12.2f}   y {p[1]:12.2f}   z {p[2]:10.2f}")
+        rel = p - origin
+        print(f"  pick {i + 1}: X={p[0]:.2f}  Y={p[1]:.2f}  Z={p[2]:.2f}"
+              f"   |   dx={rel[0]:8.2f}  dy={rel[1]:8.2f}  dz={rel[2]:8.2f}")
 
     lo = [float(round(v, 2)) for v in pts.min(axis=0)]
     hi = [float(round(v, 2)) for v in pts.max(axis=0)]
