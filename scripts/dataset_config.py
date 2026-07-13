@@ -16,6 +16,8 @@ DEFAULTS = {
     # --- scale-independent cutoffs (transfer between clouds) ---
     "exg_max": 0.1,          # unitless ExG color cutoff
     "score_max": 0.05,       # unitless planarity cutoff
+    "trim_mult": 3.0,        # robust refit trim = trim_mult x median scatter
+                             # (unitless ratio; trim distance adapts per facet)
     # --- multiples of median_nn_spacing (scale-adaptive) ---
     "radius_mult": 5.0,      # planarity radius = radius_mult * spacing
     "band_mult": 3.0,        # RANSAC band = band_mult * spacing

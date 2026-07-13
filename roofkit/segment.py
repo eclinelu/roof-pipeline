@@ -117,6 +117,36 @@ def fit_plane_svd(points):
     return vt[2]
 
 
+def fit_plane_trimmed(points, trim_mult=3.0, max_iterations=10):
+    """Robust plane fit: least-squares SVD that ignores the clutter tail.
+
+    Plain least squares SQUARES its errors, so points far off the plane
+    (dormer surfaces or chimney sides riding inside the assignment band)
+    pull the normal disproportionately. Iterate: fit, measure every point's
+    distance to the fit, keep only points within trim_mult x the median
+    distance, refit; stop when membership stabilizes. For Gaussian noise
+    the median distance is ~0.67 sigma, so trim_mult=3 keeps roughly the
+    2-sigma core of the true sheet (~95% single pass, a little under that
+    at the iterated fixed point, since each trim shrinks the next median)
+    while rejecting a tail an order of magnitude farther out. The trim is
+    symmetric, so the fitted normal stays unbiased. The trim DISTANCE is derived from the facet's
+    own scatter (adapts to any cloud); trim_mult itself is a unitless
+    ratio, therefore scale-independent.
+
+    Returns (normal, kept_mask) so callers can report how much was trimmed.
+    """
+    keep = np.ones(len(points), dtype=bool)
+    for _ in range(max_iterations):
+        normal = fit_plane_svd(points[keep])
+        d = np.abs((points - points[keep].mean(axis=0)) @ normal)
+        trim = max(trim_mult * np.median(d[keep]), 1e-12)
+        new_keep = d <= trim
+        if (new_keep == keep).all():
+            break
+        keep = new_keep
+    return fit_plane_svd(points[keep]), keep
+
+
 def assign_to_planes(points, facets, max_dist):
     """Give every point to its NEAREST facet plane (the plane through each
     facet's centroid with its normal). Returns (owner, dist): owner is the

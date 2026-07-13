@@ -1,6 +1,7 @@
 import numpy as np
 from synthetic import gable_roof
-from roofkit.segment import find_roof_planes, assign_to_planes, fit_plane_svd
+from roofkit.segment import (find_roof_planes, assign_to_planes, fit_plane_svd,
+                             fit_plane_trimmed)
 
 
 def test_ridge_points_are_not_stolen_by_the_first_plane():
@@ -38,3 +39,29 @@ def test_assign_to_planes_picks_nearest_and_caps_distance():
     owner, dist = assign_to_planes(pts, [f0, f1], max_dist=0.2)
     assert owner.tolist() == [0, 1, -1]
     assert abs(dist[0] - 0.05) < 1e-9 and abs(dist[1] - 0.10) < 1e-9
+
+
+def test_fit_plane_trimmed_ignores_clutter_tail():
+    # A noisy plane plus a clutter patch hovering over one corner (a dormer
+    # surface riding inside the assignment band). Plain least squares gets
+    # pulled toward the clutter because it SQUARES its errors; the trimmed
+    # fit must not.
+    rng = np.random.default_rng(0)
+    n_plane, n_clutter = 4000, 800
+    plane = np.column_stack([rng.uniform(0, 10, n_plane),
+                             rng.uniform(0, 10, n_plane),
+                             rng.normal(0, 0.01, n_plane)])
+    clutter = np.column_stack([rng.uniform(7, 10, n_clutter),
+                               rng.uniform(7, 10, n_clutter),
+                               rng.uniform(0.1, 0.3, n_clutter)])
+    pts = np.vstack([plane, clutter])
+
+    def tilt(n):
+        return np.degrees(np.arccos(abs(n[2]) / np.linalg.norm(n)))
+
+    assert tilt(fit_plane_svd(pts)) > 0.3          # plain fit IS pulled
+    normal, kept = fit_plane_trimmed(pts)
+    assert tilt(normal) < 0.05                     # robust fit is not
+    assert kept[:n_plane].mean() > 0.90            # the sheet survives
+    # (iterated median trimming converges just under the single-pass 95%)
+    assert kept[n_plane:].mean() < 0.05            # the clutter does not

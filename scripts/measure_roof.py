@@ -12,7 +12,8 @@ import argparse
 import numpy as np
 from dataset_config import load_config
 from roofkit.stats import median_nn_spacing
-from roofkit.segment import find_roof_planes, assign_to_planes, fit_plane_svd
+from roofkit.segment import (find_roof_planes, assign_to_planes,
+                             fit_plane_trimmed)
 from roofkit.measure import (tilt_degrees, azimuth_degrees, z_tilt_residual,
                              facet_area)
 
@@ -40,6 +41,9 @@ def main():
     ap.add_argument("dataset", help="dataset directory (holds roofkit.json)")
     ap.add_argument("--no-view", action="store_true",
                     help="skip the per-facet color viewer")
+    ap.add_argument("--clutter", default="",
+                    help="comma-separated facet ids to show colored by core "
+                         "(gray, within band) vs tail (red, band..5x band)")
     args = ap.parse_args()
     cfg = load_config(args.dataset)
 
@@ -69,6 +73,8 @@ def main():
           f"sit closer than this]:")
     print(f"{'facet':>5} {'members':>11} {'median|d|':>10} {'p90|d|':>8} "
           f"{'band':>7}  verdict")
+    clutter_ids = {int(x) for x in args.clutter.split(",") if x.strip()}
+    clutter_views = []
     kept = []
     for k in range(len(facets)):
         near = (owner == k) & (dist <= 5.0 * band)
@@ -77,14 +83,40 @@ def main():
             continue
         d = dist[near]
         med, p90 = np.median(d), np.percentile(d, 90)
-        verdict = "ok" if p90 <= band else "BAND THINNER THAN SHEET"
+        verdict = "ok" if p90 <= band else "FAT TAIL (clutter near plane)"
         print(f"{k:>5} {member.sum():>11,} {med * 100:>9.2f} {p90 * 100:>7.2f} "
               f"{band * 100:>6.2f}  {verdict}")
+        if k in clutter_ids:
+            clutter_views.append((k, points[near], dist[near]))
         mine = points[member]
-        normal = fit_plane_svd(mine)
-        kept.append({"points": mine, "normal": normal,
-                     "pitch": tilt_degrees(normal)})
+        # Robust refit: least squares squares its errors, so clutter riding
+        # inside the band (dormer surfaces) pulls a plain fit. Trim to each
+        # facet's own median scatter and refit (decision 2026-07-13).
+        normal, keep = fit_plane_trimmed(mine, trim_mult=cfg["trim_mult"])
+        trim_cm = 100 * cfg["trim_mult"] * np.median(
+            np.abs((mine[keep] - mine[keep].mean(axis=0)) @ normal))
+        kept.append({"points": mine[keep], "normal": normal,
+                     "pitch": tilt_degrees(normal),
+                     "kept_frac": keep.mean(), "trim_cm": trim_cm})
     facets = kept
+
+    print(f"\ntrimmed refit (trim_mult {cfg['trim_mult']} x per-facet median "
+          f"scatter):")
+    print(f"{'facet':>5} {'kept %':>7} {'trim cm':>8} {'pitch deg':>10}")
+    for k, f in enumerate(facets):
+        print(f"{k:>5} {100 * f['kept_frac']:>6.1f} {f['trim_cm']:>8.2f} "
+              f"{f['pitch']:>10.2f}")
+
+    if clutter_views:
+        import open3d as o3d
+        for k, pts_v, d_v in clutter_views:
+            c = o3d.geometry.PointCloud()
+            c.points = o3d.utility.Vector3dVector(pts_v)
+            colors = np.full((len(pts_v), 3), 0.75)
+            colors[d_v > band] = (1.0, 0.15, 0.15)
+            c.colors = o3d.utility.Vector3dVector(colors)
+            o3d.visualization.draw_geometries(
+                [c], window_name=f"facet {k}: red = beyond band (clutter)")
     off_facet = (dist > band).sum()
     print(f"not within the band of any plane: {off_facet:,} points "
           f"({100 * off_facet / len(points):.1f}%) "
