@@ -10,6 +10,7 @@
 # Areas are in cloud units squared until the tape scale factor is applied.
 import argparse
 import numpy as np
+import open3d as o3d
 from dataset_config import load_config
 from roofkit.stats import median_nn_spacing
 from roofkit.segment import (find_roof_planes, assign_to_planes,
@@ -25,7 +26,6 @@ AREA_MAX_POINTS = 400_000
 
 
 def show_facets(facets):
-    import open3d as o3d
     rng = np.random.default_rng(0)
     clouds = []
     for f in facets:
@@ -46,6 +46,11 @@ def main():
                          "(gray, within band) vs tail (red, band..5x band)")
     args = ap.parse_args()
     cfg = load_config(args.dataset)
+
+    # Pin Open3D's internal RNG (Open3D 0.19 exposes it): without this,
+    # RANSAC discovery is nondeterministic and facets near the
+    # min_points_frac floor flicker between runs (observed 2026-07-13).
+    o3d.utility.random.seed(0)
 
     points = np.load(cfg["roof_path"])
     s_full = median_nn_spacing(points)
@@ -108,7 +113,6 @@ def main():
               f"{f['pitch']:>10.2f}")
 
     if clutter_views:
-        import open3d as o3d
         for k, pts_v, d_v in clutter_views:
             c = o3d.geometry.PointCloud()
             c.points = o3d.utility.Vector3dVector(pts_v)
