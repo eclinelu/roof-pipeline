@@ -13,7 +13,7 @@
 - `roofkit/io.py` is the ONLY module that touches point cloud formats. Everything else consumes and returns plain NumPy arrays.
 - The pipeline is dataset-agnostic. No dataset name appears in any module, script name, or constant. Site-specific numbers (crop box, height cutoff, tuned cutoffs) live in `<dataset>\roofkit.json` next to the data; scripts take the dataset directory as an argument.
 - Scale-dependent thresholds (planarity radius, RANSAC band, alpha) are NEVER hardcoded lengths. They are multiples of `median_nn_spacing(points)`.
-- EXPLANATION GATE (decision 2026-07-12): Tasks 2 through 7 produce analysis core. After each of these tasks, STOP and walk Emmett through the approach, every threshold, and each threshold's scale-dependence. The task is not complete until he signs off. Do not batch gates.
+- EXPLANATION GATE (decision 2026-07-12): Tasks 2 through 7 produce analysis core. After each of these tasks, STOP and give Emmett a plain-language walkthrough covering the approach, every threshold, and each threshold's scale-dependence. NO QUIZZING: end with an invitation for questions, and proceed when he says to continue. Do not batch gates.
 - Visual verification on the real cloud (Tasks 8 and 9) before any stage's output is trusted downstream.
 - Stage 7b (edge fitting and dimensions) is OUT OF SCOPE for this plan. Do not start it.
 - Test synthetic clouds live in `tests/`; drivers and per-dataset glue live in `scripts/`; reusable analysis lives in `roofkit/`. Do not mix (CLAUDE.md).
@@ -207,7 +207,7 @@ git add roofkit/stats.py tests/test_stats.py
 git commit -m "feat: median nearest-neighbor spacing as the scale yardstick"
 ```
 
-Gate questions Emmett must be able to answer: why a median and not a mean (outlier robustness), why k=2, why sampling is valid for a median, and why this number is the basis for every scale-dependent threshold.
+Gate walkthrough must cover: why a median and not a mean (outlier robustness), why k=2, why sampling is valid for a median, and why this number is the basis for every scale-dependent threshold.
 
 ---
 
@@ -303,7 +303,7 @@ git add roofkit/isolate.py tests/test_isolate.py
 git commit -m "feat: height cutoff and ExG color filter for roof isolation"
 ```
 
-Gate: why ExG works and exactly when it fails; why the cutoff is scale-independent; why z_min stays out of roofkit.
+Gate walkthrough must cover: why ExG works and exactly when it fails; why the cutoff is scale-independent; why z_min stays out of roofkit.
 
 ---
 
@@ -405,7 +405,7 @@ git add roofkit/isolate.py tests/test_isolate.py
 git commit -m "feat: local planarity filter (surface variation) for foliage removal"
 ```
 
-Gate: what the covariance eigenvalues mean physically; why the score is scale-independent but the radius is not; why degenerate points get the worst score; the edge-erosion tradeoff.
+Gate walkthrough must cover: what the covariance eigenvalues mean physically; why the score is scale-independent but the radius is not; why degenerate points get the worst score; the edge-erosion tradeoff.
 
 ---
 
@@ -563,7 +563,7 @@ git add roofkit/measure.py tests/test_measure.py
 git commit -m "feat: Z-verification gate via opposing-facet pitch symmetry"
 ```
 
-Gate: why half the difference equals the Z tilt; why max not mean; why the bisector is true up and what assumption that rests on; why every tolerance here is scale-independent; what happens when no gable pair exists.
+Gate walkthrough must cover: why half the difference equals the Z tilt; why max not mean; why the bisector is true up and what assumption that rests on; why every tolerance here is scale-independent; what happens when no gable pair exists.
 
 ---
 
@@ -688,7 +688,7 @@ git add roofkit/measure.py tests/test_measure.py
 git commit -m "feat: per-facet slope area via in-plane Delaunay alpha shape"
 ```
 
-Gate: why slope area requires projecting into the facet plane; what the circumradius test does; the hole behavior (bridged below ~2*alpha, open above) and how that interacts with chimneys; why alpha is scale-dependent.
+Gate walkthrough must cover: why slope area requires projecting into the facet plane; what the circumradius test does; the hole behavior (bridged below ~2*alpha, open above) and how that interacts with chimneys; why alpha is scale-dependent.
 
 ---
 
@@ -764,7 +764,7 @@ git add tests/test_pipeline.py
 git commit -m "test: synthetic end-to-end pipeline recovers known pitch and area"
 ```
 
-Gate: why the brown blob is in the test; where each multiplier of `s` appears and what it controls.
+Gate walkthrough must cover: why the brown blob is in the test; where each multiplier of `s` appears and what it controls.
 
 ---
 
@@ -1051,7 +1051,7 @@ git add scripts/measure_roof.py
 git commit -m "feat: measurement script: segmentation, Z gate, 7a report"
 ```
 
-Gate: Emmett explains the full chain end to end. Then log via the decision-log skill: the measured gate residual, the tuned config values for big_house, and the 7a numbers. Update Current state: 7a complete, next action tape-scale validation, then the 7b plan.
+Gate walkthrough: recap the full chain end to end. Then log via the decision-log skill: the measured gate residual, the tuned config values for big_house, and the 7a numbers. Update Current state: 7a complete, next action tape-scale validation, then the 7b plan.
 
 ---
 
