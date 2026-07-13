@@ -1,36 +1,89 @@
 # scripts/find_crop_box.py
-# Throwaway exploration: find the bounding box that isolates the MAIN house and
-# excludes the second outbuilding. Edit MIN_CORNER / MAX_CORNER each pass and
-# re-run. Now prints the cropped cloud's own bounding box so you can reason about
-# which axis to tighten instead of guessing.
-
+# Read coordinates off a cloud by shift-clicking points in a viewer.
+# Dataset-agnostic: reads the cloud path (and any existing crop) from
+# <dataset>\roofkit.json, same as isolate_roof.py.
+#
+#   python scripts/find_crop_box.py C:\odm\datasets\big_house
+#
+# Workflow: SHIFT+LEFT CLICK points in the window (each pick prints its XYZ
+# to this terminal immediately), press Q to close, and the script reprints
+# every picked point plus a paste-ready crop_min/crop_max snippet built
+# from the picks' extremes.
+import argparse
+import json
 import numpy as np
+import open3d as o3d
+from dataset_config import load_config
 from roofkit.io import load_xyz_rgb
 from roofkit.crop import crop_box
-from view_cloud import show_points
 
-CLOUD_PATH = r"C:\odm\datasets\tyco_house\odm_georeferencing\odm_georeferenced_model.laz"
+MAX_VIEW_POINTS = 2_000_000  # keep the picking viewer responsive
 
-MIN_CORNER = (-0.5, 0.1, -3.0)   # (x_min, y_min, z_min)
-MAX_CORNER = ( 0.8,  0.8,  1.5)   # (x_max, y_max, z_max)
 
-points, colors = load_xyz_rgb(CLOUD_PATH)
-print(f"before crop: {len(points):,} points")
+def print_bbox(points, label):
+    lo, hi = points.min(axis=0), points.max(axis=0)
+    span = hi - lo
+    print(f"\n{label} bounding box (cloud units):")
+    for ax, name in enumerate("XYZ"):
+        print(f"  {name}: {lo[ax]:12.2f} .. {hi[ax]:12.2f}   span {span[ax]:8.2f}")
 
-cropped, mask = crop_box(points, MIN_CORNER, MAX_CORNER)
-cropped_colors = colors[mask]
-print(f"after crop:  {len(cropped):,} points")
 
-# --- the new part: report the cropped cloud's OWN bounding box ---
-# This is the extent of only the points that survived. Compare these numbers to
-# what you SEE in the viewer to learn which axis points toward the outbuilding.
-lo = cropped.min(axis=0)   # smallest x, y, z among surviving points
-hi = cropped.max(axis=0)   # largest  x, y, z
-span = hi - lo             # size along each axis
+def main():
+    ap = argparse.ArgumentParser(
+        description="Shift-click points in a cloud to read coordinates for "
+                    "roofkit.json (crop corners, ground and eave heights).")
+    ap.add_argument("dataset", help="dataset directory (holds roofkit.json)")
+    args = ap.parse_args()
+    cfg = load_config(args.dataset)
 
-print("\ncropped bounding box (native units):")
-print(f"  X: {lo[0]:7.2f} .. {hi[0]:7.2f}   span {span[0]:6.2f}")
-print(f"  Y: {lo[1]:7.2f} .. {hi[1]:7.2f}   span {span[1]:6.2f}")
-print(f"  Z: {lo[2]:7.2f} .. {hi[2]:7.2f}   span {span[2]:6.2f}")
+    points, colors = load_xyz_rgb(cfg["cloud_path"])
+    print(f"raw cloud: {len(points):,} points")
+    print_bbox(points, "raw")
 
-show_points(cropped, cropped_colors)
+    if cfg["crop_min"] is not None and cfg["crop_max"] is not None:
+        points, mask = crop_box(points, cfg["crop_min"], cfg["crop_max"])
+        colors = colors[mask]
+        print(f"\ncrop from roofkit.json applied: {len(points):,} points remain")
+        print_bbox(points, "cropped")
+    else:
+        print("\ncrop_min/crop_max not set in roofkit.json: showing the raw cloud")
+
+    # Subsample ONLY what the viewer displays. Every pick still lands on a
+    # real point of the cloud, so its printed XYZ is exact; a denser view
+    # would only add points between the ones you can already click.
+    if len(points) > MAX_VIEW_POINTS:
+        rng = np.random.default_rng(0)
+        idx = rng.choice(len(points), MAX_VIEW_POINTS, replace=False)
+        points, colors = points[idx], colors[idx]
+        print(f"\nviewer shows a random {MAX_VIEW_POINTS:,}-point subsample "
+              f"for responsiveness")
+
+    cloud = o3d.geometry.PointCloud()
+    cloud.points = o3d.utility.Vector3dVector(points)
+    cloud.colors = o3d.utility.Vector3dVector(colors)
+
+    print("\nviewer: SHIFT+LEFT CLICK prints a point's XYZ here. Q closes.")
+    vis = o3d.visualization.VisualizerWithEditing()
+    vis.create_window(window_name="pick points: shift+click, then Q")
+    vis.add_geometry(cloud)
+    vis.run()
+    vis.destroy_window()
+
+    picked = vis.get_picked_points()          # indices into the shown cloud
+    if not picked:
+        print("no points picked")
+        return
+    pts = points[picked]
+    print("\npicked points (in click order):")
+    for i, p in enumerate(pts):
+        print(f"  {i}: x {p[0]:12.2f}   y {p[1]:12.2f}   z {p[2]:10.2f}")
+
+    lo = [float(round(v, 2)) for v in pts.min(axis=0)]
+    hi = [float(round(v, 2)) for v in pts.max(axis=0)]
+    print("\npaste-ready snippet from the picks' extremes (check each axis; "
+          "pad z upward so the ridge is not clipped):")
+    print(json.dumps({"crop_min": lo, "crop_max": hi}, indent=2))
+
+
+if __name__ == "__main__":
+    main()
