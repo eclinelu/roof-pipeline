@@ -2,16 +2,28 @@
 
 ## Current state
 
-- **Phase:** 2, roof isolation
-- **Active blocker:** None. Design for isolation through measurement is reviewed and approved: `docs/superpowers/specs/2026-07-12-roof-isolation-design.md`.
-- **Last thing verified working:** ODM reconstruction of `big_house` (232 Mavic Mini nadir images) produced an 80 MB georeferenced point cloud. Visually confirmed: dense roof, thin walls, heavy tree overhang.
-- **Next action:** Implementation plan, then stage-by-stage build with visual checks. Stage 7a (polygon area) before 7b (dimensions).
+- **Phase:** 2 complete (roof isolated), entering 3: segmentation and measurement.
+- **Active blocker:** None.
+- **Last thing verified working:** Full isolation chain on big_house, visually verified at every stage; `roof.npy` (9,293,239 points) written. Synthetic test suite green (21 tests).
+- **Next action:** Task 9: segmentation with subsample-fit/full-assign, the Z gate residual as a reported number, then the 7a report (per-facet pitch and area).
 
 ---
 
 ## Decision log
 
 _Append only. Newest at the top. Past entries are never edited. A reversal is a new entry that references the one it overturns._
+
+### 2026-07-13: Assumption A3 held: one global height cutoff cleared sloped terrain
+
+**Decision:** The staged isolation (crop, height cutoff at z_min 246.5, ExG color filter, planarity filter) is accepted as verified for big_house. `roof.npy` (9,293,239 points) is the input to segmentation. Assumption A3, that a single global z_min removes all ground on a sloped woodland site, held and is no longer an open risk.
+
+**Why:** A3 was the isolation design's open risk: on sloped terrain, a cutoff low enough to keep the eaves could have let uphill ground through. The z_min was deliberately biased toward the eave (1.4 m below the lowest eave pick, 3.6 m above the uphill ground pick) to buy margin against unsampled terrain, and the margin proved sufficient.
+
+**Evidence:** Emmett's stage-by-stage visual verification at the viewer, 2026-07-13. No uphill terrain survived stage 2. Counts: raw 21,325,293, crop 21,308,532, height cutoff 17,303,825, color 16,885,409, planarity 9,293,239. Two counts that look wrong but are correct: the crop removed only 0.08% because ODM reconstructed only the immediate surroundings (no woodland existed to cut), and ExG removed only 2.4% because this canopy is mostly dark and brown, leaving the residue for the planarity filter exactly as the two-filter design intended.
+
+**Cost if wrong:** If the visual check missed surviving ground or foliage, the contamination surfaces in the 7a per-facet areas, which is the integration test's job to expose.
+
+---
 
 ### 2026-07-12: RANSAC peeling gets a nearest-plane reassignment pass
 
