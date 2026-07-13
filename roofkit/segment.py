@@ -84,7 +84,41 @@ def find_roof_planes(points, distance_threshold=0.2, min_points=300,
         # Remove this plane's points (kept or not) so the next loop finds the next surface.
         cloud = cloud.select_by_index(inliers, invert=True)
 
+    # Greedy peeling steals shared-edge points: at a ridge the two roof
+    # planes lie within the RANSAC band of EACH OTHER, so whichever plane is
+    # found first absorbs a strip of its neighbor's points, inflating its
+    # area and tilting its fit (order-dependent, so also not reproducible).
+    # One reassignment pass removes the order dependence: pool every point
+    # that belongs to any facet, hand each point to its NEAREST plane, then
+    # refit each plane to its final members. RANSAC proposes, the final
+    # consensus refits.
+    if len(facets) > 1:
+        pool = np.vstack([f["points"] for f in facets])
+        dists = np.column_stack([_point_plane_dist(pool, f) for f in facets])
+        owner = dists.argmin(axis=1)          # index of the closest plane, per point
+        for k, f in enumerate(facets):
+            mine = pool[owner == k]
+            if len(mine) < 3:                 # a plane needs 3 points; keep RANSAC's answer
+                continue
+            # Refit: the plane normal is the direction the point set spreads
+            # LEAST along. SVD of the centered points gives the three spread
+            # directions sorted largest to smallest; row 2 is the smallest,
+            # i.e. the normal. (Same eigen-idea as the planarity filter.)
+            centered = mine - mine.mean(axis=0)
+            _, _, vt = np.linalg.svd(centered, full_matrices=False)
+            f["points"] = mine
+            f["normal"] = vt[2]
+            f["pitch"] = tilt_degrees(vt[2])
+
     return facets
+
+
+def _point_plane_dist(points, facet):
+    """Perpendicular distance from each point to a facet's plane (the plane
+    through the facet's centroid with the facet's normal)."""
+    n = np.asarray(facet["normal"], float)
+    n = n / np.linalg.norm(n)
+    return np.abs((points - facet["points"].mean(axis=0)) @ n)
 
 def level_cloud(points, up_normal):
     """Rotate the whole cloud so `up_normal` points along +Z (true vertical).
