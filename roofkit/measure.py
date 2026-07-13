@@ -50,3 +50,62 @@ def facet_boundary(points, normal):
     """The facet's outline in 3D, in loop order, after spike removal."""
     uv, pts3d = _facet_in_plane(points, normal)
     return pts3d[ConvexHull(uv).vertices]
+
+
+# --- Z-verification gate (decision 2026-07-12) ---
+# Georeferenced Z comes from meter-grade GPS and is an ASSUMPTION as a
+# gravity reference. Before any pitch is reported, measure the residual
+# tilt using the building's own symmetry: opposing gable facets must read
+# equal pitch, so half their difference IS the Z tilt.
+
+
+def _up_normal(facet):
+    """Facet normal as a unit vector oriented upward (z >= 0). RANSAC's
+    normal sign is arbitrary, so orient before comparing directions."""
+    n = np.asarray(facet["normal"], float)
+    n = n / np.linalg.norm(n)
+    return -n if n[2] < 0 else n
+
+
+def opposing_pairs(facets, direction_tol_deg=15.0, pitch_tol_deg=10.0):
+    """Indices (i, j) of facets that face each other like two sides of a
+    gable: horizontal components of their normals point in opposite
+    directions (within direction_tol_deg) and their pitches are similar
+    (within pitch_tol_deg). Both tolerances are angles: scale-independent."""
+    pairs = []
+    for i in range(len(facets)):
+        for j in range(i + 1, len(facets)):
+            hi, hj = _up_normal(facets[i]).copy(), _up_normal(facets[j]).copy()
+            hi[2] = 0.0
+            hj[2] = 0.0
+            li, lj = np.linalg.norm(hi), np.linalg.norm(hj)
+            if li < 1e-9 or lj < 1e-9:
+                continue  # a flat facet faces no direction
+            angle = np.degrees(np.arccos(np.clip(hi @ hj / (li * lj), -1, 1)))
+            if (angle >= 180.0 - direction_tol_deg and
+                    abs(facets[i]["pitch"] - facets[j]["pitch"]) <= pitch_tol_deg):
+                pairs.append((i, j))
+    return pairs
+
+
+def z_tilt_residual(facets, direction_tol_deg=15.0, pitch_tol_deg=10.0):
+    """(residual_degrees, pairs). Residual = the WORST half-difference of
+    pitch across all opposing pairs: conservative on purpose, because the
+    gate exists to catch error, not to average it away. Returns (None, [])
+    when no pair exists: the gate has no instrument, and that fact must
+    reach the report rather than pass silently."""
+    pairs = opposing_pairs(facets, direction_tol_deg, pitch_tol_deg)
+    if not pairs:
+        return None, []
+    residuals = [abs(facets[i]["pitch"] - facets[j]["pitch"]) / 2.0
+                 for i, j in pairs]
+    return max(residuals), pairs
+
+
+def vertical_from_pair(facet_a, facet_b):
+    """True up recovered from a symmetric gable: the bisector of the two
+    opposing facet normals. Valid exactly when the two real-world pitches
+    are equal, which is the same symmetry assumption the gate itself uses.
+    Feed the result to level_cloud if the gate rejects georeferenced Z."""
+    up = _up_normal(facet_a) + _up_normal(facet_b)
+    return up / np.linalg.norm(up)
