@@ -2,10 +2,10 @@
 
 ## Current state
 
-- **Phase:** 7a complete on the leveled cloud. Tape-scale validation: cloud side done, waiting on Emmett's field visit.
-- **Active blocker:** Emmett must (1) run `python scripts/wall_recon.py C:\odm\datasets\big_house` and identify the painted walls physically: the candidate span is face 7 (brown) to the near-coplanar 0/2/4 facade plane (blue/green/cyan), ~6.93 cu, near dx=24 dy=36; (2) report reachability, what connects the two planes (square or oblique face), and corner trim construction; (3) tape it, ~1 cm accuracy; (4) run `measure_scale.py --click-spread` (5 clicks on one corner) so the old click instrument's error is a measured number.
-- **Last thing verified working:** wall_recon.py full run on big_house (2026-07-14): 8 wall faces, 0 derivable corners, 3 parallel-plane readings of the one candidate span, split-half repeatability 0.9-2.4 mm, predicted ~0.3% area error. 32 tests green. Everything committed through `506a302`.
-- **Next action after the tape number arrives:** put `scale_span_cu` (evaluated at the taped location, using pos-sens) and `scale_true_m` into `C:\odm\datasets\big_house\roofkit.json`; `measure_roof.py` then prints the 7a report in m^2 plus the measured GPS scale error, which gets its own log entry (the last untested georeferencing assumption; rotation is already measured and corrected). Fallbacks if unreachable: `measure_scale.py` manual patch picking on any reachable wall pair, or force-evaluating the face 3/5 pair (wing D width) that the overlap gate excludes.
+- **Phase:** 7a complete on the leveled cloud. Wall scale instrument retired (no coverage). Roof-derived scale recon DESIGNED, not yet built: spec at `docs/superpowers/specs/2026-07-14-roof-scale-recon-design.md`, implementation to run in a separate session against a written plan.
+- **Active blocker:** none for implementation. The field visit (roof tape for the one scale span, inclinometer audit) waits until roof_recon output is pre-registered by commit.
+- **Last thing verified working:** wall_recon.py full run on big_house (2026-07-14): 8 wall faces, all ~E/W, 0 derivable corners; Emmett's field knowledge confirms most walls simply have no coverage, so the wall instrument has no target. 32 tests green through `506a302`. This session changed docs only.
+- **Next action:** write the implementation plan from the spec, then execute: (1) `eave_line` / `line_pair_span` / `line_extent` primitives in roofkit/measure.py with synthetic eroded-gable tests proving the bracket brackets a known truth, (2) `scripts/roof_recon.py` candidate derivation and ranking, (3) pre-registration output writer. Then commit the frozen cloud-unit outputs, THEN the field visit.
 - **Note on the 7a numbers:** current totals are 313.00 cloud units^2, pitch floor 0.20 deg, pitch classes ~5:12 and ~8:12; leveling values live in roofkit.json (1.083 deg, uphill az 75.1).
 
 ---
@@ -13,6 +13,48 @@
 ## Decision log
 
 _Append only. Newest at the top. Past entries are never edited. A reversal is a new entry that references the one it overturns._
+
+### 2026-07-14: Roof-derived scale is a big_house exception; the wall instrument is retired for this dataset
+
+**Decision:** For big_house, the scale span is derived from roof geometry and taped on the roof. This is an exception, logged so it cannot quietly become the pattern: future properties get scale from the ground (longest building face at grade, footprint corner-to-corner diagonal, fixed ground feature pair, in that priority order), because future roofs will not be climbable and roof measurements there are audit-only.
+
+**Why:** The wall finder failed because most walls have no coverage at all (nadir grid capture, trees prevented low flight), not because of thresholds; no code fixes absent data, and there is no refly. The roof is this cloud's best-reconstructed geometry by a wide margin (8 planes, sub-centimeter scatter), and the fit-from-good-data principle points the scale instrument at it. The 2026-07-14 candidate span (face 7 to the 0/2/4 facade plane) is retired along with the corner instrument.
+
+**Rejected:** Recapturing with wall-oriented flight (no refly available). Ground control markers (same). Deriving scale from ground features on this dataset before exhausting the roof, which is strictly better-reconstructed geometry.
+
+**Evidence:** wall_recon.py runs of 2026-07-14 (8 faces, all ~E/W, zero corner contact) plus Emmett's field knowledge of which walls the capture could see. Roof quality numbers from the 7a runs.
+
+**Cost if wrong:** If the roof-derived span carries hidden edge bias into the scale multiplier, every area is wrong by its square. The recon's bias accounting (see the bracket entry) exists to surface that before the tape is chosen.
+
+---
+
+### 2026-07-14: Eave erosion is handled by a two-cloud bracket, never a correction
+
+**Decision:** An eave line's direction is never fitted from boundary points: a non-horizontal plane contains exactly one level direction, so the eave is exactly parallel to its own ridge and its direction comes free from the plane fit. Only the eave's downslope position is estimated, twice, from the same tight-set plane fit: from the filtered roof points (tight set, LOWER bound, because filtering only removes boundary points) and from the pre-filter cropped cloud gated only by perpendicular distance to the facet plane plus an in-plane region gate (loose set, UPPER bound, because it readmits true eave points along with gutter, fascia, and vegetation). Output per eave is lower, upper, delta. No averaging, no half-delta correction. An anomalously wide bracket is flagged as loose-set contamination and disqualifies that eave as a scale candidate; it is not read as an erosion measurement. Tight, loose, and a physical tape may be measuring three different physical edges (shingle overhang, fascia, wall line); disagreement is noted as possible geometry, not attributed to erosion.
+
+**Why:** Erosion has a known sign and an unknown magnitude, and the only way to measure the magnitude is the real roof, which the audit-only entry forbids as a pipeline input. A bracket is derivable from the cloud alone, so it generalizes to properties with no roof access. Split-half repeatability cannot see erosion because it is a bias, not noise: both halves are eroded identically, so repeatability flatters every edge-derived quantity.
+
+**Rejected:** Reporting erosion as an unquantified caveat: this log already records the cost of a confidently written unverified claim (the odm_filterpoints entry). Dropping eave instruments entirely: it deletes the only ground-tapeable long baseline and does not escape the failure mode anyway, since ridge endpoints erode for the same reason eave corners do. Calibrating an erosion correction from roof measurements: the exact leak the audit-only entry exists to stop.
+
+**Evidence:** Reasoning plus the geometry fact (unique level direction of a non-horizontal plane). The bracket's validity is to be pinned by synthetic eroded-gable tests where truth is known, before it touches real data; until those pass, this entry rests on design, not measurement.
+
+**Cost if wrong:** If the loose gate is too tight, the bracket understates erosion and every reported dimension carries uncertainty that looks smaller than it is. The bracket is only as honest as its contamination flag.
+
+---
+
+### 2026-07-14: Ground truth is audit-only, never a pipeline input; outputs are pre-registered by commit
+
+**Decision:** The pipeline's permitted inputs are exactly three: the point cloud, thresholds derived from the cloud, and one tape-measured scale distance (on big_house, and only there, that tape may be taken on the roof; see the exception entry). All other field measurements (inclinometer pitches, extra tape checks) exist only to score outputs after they are frozen. Enforcement is procedural: (1) run with frozen thresholds, (2) write per-facet area and pitch in cloud units, the eave brackets, and the chosen scale span's identity and cloud-unit value to an output file, (3) commit, and that hash is the pre-registration, (4) only then measure the real roof, (5) the comparison goes in a NEW file and the pre-registered output is never edited. Retuning after seeing roof data is legitimate but becomes a second pre-registered run with its own commit, and both runs are reported.
+
+**Why:** big_house is climbable; future properties are not. Roof access is therefore an audit channel, and any roof-derived number that leaks into a parameter makes the validation circular and the pipeline non-portable. Because roof numbers are physically obtainable here, the discipline cannot rest on intent; the commit hash makes it checkable by a third party.
+
+**Rejected:** Using roof measurements to calibrate an erosion correction, the most tempting use of them and the exact leak this rule exists to stop. Trusting intent without the commit protocol.
+
+**Evidence:** Protocol decision from the 2026-07-14 planning session; nothing to measure yet. The first pre-registration commit will be the first evidence it is being followed.
+
+**Cost if wrong:** If the procedure is bypassed even once, silently, the validation becomes uninterpretable, and the validation is the deliverable.
+
+---
 
 ### 2026-07-14: Constraint discovered: this cloud has no derivable wall corner; parallel-plane separation is the scale instrument
 
