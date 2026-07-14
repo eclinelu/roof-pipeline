@@ -43,3 +43,19 @@ def foliage_blob(center, size, n=3000, seed=1):
 def solid_color(n, rgb):
     """(n, 3) array of one repeated 0-1 RGB color."""
     return np.tile(np.asarray(rgb, float), (n, 1))
+
+
+def slope_dist_from_eave(points, pitch_deg, width):
+    """Each point's distance from its side's eave, measured IN the roof
+    plane down the slope (the same axis the eave estimator reads).
+    gable_roof puts the eaves at |x| = width/2, so the horizontal run to
+    the eave is width/2 - |x| and the slope distance divides by cos."""
+    run = width / 2.0 - np.abs(points[:, 0])
+    return run / np.cos(np.radians(pitch_deg))
+
+
+def erode_eaves(points, pitch_deg, width, depth_cu):
+    """Strip every point within depth_cu (slope distance) of either
+    eave: the synthetic stand-in for edge erosion, whose depth is KNOWN
+    so bracket tests have a truth to contain."""
+    return points[slope_dist_from_eave(points, pitch_deg, width) >= depth_cu]
