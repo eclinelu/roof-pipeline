@@ -111,3 +111,49 @@ def test_flat_plane_has_no_eave():
                             rng.uniform(0, 5, 2000),
                             np.zeros(2000)])
     assert eave_line(flat, np.array([0.0, 0.0, 1.0]), 0.1) is None
+
+
+from roofkit.measure import line_pair_span, plane_intersection, _plane_fit
+
+
+def gable_ridge_and_eave():
+    """Fitted ridge line and derived eave line of the synthetic gable's
+    right side, the way the recon script builds them."""
+    pts = gable_roof(PITCH, WIDTH, DEPTH, N_SIDE)
+    left, right = pts[pts[:, 0] <= 0], pts[pts[:, 0] > 0]
+    na, ca = _plane_fit(left)
+    nb, cb = _plane_fit(right)
+    p0, d = plane_intersection(na, ca, nb, cb)
+    e = eave_line(right, nb, median_nn_spacing(right))
+    return pts, (p0, d), e
+
+
+def test_ridge_to_eave_span_is_the_true_slope_length():
+    pts, (p0, d), e = gable_ridge_and_eave()
+    r = line_pair_span(p0, d, e["p0"], e["d"], t_lo=1.0, t_hi=5.0)
+    true_slope = (WIDTH / 2.0) / np.cos(np.radians(PITCH))
+    s = median_nn_spacing(pts)
+    # the estimate sits within about one density bin of truth, and the
+    # error is toward SHORT (the eave estimator's lower-bound side)
+    assert r["span"] <= true_slope + 1e-6
+    assert true_slope - r["span"] <= 1.5 * 4.0 * s
+    assert r["divergence_deg"] < 0.5
+
+
+def test_span_does_not_depend_on_where_either_line_ends():
+    pts = gable_roof(PITCH, WIDTH, DEPTH, N_SIDE)
+    # crop 25% off both y-ends: both lines lose their ends entirely
+    crop = pts[(pts[:, 1] >= 0.25 * DEPTH) & (pts[:, 1] <= 0.75 * DEPTH)]
+    spans = []
+    for cloud in (pts, crop):
+        left, right = cloud[cloud[:, 0] <= 0], cloud[cloud[:, 0] > 0]
+        na, ca = _plane_fit(left)
+        nb, cb = _plane_fit(right)
+        p0, d = plane_intersection(na, ca, nb, cb)
+        e = eave_line(right, nb, median_nn_spacing(right))
+        spans.append(line_pair_span(p0, d, e["p0"], e["d"],
+                                    t_lo=2.5, t_hi=3.5)["span"])
+    # losing the ends moves the span by at most a couple of point
+    # spacings: THE property that makes parallel-line spans the
+    # instrument of choice (spec: endpoint-free claim, tested directly)
+    assert abs(spans[0] - spans[1]) <= 0.05

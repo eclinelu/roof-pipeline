@@ -349,6 +349,40 @@ def eave_line(points, normal, spacing, origin=None,
             "n_edge": n_hi, "azimuth_deg": az}
 
 
+def line_pair_span(p0a, da, p0b, db, t_lo, t_hi):
+    """Perpendicular separation of two near-parallel lines, evaluated at
+    stated positions along line A, because a tape goes to ONE physical
+    spot. Nothing here depends on where either line's point support
+    ends, which is why parallel-line spans beat line lengths as scale
+    candidates (a length's ends sit in the eroded edge zone).
+    t_lo, t_hi: evaluation window along line A in cu relative to p0a,
+    normally the overlap of the two lines' supported extents.
+    Returns dict: span (window middle), span_lo/span_hi (window ends),
+    sens (worst drift from the middle: if the lines diverge, the tape's
+    exact position matters by this much), divergence_deg."""
+    da = np.asarray(da, float)
+    db = np.asarray(db, float)
+    p0a = np.asarray(p0a, float)
+    p0b = np.asarray(p0b, float)
+    da = da / np.linalg.norm(da)
+    db = db / np.linalg.norm(db)
+    if da @ db < 0:  # a line has no forward end; compare like with like
+        db = -db
+    divergence = float(np.degrees(np.arccos(np.clip(da @ db, -1.0, 1.0))))
+
+    def dist_to_b(q):
+        rel = q - p0b
+        return float(np.linalg.norm(rel - (rel @ db) * db))
+
+    mid = (t_lo + t_hi) / 2.0
+    span = dist_to_b(p0a + mid * da)
+    span_lo = dist_to_b(p0a + t_lo * da)
+    span_hi = dist_to_b(p0a + t_hi * da)
+    return {"span": span, "span_lo": span_lo, "span_hi": span_hi,
+            "sens": max(abs(span_lo - span), abs(span_hi - span)),
+            "divergence_deg": divergence}
+
+
 # --- Stage 7a: polygon area per facet (decision 2026-07-12) ---
 # Area is measured IN THE FACET'S OWN PLANE (slope area, what shingles
 # cover), not the ground footprint. The alpha shape is a shrink-wrapped
