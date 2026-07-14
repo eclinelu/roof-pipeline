@@ -2,16 +2,45 @@
 
 ## Current state
 
-- **Phase:** 7a complete on the leveled cloud. Entering tape-scale validation.
-- **Active blocker:** None.
-- **Last thing verified working:** Ridge instrument formalized in `roofkit.measure` (`ridge_line`, `tilt_from_ridges`, `up_from_tilt`); 30 tests green. big_house leveled by 1.083 deg at uphill azimuth 75.1; null check passed (residual tilt vector 0.001 deg); gate 0.20 deg; 7a report produced (8 facets, two pitch classes ~5:12 and ~8:12, total 313.00 cloud units^2).
-- **Next action:** Tape-scale validation: pick the measured edge's endpoints in the cloud, compute the scale factor, report areas in m^2, and LOG the factor's deviation from 1.0 as the measured GPS scale error. That is the last untested georeferencing assumption (rotation is now measured and corrected; scale is not).
+- **Phase:** 7a complete on the leveled cloud. Tape-scale validation: cloud side done, waiting on Emmett's field visit.
+- **Active blocker:** Emmett must (1) run `python scripts/wall_recon.py C:\odm\datasets\big_house` and identify the painted walls physically: the candidate span is face 7 (brown) to the near-coplanar 0/2/4 facade plane (blue/green/cyan), ~6.93 cu, near dx=24 dy=36; (2) report reachability, what connects the two planes (square or oblique face), and corner trim construction; (3) tape it, ~1 cm accuracy; (4) run `measure_scale.py --click-spread` (5 clicks on one corner) so the old click instrument's error is a measured number.
+- **Last thing verified working:** wall_recon.py full run on big_house (2026-07-14): 8 wall faces, 0 derivable corners, 3 parallel-plane readings of the one candidate span, split-half repeatability 0.9-2.4 mm, predicted ~0.3% area error. 32 tests green. Everything committed through `506a302`.
+- **Next action after the tape number arrives:** put `scale_span_cu` (evaluated at the taped location, using pos-sens) and `scale_true_m` into `C:\odm\datasets\big_house\roofkit.json`; `measure_roof.py` then prints the 7a report in m^2 plus the measured GPS scale error, which gets its own log entry (the last untested georeferencing assumption; rotation is already measured and corrected). Fallbacks if unreachable: `measure_scale.py` manual patch picking on any reachable wall pair, or force-evaluating the face 3/5 pair (wing D width) that the overlap gate excludes.
+- **Note on the 7a numbers:** current totals are 313.00 cloud units^2, pitch floor 0.20 deg, pitch classes ~5:12 and ~8:12; leveling values live in roofkit.json (1.083 deg, uphill az 75.1).
 
 ---
 
 ## Decision log
 
 _Append only. Newest at the top. Past entries are never edited. A reversal is a new entry that references the one it overturns._
+
+### 2026-07-14: Constraint discovered: this cloud has no derivable wall corner; parallel-plane separation is the scale instrument
+
+**Decision:** The scale span for big_house is the perpendicular separation between wall face 7 and the near-coplanar 0/2/4 facade plane (~6.93 cloud units, three readings 6.931/6.934/6.960 whose 26 mm spread is the real offset within the coplanar family), pending Emmett's reachability check. The corner-to-corner instrument is retired for this dataset: it has no target.
+
+**Why:** The north/south-facing wall sets never reconstructed (nadir grid capture; confirmed with relaxed gates and 30 RANSAC peels, not just default thresholds), and every geometrically possible corner pair failed contact validation with zero points near the intersection line: the reconstructed walls do not physically adjoin. A parallel-plane separation needs no corner anywhere; taping it flat across a connecting face introduces only sec(skew), and the skew is measured from the cloud when the connecting face reconstructed, not assumed.
+
+**Rejected:** Deriving corners by extrapolating wall planes to intersections without contact support (a jog or plane change beyond the reconstructed patch would be invisible). Relaxing corner gates further (the walls are absent, not filtered).
+
+**Evidence:** wall_recon.py runs of 2026-07-14: 8 wall faces, scatter 0.003-0.006 cu, all facing ~E/W; corner contact counts 0/0 for every candidate pair; split-half repeatability of the candidate span 0.9-2.4 mm; predicted error ~0.15% linear, ~0.3% on area, versus 2-6% for clicked corners.
+
+**Cost if wrong:** If the taped faces do not match the derived planes (proud corner trim, hidden jogs), the scale factor carries a centimeter-scale systematic; the three near-coplanar readings 26 mm apart exist to catch exactly that, and the trim construction is recorded at taping time.
+
+---
+
+### 2026-07-14: Scale span is derived from wall-plane geometry, never from clicked corners; reconnaissance runs before the tape
+
+**Decision:** Cloud-side scale endpoints are never clicked. Spans are derived from plane fits to well-reconstructed wall interiors (the ridge instrument's logic pointed at walls), and wall_recon.py runs BEFORE the tape measurement so the tape goes to the edge the cloud measures best. The predicted error of a candidate is computed from its split-half repeatability plus the tape's centimeter, and the choice is made on that number.
+
+**Why:** A corner in a point cloud is a fuzzy cluster where two fuzzy surfaces meet, and ODM reconstructs edges worse than surfaces; clicking one samples the scene's worst data (est. 5-15 cm per end, 2-6% on area, alone exceeding the 5% budget). A plane fit to thousands of surface points puts the derived geometry at millimeter repeatability. The cloud is the fixed thing and the tape is the flexible thing, so the measurement site is chosen by the instrument, not by habit.
+
+**Rejected:** Taping first and reconstructing whatever was taped. Clicking endpoints with a repeat-click spread as the error bar (quantifies the noise instead of removing it).
+
+**Evidence:** Split-half repeatability 0.9-2.4 mm on a ~7 m span (2026-07-14 runs). The click-spread control experiment (measure_scale.py --click-spread) is still to be run so the old instrument's error is measured, not estimated.
+
+**Cost if wrong:** If wall surfaces are systematically biased (vegetation shadowing, siding relief), plane-derived spans inherit it invisibly; the tape comparison itself is the check, since a factor far from 1.0 beyond GPS-plausible scale error would expose it.
+
+---
 
 ### 2026-07-13: Leveling applied from the three-ridge least squares; null check passed; pitch floor is 0.20 degrees
 
