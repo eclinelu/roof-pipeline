@@ -28,6 +28,13 @@ DEFAULTS = {
                              # pitch and area always use the full cloud
     "max_planes": 12,        # safety ceiling on the peeling loop; the real
                              # floor is min_points_frac
+    # --- tape scale (decision 2026-07-12: scale from tape, not GPS) ---
+    "patch_radius_mult": 40.0,  # wall-patch gather radius = mult * spacing
+    # Site-specific measured data, from measure_scale.py plus the tape:
+    # the derived corner-to-corner wall span in cloud units, and the same
+    # span tape-measured in meters. Both None = areas stay in cloud units.
+    "scale_span_cu": None,
+    "scale_true_m": None,
     # --- vertical reference (decision 2026-07-13: ridge instrument) ---
     "ridge_contact_mult": 10.0,  # ridge contact zone = mult * spacing
     "ridge_frac_min": 0.8,   # contact-height fraction (both facets) for a

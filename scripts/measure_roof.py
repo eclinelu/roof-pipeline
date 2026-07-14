@@ -211,8 +211,21 @@ def main():
     residual = worst
 
     # --- 7a report ---
-    print(f"\n{'facet':>5} {'points':>11} {'pitch deg':>10} {'rise:run':>9} "
-          f"{'azimuth':>8} {'area':>10}")
+    # Scale comes from the tape via measure_scale.py, never from GPS. The
+    # factor's deviation from 1.0 is itself a result: the MEASURED error
+    # of the GPS-derived scale (decision 2026-07-12; capture 2026-07-14).
+    scale = None
+    if cfg["scale_span_cu"] is not None and cfg["scale_true_m"] is not None:
+        scale = cfg["scale_true_m"] / cfg["scale_span_cu"]
+        print(f"\ntape scale: {cfg['scale_true_m']} m over "
+              f"{cfg['scale_span_cu']} cu -> factor {scale:.4f} m/cu")
+        print(f"measured GPS scale error: {100 * (scale - 1):+.2f}% linear, "
+              f"{100 * (scale ** 2 - 1):+.2f}% on area")
+    head = (f"\n{'facet':>5} {'points':>11} {'pitch deg':>10} {'rise:run':>9} "
+            f"{'azimuth':>8} {'area cu^2':>10}")
+    if scale is not None:
+        head += f" {'area m^2':>9}"
+    print(head)
     total = 0.0
     for k, f in enumerate(facets):
         pts_f = f["points"]
@@ -224,17 +237,24 @@ def main():
         area = facet_area(pts_f, f["normal"], alpha=cfg["alpha_mult"] * s_f)
         total += area
         rise = 12.0 * np.tan(np.radians(f["pitch"]))
-        print(f"{k:>5} {len(f['points']):>11,} {f['pitch']:>10.2f} "
-              f"{rise:>7.1f}:12 {azimuth_degrees(f['normal']):>8.1f} "
-              f"{area:>10.2f}{note}")
+        row = (f"{k:>5} {len(f['points']):>11,} {f['pitch']:>10.2f} "
+               f"{rise:>7.1f}:12 {azimuth_degrees(f['normal']):>8.1f} "
+               f"{area:>10.2f}{note:1}")
+        if scale is not None:
+            row += f"{area * scale * scale:>9.2f}"
+        print(row)
     print(f"\n(* area computed on a {AREA_MAX_POINTS:,}-point subsample; "
           f"alpha derived from that subsample's own spacing)")
-    print(f"total roof area: {total:.2f} cloud units^2")
+    total_line = f"total roof area: {total:.2f} cloud units^2"
+    if scale is not None:
+        total_line += f" = {total * scale * scale:.2f} m^2"
+    print(total_line)
     print(f"pitch uncertainty floor (worst residual ridge inclination): "
           f"{residual:.2f} deg")
-    print("scale note: areas are CLOUD UNITS squared. Multiply by (tape "
-          "scale factor)^2 before comparing to real dimensions; the "
-          "georeferenced scale is a separate, untested assumption.")
+    if scale is None:
+        print("scale note: areas are CLOUD UNITS squared. Multiply by (tape "
+              "scale factor)^2 before comparing to real dimensions; the "
+              "georeferenced scale is a separate, untested assumption.")
 
 
 if __name__ == "__main__":
