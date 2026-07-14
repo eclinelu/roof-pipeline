@@ -157,3 +157,41 @@ def test_span_does_not_depend_on_where_either_line_ends():
     # spacings: THE property that makes parallel-line spans the
     # instrument of choice (spec: endpoint-free claim, tested directly)
     assert abs(spans[0] - spans[1]) <= 0.05
+
+
+from synthetic import foliage_blob
+
+
+def test_split_half_repeatability_flatters_an_eroded_eave():
+    """The reason the bracket exists: both halves of an eroded set are
+    eroded identically, so split-half looks superb while the reading is
+    biased by the full erosion depth. Pinned so nobody ever swaps the
+    bracket for a repeatability number."""
+    full = right_side(gable_roof(PITCH, WIDTH, DEPTH, N_SIDE))
+    tight = erode_eaves(full, PITCH, WIDTH, depth_cu=0.5)
+    s = median_nn_spacing(tight)
+    origin = tight.mean(axis=0)
+    halves = [eave_line(tight[off::2], NORMAL_R, s, origin=origin)["t_edge"]
+              for off in (0, 1)]
+    rep = abs(halves[0] - halves[1])
+    truth_gap = (eave_line(full, NORMAL_R, s, origin=origin)["t_edge"]
+                 - eave_line(tight, NORMAL_R, s, origin=origin)["t_edge"])
+    assert rep < 0.2 * truth_gap  # repeatability says mm; the bias is 0.5 cu
+
+
+def test_clutter_near_the_plane_blows_the_loose_reading_out():
+    """Vegetation within the plane gate makes the loose eave read LONG.
+    The recon must flag a wide bracket as contamination, so this pins
+    that the blowout is visible in t_edge, not hidden."""
+    full = right_side(gable_roof(PITCH, WIDTH, DEPTH, N_SIDE))
+    s = median_nn_spacing(full)
+    origin = full.mean(axis=0)
+    clean = eave_line(full, NORMAL_R, s, origin=origin)["t_edge"]
+    # a limb just past the eave, ON the extended plane so a distance
+    # gate alone cannot reject it: x centered 1.0 past the eave
+    x0 = WIDTH / 2.0 + 1.0
+    z0 = (WIDTH / 2.0 - x0) * np.tan(np.radians(PITCH))
+    blob = foliage_blob(center=(x0, DEPTH / 2.0, z0), size=1.5, n=4000)
+    dirty = eave_line(np.vstack([full, blob]), NORMAL_R, s,
+                      origin=origin)["t_edge"]
+    assert dirty - clean > 0.5  # the blowout is unmistakable, so flaggable
