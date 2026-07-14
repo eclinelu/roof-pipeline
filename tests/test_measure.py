@@ -1,8 +1,10 @@
 import numpy as np
 from scipy.spatial.transform import Rotation
+from synthetic import gable_roof
 from roofkit.measure import (tilt_degrees, opposing_pairs, z_tilt_residual,
                              vertical_from_pair, project_to_plane,
-                             alpha_shape_area, facet_area, azimuth_degrees)
+                             alpha_shape_area, facet_area, azimuth_degrees,
+                             ridge_line, tilt_from_ridges)
 
 
 def gable_facets(pitch_deg=30.0, tilt_about_ridge_deg=0.0):
@@ -55,6 +57,74 @@ def test_vertical_from_pair_recovers_true_up():
     up = vertical_from_pair(facets[0], facets[1])
     true_up = Rotation.from_euler("y", 2.0, degrees=True).apply([0.0, 0.0, 1.0])
     assert np.degrees(np.arccos(np.clip(up @ true_up, -1, 1))) < 0.05
+
+
+def test_ridge_line_finds_a_level_gable_ridge():
+    roof = gable_roof(pitch_deg=30.0, n_per_side=6000, noise=0.005)
+    a, b = roof[roof[:, 0] < 0], roof[roof[:, 0] >= 0]
+    r = ridge_line(a, b, contact_dist=0.15)
+    assert r is not None
+    assert abs(r["inclination_deg"]) < 0.15          # a real ridge is level
+    az = r["azimuth_deg"]
+    assert az < 5.0 or az > 175.0                    # ridge runs along Y (north)
+    assert r["frac_a"] > 0.9 and r["frac_b"] > 0.9   # contact at the TOP
+
+
+def test_ridge_line_measures_a_known_inclination():
+    from scipy.spatial.transform import Rotation
+    roof = gable_roof(pitch_deg=30.0, n_per_side=6000, noise=0.005)
+    tilted = Rotation.from_euler("x", 2.0, degrees=True).apply(roof)
+    a, b = tilted[tilted[:, 0] < 0], tilted[tilted[:, 0] >= 0]
+    r = ridge_line(a, b, contact_dist=0.15)
+    assert abs(abs(r["inclination_deg"]) - 2.0) < 0.15
+
+
+def test_valley_contact_reads_as_bottom_not_ridge():
+    roof = gable_roof(pitch_deg=30.0, n_per_side=6000, noise=0.005)
+    valley = roof.copy()
+    valley[:, 2] = roof[:, 2].max() - roof[:, 2]     # flip: ridge becomes valley
+    a, b = valley[valley[:, 0] < 0], valley[valley[:, 0] >= 0]
+    r = ridge_line(a, b, contact_dist=0.15)
+    assert r is not None
+    assert r["frac_a"] < 0.2 and r["frac_b"] < 0.2   # contact at the BOTTOM
+
+
+def test_tilt_from_ridges_recovers_the_vector():
+    # ridges at az 0 and 90 with slopes 1.0 and 0.5: tilt vector components
+    # u=1.0, w=0.5 -> magnitude hypot = 1.118, uphill az = atan2(0.5, 1.0)
+    t, az = tilt_from_ridges([(0.0, 1.0), (90.0, 0.5)])
+    assert abs(t - 1.1180) < 1e-3
+    assert abs(az - 26.565) < 1e-2
+
+
+def test_leveling_by_the_measured_tilt_nulls_the_ridges():
+    # The full instrument chain, and the SIGN convention pin: tilt two
+    # orthogonal gables by a known rotation, measure both ridges, solve
+    # the tilt vector, level by it, re-measure. If any sign anywhere in
+    # ridge_line / tilt_from_ridges / up_from_tilt is wrong, leveling
+    # DOUBLES the readings instead of nulling them and this fails loudly.
+    from roofkit.measure import up_from_tilt
+    from roofkit.segment import level_cloud
+    r1 = gable_roof(pitch_deg=30.0, n_per_side=6000, noise=0.005)
+    r2 = r1[:, [1, 0, 2]] + np.array([20.0, 0.0, 0.0])  # ridge along X
+    tilt = Rotation.from_euler("xy", [0.9, -1.1], degrees=True)
+    t1, t2 = tilt.apply(r1), tilt.apply(r2)
+    readings = []
+    for roof, axis in ((t1, 0), (t2, 1)):
+        split = roof[:, axis] < np.median(roof[:, axis])
+        r = ridge_line(roof[split], roof[~split], contact_dist=0.15)
+        readings.append((r["azimuth_deg"], r["inclination_deg"]))
+    t_deg, az_deg = tilt_from_ridges(readings)
+    # Non-vacuous check: euler xy [0.9, -1.1] puts true up in cloud coords
+    # at (-0.019198, -0.015708, ~1), i.e. tilt 1.4215 deg, uphill az 50.7.
+    assert abs(t_deg - 1.4215) < 0.05
+    assert abs(az_deg - 50.7) < 2.0
+    up = up_from_tilt(t_deg, az_deg)
+    for roof, axis in ((t1, 0), (t2, 1)):
+        lev = level_cloud(roof, up)
+        split = lev[:, axis] < np.median(lev[:, axis])
+        r = ridge_line(lev[split], lev[~split], contact_dist=0.15)
+        assert abs(r["inclination_deg"]) < 0.1
 
 
 def test_azimuth_east_south_and_sign_flip():
