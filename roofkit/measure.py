@@ -253,6 +253,57 @@ def up_from_tilt(tilt_deg, uphill_az_deg):
     return up / np.linalg.norm(up)
 
 
+# --- Recon primitives (decision 2026-07-14: roof-derived scale spans) ---
+# A span between two DERIVED parallel lines depends on no endpoint, which
+# is why it beats a line LENGTH as a scale candidate: a line's ends sit
+# where facets stop being reconstructed, the cloud's worst data. These
+# primitives make both constructs measurable, with the endpoint
+# dependence of the length isolated in one estimator so its bias can be
+# reported instead of hidden.
+
+
+def _density_edge(t, bin_width, edge_frac=0.5):
+    """Supported extent of a 1D coordinate set: the extreme values among
+    histogram bins carrying at least edge_frac of the central (median
+    filled-bin) density. Stragglers past the real edge live in
+    near-empty bins and are excluded. Erosion removes whole edge bins,
+    so the reading moves INWARD: a one-sided bias with known sign,
+    which callers report as a bracket, never correct away.
+    bin_width is a LENGTH (scale-dependent: callers derive it from
+    median_nn_spacing); edge_frac is a unitless ratio, scale-free.
+    Returns (t_lo, t_hi, n_lo, n_hi): the supported extremes and the
+    point count inside each supporting end bin."""
+    t = np.asarray(t, float)
+    edges = np.arange(t.min(), t.max() + bin_width, bin_width)
+    if len(edges) < 4:  # fewer than 3 bins: nothing to compare against
+        return float(t.min()), float(t.max()), len(t), len(t)
+    counts, edges = np.histogram(t, bins=edges)
+    central = float(np.median(counts[counts > 0]))
+    ok = np.flatnonzero(counts >= edge_frac * central)
+    lo, hi = ok[0], ok[-1]
+    kept = t[(t >= edges[lo]) & (t <= edges[hi + 1])]
+    n_lo = int(((t >= edges[lo]) & (t < edges[lo + 1])).sum())
+    n_hi = int(((t >= edges[hi]) & (t <= edges[hi + 1])).sum())
+    return float(kept.min()), float(kept.max()), n_lo, n_hi
+
+
+def line_extent(points, p0, d, spacing, edge_frac=0.5, bin_mult=4.0):
+    """Supported extent of a line's contact points ALONG the line. The
+    two ends are where the supporting facets stop overlapping: the
+    eroded edge zone. This is the one primitive whose answer depends on
+    the cloud's worst data, so callers must report per-end sensitivity
+    (re-select contacts at other radii and diff the ends) rather than
+    trusting the ends as read.
+    Returns dict: t_lo, t_hi (cu along d, relative to p0), length,
+    n_lo, n_hi (per-end supporting counts)."""
+    d = np.asarray(d, float)
+    d = d / np.linalg.norm(d)
+    t = (np.asarray(points, float) - np.asarray(p0, float)) @ d
+    t_lo, t_hi, n_lo, n_hi = _density_edge(t, bin_mult * spacing, edge_frac)
+    return {"t_lo": t_lo, "t_hi": t_hi, "length": t_hi - t_lo,
+            "n_lo": n_lo, "n_hi": n_hi}
+
+
 # --- Stage 7a: polygon area per facet (decision 2026-07-12) ---
 # Area is measured IN THE FACET'S OWN PLANE (slope area, what shingles
 # cover), not the ground footprint. The alpha shape is a shrink-wrapped
