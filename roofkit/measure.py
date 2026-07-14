@@ -136,6 +136,30 @@ def _plane_fit(points):
     return (-n if n[2] < 0 else n), centroid
 
 
+def plane_intersection(n1, c1, n2, c2, min_cross=0.05):
+    """The line where two planes meet: (point, unit direction), or None
+    when the planes are within ~arcsin(min_cross) of parallel (min_cross
+    is the sine of an angle: scale-independent). Each plane is given as
+    (normal, a point on it). The returned point is the spot on the line
+    nearest the two given points' midpoint, so it lands in the region the
+    data actually occupies rather than somewhere far along the line."""
+    n1 = np.asarray(n1, float)
+    n2 = np.asarray(n2, float)
+    c1 = np.asarray(c1, float)
+    c2 = np.asarray(c2, float)
+    n1 = n1 / np.linalg.norm(n1)
+    n2 = n2 / np.linalg.norm(n2)
+    d = np.cross(n1, n2)
+    norm = np.linalg.norm(d)
+    if norm < min_cross:
+        return None
+    d = d / norm
+    mid = (c1 + c2) / 2.0
+    p0 = np.linalg.solve(np.vstack([n1, n2, d]),
+                         [n1 @ c1, n2 @ c2, d @ mid])
+    return p0, d
+
+
 def ridge_line(points_a, points_b, contact_dist, min_contact=20):
     """Measure the line where two facets meet, from the points ON it.
 
@@ -166,16 +190,10 @@ def ridge_line(points_a, points_b, contact_dist, min_contact=20):
     points_b = np.asarray(points_b, float)
     na, ca = _plane_fit(points_a)
     nb, cb = _plane_fit(points_b)
-    d = np.cross(na, nb)
-    if np.linalg.norm(d) < 0.05:  # within ~3 degrees of parallel
+    inter = plane_intersection(na, ca, nb, cb)
+    if inter is None:  # within ~3 degrees of parallel: no defined line
         return None
-    d = d / np.linalg.norm(d)
-    # A point on the intersection line: solve the 3x3 system that puts it
-    # on both planes and (to pin it along the line) closest to the
-    # centroids' midpoint measured along d.
-    mid = (ca + cb) / 2.0
-    p0 = np.linalg.solve(np.vstack([na, nb, d]),
-                         [na @ ca, nb @ cb, d @ mid])
+    p0, d = inter
 
     contacts, fracs = [], []
     for pts in (points_a, points_b):

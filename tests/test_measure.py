@@ -97,6 +97,22 @@ def test_tilt_from_ridges_recovers_the_vector():
     assert abs(az - 26.565) < 1e-2
 
 
+def test_plane_intersection_line_of_two_walls():
+    from roofkit.measure import plane_intersection
+    # wall x=2 (normal +X) meets wall y=3 (normal +Y): the corner line is
+    # vertical and passes through (2, 3, any z)
+    p0, d = plane_intersection([1.0, 0.0, 0.0], [2.0, 5.0, 1.0],
+                               [0.0, 1.0, 0.0], [7.0, 3.0, 2.0])
+    assert abs(p0[0] - 2.0) < 1e-9 and abs(p0[1] - 3.0) < 1e-9
+    assert abs(abs(d[2]) - 1.0) < 1e-9
+
+
+def test_plane_intersection_parallel_is_none():
+    from roofkit.measure import plane_intersection
+    assert plane_intersection([0.0, 0.0, 1.0], [0.0, 0.0, 0.0],
+                              [0.0, 0.0, 1.0], [0.0, 0.0, 5.0]) is None
+
+
 def test_leveling_by_the_measured_tilt_nulls_the_ridges():
     # The full instrument chain, and the SIGN convention pin: tilt two
     # orthogonal gables by a known rotation, measure both ridges, solve
