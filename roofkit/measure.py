@@ -304,6 +304,51 @@ def line_extent(points, p0, d, spacing, edge_frac=0.5, bin_mult=4.0):
             "n_lo": n_lo, "n_hi": n_hi}
 
 
+def eave_line(points, normal, spacing, origin=None,
+              edge_frac=0.5, bin_mult=4.0):
+    """The eave of a facet, derived WITHOUT fitting a direction to the
+    ragged boundary. Geometry gives the direction free: a non-horizontal
+    plane contains exactly one level direction, so the eave is exactly
+    parallel to its own ridge. The only estimated quantity is the
+    eave's POSITION down the slope: the density edge of the along-slope
+    distribution (_density_edge), averaged over the whole edge length.
+
+    origin anchors the downslope coordinate (default: the point set's
+    own centroid). Pass the TIGHT set's centroid when reading a LOOSE
+    set, so tight and loose share one axis and their t_edge difference
+    IS the two-cloud bracket delta (decision 2026-07-14).
+
+    Returns None for a near-horizontal plane (no level direction), else
+    a dict:
+      p0          : a point on the eave line (origin + t_edge * w)
+      d           : unit level direction (the eave/ridge direction)
+      w           : in-plane downslope unit vector, w[2] < 0
+      t_edge      : downslope coordinate of the eave, relative to origin
+      n_edge      : point count in the supporting end bin
+      azimuth_deg : bearing of d, folded to [0, 180) (a line has no
+                    forward end)"""
+    n = np.asarray(normal, float)
+    n = n / np.linalg.norm(n)
+    if n[2] < 0:
+        n = -n
+    if np.hypot(n[0], n[1]) < 0.02:  # within ~1 deg of flat: no downslope
+        return None
+    d = np.cross(n, [0.0, 0.0, 1.0])
+    d = d / np.linalg.norm(d)
+    w = np.cross(n, d)  # in-plane, perpendicular to the level direction
+    if w[2] > 0:
+        w = -w  # orient downslope, so bigger t_edge means longer facet
+    points = np.asarray(points, float)
+    origin = points.mean(axis=0) if origin is None else np.asarray(origin, float)
+    t = (points - origin) @ w
+    _, t_hi, _, n_hi = _density_edge(t, bin_mult * spacing, edge_frac)
+    az = float(np.degrees(np.arctan2(d[0], d[1])) % 360.0)
+    if az >= 180.0:
+        az -= 180.0
+    return {"p0": origin + t_hi * w, "d": d, "w": w, "t_edge": float(t_hi),
+            "n_edge": n_hi, "azimuth_deg": az}
+
+
 # --- Stage 7a: polygon area per facet (decision 2026-07-12) ---
 # Area is measured IN THE FACET'S OWN PLANE (slope area, what shingles
 # cover), not the ground footprint. The alpha shape is a shrink-wrapped
