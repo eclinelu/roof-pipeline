@@ -28,8 +28,18 @@ DEFAULTS = {
                              # pitch and area always use the full cloud
     "max_planes": 12,        # safety ceiling on the peeling loop; the real
                              # floor is min_points_frac
+    # --- vertical reference (decision 2026-07-13: ridge instrument) ---
+    "ridge_contact_mult": 10.0,  # ridge contact zone = mult * spacing
+    "ridge_frac_min": 0.8,   # contact-height fraction (both facets) for a
+                             # pair to count as a TRUE ridge pair
+    # Site-specific measured correction, from the ridge instrument's own
+    # printout on an unleveled run. Filled in by a HUMAN decision, never
+    # automatically (2026-07-13). None = trust georeferenced Z as-is.
+    "level_tilt_deg": None,
+    "level_uphill_az_deg": None,
     # --- design constants ---
-    "gate_limit_deg": 1.0,   # reject georeferenced Z above this residual
+    "gate_limit_deg": 1.0,   # reject the vertical reference above this
+                             # residual ridge inclination
 }
 
 

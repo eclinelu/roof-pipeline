@@ -4,18 +4,25 @@
 #
 # Plane DISCOVERY runs on a random subsample (cfg fit_sample); membership,
 # refit, pitch, azimuth, and area use the full cloud. Band diagnostics
-# print in physical units BEFORE any render. The Z gate residual prints as
-# a number BEFORE any trusted output; above gate_limit_deg the script
-# STOPS: leveling is a human decision (2026-07-13), never automatic.
-# Areas are in cloud units squared until the tape scale factor is applied.
+# print in CLOUD UNITS before any render (georeferenced scale is untested;
+# no diagnostic labels it as cm/m). The vertical reference is the
+# RIDGE INSTRUMENT (decision 2026-07-13): real ridges are level, so a
+# measured ridge inclination IS cloud tilt, no symmetry assumption. The
+# symmetry residual is demoted to an asymmetry report. Above gate_limit_deg
+# the script STOPS and prints the measured tilt vector; putting it into
+# roofkit.json (level_tilt_deg / level_uphill_az_deg) is a human decision,
+# never automatic. Areas are in cloud units squared until the tape scale
+# factor is applied; that scale is a SEPARATE untested assumption from the
+# rotation this corrects.
 import argparse
 import numpy as np
 import open3d as o3d
 from dataset_config import load_config
 from roofkit.stats import median_nn_spacing
 from roofkit.segment import (find_roof_planes, assign_to_planes,
-                             fit_plane_trimmed)
-from roofkit.measure import (tilt_degrees, azimuth_degrees, z_tilt_residual,
+                             fit_plane_trimmed, level_cloud)
+from roofkit.measure import (tilt_degrees, azimuth_degrees, opposing_pairs,
+                             ridge_line, tilt_from_ridges, up_from_tilt,
                              facet_area)
 
 # Cap on points fed to one facet's Delaunay triangulation. The alpha shape
@@ -53,17 +60,35 @@ def main():
     o3d.utility.random.seed(0)
 
     points = np.load(cfg["roof_path"])
+
+    # Leveling happens HERE, before anything reads a coordinate, so every
+    # downstream quantity that references Z (pitch, azimuth, the ridge
+    # readings, the gate) inherits the corrected frame. The correction is
+    # measured site data, so it lives in roofkit.json, not in code.
+    if cfg["level_tilt_deg"] is not None:
+        up = up_from_tilt(cfg["level_tilt_deg"], cfg["level_uphill_az_deg"])
+        points = level_cloud(points, up)
+        print(f"LEVELED: removed {cfg['level_tilt_deg']:.3f} deg tilt, uphill "
+              f"azimuth {cfg['level_uphill_az_deg']:.1f} (ridge-measured). "
+              f"Null check: ridge inclinations below must read ~0.")
+    else:
+        print("NOT LEVELED: georeferenced Z taken as vertical, pending the "
+              "ridge readings below.")
+
     s_full = median_nn_spacing(points)
     rng = np.random.default_rng(0)
     n_fit = min(cfg["fit_sample"], len(points))
     sub = points[rng.choice(len(points), n_fit, replace=False)]
     s_sub = median_nn_spacing(sub)
     band = cfg["band_mult"] * s_sub
+    # Diagnostics print in CLOUD UNITS (cu), never cm/m: the georeferenced
+    # scale is an untested assumption, and labeling it as a real unit
+    # presents GPS scale as fact (the 2026-07-13 lesson, applied to units).
     print(f"{len(points):,} roof points")
-    print(f"median spacing: full cloud {s_full * 100:.2f} cm, "
-          f"fit subsample ({n_fit:,} pts) {s_sub * 100:.2f} cm")
+    print(f"median spacing: full cloud {s_full:.4f} cu, "
+          f"fit subsample ({n_fit:,} pts) {s_sub:.4f} cu")
     print(f"RANSAC/assignment band = {cfg['band_mult']} x subsample spacing "
-          f"= {band * 100:.2f} cm")
+          f"= {band:.4f} cu")
 
     facets = find_roof_planes(sub, distance_threshold=band,
                               min_points=int(cfg["min_points_frac"] * n_fit),
@@ -74,8 +99,8 @@ def main():
     # scatter is measured in a generous 5x band window so a sheet thicker
     # than the band shows up as a number, not as a moth-eaten render.
     owner, dist = assign_to_planes(points, facets, max_dist=np.inf)
-    print(f"\nband vs sheet thickness (cm) [p90 = 90% of a facet's points "
-          f"sit closer than this]:")
+    print(f"\nband vs sheet thickness (cloud units) [p90 = 90% of a facet's "
+          f"points sit closer than this]:")
     print(f"{'facet':>5} {'members':>11} {'median|d|':>10} {'p90|d|':>8} "
           f"{'band':>7}  verdict")
     clutter_ids = {int(x) for x in args.clutter.split(",") if x.strip()}
@@ -89,8 +114,8 @@ def main():
         d = dist[near]
         med, p90 = np.median(d), np.percentile(d, 90)
         verdict = "ok" if p90 <= band else "FAT TAIL (clutter near plane)"
-        print(f"{k:>5} {member.sum():>11,} {med * 100:>9.2f} {p90 * 100:>7.2f} "
-              f"{band * 100:>6.2f}  {verdict}")
+        print(f"{k:>5} {member.sum():>11,} {med:>9.4f} {p90:>7.4f} "
+              f"{band:>6.4f}  {verdict}")
         if k in clutter_ids:
             clutter_views.append((k, points[near], dist[near]))
         mine = points[member]
@@ -98,18 +123,18 @@ def main():
         # inside the band (dormer surfaces) pulls a plain fit. Trim to each
         # facet's own median scatter and refit (decision 2026-07-13).
         normal, keep = fit_plane_trimmed(mine, trim_mult=cfg["trim_mult"])
-        trim_cm = 100 * cfg["trim_mult"] * np.median(
+        trim_cu = cfg["trim_mult"] * np.median(
             np.abs((mine[keep] - mine[keep].mean(axis=0)) @ normal))
         kept.append({"points": mine[keep], "normal": normal,
                      "pitch": tilt_degrees(normal),
-                     "kept_frac": keep.mean(), "trim_cm": trim_cm})
+                     "kept_frac": keep.mean(), "trim_cu": trim_cu})
     facets = kept
 
     print(f"\ntrimmed refit (trim_mult {cfg['trim_mult']} x per-facet median "
           f"scatter):")
-    print(f"{'facet':>5} {'kept %':>7} {'trim cm':>8} {'pitch deg':>10}")
+    print(f"{'facet':>5} {'kept %':>7} {'trim cu':>8} {'pitch deg':>10}")
     for k, f in enumerate(facets):
-        print(f"{k:>5} {100 * f['kept_frac']:>6.1f} {f['trim_cm']:>8.2f} "
+        print(f"{k:>5} {100 * f['kept_frac']:>6.1f} {f['trim_cu']:>8.4f} "
               f"{f['pitch']:>10.2f}")
 
     if clutter_views:
@@ -129,33 +154,61 @@ def main():
     if not args.no_view:
         show_facets(facets)
 
-    # --- Z-verification gate, BEFORE any trusted numbers ---
-    residual, pairs = z_tilt_residual(facets)
-    if residual is None:
+    # --- Vertical reference gate: ridge inclination (2026-07-13) ---
+    # One row per opposing pair. The contact-height fractions certify a
+    # TRUE ridge pair (contact at the TOP of both facets); only those are
+    # instruments. The symmetry residual column is now the pair's measured
+    # ASYMMETRY, a property of the building, not the gate.
+    pairs = opposing_pairs(facets)
+    if not pairs:
         print("\nGATE: no opposing facet pair found. No instrument for Z.")
         print("STOP: a fallback vertical reference must be chosen before any")
         print("pitch from this cloud can be trusted.")
         return
-    print("\nZ gate evidence, one row per opposing pair "
-          "(a true gable pair: azimuths ~180 apart, comparable sizes):")
-    print(f"{'pair':>7} {'az_i':>6} {'az_j':>6} {'az diff':>8} {'pitch_i':>8} "
-          f"{'pitch_j':>8} {'pts_i':>10} {'pts_j':>10} {'residual':>9}")
+    contact_dist = cfg["ridge_contact_mult"] * s_full
+    print(f"\nridge instrument, contact zone {contact_dist:.4f} cu "
+          f"({cfg['ridge_contact_mult']} x full-cloud spacing):")
+    print(f"{'pair':>7} {'ridge az':>9} {'incline':>8} {'frac_i':>7} "
+          f"{'frac_j':>7} {'contacts':>17} {'sym resid':>10}  verdict")
+    ridge_readings = []
+    worst = None
     for i, j in pairs:
-        ai, aj = azimuth_degrees(facets[i]["normal"]), azimuth_degrees(facets[j]["normal"])
-        diff = 180.0 - abs(abs(ai - aj) - 180.0)  # angular separation
-        r = abs(facets[i]["pitch"] - facets[j]["pitch"]) / 2.0
-        print(f"{i:>3},{j:>3} {ai:>6.1f} {aj:>6.1f} {diff:>8.1f} "
-              f"{facets[i]['pitch']:>8.2f} {facets[j]['pitch']:>8.2f} "
-              f"{len(facets[i]['points']):>10,} {len(facets[j]['points']):>10,} "
-              f"{r:>9.2f}")
-    print(f"\nGATE residual (worst pair): {residual:.2f} deg "
-          f"(limit {cfg['gate_limit_deg']})")
-    if residual > cfg["gate_limit_deg"]:
-        print("GATE FAILED: the cloud's Z axis is tilted by this residual and")
-        print("every pitch below would be wrong by it. STOPPING before the")
-        print("area report. Leveling (vertical_from_pair + level_cloud) is")
-        print("available but is a human decision, not an automatic one.")
+        sym = abs(facets[i]["pitch"] - facets[j]["pitch"]) / 2.0
+        r = ridge_line(facets[i]["points"], facets[j]["points"], contact_dist)
+        if r is None:
+            print(f"{i:>3},{j:>3} {'-':>9} {'-':>8} {'-':>7} {'-':>7} "
+                  f"{'-':>17} {sym:>10.2f}  planes do not meet")
+            continue
+        is_ridge = (r["frac_a"] >= cfg["ridge_frac_min"]
+                    and r["frac_b"] >= cfg["ridge_frac_min"])
+        verdict = "RIDGE" if is_ridge else "not a ridge pair (no instrument)"
+        contacts = f"{r['n_a']:,}/{r['n_b']:,}"
+        print(f"{i:>3},{j:>3} {r['azimuth_deg']:>9.1f} "
+              f"{r['inclination_deg']:>8.2f} {r['frac_a']:>7.2f} "
+              f"{r['frac_b']:>7.2f} {contacts:>17} {sym:>10.2f}  {verdict}")
+        if is_ridge:
+            ridge_readings.append((r["azimuth_deg"], r["inclination_deg"]))
+            worst = max(worst if worst is not None else 0.0,
+                        abs(r["inclination_deg"]))
+    if not ridge_readings:
+        print("\nGATE: no TRUE ridge pair (contact fractions all below "
+              f"{cfg['ridge_frac_min']}). No instrument for Z. STOP.")
         return
+    if len(ridge_readings) >= 2:
+        t_deg, az_deg = tilt_from_ridges(ridge_readings)
+        print(f"\ntilt vector from {len(ridge_readings)} ridges: "
+              f"{t_deg:.3f} deg, uphill azimuth {az_deg:.1f}")
+    print(f"\nGATE residual (worst ridge inclination): {worst:.2f} deg "
+          f"(limit {cfg['gate_limit_deg']})")
+    if worst > cfg["gate_limit_deg"]:
+        print("GATE FAILED: real ridges are level and this cloud's are not,")
+        print("so its vertical is tilted and every pitch below would be wrong")
+        print("by it. STOPPING before the area report. To level: copy the")
+        print("tilt vector above into roofkit.json as level_tilt_deg and")
+        print("level_uphill_az_deg (a human decision, never automatic; with")
+        print("only one ridge, only the component along it is measurable).")
+        return
+    residual = worst
 
     # --- 7a report ---
     print(f"\n{'facet':>5} {'points':>11} {'pitch deg':>10} {'rise:run':>9} "
@@ -177,9 +230,11 @@ def main():
     print(f"\n(* area computed on a {AREA_MAX_POINTS:,}-point subsample; "
           f"alpha derived from that subsample's own spacing)")
     print(f"total roof area: {total:.2f} cloud units^2")
-    print(f"pitch uncertainty floor (gate residual): {residual:.2f} deg")
-    print("scale note: multiply areas by (tape scale factor)^2 before "
-          "comparing to real dimensions.")
+    print(f"pitch uncertainty floor (worst residual ridge inclination): "
+          f"{residual:.2f} deg")
+    print("scale note: areas are CLOUD UNITS squared. Multiply by (tape "
+          "scale factor)^2 before comparing to real dimensions; the "
+          "georeferenced scale is a separate, untested assumption.")
 
 
 if __name__ == "__main__":
