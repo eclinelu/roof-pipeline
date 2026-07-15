@@ -262,29 +262,43 @@ def up_from_tilt(tilt_deg, uphill_az_deg):
 # reported instead of hidden.
 
 
-def _density_edge(t, bin_width, edge_frac=0.5):
+def _density_edge(t, bin_width, edge_frac=0.5, min_count=None):
     """Supported extent of a 1D coordinate set: the extreme values among
-    histogram bins carrying at least edge_frac of the central (median
-    filled-bin) density. Stragglers past the real edge live in
-    near-empty bins and are excluded. Erosion removes whole edge bins,
-    so the reading moves INWARD: a one-sided bias with known sign,
-    which callers report as a bracket, never correct away.
+    histogram bins carrying at least a density floor. Stragglers past the
+    real edge live in near-empty bins and are excluded. Erosion removes
+    whole edge bins, so the reading moves INWARD: a one-sided bias with
+    known sign, which callers report as a bracket, never correct away.
+
+    The floor is edge_frac * central (central = median filled-bin count)
+    UNLESS min_count is given, in which case min_count is used as an
+    ABSOLUTE bin-count floor. This distinction is the whole reason the
+    two-cloud bracket works (decision 2026-07-15): a relative floor is
+    correct for measuring ONE cloud's extent, but it is NOT comparable
+    across two clouds of different density, because the denser cloud
+    gets a higher floor and reads its edge inboard even when it holds
+    strictly more points. The bracket passes the TIGHT set's floor here
+    when reading the LOOSE set, so both edges use one threshold.
+
     bin_width is a LENGTH (scale-dependent: callers derive it from
     median_nn_spacing); edge_frac is a unitless ratio, scale-free.
-    Returns (t_lo, t_hi, n_lo, n_hi): the supported extremes and the
-    point count inside each supporting end bin."""
+    Returns (t_lo, t_hi, n_lo, n_hi, central): the supported extremes,
+    the point count inside each supporting end bin, and central (so the
+    caller can derive the shared floor for the paired read)."""
     t = np.asarray(t, float)
     edges = np.arange(t.min(), t.max() + bin_width, bin_width)
     if len(edges) < 4:  # fewer than 3 bins: nothing to compare against
-        return float(t.min()), float(t.max()), len(t), len(t)
+        return float(t.min()), float(t.max()), len(t), len(t), float(len(t))
     counts, edges = np.histogram(t, bins=edges)
     central = float(np.median(counts[counts > 0]))
-    ok = np.flatnonzero(counts >= edge_frac * central)
+    floor = min_count if min_count is not None else edge_frac * central
+    ok = np.flatnonzero(counts >= floor)
+    if len(ok) == 0:  # floor above every bin (sparse loose set): no edge
+        return float(t.min()), float(t.max()), 0, 0, central
     lo, hi = ok[0], ok[-1]
     kept = t[(t >= edges[lo]) & (t <= edges[hi + 1])]
     n_lo = int(((t >= edges[lo]) & (t < edges[lo + 1])).sum())
     n_hi = int(((t >= edges[hi]) & (t <= edges[hi + 1])).sum())
-    return float(kept.min()), float(kept.max()), n_lo, n_hi
+    return float(kept.min()), float(kept.max()), n_lo, n_hi, central
 
 
 def line_extent(points, p0, d, spacing, edge_frac=0.5, bin_mult=4.0):
@@ -299,13 +313,13 @@ def line_extent(points, p0, d, spacing, edge_frac=0.5, bin_mult=4.0):
     d = np.asarray(d, float)
     d = d / np.linalg.norm(d)
     t = (np.asarray(points, float) - np.asarray(p0, float)) @ d
-    t_lo, t_hi, n_lo, n_hi = _density_edge(t, bin_mult * spacing, edge_frac)
+    t_lo, t_hi, n_lo, n_hi, _ = _density_edge(t, bin_mult * spacing, edge_frac)
     return {"t_lo": t_lo, "t_hi": t_hi, "length": t_hi - t_lo,
             "n_lo": n_lo, "n_hi": n_hi}
 
 
 def eave_line(points, normal, spacing, origin=None,
-              edge_frac=0.5, bin_mult=4.0):
+              edge_frac=0.5, bin_mult=4.0, min_count=None):
     """The eave of a facet, derived WITHOUT fitting a direction to the
     ragged boundary. Geometry gives the direction free: a non-horizontal
     plane contains exactly one level direction, so the eave is exactly
@@ -318,6 +332,12 @@ def eave_line(points, normal, spacing, origin=None,
     set, so tight and loose share one axis and their t_edge difference
     IS the two-cloud bracket delta (decision 2026-07-14).
 
+    min_count forwards an ABSOLUTE density floor to _density_edge. The
+    bracket passes 0.5 * the tight read's central density when reading
+    the loose set, so both edges use one threshold and the denser loose
+    cloud cannot pull its cutoff up and read inboard (decision
+    2026-07-15). Default None keeps the relative edge_frac floor.
+
     Returns None for a near-horizontal plane (no level direction), else
     a dict:
       p0          : a point on the eave line (origin + t_edge * w)
@@ -325,6 +345,8 @@ def eave_line(points, normal, spacing, origin=None,
       w           : in-plane downslope unit vector, w[2] < 0
       t_edge      : downslope coordinate of the eave, relative to origin
       n_edge      : point count in the supporting end bin
+      central     : median filled-bin count (the bracket derives the
+                    shared loose floor as 0.5 * this from the tight read)
       azimuth_deg : bearing of d, folded to [0, 180) (a line has no
                     forward end)"""
     n = np.asarray(normal, float)
@@ -341,12 +363,13 @@ def eave_line(points, normal, spacing, origin=None,
     points = np.asarray(points, float)
     origin = points.mean(axis=0) if origin is None else np.asarray(origin, float)
     t = (points - origin) @ w
-    _, t_hi, _, n_hi = _density_edge(t, bin_mult * spacing, edge_frac)
+    _, t_hi, _, n_hi, central = _density_edge(t, bin_mult * spacing,
+                                              edge_frac, min_count=min_count)
     az = float(np.degrees(np.arctan2(d[0], d[1])) % 360.0)
     if az >= 180.0:
         az -= 180.0
     return {"p0": origin + t_hi * w, "d": d, "w": w, "t_edge": float(t_hi),
-            "n_edge": n_hi, "azimuth_deg": az}
+            "n_edge": n_hi, "central": central, "azimuth_deg": az}
 
 
 def line_pair_span(p0a, da, p0b, db, t_lo, t_hi):
