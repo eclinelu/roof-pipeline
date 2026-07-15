@@ -193,6 +193,152 @@ def bracket_eaves(facets, raw_points, band, spacing):
     return brackets
 
 
+def _where(p, origin):
+    r = p - origin
+    return f"dx={r[0]:.1f} dy={r[1]:.1f} z={r[2]:.1f}"
+
+
+def _overlap_window(line_a, pts_b, p0a, da):
+    """Evaluation window along line A: the overlap of A's supported
+    extent and B's support projected onto A. The span gets read where
+    BOTH lines actually have data under them."""
+    ta = line_a
+    tb = (pts_b - p0a) @ da
+    lo = max(ta["t_lo"], float(tb.min()))
+    hi = min(ta["t_hi"], float(tb.max()))
+    return (lo, hi) if hi > lo else None
+
+
+def enumerate_candidates(facets, lines, brackets, spacing, origin):
+    cands = []
+    # class 1: parallel facet-plane separations (interior fits, no edges)
+    for i in range(len(facets)):
+        for j in range(i + 1, len(facets)):
+            ni = facets[i]["normal"] / np.linalg.norm(facets[i]["normal"])
+            nj = facets[j]["normal"] / np.linalg.norm(facets[j]["normal"])
+            if ni[2] < 0:
+                ni = -ni
+            if nj[2] < 0:
+                nj = -nj
+            ang = np.degrees(np.arccos(np.clip(ni @ nj, -1.0, 1.0)))
+            if ang > PLANE_TOL_DEG:
+                continue
+            ci = facets[i]["points"].mean(axis=0)
+            sep_ij = np.abs((facets[j]["points"] - ci) @ ni).mean()
+            cj = facets[j]["points"].mean(axis=0)
+            sep_ji = np.abs((facets[i]["points"] - cj) @ nj).mean()
+            sep = float((sep_ij + sep_ji) / 2.0)
+            if not SEP_MIN <= sep <= SEP_MAX:
+                continue
+            halves = []
+            for off in (0, 1):
+                pi = facets[i]["points"][off::2]
+                pj = facets[j]["points"][off::2]
+                n1, k1 = fit_plane_trimmed(pi, trim_mult=3.0)
+                if n1[2] < 0:
+                    n1 = -n1
+                halves.append(float(np.abs((pj - pi[k1].mean(axis=0)) @ n1)
+                                    .mean()))
+            cands.append({
+                "cand_id": f"planes:{i}|{j}", "kind": "plane pair",
+                "span": sep, "rep": abs(halves[0] - halves[1]), "bias": 0.0,
+                "where": _where((ci + cj) / 2.0, origin), "dz": None,
+                "tape_plan": "perpendicular offset between two parallel "
+                             "roof planes; tapeable only if a step or "
+                             "junction physically joins them, judge on "
+                             "site"})
+    # class 2: parallel derived-line pairs. Pool intersection lines and
+    # unflagged eaves; every pair within PAIR_TOL_DEG is a candidate.
+    pool = []
+    for L in lines:
+        pool.append({"tag": f"{L['kind'][0]}{L['i']},{L['j']}", "p0": L["p0"],
+                     "d": L["d"], "sup": L["contacts"], "ext": L["extent"],
+                     "bias": 0.0, "eave": False, "line": L})
+    for b in brackets:
+        if b is None or b["flagged"] or b["delta"] is None:
+            continue
+        f = facets[b["facet"]]
+        t = (f["points"] - f["points"].mean(axis=0)) @ b["tight"]["d"]
+        ext = {"t_lo": float(t.min()), "t_hi": float(t.max())}
+        pool.append({"tag": f"e{b['facet']}", "p0": b["tight"]["p0"],
+                     "d": b["tight"]["d"], "sup": f["points"], "ext": ext,
+                     "bias": b["delta"], "eave": True,
+                     "facet": b["facet"], "rep_e": b["rep"]})
+    for a in range(len(pool)):
+        for c in range(a + 1, len(pool)):
+            A, B = pool[a], pool[c]
+            fold = abs(A["d"] @ B["d"])
+            ang = np.degrees(np.arccos(np.clip(fold, 0.0, 1.0)))
+            if ang > PAIR_TOL_DEG:
+                continue
+            # extent window of A, intersected with B's support footprint
+            win = _overlap_window(A["ext"], B["sup"], A["p0"], A["d"])
+            r = line_pair_span(A["p0"], A["d"], B["p0"], B["d"],
+                               *(win if win else (A["ext"]["t_lo"],
+                                                  A["ext"]["t_hi"])))
+            if r["span"] < MIN_SPAN:
+                continue
+            bias = A["bias"] + B["bias"]  # once per eave involved
+            both_eave = A["eave"] and B["eave"]
+            dz = abs(float(A["p0"][2] - B["p0"][2])) if both_eave else None
+            reps = [x["rep_e"] for x in (A, B)
+                    if x["eave"] and x.get("rep_e") is not None]
+            rep = float(np.hypot(*reps)) if len(reps) == 2 else (
+                reps[0] if reps else r["sens"])
+            plan = ("ground: plumb drops from both drip edges, tape the "
+                    "horizontal" if both_eave else
+                    "on roof: hook the drip edge, run up the slope"
+                    if A["eave"] or B["eave"] else
+                    "on roof: between the two lines")
+            cands.append({
+                "cand_id": f"lines:{A['tag']}-{B['tag']}",
+                "kind": "line pair", "span": float(r["span"]), "rep": rep,
+                "bias": float(bias), "dz": dz,
+                "where": _where((A["p0"] + B["p0"]) / 2.0, origin),
+                "tape_plan": plan + f" (divergence {r['divergence_deg']:.2f} "
+                                    f"deg, pos-sens {r['sens']:.3f} cu)"})
+    # class 3: intersection-line lengths (fallback, endpoint bias visible)
+    for L in lines:
+        length = L["extent"]["length"]
+        if length < MIN_SPAN:
+            continue
+        cands.append({
+            "cand_id": f"length:{L['kind'][0]}{L['i']},{L['j']}",
+            "kind": f"{L['kind']} length", "span": float(length),
+            "rep": None, "bias": float(sum(L["end_bias"])), "dz": None,
+            "where": _where(L["p0"], origin),
+            "tape_plan": "on roof, along the line; BOTH ends are eroded "
+                         "edge zone, bias is one-sided (reads short)"})
+    return cands
+
+
+def rank_and_print(cands):
+    for e in cands:
+        rep = e["rep"] if e["rep"] is not None else 0.0
+        noise = float(np.hypot(rep, TAPE_ERR))
+        e["noise_pct"] = 100.0 * noise / e["span"]
+        e["bias_pct"] = 100.0 * e["bias"] / e["span"]
+        e["lin_pct"] = e["noise_pct"] + e["bias_pct"]
+        e["area_pct"] = 2.0 * e["lin_pct"]
+    cands.sort(key=lambda e: e["lin_pct"])
+    print(f"\ncandidate scale spans, ranked by predicted linear error "
+          f"(noise and bias SHOWN SPLIT, tape term {TAPE_ERR} m):")
+    print(f"{'rank':>4} {'id':>18} {'kind':>14} {'span cu':>8} "
+          f"{'noise %':>8} {'bias %':>7} {'lin %':>6} {'area %':>7}  "
+          f"where / tape plan")
+    for r, e in enumerate(cands, 1):
+        print(f"{r:>4} {e['cand_id']:>18} {e['kind']:>14} {e['span']:>8.3f} "
+              f"{e['noise_pct']:>8.3f} {e['bias_pct']:>7.3f} "
+              f"{e['lin_pct']:>6.2f} {e['area_pct']:>7.2f}  "
+              f"{e['where']}; {e['tape_plan']}"
+              + (f"; dz={e['dz']:.2f} cu" if e["dz"] is not None else ""))
+    print("\nnotes: bias is a BOUND with known direction, not noise; a "
+          "candidate with tiny noise and fat bias is not better than the "
+          "reverse. Eave-based spans inherit the bracket delta once per "
+          "eave. Physical access is Emmett's judgment, from the where "
+          "column, not the script's.")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("dataset", help="dataset directory (holds roofkit.json)")
@@ -216,6 +362,13 @@ def main():
     origin = roof.min(axis=0)  # for relative dx/dy/z printouts
 
     facets, band, s = discover_facets(roof, cfg)
+    # Vanish guard (decision 2026-07-15): once a dataset's facet count is
+    # verified, a run that finds fewer means RANSAC dropped a real facet,
+    # which would silently corrupt every downstream number. Fail loudly.
+    if cfg["expected_facets"] is not None and len(facets) != cfg["expected_facets"]:
+        raise SystemExit(f"expected {cfg['expected_facets']} facets, found "
+                         f"{len(facets)}: a facet vanished or split. Recon "
+                         f"aborted; investigate before trusting any output.")
     print(f"{len(roof):,} roof points, {len(raw):,} raw crop points, "
           f"spacing {s:.4f} cu, band {band:.4f} cu, {len(facets)} facets")
     print(f"\n{'facet':>5} {'points':>10} {'pitch':>7} {'azimuth':>8}")
@@ -255,7 +408,54 @@ def main():
           "edges (shingle overhang, fascia, wall line); a bracket gap may "
           "be geometry, not erosion. Field notes must record which edge "
           "the tape hooked.")
-    return
+
+    cands = enumerate_candidates(facets, lines, brackets, s, origin)
+    if not cands:
+        print("\nNO candidate span survived. The honest outcome per the "
+              "spec: report it, do not paper over it.")
+        return
+    rank_and_print(cands)
+
+    if not args.no_view:
+        geoms = []
+        view = roof
+        rng = np.random.default_rng(0)
+        if len(view) > 1_500_000:
+            view = view[rng.choice(len(view), 1_500_000, replace=False)]
+        pc = o3d.geometry.PointCloud()
+        pc.points = o3d.utility.Vector3dVector(view)
+        pc.paint_uniform_color((0.45, 0.45, 0.45))
+        geoms.append(pc)
+        for L in lines:  # intersection lines in red
+            seg = o3d.geometry.LineSet()
+            a = L["p0"] + L["extent"]["t_lo"] * L["d"]
+            b = L["p0"] + L["extent"]["t_hi"] * L["d"]
+            seg.points = o3d.utility.Vector3dVector([a, b])
+            seg.lines = o3d.utility.Vector2iVector([[0, 1]])
+            seg.paint_uniform_color((1.0, 0.0, 0.0))
+            geoms.append(seg)
+        for b in brackets:  # tight eaves green, loose eaves yellow
+            if b is None:
+                continue
+            f = facets[b["facet"]]
+            c = f["points"].mean(axis=0)
+            t = (f["points"] - c) @ b["tight"]["d"]
+            for key, col in (("tight", (0.0, 0.8, 0.2)),
+                             ("loose", (0.95, 0.85, 0.1))):
+                e = b[key]
+                if e is None:
+                    continue
+                seg = o3d.geometry.LineSet()
+                seg.points = o3d.utility.Vector3dVector(
+                    [e["p0"] + t.min() * e["d"], e["p0"] + t.max() * e["d"]])
+                seg.lines = o3d.utility.Vector2iVector([[0, 1]])
+                seg.paint_uniform_color(col)
+                geoms.append(seg)
+        print("\nviewer: intersection lines red, tight eaves green, loose "
+              "eaves yellow. A wide green-to-yellow gap IS the bracket. "
+              "Q closes.")
+        o3d.visualization.draw_geometries(
+            geoms, window_name="roof recon: derived lines and brackets")
 
 
 if __name__ == "__main__":

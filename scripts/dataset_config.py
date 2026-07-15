@@ -44,6 +44,12 @@ DEFAULTS = {
     # automatically (2026-07-13). None = trust georeferenced Z as-is.
     "level_tilt_deg": None,
     "level_uphill_az_deg": None,
+    # Site-specific expected facet count. Once a dataset's segmentation is
+    # verified, pin the count here so a VANISHED facet (RANSAC failing to
+    # rediscover a real facet, the historical nondeterminism failure) fails
+    # the recon and the pre-registration freeze loudly instead of silently
+    # writing fewer facets. None = no guard (a new, unverified dataset).
+    "expected_facets": None,
     # --- design constants ---
     "gate_limit_deg": 1.0,   # reject the vertical reference above this
                              # residual ridge inclination
