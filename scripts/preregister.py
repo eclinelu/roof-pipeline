@@ -53,6 +53,14 @@ def main():
                     help="cand_id of the documented fallback span")
     ap.add_argument("--dry-run", action="store_true",
                     help="compute and print, write NO file (verification)")
+    ap.add_argument("--notes-file", default=None,
+                    help="path to a free-text file recorded VERBATIM in the "
+                         "freeze as the 'context' field: honest metadata "
+                         "around the frozen numbers (e.g. that a span was "
+                         "already taped, or that a prediction was refuted on "
+                         "site). It does NOT alter any frozen number, and it "
+                         "must not contain real-world units or scale, which "
+                         "belong in the later comparison file.")
     args = ap.parse_args()
     cfg = load_config(args.dataset)
     rng = np.random.default_rng(0)
@@ -94,9 +102,16 @@ def main():
         {"facet": b["facet"], "rep_cu": b["rep"], "delta_cu": b["delta"],
          "flagged": b["flagged"]}
         for b in brackets if b is not None]
+    # Free-text context: honest metadata AROUND the frozen numbers, never
+    # altering them. Read verbatim from --notes-file (decision 2026-07-15:
+    # this freeze is not scale-blind, the primary was refuted on site, and
+    # dormers contaminate specific facets). None when no file is given.
+    context = (Path(args.notes_file).read_text(encoding="utf-8")
+               if args.notes_file else None)
     report = {
         "protocol": "decision 2026-07-14: outputs frozen BEFORE field "
                     "visit; this file is never edited",
+        "context": context,
         "date": datetime.date.today().isoformat(),
         "dataset": Path(args.dataset).name,
         "config": {k: cfg[k] for k in
