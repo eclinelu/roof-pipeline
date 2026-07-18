@@ -1,0 +1,266 @@
+{
+  "protocol": "comparison in a NEW file; the freeze and the ground-truth record are read-only inputs",
+  "date": "2026-07-18",
+  "dataset": "big_house",
+  "inputs": {
+    "freeze": "preregistered-2026-07-18.json",
+    "truth": "ground-truth-2026-07-15.json"
+  },
+  "scale": {
+    "primary_cand_id": "length:r6,7",
+    "primary_span_cu": 10.184376836402794,
+    "primary_tape_in": 412.0,
+    "in_per_cu": 40.4541,
+    "ft_per_cu": 3.37118,
+    "recorded_end_sensitivity_cu": 3.911449237367581,
+    "end_sensitivity_note": "verbatim from the freeze; its interpretation is defined by that freeze's context field",
+    "gps_scale_error_pct": 2.75
+  },
+  "scale_crosscheck": {
+    "fallback_cand_id": "lines:r1,3-e1",
+    "fallback_span_cu": 6.72695770104625,
+    "predicted_in": 272.1,
+    "tape_in": 267.0,
+    "disagreement_pct": 1.92,
+    "tape_in_with_gutter": 270.0,
+    "disagreement_pct_with_gutter": 0.79,
+    "linear_budget_pct": 2.47,
+    "pass": true,
+    "implied_area_uncertainty_pct": 3.9
+  },
+  "alternative_scaling_NOT_adopted": {
+    "note": "scale from the fallback tape instead of the frozen primary; shown because it reconciles with GPS while the primary does not; adopting it is a documented deviation decision for Emmett, not made here",
+    "in_per_cu": 39.691,
+    "gps_scale_error_pct": 0.82,
+    "total_area_ft2": 3426.3
+  },
+  "areas": [
+    {
+      "facet": 0,
+      "area_cu2": 42.89,
+      "area_ft2": 487.4,
+      "dormer": "suspect"
+    },
+    {
+      "facet": 1,
+      "area_cu2": 68.301,
+      "area_ft2": 776.2,
+      "dormer": "suspect"
+    },
+    {
+      "facet": 2,
+      "area_cu2": 30.768,
+      "area_ft2": 349.7,
+      "dormer": "suspect (heaviest)"
+    },
+    {
+      "facet": 3,
+      "area_cu2": 53.048,
+      "area_ft2": 602.9,
+      "dormer": "suspect"
+    },
+    {
+      "facet": 4,
+      "area_cu2": 28.726,
+      "area_ft2": 326.5,
+      "dormer": "near-clean"
+    },
+    {
+      "facet": 5,
+      "area_cu2": 18.628,
+      "area_ft2": 211.7,
+      "dormer": "near-clean"
+    },
+    {
+      "facet": 6,
+      "area_cu2": 33.713,
+      "area_ft2": 383.1,
+      "dormer": "suspect"
+    },
+    {
+      "facet": 7,
+      "area_cu2": 37.114,
+      "area_ft2": 421.8,
+      "dormer": "suspect"
+    }
+  ],
+  "total_area_ft2": 3559.3,
+  "area_claim": "scale confirmed by an independent length (weaker claim); NO measured area exists for this property, so area itself is NOT validated against ground truth",
+  "pitch": [
+    {
+      "facet": 0,
+      "pipeline_deg": 21.188,
+      "truth_raw_deg": [
+        20,
+        19,
+        18
+      ],
+      "truth_used_deg": [
+        20,
+        19,
+        18
+      ],
+      "converted_90_minus": false,
+      "truth_mean_deg": 19.0,
+      "truth_spread_deg": 2,
+      "error_deg": 2.19,
+      "within_3deg": true,
+      "within_2deg": false,
+      "dormer": "suspect"
+    },
+    {
+      "facet": 1,
+      "pipeline_deg": 33.067,
+      "truth_raw_deg": [
+        32,
+        32,
+        32
+      ],
+      "truth_used_deg": [
+        32,
+        32,
+        32
+      ],
+      "converted_90_minus": false,
+      "truth_mean_deg": 32.0,
+      "truth_spread_deg": 0,
+      "error_deg": 1.07,
+      "within_3deg": true,
+      "within_2deg": true,
+      "dormer": "suspect"
+    },
+    {
+      "facet": 2,
+      "pipeline_deg": 22.722,
+      "truth_raw_deg": [
+        21,
+        20,
+        21
+      ],
+      "truth_used_deg": [
+        21,
+        20,
+        21
+      ],
+      "converted_90_minus": false,
+      "truth_mean_deg": 20.67,
+      "truth_spread_deg": 1,
+      "error_deg": 2.06,
+      "within_3deg": true,
+      "within_2deg": false,
+      "dormer": "suspect (heaviest)"
+    },
+    {
+      "facet": 3,
+      "pipeline_deg": 34.006,
+      "truth_raw_deg": [
+        33,
+        32,
+        31
+      ],
+      "truth_used_deg": [
+        33,
+        32,
+        31
+      ],
+      "converted_90_minus": false,
+      "truth_mean_deg": 32.0,
+      "truth_spread_deg": 2,
+      "error_deg": 2.01,
+      "within_3deg": true,
+      "within_2deg": false,
+      "dormer": "suspect"
+    },
+    {
+      "facet": 4,
+      "pipeline_deg": 20.99,
+      "truth_raw_deg": [
+        20,
+        19,
+        19
+      ],
+      "truth_used_deg": [
+        20,
+        19,
+        19
+      ],
+      "converted_90_minus": false,
+      "truth_mean_deg": 19.33,
+      "truth_spread_deg": 1,
+      "error_deg": 1.66,
+      "within_3deg": true,
+      "within_2deg": true,
+      "dormer": "near-clean"
+    },
+    {
+      "facet": 5,
+      "pipeline_deg": 21.357,
+      "truth_raw_deg": [
+        19,
+        20,
+        19
+      ],
+      "truth_used_deg": [
+        19,
+        20,
+        19
+      ],
+      "converted_90_minus": false,
+      "truth_mean_deg": 19.33,
+      "truth_spread_deg": 1,
+      "error_deg": 2.02,
+      "within_3deg": true,
+      "within_2deg": false,
+      "dormer": "near-clean"
+    },
+    {
+      "facet": 6,
+      "pipeline_deg": 33.757,
+      "truth_raw_deg": [
+        59,
+        58,
+        58
+      ],
+      "truth_used_deg": [
+        31,
+        32,
+        32
+      ],
+      "converted_90_minus": true,
+      "truth_mean_deg": 31.67,
+      "truth_spread_deg": 1,
+      "error_deg": 2.09,
+      "within_3deg": true,
+      "within_2deg": false,
+      "dormer": "suspect"
+    },
+    {
+      "facet": 7,
+      "pipeline_deg": 33.515,
+      "truth_raw_deg": [
+        58,
+        58,
+        58
+      ],
+      "truth_used_deg": [
+        32,
+        32,
+        32
+      ],
+      "converted_90_minus": true,
+      "truth_mean_deg": 32.0,
+      "truth_spread_deg": 0,
+      "error_deg": 1.52,
+      "within_3deg": true,
+      "within_2deg": true,
+      "dormer": "suspect"
+    }
+  ],
+  "pitch_summary": {
+    "mean_bias_deg": 1.83,
+    "max_abs_error_deg": 2.19,
+    "pipeline_floor_deg": 0.2,
+    "pass_at_3deg": true,
+    "pass_at_2deg": false
+  }
+}
