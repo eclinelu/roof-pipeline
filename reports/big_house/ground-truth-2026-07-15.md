@@ -1,0 +1,102 @@
+# big_house ground truth (field measurements of 2026-07-15)
+
+AUDIT DATA ONLY. No pipeline script reads this file (decision 2026-07-14:
+ground truth is audit-only, never a pipeline input). It exists to score the
+frozen pre-registration `preregistered-2026-07-15.json` (commit 6c2e614),
+which was committed before any number in this file entered a computation.
+The comparison itself goes in a separate new file and never edits the freeze.
+
+Captured on site 2026-07-15 by Emmett. Transcribed from field notes
+2026-07-18. Site access is gone; this is the complete record and there will
+never be more.
+
+## 1. Scale, primary: ridge tape
+
+- Frozen cloud-side instrument: `length:r6,7` (ridge of facets 6/7),
+  10.808 cloud units, per the freeze.
+- Tape reading: **412 in**, measured on the roof along the ridge line.
+- Conditions noted in the freeze's tape plan: both ridge ends sit in the
+  eroded edge zone of the cloud, so the cloud span's bias is one-sided
+  (cloud reads short relative to the physical ridge).
+
+## 2. Scale, fallback / cross-check: facet 1 slope span
+
+- Frozen cloud-side instrument: `lines:r1,3-e1` (perpendicular from ridge
+  1,3 to eave 1), 6.727 cloud units, per the freeze.
+- Tape method: hooked the drip edge, ran the tape up the slope, per the
+  freeze's tape plan.
+- Tape readings, BOTH recorded because of an edge ambiguity at the bottom:
+  - **267 in** excluding the gutter (tape hooked at the drip edge)
+  - **270 in** including the gutter
+- The gutter question was noted at measurement time and is recorded here
+  unresolved. Which reading the comparison scores against, and why, is an
+  analysis decision that belongs in the comparison file, not here.
+
+## 3. Pitch: inclinometer readings, three per major facet
+
+Method (Emmett, 2026-07-18): the three readings per facet were taken at
+different points on the facet, spread out as much as possible. Readings are
+keyed directly to pipeline facet numbers: Emmett states the facet numbering
+matches the labeled outputs he was shown in earlier sessions. This mapping
+gets one cheap reconfirmation against the Phase 1 labeled renders before
+scoring. Values below are VERBATIM from the field notes; any interpretation
+(unit reference, complements) belongs to the comparison file, never here.
+
+| Facet | Reading 1 (deg) | Reading 2 (deg) | Reading 3 (deg) | Notes |
+|-------|-----------------|-----------------|-----------------|-------|
+| 0     | 20              | 19              | 18              |       |
+| 1     | 32              | 32              | 32              |       |
+| 2     | 21              | 20              | 21              |       |
+| 3     | 33              | 32              | 31              |       |
+| 4     | 20              | 19              | 19              |       |
+| 5     | 19              | 20              | 19              | supplied 2026-07-18, see note A |
+| 6     | 59              | 58              | 58              | see anomaly note B |
+| 7     | 58              | 58              | 58              | see anomaly note B |
+
+**Anomaly note A, facet 5.** Facet 5's readings were omitted from the first
+transcription pass and supplied by Emmett from the field notes on
+2026-07-18 (19, 20, 19). Resolved; kept as a note only so the two-step
+transcription is visible in the record.
+
+**Anomaly note B, facets 6 and 7 read in the fifties.** All other facets
+read in the twenties and low thirties, consistent with the two frozen pitch
+classes. Emmett confirmed (2026-07-18) that the inclinometer was held and
+referenced the SAME way on facets 6 and 7 as on every other facet, which
+kills the easy explanation that these are vertical-referenced complement
+readings. The verbatim values therefore stand, and the discrepancy is a
+real open finding that the comparison file must confront, not smooth over.
+Hypotheses recorded for Phase 1, all currently untested:
+1. Facet-number mapping mismatch: the physical faces Emmett labels 6 and 7
+   are not pipeline facets 6 and 7. This is the leading hypothesis and makes
+   the Phase 1 labeled-render reconfirmation MANDATORY before any pitch is
+   scored. It matters doubly because the frozen scale instrument is the
+   ridge of facets 6/7: if the mapping is wrong there, the scale chain needs
+   re-examination too.
+2. Instrument scale misread: 58-59 read off a percent-grade scale would be
+   ~30 degrees, near the steep pitch class. Nothing in the notes supports or
+   refutes this.
+3. The faces genuinely slope ~58 degrees and the pipeline is badly wrong on
+   them.
+**Resolution (2026-07-18, Emmett's determination):** After reviewing the
+discrepancy, Emmett concluded the inclinometer was referenced 90 degrees off
+on facets 6 and 7 (hypothesis of the complement family), so true pitch is
+90 minus the recorded reading: facet 6 = 31, 32, 32 and facet 7 = 32, 32, 32
+degrees. Two things are recorded plainly so the trail stays honest: this
+supersedes his same-day statement that the hold was identical on every
+facet, and it was reached AFTER seeing that the raw values disagree with the
+frozen pitch class, so it is a post-hoc interpretation, not a field
+observation. The table above keeps the verbatim readings untouched; the
+comparison file applies this conversion for facets 6 and 7 only, labeled as
+Emmett's determination. Hypothesis 1 (facet-number mapping) stays open until
+the Phase 1 labeled-render check.
+
+## 4. Explicitly absent
+
+- **No independent area measurement exists.** No facet has two taped
+  dimensions, and no other length in the notes yields a real square-footage
+  anchor. Confirmed by Emmett 2026-07-18: the notes contain only the ridge
+  tape, the fallback slope tape, and the inclinometer readings. Area
+  validation for big_house is therefore limited to "scale confirmed by an
+  independent length" and this file is the permanent record of why.
+- No wall or ground-level distances were taped (walls did not reconstruct;
+  the roof exception of 2026-07-14 applied).
