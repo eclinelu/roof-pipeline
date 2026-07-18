@@ -15,6 +15,36 @@
 
 _Append only. Newest at the top. Past entries are never edited. A reversal is a new entry that references the one it overturns._
 
+### 2026-07-18: Facet 6/7 inclinometer readings are scored as 90 minus the raw value; the raw values stay in the record
+
+**Decision:** Emmett determined that the inclinometer was referenced 90 degrees off on facets 6 and 7 (raw 58-59 where every other facet read 18-33), so the comparison scores those two facets against 90 minus the reading (facet 6: 31, 32, 32; facet 7: 32, 32, 32). The ground-truth file keeps the verbatim raw values; the conversion is applied only in the comparison, labeled as Emmett's determination. This call is his to make (physical judgment about his own instrument), and it is recorded as post-hoc: it was reached after seeing the raw values disagree with the frozen pitch class, and it supersedes his earlier same-day recollection that the hold was identical on every facet.
+
+**Why:** A 58 degree face is inconsistent with every cloud measurement of those facets, while the complement lands inside the steep pitch class the rest of the roof exhibits, and referencing an inclinometer against the wrong edge measures from vertical instead of horizontal, which produces exactly this signature. The alternative reading, that the pipeline is off by ~25 degrees on two facets while agreeing within a couple of degrees everywhere else, has no supporting mechanism.
+
+**Rejected:** Editing the raw table values to the converted ones (destroys the audit record and hides that the interpretation is post-hoc). Scoring the raw values as-is (reports a pitch failure the instrument story explains, as if it were a pipeline finding). Dropping facets 6/7 from pitch scoring (loses the only readings on the taped-ridge pair).
+
+**Evidence:** The raw readings and the frozen per-facet pitches. Assumption, not verified: no photo or note records how the instrument was actually placed on those faces, so the determination rests on Emmett's judgment plus the numerical signature, and the contradiction with his first recollection is part of the record. The adjacent hypothesis (that his facet labels 6/7 were not the pipeline's facets 6/7) was closed the same day: the labeled-render check (scripts/render_facets.py, verified index-for-index against the freeze) was reviewed by Emmett, who confirmed every label including the 6/7 pair.
+
+**Cost if wrong:** If those faces genuinely slope ~58 degrees, the pitch validation on facets 6 and 7 is manufactured agreement, and the scale instrument (the facet 6/7 ridge) sits on a misunderstood pair, putting every area at risk through the multiplier. The mapping check and the fallback span cross-check are the instruments positioned to catch that.
+
+---
+
+### 2026-07-18: The explanation gate points one way: Claude explains, Emmett is never quizzed or blocked
+
+**Decision:** Amends the 2026-07-12 authorship entry: its authorship half stands (Claude Code writes the analysis core), and its gate mechanics are now explicit. Claude explains the approach, every threshold, and its scale-dependence in plain language, invites questions, and moves on. Claude never quizzes Emmett, never asks him to explain the why back, and never refuses to proceed until he supplies a reason. The walkthrough stays; every form of comprehension check on Emmett is gone.
+
+**Why:** The gate exists so the design can be defended in an interview. A clear walkthrough with invited questions serves that; demanding the why back adds friction, not understanding. This had been rejected once already (the no-quiz feedback of 2026-07-12) but kept resurfacing, because the old rule was encoded in several instruction layers at once: CLAUDE.md still carried the pre-reversal wording requiring Emmett to hand-write and defend the core, the agent's memory carried the gate framing, and the 2026-07-12 entry in this log reads as a gate ON Emmett. A behavior change is only real when every layer that encodes the old rule is updated together; this entry records that alignment.
+
+**Rejected:** Keeping any comprehension check (quiz-backs, recite-the-why, proceed-blocks). Also rejected: dropping the explanation practice itself; the walkthroughs stay, because clear explanations are what make the design defensible.
+
+**Evidence:** Emmett's direct instruction of 2026-07-18, after a repo-wide audit found the old rule in CLAUDE.md (wording superseded 2026-07-12 but never removed there), the agent memory, and the 7a plan's per-task gates. CLAUDE.md and the agent memory were updated the same day; the historical plans and specs are records and stay as written.
+
+**Cost if wrong:** If explanation without any check leaves gaps in understanding, they surface in an interview, the one place they must not. The mitigation is the standing invitation: questions are always welcome, and Emmett owns asking them.
+
+**Amends:** 2026-07-12 "Claude Code writes the analysis code; the gate is explanation, not authorship."
+
+---
+
 ### 2026-07-15: Dormers are in scope but unresolved this run; they contaminate specific per-facet numbers, not only the total
 
 **Decision:** About 8 dormers on big_house were not segmented as their own facets. Their points were absorbed into other detected planes rather than dropped, so specific per-facet areas and pitches are suspect, not only the roof total, and the predicted rank-1 scale span (lines:j0,3-j0,5, across facet 0's dormer-corrupted junctions) does not exist on the roof. Dormers remain in scope; their detection is deferred to a dedicated effort on this cloud or a later one. This run records the contamination as freeze context and leaves the frozen numbers exactly as the pipeline produced them.

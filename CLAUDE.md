@@ -21,17 +21,20 @@ The value of this project is the ANALYSIS half point cloud in, measurements out.
 - Never use em dashes, in any response, in any context.
 
 ## CRITICAL pair, do not autopilot
-I write the analysis core myself so I can defend every stage in an interview.
-For the analysis core (segmentation, geometry, measurement math, anything an
-interviewer would probe) explain the approach and the why, write a heavily
-commented REFERENCE version if helpful, but let ME write the real version and
-then review mine. Do not generate-and-move-on for these parts.
+Claude Code writes the analysis core; the gate is explanation, not authorship
+(decision 2026-07-12, amended 2026-07-18). For the analysis core (segmentation,
+geometry, measurement math, anything an interviewer would probe): explain the
+approach and the why in plain language, in heavily commented code and clear
+walkthroughs, so I can defend every stage in an interview. Then invite my
+questions and MOVE ON. Never quiz me, never ask me to explain the why back,
+and never refuse to proceed until I supply a reason. Understanding is my job;
+a clear explanation is yours.
 
 Boilerplate and glue ARE fine to write for me file paths, plotting, argument
 parsing, ODMDocker commands, environment setup, config files, visualization.
 
-Default loop explain concept - I write it - I run it - we review and fix.
-Small steps, beginner pace on code.
+Default loop: explain the concept, build it, run it, invite questions, move
+on. Small steps, plain language on code, never a quiz.
 
 ## Architecture the seam
 - `roofkitio.py` is the ONLY module that touches file formats. It reads a cloud
