@@ -85,6 +85,7 @@
     }
   ],
   "total_area_ft2": 3559.3,
+  "total_area_caveat": "the total inherits the dormer contamination, not just the facets: 6 of 8 facets are dormer-suspect, ~8 dormers are unmodeled with their points absorbed into host facets, and the resulting bias on the total is unquantified and not correctable by a flat allowance (decision 2026-07-15)",
   "area_claim": "scale confirmed by an independent length (weaker claim); NO measured area exists for this property, so area itself is NOT validated against ground truth",
   "pitch": [
     {
@@ -262,5 +263,13 @@
     "pipeline_floor_deg": 0.2,
     "pass_at_3deg": true,
     "pass_at_2deg": false
+  },
+  "baseline_context": {
+    "file": "comparison-2026-07-15-scored-2026-07-18.json",
+    "total_area_ft2": 3160.6,
+    "this_run_vs_baseline_pct": 12.6,
+    "baseline_implied_area_uncertainty_pct": 8.1,
+    "baseline_interval_contains_this_total": false,
+    "note": "the baseline's widened uncertainty interval would NOT have contained this run's total: widening instead of diagnosing would have quoted an interval that misses the corrected value"
   }
 }

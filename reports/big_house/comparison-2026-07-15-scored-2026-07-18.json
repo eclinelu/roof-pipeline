@@ -12,7 +12,8 @@
     "primary_tape_in": 412.0,
     "in_per_cu": 38.1206,
     "ft_per_cu": 3.17672,
-    "erosion_bias_pct_one_sided": 0.3,
+    "recorded_end_sensitivity_cu": 0.032708703344697554,
+    "end_sensitivity_note": "verbatim from the freeze; its interpretation is defined by that freeze's context field",
     "gps_scale_error_pct": -3.17
   },
   "scale_crosscheck": {
@@ -84,6 +85,7 @@
     }
   ],
   "total_area_ft2": 3160.6,
+  "total_area_caveat": "the total inherits the dormer contamination, not just the facets: 6 of 8 facets are dormer-suspect, ~8 dormers are unmodeled with their points absorbed into host facets, and the resulting bias on the total is unquantified and not correctable by a flat allowance (decision 2026-07-15)",
   "area_claim": "scale confirmed by an independent length (weaker claim); NO measured area exists for this property, so area itself is NOT validated against ground truth",
   "pitch": [
     {

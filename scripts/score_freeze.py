@@ -44,6 +44,12 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("freeze")
     ap.add_argument("truth")
+    ap.add_argument("--baseline", default=None,
+                    help="a previously scored comparison JSON to embed as "
+                         "context: its total, the delta, and whether its "
+                         "widened uncertainty interval would have contained "
+                         "THIS run's total (the case for diagnosing instead "
+                         "of widening, stated with numbers)")
     args = ap.parse_args()
     freeze_path, truth_path = Path(args.freeze), Path(args.truth)
     fz = json.loads(freeze_path.read_text())
@@ -163,6 +169,13 @@ def main():
         },
         "areas": facet_areas,
         "total_area_ft2": total_ft2,
+        "total_area_caveat": (
+            f"the total inherits the dormer contamination, not just the "
+            f"facets: {sum(1 for v in DORMER_FLAG.values() if 'suspect' in v)}"
+            f" of {len(DORMER_FLAG)} facets are dormer-suspect, ~8 dormers "
+            f"are unmodeled with their points absorbed into host facets, and "
+            f"the resulting bias on the total is unquantified and not "
+            f"correctable by a flat allowance (decision 2026-07-15)"),
         "area_claim": "scale confirmed by an independent length (weaker "
                       "claim); NO measured area exists for this property, "
                       "so area itself is NOT validated against ground truth",
@@ -175,6 +188,27 @@ def main():
             "pass_at_2deg": all(r["within_2deg"] for r in pitch_rows),
         },
     }
+
+    if args.baseline:
+        base = json.loads(Path(args.baseline).read_text())
+        b_total = base["total_area_ft2"]
+        b_unc = base["scale_crosscheck"]["implied_area_uncertainty_pct"]
+        delta = 100.0 * (total_ft2 / b_total - 1.0)
+        contained = abs(delta) <= b_unc
+        report["baseline_context"] = {
+            "file": Path(args.baseline).name,
+            "total_area_ft2": b_total,
+            "this_run_vs_baseline_pct": round(delta, 1),
+            "baseline_implied_area_uncertainty_pct": b_unc,
+            "baseline_interval_contains_this_total": contained,
+            "note": ("the baseline's widened uncertainty interval "
+                     + ("would have contained" if contained else
+                        "would NOT have contained")
+                     + " this run's total: widening instead of diagnosing "
+                       "would have "
+                     + ("been sufficient" if contained else
+                        "quoted an interval that misses the corrected "
+                        "value"))}
 
     frozen_date = freeze_path.stem.replace("preregistered-", "")
     out = (freeze_path.parent
@@ -192,7 +226,14 @@ def main():
           f"{'PASS' if crosscheck_pass else 'FAIL'}")
     print(f"  with gutter ({tape_alt:.0f} in): {100 * dis_alt:+.2f}%")
     print(f"total area {total_ft2:,.1f} ft2 (alternative scaling would "
-          f"give {alt_total_ft2:,.1f} ft2)\n")
+          f"give {alt_total_ft2:,.1f} ft2)")
+    print(f"total caveat: {report['total_area_caveat']}")
+    if args.baseline:
+        bc = report["baseline_context"]
+        print(f"baseline {bc['file']}: {bc['total_area_ft2']:,.1f} ft2, "
+              f"this run {bc['this_run_vs_baseline_pct']:+.1f}%; "
+              f"{bc['note']}")
+    print()
     print("facet  pipeline  truth(mean)  err    spread  dormer")
     for r in pitch_rows:
         conv = " (90-x)" if r["converted_90_minus"] else ""
