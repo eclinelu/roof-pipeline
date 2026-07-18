@@ -301,21 +301,50 @@ def _density_edge(t, bin_width, edge_frac=0.5, min_count=None):
     return float(kept.min()), float(kept.max()), n_lo, n_hi, central
 
 
-def line_extent(points, p0, d, spacing, edge_frac=0.5, bin_mult=4.0):
+def line_extent(points, p0, d, spacing, edge_frac=0.5, bin_mult=4.0,
+                max_void_mult=60.0):
     """Supported extent of a line's contact points ALONG the line. The
     two ends are where the supporting facets stop overlapping: the
     eroded edge zone. This is the one primitive whose answer depends on
     the cloud's worst data, so callers must report per-end sensitivity
     (re-select contacts at other radii and diff the ends) rather than
     trusting the ends as read.
+
+    Contiguity rule (2026-07-18): the extent must not jump a void. The
+    sorted projections are split wherever consecutive points sit more
+    than max_void_mult * spacing apart, and only the run containing the
+    median survives (largest run if the median lands inside a void). A
+    void that wide cannot be sampling noise on a reconstructed line; it
+    is a physical break, and jumping it reads detached clutter as
+    extent. Pinned by the big_house r6,7 failure: a 97-point
+    assignment-artifact island across a 0.47 cu void (~90x spacing)
+    stretched the frozen scale span 6% long, while every real sampling
+    void on that same validated ridge was under ~40x spacing; 60x
+    splits those regimes with margin both ways. max_void_mult is a
+    multiple of spacing, so the threshold adapts to any cloud's scale.
+
     Returns dict: t_lo, t_hi (cu along d, relative to p0), length,
-    n_lo, n_hi (per-end supporting counts)."""
+    n_lo, n_hi (per-end supporting counts), n_excluded (points dropped
+    by the contiguity rule; report it, a nonzero value is a finding)."""
     d = np.asarray(d, float)
     d = d / np.linalg.norm(d)
     t = (np.asarray(points, float) - np.asarray(p0, float)) @ d
+    ts = np.sort(t)
+    voids = np.flatnonzero(np.diff(ts) > max_void_mult * spacing)
+    n_excluded = 0
+    if len(voids):
+        bounds = np.concatenate([[0], voids + 1, [len(ts)]])
+        runs = [(ts[a], ts[b - 1], b - a)
+                for a, b in zip(bounds[:-1], bounds[1:])]
+        med = np.median(ts)
+        main = next((r for r in runs if r[0] <= med <= r[1]),
+                    max(runs, key=lambda r: r[2]))
+        keep = (t >= main[0]) & (t <= main[1])
+        n_excluded = int((~keep).sum())
+        t = t[keep]
     t_lo, t_hi, n_lo, n_hi, _ = _density_edge(t, bin_mult * spacing, edge_frac)
     return {"t_lo": t_lo, "t_hi": t_hi, "length": t_hi - t_lo,
-            "n_lo": n_lo, "n_hi": n_hi}
+            "n_lo": n_lo, "n_hi": n_hi, "n_excluded": n_excluded}
 
 
 def eave_line(points, normal, spacing, origin=None,

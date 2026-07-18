@@ -1,0 +1,148 @@
+{
+  "protocol": "decision 2026-07-14: outputs frozen BEFORE field visit; this file is never edited",
+  "context": "CONTEXT for pre-registration RUN 2 (2026-07-18). This is the documented\ntruth-aware retune the 2026-07-14 protocol anticipates: \"retuning after\nseeing roof data is legitimate but becomes a second pre-registered run\nwith its own commit, and both runs are reported.\" Run 1 is\npreregistered-2026-07-15.json and remains the frozen first run.\n\n1. Why run 2 exists. Run 1's independent scale cross-check FAILED: the\n   412 in ridge tape on the frozen primary span predicted the fallback\n   span at 256.4 in against its 267 in tape (-3.96%, budget +/-2.47%),\n   and GPS plausibility disagreed in the same direction (-3.17%). The\n   cloud-side diagnosis found the cause in the instrument, not the tape:\n   the r6,7 supported extent jumped a 0.469 cu void (~90x point spacing)\n   to a detached 97-point island and read the ridge 0.6 cu (6%) long.\n   The island sits where thin off-roof point strings (the infinite-plane\n   assignment artifact already documented in run 1's context) cross near\n   the ridge line. Every genuine sampling void on the same validated\n   ridge is under ~40x spacing.\n\n2. What changed: exactly one instrument rule. line_extent now requires\n   the supported extent to be contiguous: it splits the along-line\n   projections at voids wider than max_void_mult (60) x spacing and\n   keeps the run containing the median. 60x sits between the real-void\n   regime (<=40x) and the artifact regime (~90x) with margin both ways.\n   Pinned by test_line_extent_does_not_jump_a_void_to_a_detached_island.\n   47 tests green.\n\n3. What did NOT change: everything else. Facet count, per-facet points,\n   pitches, azimuths, areas (total 313.188 cu^2), eave brackets, and the\n   fallback span (6.727 cu) are bit-identical to run 1. The only moved\n   number is the primary span: 10.808 -> 10.184 cu.\n\n4. The bias field (3.911 cu) needs its decomposition to be read\n   honestly. It is the radius-probe end sensitivity, and under the\n   contiguity rule it no longer means erosion: the HIGH end (the\n   artifact-corrected one) moves only 0.024 cu across probes at 0.5x,\n   1x, and 2x contact radius; 3.89 of the 3.91 is the 0.5x probe\n   fragmenting the ridge's sparse south half (at half radius a 0.53 cu\n   stretch of the south half has no contact points, so the main-run\n   heuristic switches to the dense northern run and t_lo jumps). The\n   south half is real: it is continuous at 1x and 2x radius, and the\n   tape physically ran its full length. The honest reading: the\n   corrected end is stable; the probe flags the south half as\n   low-density; the empirical bound on scale error is the independent\n   fallback cross-check, not this field.\n\n5. NOT blind, stated plainly. This run was made with the field numbers\n   already known. Its defense is not blindness; it is that the fix is a\n   principled cloud-side rule (threshold derived from the two void\n   regimes, not from the tape), it was corroborated by two independent\n   checks before adoption (fallback tape and GPS plausibility), and both\n   runs are reported side by side, failure first.\n",
+  "date": "2026-07-18",
+  "dataset": "big_house",
+  "config": {
+    "band_mult": 3.0,
+    "trim_mult": 3.0,
+    "min_points_frac": 0.025,
+    "max_planes": 12,
+    "fit_sample": 200000,
+    "alpha_mult": 4.0,
+    "ridge_contact_mult": 10.0,
+    "level_tilt_deg": 1.083,
+    "level_uphill_az_deg": 75.1,
+    "expected_facets": 8
+  },
+  "units": "cloud units (cu); one tape number converts, later",
+  "facets": [
+    {
+      "facet": 0,
+      "points": 1538098,
+      "pitch_deg": 21.188,
+      "azimuth_deg": 290.36,
+      "area_cu2": 42.89
+    },
+    {
+      "facet": 1,
+      "points": 1154335,
+      "pitch_deg": 33.067,
+      "azimuth_deg": 358.33,
+      "area_cu2": 68.301
+    },
+    {
+      "facet": 2,
+      "points": 693991,
+      "pitch_deg": 22.722,
+      "azimuth_deg": 112.73,
+      "area_cu2": 30.768
+    },
+    {
+      "facet": 3,
+      "points": 850268,
+      "pitch_deg": 34.006,
+      "azimuth_deg": 178.87,
+      "area_cu2": 53.048
+    },
+    {
+      "facet": 4,
+      "points": 744303,
+      "pitch_deg": 20.99,
+      "azimuth_deg": 22.9,
+      "area_cu2": 28.726
+    },
+    {
+      "facet": 5,
+      "points": 669484,
+      "pitch_deg": 21.357,
+      "azimuth_deg": 201.97,
+      "area_cu2": 18.628
+    },
+    {
+      "facet": 6,
+      "points": 403109,
+      "pitch_deg": 33.757,
+      "azimuth_deg": 268.67,
+      "area_cu2": 33.713
+    },
+    {
+      "facet": 7,
+      "points": 297583,
+      "pitch_deg": 33.515,
+      "azimuth_deg": 88.38,
+      "area_cu2": 37.114
+    }
+  ],
+  "eave_brackets": [
+    {
+      "facet": 0,
+      "rep_cu": 0.0023532966675730016,
+      "delta_cu": 0.04250377726486487,
+      "flagged": false
+    },
+    {
+      "facet": 1,
+      "rep_cu": 0.011332293169462826,
+      "delta_cu": 0.02078687196547957,
+      "flagged": false
+    },
+    {
+      "facet": 2,
+      "rep_cu": 0.0010636911134209726,
+      "delta_cu": 0.5676986045665302,
+      "flagged": true
+    },
+    {
+      "facet": 3,
+      "rep_cu": 0.08388409508738093,
+      "delta_cu": 0.6235056132127417,
+      "flagged": true
+    },
+    {
+      "facet": 4,
+      "rep_cu": 0.006295823326798455,
+      "delta_cu": 0.08314731919841245,
+      "flagged": false
+    },
+    {
+      "facet": 5,
+      "rep_cu": 0.0024700176858627465,
+      "delta_cu": 0.6235190872424927,
+      "flagged": true
+    },
+    {
+      "facet": 6,
+      "rep_cu": 0.02459534192330315,
+      "delta_cu": 0.43648879434183074,
+      "flagged": true
+    },
+    {
+      "facet": 7,
+      "rep_cu": 0.02588938760707027,
+      "delta_cu": 0.12433252620908064,
+      "flagged": false
+    }
+  ],
+  "total_area_cu2": 313.188,
+  "scale_candidate_primary": {
+    "cand_id": "length:r6,7",
+    "kind": "ridge length",
+    "span": 10.184376836402794,
+    "rep": null,
+    "bias": 3.911449237367581,
+    "dz": null,
+    "where": "dx=10.8 dy=6.5 z=4.7",
+    "tape_plan": "on roof, along the line; BOTH ends are eroded edge zone, bias is one-sided (reads short)"
+  },
+  "scale_candidate_fallback": {
+    "cand_id": "lines:r1,3-e1",
+    "kind": "line pair",
+    "span": 6.72695770104625,
+    "rep": 0.011332293169462826,
+    "bias": 0.02078687196547957,
+    "dz": null,
+    "where": "dx=11.9 dy=13.7 z=3.1",
+    "tape_plan": "on roof: hook the drip edge, run up the slope (divergence 0.32 deg, pos-sens 0.045 cu)"
+  }
+}

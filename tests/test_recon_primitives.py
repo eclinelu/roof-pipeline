@@ -59,6 +59,34 @@ def test_line_extent_ignores_stragglers():
     assert ext["t_hi"] <= DEPTH + 4.0 * 4.0 * s
 
 
+def test_line_extent_does_not_jump_a_void_to_a_detached_island():
+    """The big_house r6,7 failure in miniature (2026-07-18): a dense
+    clutter island past a wide void must NOT stretch the extent, no
+    matter how many points it holds. The island here is 100 points, far
+    denser than the stragglers test, isolated behind a void wider than
+    max_void_mult * spacing; the contiguity rule must cut at the void."""
+    pts = gable_roof(PITCH, WIDTH, DEPTH, N_SIDE)
+    s = median_nn_spacing(pts)
+    p0 = np.array([0.0, 0.0, pts[:, 2].max()])
+    d = np.array([0.0, 1.0, 0.0])
+    strip = pts[np.abs(pts[:, 0]) <= 10.0 * s]
+    rng = np.random.default_rng(0)
+    # a compact 100-point island centered 61 * (60 * s) past nothing in
+    # particular: simply guarantee the void ahead of it exceeds 60 x s
+    island_t = DEPTH + 61.0 * s + rng.uniform(0, 0.15, 100)
+    island = p0 + island_t[:, None] * d
+    ext = line_extent(np.vstack([strip, island]), p0, d, s)
+    assert ext["n_excluded"] >= 100
+    assert ext["t_hi"] <= DEPTH + 2.0 * 4.0 * s
+    # and the same island with NO wide void in front of it (a filled
+    # approach) is legitimately part of the supported extent question,
+    # handled by the density floor, not the contiguity rule
+    filler_t = DEPTH + rng.uniform(0, 61.0 * s, 2000)
+    filler = p0 + filler_t[:, None] * d
+    ext2 = line_extent(np.vstack([strip, filler, island]), p0, d, s)
+    assert ext2["n_excluded"] == 0
+
+
 from roofkit.measure import eave_line
 
 # exact normal of the x > 0 facet: z = (WIDTH/2 - x) * tan(PITCH), so the
