@@ -8,3 +8,7 @@ datasets/
 *.las
 *.ply
 *.pcd
+
+# Editor state and generated tool output (repo holds only code)
+.obsidian/
+graphify-out/

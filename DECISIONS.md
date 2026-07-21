@@ -2,13 +2,14 @@
 
 ## Current state
 
+- **Project goal (2026-07-21):** engineering PORTFOLIO project. Commercialization, customer acquisition, and pricing are dropped after a market analysis found no viable commercial path for a part-time solo operator (see the 2026-07-21 entry). Technical scope and the validation standard are unchanged.
 - **Phase:** big_house VALIDATED and SCORED, the project's first validated property. Pitch validated directly against the inclinometer; scale validated by an independent taped length; the full run 1 / run 2 story is under "Scored" below.
 - **Active blocker:** none.
 - **Site findings (2026-07-15, roof visit):** (1) the fallback ridge span `length:r6,7` was tape-measured on site BEFORE the freeze, so this is NOT a scale-blind pre-registration; the honest claim is only that the cloud-unit geometry is locked before any real-world conversion (the tape value and the multiplier live in the later comparison file, never in the freeze). (2) the predicted rank-1 primary `lines:j0,3-j0,5` was found NON-EXISTENT on the roof (dormer points corrupted facet 0's junctions), so it is recorded as predicted-but-refuted in the context notes and the decision log and is deliberately NOT frozen in the candidate slot; the candidate slot declares the instrument the scale calc uses, so it holds the taped ridge `length:r6,7`, with `lines:r1,3-e1` (facet 1 slope span, endpoint-free, clean eave + validated ridge, eave-reachable) as the declared fallback. (3) about 8 dormers were not segmented and contaminate specific per-facet numbers (see the 2026-07-15 dormer decision entry); attribution could NOT be cleaned up (101 entangled clusters mixing dormers, foliage, and an assignment artifact; facets 4 and 5 alone are near-clean, facet 2 heaviest).
-- **Last thing verified working (2026-07-18):** `score_freeze.py` on both freezes; `render_facets.py` labeled views verified index-for-index against the freeze before drawing; run 2 dry-run bit-identical to run 1 except the primary span; 47 tests green (new: the contiguity island test).
+- **Last thing verified working (2026-07-20):** PDF report generator (`scripts/build_report.py` + `scripts/report_data.py`) produced the 8-page `reports/big_house/report-big_house-2026-07-20.pdf`; it re-segments the cloud and verifies the 8 facets index-for-index against `preregistered-2026-07-18.json` before drawing (aborts on any mismatch). Prior (2026-07-18): `score_freeze.py` on both freezes; `render_facets.py` labeled views verified index-for-index against the freeze; run 2 dry-run bit-identical to run 1 except the primary span; 47 tests green (new: the contiguity island test).
 - **Scored (2026-07-18):** big_house validation chain complete; both pre-registrations reported, failure first. Run 1 (`6c2e614`, r6,7 = 10.808 cu) FAILED its independent scale cross-check at -3.96% (budget +/-2.47%); diagnosis: the extent jumped a 0.469 cu void to a 97-point assignment-artifact island (6% long). Run 2 (`4fe6859`, `preregistered-2026-07-18.json`, contiguity rule, r6,7 = 10.184 cu, all else bit-identical) PASSES at +1.92% (+0.79% vs the with-gutter reading). Ground truth committed (`4dd4f92`): 412 in ridge, 267/270 in fallback, inclinometer all 8 facets, facet mapping confirmed against freeze-verified labeled renders.
 - **Results (run 2 scaling, 40.454 in/cu):** total roof area 3,559 ft^2 WITH a total-level dormer caveat (6 of 8 facets suspect; bias unquantified); the area claim is "scale confirmed by an independent length" (no measured area exists for big_house, permanently). Run 1 baseline embedded: 3,160.6 ft^2, +12.6% apart, and run 1's widened 8.1% interval would NOT have contained the corrected total (the case for diagnosing over widening, in numbers). Pitch: max |error| 2.19 deg, PASS at 3 deg, not at 2 deg; the offset decomposes as +1.83 deg uniform + 0.37 deg azimuth term (noise-level), rms residual 0.24 deg: tilt ruled out, inclinometer convention/zero or surface-vs-plane definition are the open suspects (see the evidence addendum entry). Facets 6/7 scored against 90-minus readings per the interpretation entry. GPS scale error +2.75% under run 2. Comparison files: `comparison-2026-07-15-scored-2026-07-18.json`, `comparison-2026-07-18-scored-2026-07-18.json`. 47 tests green.
-- **Next action:** PDF report prototype for big_house (per-facet table in ft^2, labeled views, validation page reporting both runs). Then roger capture design: ground-only truth (roof access never assumed, Emmett 2026-07-18), oblique wall passes, solar-array watch items. Dormer detection deferred until after the three new houses (Emmett, 2026-07-18).
+- **Next action:** PDF report is a working 8-page prototype (per-facet table in ft^2, labeled plan/pitch/area/3D views, validation page reporting both runs failure-first); PAUSED for refinement (Emmett, 2026-07-20). Open report items when resumed: two data-support gaps left as honest degradations, not defects (materials page carries only the two tape-validated lines because there is no edge-classification stage; page-8 dormer annotation marks suspect host facets because dormers are unsegmented). Then roger capture design: ground-only truth (roof access never assumed, Emmett 2026-07-18), oblique wall passes, solar-array watch items. Dormer detection deferred until after the three new houses (Emmett, 2026-07-18).
 - **Note on the 7a numbers:** totals 313.19 cloud units^2, pitch floor 0.20 deg, pitch classes ~5:12 and ~8:12; leveling values in roofkit.json (1.083 deg, uphill az 75.1); `expected_facets` pinned at 8 as the vanish guard. Per-facet numbers are dormer-suspect except facets 4 and 5.
 
 ---
@@ -16,6 +17,66 @@
 ## Decision log
 
 _Append only. Newest at the top. Past entries are never edited. A reversal is a new entry that references the one it overturns._
+
+### 2026-07-21: Project goal reframed from commercial venture to engineering portfolio
+
+**Decision:** roofkit continues to completion as an engineering portfolio
+project. Commercialization, customer acquisition, and pricing are dropped
+as goals. The technical scope and validation standard are unchanged.
+
+**Why:** A market analysis of the roofing, solar, and adjacent verticals
+found no viable commercial path for a part-time solo operator. Commodity
+roofing is a price trap: incumbents deliver measurement reports from
+existing imagery for $13-38 with no site visit, against a $150-400 cost
+floor for a drone job that has to physically show up. Solar is the one
+vertical where drone photogrammetry has proven value, but the winning
+model there is software sold to installers (Scanifly, ~$30/design at
+volume), not a per-job flying service, and entering it means competing
+behind a funded incumbent. The common failure across every vertical is
+the delivery model, not the pipeline: measurement-as-a-service carries a
+truck-roll cost floor that image-library competitors do not have. The
+engineering and validation work was always the source of the value, so
+removing the commercial goal costs the project nothing it was relying on.
+
+**Rejected:**
+- Solar-and-complex-roof drone service in Chittenden County. The memo's
+  own recommendation for near-term income. Rejected because realistic
+  SOM is $5-35k/yr gross as a side project, and the throughput ceiling
+  is one Part 107 pilot. Not worth the scope expansion.
+- Software-for-installers (the Scanifly model). The only version that
+  scales. Rejected as out of reach for a student side project against a
+  funded incumbent.
+- Abandoning the project. Rejected because the technical deliverable
+  stands on its own regardless of market outcome.
+
+**Evidence:** Market analysis memo, 2026-07-20. Sourced to secondary
+aggregators (getapp, homeguide, roofingsoftwareguide) with no primary
+customer interviews. Pricing and market-size figures should be treated as
+indicative, not verified. The bottom-up SOM funnel is driven by a
+part-time capacity assumption (30-100 jobs/yr), not by an independently
+measured demand figure, and that capacity figure has not been checked
+against a timed end-to-end job.
+
+**Cost if wrong:** Low. The technical scope does not change, so no work
+is discarded. If a commercial path later appears, the pipeline, the
+validation record, and this decision log all still apply. The cost is
+opportunity cost only: leads not pursued during the build.
+
+---
+
+### 2026-07-20: PDF report is a house-agnostic, freeze-verified deliverable generator; prototyped on big_house, paused for refinement
+
+**Decision:** Two new scripts under `scripts/` produce the per-house PDF. `report_data.py` is a pure data layer (loads the freeze, the scored comparison, the ground-truth record, and `roofkit.json`; assigns stable facet labels A-H smallest-area-first per the EagleView convention; derives the x:12 column, pitch bands, area-per-pitch and waste-to-squares tables). `build_report.py` recomputes the cloud geometry only to draw pictures, VERIFIES that geometry index-for-index against the freeze before drawing anything, renders eight pages, and assembles them with matplotlib `PdfPages`; it caches the verified geometry per freeze so layout iteration does not re-segment 9M points, and re-verifies the cache against the freeze on every load. Output is `reports/<dataset>/report-<dataset>-<date>.pdf`. A `report_meta` block (property_name, flight_date) was added to big_house's `roofkit.json`, since those are the only two cover fields not present in any pipeline output. The generator is a working prototype and is PAUSED for refinement (Emmett, 2026-07-20).
+
+**Why:** The report is the thing an interviewer actually reads, so it is built to the EagleView template they will recognize, with one page competitors do not publish: the validation page, which reports the run 1 cross-check failure first, the diagnosis, the fix, and the run 2 pass, with the diagnose-versus-widen arithmetic. Two design rules make the deliverable trustworthy rather than merely pretty. First, verify-before-draw: because the freeze stores numbers but not shapes, the pictures must come from a re-segmentation, and a picture with wrong numbers is worse than no picture, so the run aborts unless the re-segmented facets match the freeze exactly (the same guard `render_facets.py` already uses). Second, claims are restricted to fields backed by a comparison file, so nothing unvalidated reaches the page. House-agnostic + config-in-`roofkit.json` follows the 2026-07-12 config-not-code decision, so the same generator ports to roger, bungalow, and cove_house unchanged. Where the data does not support a page as specified, the page degrades honestly and says so rather than inventing content.
+
+**Rejected:** Open3D offscreen rendering and the Anthropic PDF (HTML-to-PDF) skill for assembly: matplotlib already renders the point-cloud pages headless (proven by `render_facets.py`) and keeping one toolchain makes the whole report reproducible with a single command; the PDF skill stays installed for any later post-processing. Hardcoding big_house specifics (name, flight date, dormer flags) into the report code: breaks the config-not-code seam and would not port. Fabricating a full ridge/hip/valley/rake/eave line inventory: the pipeline has no edge-classification stage, so the materials page reports only the two tape-validated lines (one ridge, one slope span) and lists what a full inventory would still require. Drawing individual dormers: they are unsegmented, so the honest annotation is the set of dormer-suspect host facets, not dormer outlines.
+
+**Evidence:** Generator run 2026-07-20 produced the 8-page `report-big_house-2026-07-20.pdf`; freeze verification passed (8 facets match `preregistered-2026-07-18.json` index-for-index, counts exact and pitch/azimuth at frozen rounding). All eight pages were inspected visually. Flight date is the only cover value with no machine source; it was transcribed from the 2026-07-14 "July 11-12 capture" note into `report_meta` and is the one field to double-check.
+
+**Cost if wrong:** Low and reversible. This is a downstream generator that reads frozen outputs and writes only a PDF; it touches no analysis core and never writes to the freeze, comparison, or ground-truth files (hard constraint, enforced by construction). A wrong degradation choice (flight date, or the drawn-versus-labeled placement of the two dimensioned lines) is fixed in the report code or `roofkit.json` without affecting any measurement.
+
+---
 
 ### 2026-07-18: Run 2 evidence addendum: the rule is global, the threshold sits on a plateau, the pitch offset is uniform, and the total is caveated
 
