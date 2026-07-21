@@ -60,6 +60,8 @@ Newest at the top. NEVER edit or delete a past entry. Its value is that it is ev
 
 If a past decision turns out to be wrong, do not fix it in place. Write a NEW entry that reverses it and references the original. The reversal is more interesting than either position alone.
 
+**A reversal is not finished when the entry is written.** The rule you just reversed usually lives in other instruction-bearing layers too: project instructions (CLAUDE.md), agent memory, other skills, reusable plan templates. Editing only this log leaves those stale layers to silently reassert the old behavior on the next session that reads them, and the agent re-applies whichever layer it read most recently. So when you write a reversal, sweep every instruction-bearing layer for the old rule and update each one in the same pass, and record in the entry which layers you changed. This project has been burned by exactly this failure: an instruction the decision log had already reversed survived in CLAUDE.md, agent memory, and a plan file, and kept resurrecting until every layer was found and fixed.
+
 ## Entry format
 
 Use this exact template:
@@ -94,8 +96,9 @@ So: when logging a decision that rests on how a tool actually behaves, cite the 
 2. Draft the entry.
 3. SHOW IT TO THE USER BEFORE WRITING. The user owns the reasoning; do not put words in their mouth. If the "Why" is not something they actually said or agreed to, it does not go in.
 4. Update the Current state block if the state changed.
-5. Write the file.
-6. Commit, with a message naming the decision.
+5. If this entry reverses or changes a standing rule, sweep every instruction-bearing layer (CLAUDE.md, agent memory, other skills, reusable plan templates) for the old rule and update each in the same pass; list the layers you changed in the entry. A reversal logged but not propagated leaves stale layers that resurrect the old behavior on the next session that reads them.
+6. Write the file.
+7. Commit, with a message naming the decision.
 
 ## At the end of a session
 
