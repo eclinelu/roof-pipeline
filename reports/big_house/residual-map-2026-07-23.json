@@ -1,0 +1,800 @@
+{
+  "task": "5B residual map (where the unexplained plan area sits)",
+  "dataset": "big_house",
+  "facet_state_date": "2026-07-23",
+  "source_run": "coverage-comparison-2026-07-23.json",
+  "reproduction_check": {
+    "verdict": "REPRODUCED_PARTIAL",
+    "facet_count_expected": 26,
+    "facet_count_rebuilt": 25,
+    "count_matches": false,
+    "facets_compared": 25,
+    "main_worst_delta_deg": 0.0004,
+    "main_tolerance_deg": 0.01,
+    "main_ok": true,
+    "dormer_worst_delta_deg": 0.4076,
+    "dormer_tolerance_deg": 1.0,
+    "dormer_ok": true,
+    "missing_facets": [
+      {
+        "facet": 25,
+        "kind": "dormer",
+        "pitch": 51.998,
+        "gross": 0.019,
+        "net": 0.019
+      }
+    ],
+    "per_facet": [
+      {
+        "facet": 0,
+        "kind": "main",
+        "json_pitch": 21.188,
+        "rebuilt_pitch": 21.188,
+        "delta_deg": 0.0003,
+        "n_points": 1538098,
+        "json_net_cu2": 42.457
+      },
+      {
+        "facet": 1,
+        "kind": "main",
+        "json_pitch": 33.067,
+        "rebuilt_pitch": 33.067,
+        "delta_deg": 0.0001,
+        "n_points": 1154335,
+        "json_net_cu2": 67.241
+      },
+      {
+        "facet": 2,
+        "kind": "main",
+        "json_pitch": 22.722,
+        "rebuilt_pitch": 22.722,
+        "delta_deg": 0.0004,
+        "n_points": 693991,
+        "json_net_cu2": 30.348
+      },
+      {
+        "facet": 3,
+        "kind": "main",
+        "json_pitch": 34.006,
+        "rebuilt_pitch": 34.006,
+        "delta_deg": 0.0001,
+        "n_points": 850268,
+        "json_net_cu2": 52.711
+      },
+      {
+        "facet": 4,
+        "kind": "main",
+        "json_pitch": 20.99,
+        "rebuilt_pitch": 20.99,
+        "delta_deg": 0.0001,
+        "n_points": 744303,
+        "json_net_cu2": 28.639
+      },
+      {
+        "facet": 5,
+        "kind": "main",
+        "json_pitch": 21.357,
+        "rebuilt_pitch": 21.357,
+        "delta_deg": 0.0001,
+        "n_points": 669484,
+        "json_net_cu2": 18.499
+      },
+      {
+        "facet": 6,
+        "kind": "main",
+        "json_pitch": 33.757,
+        "rebuilt_pitch": 33.757,
+        "delta_deg": 0.0004,
+        "n_points": 403109,
+        "json_net_cu2": 33.422
+      },
+      {
+        "facet": 7,
+        "kind": "main",
+        "json_pitch": 33.515,
+        "rebuilt_pitch": 33.515,
+        "delta_deg": 0.0003,
+        "n_points": 297583,
+        "json_net_cu2": 36.605
+      },
+      {
+        "facet": 8,
+        "kind": "dormer",
+        "json_pitch": 23.523,
+        "rebuilt_pitch": 23.53,
+        "delta_deg": 0.0066,
+        "n_points": 99482,
+        "json_net_cu2": 4.452
+      },
+      {
+        "facet": 9,
+        "kind": "dormer",
+        "json_pitch": 22.101,
+        "rebuilt_pitch": 22.101,
+        "delta_deg": 0.0002,
+        "n_points": 80887,
+        "json_net_cu2": 2.648
+      },
+      {
+        "facet": 10,
+        "kind": "dormer",
+        "json_pitch": 22.68,
+        "rebuilt_pitch": 22.679,
+        "delta_deg": 0.0013,
+        "n_points": 24493,
+        "json_net_cu2": 1.49
+      },
+      {
+        "facet": 11,
+        "kind": "dormer",
+        "json_pitch": 35.088,
+        "rebuilt_pitch": 35.081,
+        "delta_deg": 0.0073,
+        "n_points": 67725,
+        "json_net_cu2": 1.803
+      },
+      {
+        "facet": 12,
+        "kind": "dormer",
+        "json_pitch": 33.953,
+        "rebuilt_pitch": 33.917,
+        "delta_deg": 0.036,
+        "n_points": 55880,
+        "json_net_cu2": 2.068
+      },
+      {
+        "facet": 13,
+        "kind": "dormer",
+        "json_pitch": 35.106,
+        "rebuilt_pitch": 35.106,
+        "delta_deg": 0.0003,
+        "n_points": 55178,
+        "json_net_cu2": 1.799
+      },
+      {
+        "facet": 14,
+        "kind": "dormer",
+        "json_pitch": 33.879,
+        "rebuilt_pitch": 33.879,
+        "delta_deg": 0.0002,
+        "n_points": 42793,
+        "json_net_cu2": 1.619
+      },
+      {
+        "facet": 15,
+        "kind": "dormer",
+        "json_pitch": 34.427,
+        "rebuilt_pitch": 34.189,
+        "delta_deg": 0.2378,
+        "n_points": 53023,
+        "json_net_cu2": 1.471
+      },
+      {
+        "facet": 16,
+        "kind": "dormer",
+        "json_pitch": 33.915,
+        "rebuilt_pitch": 33.867,
+        "delta_deg": 0.0476,
+        "n_points": 39079,
+        "json_net_cu2": 1.673
+      },
+      {
+        "facet": 17,
+        "kind": "dormer",
+        "json_pitch": 34.899,
+        "rebuilt_pitch": 34.893,
+        "delta_deg": 0.0064,
+        "n_points": 44649,
+        "json_net_cu2": 1.758
+      },
+      {
+        "facet": 18,
+        "kind": "dormer",
+        "json_pitch": 34.679,
+        "rebuilt_pitch": 34.7,
+        "delta_deg": 0.0213,
+        "n_points": 29920,
+        "json_net_cu2": 1.726
+      },
+      {
+        "facet": 19,
+        "kind": "dormer",
+        "json_pitch": 32.952,
+        "rebuilt_pitch": 32.947,
+        "delta_deg": 0.0052,
+        "n_points": 26495,
+        "json_net_cu2": 1.195
+      },
+      {
+        "facet": 20,
+        "kind": "dormer",
+        "json_pitch": 33.831,
+        "rebuilt_pitch": 33.83,
+        "delta_deg": 0.0015,
+        "n_points": 20903,
+        "json_net_cu2": 1.167
+      },
+      {
+        "facet": 21,
+        "kind": "dormer",
+        "json_pitch": 23.259,
+        "rebuilt_pitch": 23.259,
+        "delta_deg": 0.0,
+        "n_points": 19795,
+        "json_net_cu2": 1.127
+      },
+      {
+        "facet": 22,
+        "kind": "dormer",
+        "json_pitch": 33.338,
+        "rebuilt_pitch": 33.339,
+        "delta_deg": 0.0008,
+        "n_points": 14130,
+        "json_net_cu2": 0.378
+      },
+      {
+        "facet": 23,
+        "kind": "dormer",
+        "json_pitch": 55.272,
+        "rebuilt_pitch": 54.864,
+        "delta_deg": 0.4076,
+        "n_points": 664,
+        "json_net_cu2": 0.01
+      },
+      {
+        "facet": 24,
+        "kind": "dormer",
+        "json_pitch": 33.036,
+        "rebuilt_pitch": 33.036,
+        "delta_deg": 0.0005,
+        "n_points": 10614,
+        "json_net_cu2": 0.811
+      }
+    ],
+    "caveat": "Open3D 0.19 segment_plane is NONDETERMINISTIC: with an identical seed and identical input points it returns different planes on small point sets (measured; see ransac-nondeterminism report). Main facets (300k-1.5M points) reproduce to <0.001 deg. Recovered dormer facets reproduce only approximately, and the smallest ones may not reproduce at all. Treat every recovered-facet number below as carrying the per-facet delta shown here as its reproducibility uncertainty."
+  },
+  "grid": {
+    "cell_cu": 0.01299,
+    "cell_area_cu2": 0.00016875,
+    "nx": 2236,
+    "ny": 2698,
+    "cell_mult_of_spacing": 2.5,
+    "spacing_cu": 0.005196
+  },
+  "erosion": {
+    "eroded_by_one_cell": true,
+    "answer": "YES",
+    "where": "roofkit/coverage.py, coverage_masks(): interior = binary_erosion(building, iterations=1); residual = interior & building & ~explained",
+    "meaning": "The residual EXCLUDES the outermost one-cell ring of the building footprint by construction. The 13.877 cu^2 is therefore already perimeter-fringe-free at the 1-cell level. Any perimeter concentration reported below is residual that survived that erosion and sits 2+ cells inside the edge.",
+    "erosion_cells": 1,
+    "erosion_length_cu": 0.01299
+  },
+  "totals": {
+    "coverage_pct": 93.14,
+    "interior_building_cells": 1198049,
+    "interior_building_cu2": 202.171,
+    "residual_cells": 82233,
+    "residual_cu2": 13.8768,
+    "expected_residual_cu2_from_run": 13.877,
+    "delta_vs_run_cu2": -0.0002,
+    "matches_run": true,
+    "delta_explanation": "This rebuild is missing the facets listed in reproduction_check.missing_facets, so the plan area they explained falls back into the residual. Their combined net slope area is tiny, so the residual should sit slightly ABOVE the run's 13.877 cu^2, not below. A large or negative delta would mean something other than the missing facets changed, and would invalidate this map."
+  },
+  "perimeter_vs_interior": {
+    "method": "EDT depth: distance in cells from each residual cell to the nearest non-building cell. Ring = depth <= k.",
+    "headline_ring_width_cells": 3,
+    "headline": {
+      "ring_width_cells": 3,
+      "ring_width_cu": 0.03897,
+      "perimeter_cells": 67022,
+      "perimeter_cu2": 11.31,
+      "perimeter_pct": 81.5,
+      "interior_cells": 15211,
+      "interior_cu2": 2.5669,
+      "interior_pct": 18.5
+    },
+    "sensitivity": [
+      {
+        "ring_width_cells": 2,
+        "ring_width_cu": 0.02598,
+        "perimeter_cells": 47950,
+        "perimeter_cu2": 8.0916,
+        "perimeter_pct": 58.31,
+        "interior_cells": 34283,
+        "interior_cu2": 5.7853,
+        "interior_pct": 41.69
+      },
+      {
+        "ring_width_cells": 3,
+        "ring_width_cu": 0.03897,
+        "perimeter_cells": 67022,
+        "perimeter_cu2": 11.31,
+        "perimeter_pct": 81.5,
+        "interior_cells": 15211,
+        "interior_cu2": 2.5669,
+        "interior_pct": 18.5
+      },
+      {
+        "ring_width_cells": 4,
+        "ring_width_cu": 0.05196,
+        "perimeter_cells": 74336,
+        "perimeter_cu2": 12.5442,
+        "perimeter_pct": 90.4,
+        "interior_cells": 7897,
+        "interior_cu2": 1.3326,
+        "interior_pct": 9.6
+      },
+      {
+        "ring_width_cells": 5,
+        "ring_width_cu": 0.06495,
+        "perimeter_cells": 78472,
+        "perimeter_cu2": 13.2422,
+        "perimeter_pct": 95.43,
+        "interior_cells": 3761,
+        "interior_cu2": 0.6347,
+        "interior_pct": 4.57
+      },
+      {
+        "ring_width_cells": 6,
+        "ring_width_cu": 0.07794,
+        "perimeter_cells": 80051,
+        "perimeter_cu2": 13.5086,
+        "perimeter_pct": 97.35,
+        "interior_cells": 2182,
+        "interior_cu2": 0.3682,
+        "interior_pct": 2.65
+      }
+    ],
+    "depth_histogram": [
+      {
+        "depth_cells": 1,
+        "cells": 33364,
+        "cu2": 5.6302
+      },
+      {
+        "depth_cells": 2,
+        "cells": 30891,
+        "cu2": 5.2129
+      },
+      {
+        "depth_cells": 3,
+        "cells": 9044,
+        "cu2": 1.5262
+      },
+      {
+        "depth_cells": 4,
+        "cells": 4081,
+        "cu2": 0.6887
+      },
+      {
+        "depth_cells": 5,
+        "cells": 2526,
+        "cu2": 0.4263
+      },
+      {
+        "depth_cells": 6,
+        "cells": 793,
+        "cu2": 0.1338
+      },
+      {
+        "depth_cells": 7,
+        "cells": 540,
+        "cu2": 0.0911
+      },
+      {
+        "depth_cells": 8,
+        "cells": 316,
+        "cu2": 0.0533
+      },
+      {
+        "depth_cells": 9,
+        "cells": 161,
+        "cu2": 0.0272
+      },
+      {
+        "depth_cells": 10,
+        "cells": 123,
+        "cu2": 0.0208
+      },
+      {
+        "depth_cells": 11,
+        "cells": 79,
+        "cu2": 0.0133
+      },
+      {
+        "depth_cells": ">=12",
+        "cells": 315,
+        "cu2": 0.0532
+      }
+    ]
+  },
+  "interior_blobs": {
+    "definition": "connected residual cells with EDT depth > 3, area >= 0.15 cu^2",
+    "count": 2,
+    "total_cu2": 0.4285,
+    "blobs": [
+      {
+        "area_cu2": 0.2577,
+        "cells": 1527,
+        "location_raw": {
+          "utm": {
+            "x": [
+              553485.46,
+              553486.45
+            ],
+            "y": [
+              4543288.31,
+              4543289.36
+            ]
+          },
+          "short": {
+            "x": [
+              85.46,
+              86.45
+            ],
+            "y": [
+              288.31,
+              289.36
+            ]
+          }
+        },
+        "box_leveled": {
+          "x": [
+            553196.01,
+            553197.01
+          ],
+          "y": [
+            4543211.29,
+            4543212.34
+          ]
+        },
+        "max_depth_cells": 8.49,
+        "n_roof_points": 7801,
+        "n_unexplained_points": 7792
+      },
+      {
+        "area_cu2": 0.1708,
+        "cells": 1012,
+        "location_raw": {
+          "utm": {
+            "x": [
+              553485.95,
+              553486.58
+            ],
+            "y": [
+              4543289.07,
+              4543289.98
+            ]
+          },
+          "short": {
+            "x": [
+              85.95,
+              86.58
+            ],
+            "y": [
+              289.07,
+              289.98
+            ]
+          }
+        },
+        "box_leveled": {
+          "x": [
+            553196.5,
+            553197.14
+          ],
+          "y": [
+            4543212.06,
+            4543212.97
+          ]
+        },
+        "max_depth_cells": 8.94,
+        "n_roof_points": 5074,
+        "n_unexplained_points": 5001
+      }
+    ]
+  },
+  "triangular_blob": {
+    "query_box_short": {
+      "x": [
+        84.0,
+        90.0
+      ],
+      "y": [
+        285.0,
+        291.0
+      ]
+    },
+    "query_box_utm": {
+      "x": [
+        553484.0,
+        553490.0
+      ],
+      "y": [
+        4543285.0,
+        4543291.0
+      ]
+    },
+    "coordinate_note": "query box is RAW UTM; shorthand X = UTM_X - 553400, Y = UTM_Y - 4543000. Masks are computed in LEVELED coordinates and selection is done on points, so the two frames are never compared directly.",
+    "roof_points_in_query_box": 606353,
+    "earlier_diagnostic_area_cu2": 5.94,
+    "pre_recovery_blob": {
+      "matched_by": "closest pre-recovery blob area to the 5.94 cu^2 quoted in the earlier diagnostic",
+      "blob": 0,
+      "area_cu2": 5.2596,
+      "box_leveled": {
+        "x": [
+          553194.72,
+          553199.18
+        ],
+        "y": [
+          4543210.58,
+          4543213.9
+        ]
+      },
+      "facets_produced": [
+        8
+      ]
+    },
+    "all_pre_recovery_blobs": [
+      {
+        "blob": 0,
+        "area_cu2": 5.2596,
+        "box_leveled": {
+          "x": [
+            553194.72,
+            553199.18
+          ],
+          "y": [
+            4543210.58,
+            4543213.9
+          ]
+        },
+        "facets_produced": [
+          8
+        ]
+      },
+      {
+        "blob": 1,
+        "area_cu2": 2.4167,
+        "box_leveled": {
+          "x": [
+            553197.43,
+            553199.55
+          ],
+          "y": [
+            4543217.17,
+            4543219.15
+          ]
+        },
+        "facets_produced": [
+          9,
+          10
+        ]
+      },
+      {
+        "blob": 2,
+        "area_cu2": 2.2673,
+        "box_leveled": {
+          "x": [
+            553193.94,
+            553195.37
+          ],
+          "y": [
+            4543216.65,
+            4543219.47
+          ]
+        },
+        "facets_produced": [
+          11,
+          12
+        ]
+      },
+      {
+        "blob": 3,
+        "area_cu2": 2.2052,
+        "box_leveled": {
+          "x": [
+            553188.91,
+            553190.17
+          ],
+          "y": [
+            4543216.88,
+            4543219.28
+          ]
+        },
+        "facets_produced": [
+          13,
+          14
+        ]
+      },
+      {
+        "blob": 4,
+        "area_cu2": 2.0429,
+        "box_leveled": {
+          "x": [
+            553191.43,
+            553192.86
+          ],
+          "y": [
+            4543217.46,
+            4543219.33
+          ]
+        },
+        "facets_produced": [
+          15,
+          16
+        ]
+      },
+      {
+        "blob": 5,
+        "area_cu2": 1.7388,
+        "box_leveled": {
+          "x": [
+            553186.3,
+            553187.8
+          ],
+          "y": [
+            4543217.21,
+            4543219.49
+          ]
+        },
+        "facets_produced": [
+          17,
+          18
+        ]
+      },
+      {
+        "blob": 6,
+        "area_cu2": 1.0734,
+        "box_leveled": {
+          "x": [
+            553194.24,
+            553196.19
+          ],
+          "y": [
+            4543211.15,
+            4543212.87
+          ]
+        },
+        "facets_produced": []
+      },
+      {
+        "blob": 7,
+        "area_cu2": 0.9757,
+        "box_leveled": {
+          "x": [
+            553188.43,
+            553190.39
+          ],
+          "y": [
+            4543206.2,
+            4543207.55
+          ]
+        },
+        "facets_produced": [
+          19,
+          20
+        ]
+      },
+      {
+        "blob": 8,
+        "area_cu2": 0.5648,
+        "box_leveled": {
+          "x": [
+            553196.58,
+            553197.54
+          ],
+          "y": [
+            4543208.73,
+            4543210.65
+          ]
+        },
+        "facets_produced": []
+      },
+      {
+        "blob": 9,
+        "area_cu2": 0.3709,
+        "box_leveled": {
+          "x": [
+            553199.5,
+            553200.29
+          ],
+          "y": [
+            4543211.67,
+            4543213.11
+          ]
+        },
+        "facets_produced": [
+          21
+        ]
+      },
+      {
+        "blob": 10,
+        "area_cu2": 0.2729,
+        "box_leveled": {
+          "x": [
+            553188.13,
+            553189.25
+          ],
+          "y": [
+            4543206.83,
+            4543207.54
+          ]
+        },
+        "facets_produced": [
+          22,
+          23
+        ]
+      },
+      {
+        "blob": 11,
+        "area_cu2": 0.2108,
+        "box_leveled": {
+          "x": [
+            553194.86,
+            553196.19
+          ],
+          "y": [
+            4543207.07,
+            4543207.69
+          ]
+        },
+        "facets_produced": [
+          24
+        ]
+      },
+      {
+        "blob": 12,
+        "area_cu2": 0.1601,
+        "box_leveled": {
+          "x": [
+            553189.2,
+            553189.52
+          ],
+          "y": [
+            4543209.78,
+            4543210.64
+          ]
+        },
+        "facets_produced": []
+      },
+      {
+        "blob": 13,
+        "area_cu2": 0.1593,
+        "box_leveled": {
+          "x": [
+            553200.88,
+            553201.38
+          ],
+          "y": [
+            4543215.08,
+            4543215.98
+          ]
+        },
+        "facets_produced": []
+      }
+    ],
+    "post_recovery": {
+      "building_cu2": 21.3786,
+      "explained_cu2": 14.7015,
+      "residual_cu2": 4.252,
+      "explained_pct": 68.77
+    },
+    "recovered_facets_centroid_inside": [
+      {
+        "facet": 8,
+        "blob": 0,
+        "n_points": 99482,
+        "pitch_deg": 23.53
+      },
+      {
+        "facet": 21,
+        "blob": 9,
+        "n_points": 19795,
+        "pitch_deg": 23.259
+      }
+    ],
+    "verdict": "PARTIALLY fitted",
+    "caveat": "The earlier Task 2 diagnostic defined a residual CELL as >=2 points beyond the band (Hres>=2); coverage.py defines a cell as explained when >=2 points are WITHIN the band. A cell can satisfy both. Areas from the two definitions are therefore not bit-comparable; the verdict above uses coverage.py's."
+  }
+}

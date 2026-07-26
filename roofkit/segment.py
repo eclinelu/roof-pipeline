@@ -52,10 +52,39 @@ def fit_ground_plane(points, distance_threshold=0.2):
     return normal, ground_points, inlier_mask
 
 def find_roof_planes(points, distance_threshold=0.2, min_points=300,
-                     min_pitch=10, max_pitch=60, max_planes=8):
+                     min_pitch=10, max_pitch=60, max_planes=8,
+                     probability=1.0):
     """Peel flat planes off the cloud one at a time with RANSAC, keeping only
     the ones tilted like a roof. Returns a list of facets, each a dict holding
-    that facet's points, its normal, and its pitch in degrees."""
+    that facet's points, its normal, and its pitch in degrees.
+
+    `probability` is Open3D's ADAPTIVE EARLY STOP: RANSAC keeps a running
+    estimate of how many iterations it still needs to have reached this
+    probability of having found the best plane, and quits as soon as the
+    estimate is met, usually long before num_iterations. That estimate depends
+    on the best inlier count found SO FAR. Open3D evaluates candidates in
+    PARALLEL, so "best so far" depends on the order threads happen to finish,
+    which the seed does not control. That is why a fixed seed did NOT give a
+    fixed answer (measured 2026-07-25: a 664-point facet returned three
+    different planes under an identical seed).
+
+    probability=1.0 disables the early stop and forces all num_iterations, so
+    every candidate is always evaluated and the result no longer depends on
+    thread timing.
+
+    WHY 1.0 IS THE DEFAULT (decision 2026-07-26). The alternative fixes were
+    an env var (OMP_NUM_THREADS=1) or a non-default argument. Both fail the
+    same way: they are invisible at the call site and a caller who forgets
+    silently gets the irreproducible path. A default cannot be forgotten.
+    Verified before adopting: at probability=1.0 the eight main big_house
+    facets match the frozen pre-registration to 0.00043 deg worst case, which
+    is the SAME worst-case delta the old default produced, so this does not
+    restate the frozen result. Cost is wall-clock only (measured in T2,
+    2026-07-26).
+
+    Note this makes scripts/measure_roof.py run at 1.0 as well, since it does
+    not pass the argument. That is intended: it is the same verified-identical
+    fit, now reproducible."""
     cloud = o3d.geometry.PointCloud()
     cloud.points = o3d.utility.Vector3dVector(points)
 
@@ -67,7 +96,8 @@ def find_roof_planes(points, distance_threshold=0.2, min_points=300,
 
         # RANSAC: grab the biggest flat plane in what remains.
         plane_model, inliers = cloud.segment_plane(
-            distance_threshold=distance_threshold, ransac_n=3, num_iterations=1000)
+            distance_threshold=distance_threshold, ransac_n=3,
+            num_iterations=1000, probability=probability)
 
         # If even the biggest remaining plane is tiny, we're done finding surfaces.
         if len(inliers) < min_points:

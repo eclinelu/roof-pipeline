@@ -1,0 +1,297 @@
+{
+  "protocol": "coverage run; frozen file is a read-only input, never edited",
+  "date": "2026-07-23",
+  "dataset": "big_house",
+  "inputs": {
+    "frozen": "preregistered-2026-07-18.json",
+    "roof": "roof.npy"
+  },
+  "config": {
+    "coverage_cell_mult": 2.5,
+    "min_blob_area_cu2": 0.15,
+    "band_cu": 0.06586349408109585,
+    "quality_bar": 2.9479968459650356,
+    "cell_cu": 0.012990381489840008
+  },
+  "facet_count": {
+    "frozen": 8,
+    "coverage": 26
+  },
+  "threshold_sweep": [
+    {
+      "min_area": 0.05,
+      "blobs": 26
+    },
+    {
+      "min_area": 0.1,
+      "blobs": 19
+    },
+    {
+      "min_area": 0.15,
+      "blobs": 14
+    },
+    {
+      "min_area": 0.2,
+      "blobs": 12
+    },
+    {
+      "min_area": 0.25,
+      "blobs": 11
+    },
+    {
+      "min_area": 0.3,
+      "blobs": 10
+    },
+    {
+      "min_area": 0.4,
+      "blobs": 9
+    },
+    {
+      "min_area": 0.5,
+      "blobs": 9
+    },
+    {
+      "min_area": 0.75,
+      "blobs": 8
+    },
+    {
+      "min_area": 1.0,
+      "blobs": 7
+    },
+    {
+      "min_area": 1.5,
+      "blobs": 6
+    },
+    {
+      "min_area": 2.0,
+      "blobs": 5
+    }
+  ],
+  "area": {
+    "rows": [
+      {
+        "facet": 0,
+        "kind": "main",
+        "pitch": 21.188,
+        "gross": 42.89,
+        "occluded": 0.4326,
+        "net": 42.457
+      },
+      {
+        "facet": 1,
+        "kind": "main",
+        "pitch": 33.067,
+        "gross": 68.301,
+        "occluded": 1.0606,
+        "net": 67.241
+      },
+      {
+        "facet": 2,
+        "kind": "main",
+        "pitch": 22.722,
+        "gross": 30.768,
+        "occluded": 0.4197,
+        "net": 30.348
+      },
+      {
+        "facet": 3,
+        "kind": "main",
+        "pitch": 34.006,
+        "gross": 53.048,
+        "occluded": 0.3371,
+        "net": 52.711
+      },
+      {
+        "facet": 4,
+        "kind": "main",
+        "pitch": 20.99,
+        "gross": 28.726,
+        "occluded": 0.0868,
+        "net": 28.639
+      },
+      {
+        "facet": 5,
+        "kind": "main",
+        "pitch": 21.357,
+        "gross": 18.628,
+        "occluded": 0.1286,
+        "net": 18.499
+      },
+      {
+        "facet": 6,
+        "kind": "main",
+        "pitch": 33.757,
+        "gross": 33.713,
+        "occluded": 0.2917,
+        "net": 33.422
+      },
+      {
+        "facet": 7,
+        "kind": "main",
+        "pitch": 33.515,
+        "gross": 37.114,
+        "occluded": 0.5084,
+        "net": 36.605
+      },
+      {
+        "facet": 8,
+        "kind": "dormer",
+        "pitch": 23.523,
+        "gross": 4.454,
+        "occluded": 0.0018,
+        "net": 4.452
+      },
+      {
+        "facet": 9,
+        "kind": "dormer",
+        "pitch": 22.101,
+        "gross": 2.733,
+        "occluded": 0.0858,
+        "net": 2.648
+      },
+      {
+        "facet": 10,
+        "kind": "dormer",
+        "pitch": 22.68,
+        "gross": 1.543,
+        "occluded": 0.0536,
+        "net": 1.49
+      },
+      {
+        "facet": 11,
+        "kind": "dormer",
+        "pitch": 35.088,
+        "gross": 1.825,
+        "occluded": 0.0221,
+        "net": 1.803
+      },
+      {
+        "facet": 12,
+        "kind": "dormer",
+        "pitch": 33.953,
+        "gross": 2.099,
+        "occluded": 0.0305,
+        "net": 2.068
+      },
+      {
+        "facet": 13,
+        "kind": "dormer",
+        "pitch": 35.106,
+        "gross": 1.805,
+        "occluded": 0.0068,
+        "net": 1.799
+      },
+      {
+        "facet": 14,
+        "kind": "dormer",
+        "pitch": 33.879,
+        "gross": 1.639,
+        "occluded": 0.0199,
+        "net": 1.619
+      },
+      {
+        "facet": 15,
+        "kind": "dormer",
+        "pitch": 34.427,
+        "gross": 1.501,
+        "occluded": 0.0305,
+        "net": 1.471
+      },
+      {
+        "facet": 16,
+        "kind": "dormer",
+        "pitch": 33.915,
+        "gross": 1.698,
+        "occluded": 0.025,
+        "net": 1.673
+      },
+      {
+        "facet": 17,
+        "kind": "dormer",
+        "pitch": 34.899,
+        "gross": 1.768,
+        "occluded": 0.0107,
+        "net": 1.758
+      },
+      {
+        "facet": 18,
+        "kind": "dormer",
+        "pitch": 34.679,
+        "gross": 1.738,
+        "occluded": 0.0119,
+        "net": 1.726
+      },
+      {
+        "facet": 19,
+        "kind": "dormer",
+        "pitch": 32.952,
+        "gross": 1.372,
+        "occluded": 0.177,
+        "net": 1.195
+      },
+      {
+        "facet": 20,
+        "kind": "dormer",
+        "pitch": 33.831,
+        "gross": 1.188,
+        "occluded": 0.0213,
+        "net": 1.167
+      },
+      {
+        "facet": 21,
+        "kind": "dormer",
+        "pitch": 23.259,
+        "gross": 1.127,
+        "occluded": 0.0,
+        "net": 1.127
+      },
+      {
+        "facet": 22,
+        "kind": "dormer",
+        "pitch": 33.338,
+        "gross": 0.709,
+        "occluded": 0.3309,
+        "net": 0.378
+      },
+      {
+        "facet": 23,
+        "kind": "dormer",
+        "pitch": 55.272,
+        "gross": 0.078,
+        "occluded": 0.0678,
+        "net": 0.01
+      },
+      {
+        "facet": 24,
+        "kind": "dormer",
+        "pitch": 33.036,
+        "gross": 0.811,
+        "occluded": 0.0,
+        "net": 0.811
+      },
+      {
+        "facet": 25,
+        "kind": "dormer",
+        "pitch": 51.998,
+        "gross": 0.019,
+        "occluded": 0.0,
+        "net": 0.019
+      }
+    ],
+    "total_gross": 341.296,
+    "total_occluded": 4.161,
+    "total_net": 337.135
+  },
+  "decomposition": {
+    "frozen_total": 313.188,
+    "my_main_net": 309.923,
+    "dormer_gross": 28.108,
+    "occlusion": 4.161,
+    "new_total_net": 337.135,
+    "change": 23.947,
+    "change_pct": 7.646
+  },
+  "coverage_pct": 93.14,
+  "unexplained_plan_cu2": 13.877,
+  "pairwise_note": "raw matrix printed to stdout; no merge performed"
+}

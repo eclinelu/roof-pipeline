@@ -1,0 +1,380 @@
+{
+  "task": "6A determinism probe",
+  "dataset": "big_house",
+  "date": "2026-07-25",
+  "open3d_version": "0.19.0",
+  "omp_num_threads": "unset",
+  "threads_pinned": false,
+  "method": "re-seed to 0 immediately before each repetition, identical input points, identical parameters; main facets held fixed because they were already measured reproducible to 0.0004 deg",
+  "reps": 25,
+  "floor": {
+    "min_points": 2000,
+    "min_area_cu2": 0.1,
+    "min_area_in_spacing_sq": 3703.7,
+    "spacing_cu": 0.005196,
+    "rationale": "both values sit inside an EMPTY band of the observed distribution (points: 664 then nothing until 10,614; net area: 0.019 then nothing until 0.378), so the threshold is insensitive to its exact value",
+    "scale_note": "min_points is a count: density-dependent, not scale-dependent. min_area_cu2 IS scale-dependent; carry min_area_in_spacing_sq to another cloud instead."
+  },
+  "inputs": {
+    "main_facets": 8,
+    "blobs": 14,
+    "band_cu": 0.065863,
+    "quality_bar": 2.948
+  },
+  "variants": [
+    {
+      "reps": 25,
+      "counts_observed": [
+        17,
+        18,
+        19,
+        20
+      ],
+      "count_stable": false,
+      "worst_pitch_spread_deg": null,
+      "per_facet": null,
+      "note": "count varies across reps, so index-matched spread is undefined",
+      "variant": "baseline (no floor, default prob)",
+      "floor_applied": false,
+      "probability": 0.99999999,
+      "min_points": null,
+      "min_area_cu2": null
+    },
+    {
+      "reps": 25,
+      "counts_observed": [
+        16,
+        17
+      ],
+      "count_stable": false,
+      "worst_pitch_spread_deg": null,
+      "per_facet": null,
+      "note": "count varies across reps, so index-matched spread is undefined",
+      "variant": "hard floor only",
+      "floor_applied": true,
+      "probability": 0.99999999,
+      "min_points": 2000,
+      "min_area_cu2": 0.1
+    },
+    {
+      "reps": 25,
+      "counts_observed": [
+        19
+      ],
+      "count_stable": true,
+      "worst_pitch_spread_deg": 0.0,
+      "bit_identical_point_counts": true,
+      "per_facet": [
+        {
+          "facet_index": 0,
+          "pitch_spread_deg": 0.0,
+          "min_pitch": 23.6285,
+          "max_pitch": 23.6285,
+          "n_points_min": 63544,
+          "n_points_max": 63544
+        },
+        {
+          "facet_index": 1,
+          "pitch_spread_deg": 0.0,
+          "min_pitch": 10.2719,
+          "max_pitch": 10.2719,
+          "n_points_min": 13505,
+          "n_points_max": 13505
+        },
+        {
+          "facet_index": 2,
+          "pitch_spread_deg": 0.0,
+          "min_pitch": 22.1089,
+          "max_pitch": 22.1089,
+          "n_points_min": 80784,
+          "n_points_max": 80784
+        },
+        {
+          "facet_index": 3,
+          "pitch_spread_deg": 0.0,
+          "min_pitch": 22.7057,
+          "max_pitch": 22.7057,
+          "n_points_min": 24453,
+          "n_points_max": 24453
+        },
+        {
+          "facet_index": 4,
+          "pitch_spread_deg": 0.0,
+          "min_pitch": 35.0961,
+          "max_pitch": 35.0961,
+          "n_points_min": 68561,
+          "n_points_max": 68561
+        },
+        {
+          "facet_index": 5,
+          "pitch_spread_deg": 0.0,
+          "min_pitch": 33.9252,
+          "max_pitch": 33.9252,
+          "n_points_min": 55362,
+          "n_points_max": 55362
+        },
+        {
+          "facet_index": 6,
+          "pitch_spread_deg": 0.0,
+          "min_pitch": 35.1193,
+          "max_pitch": 35.1193,
+          "n_points_min": 54863,
+          "n_points_max": 54863
+        },
+        {
+          "facet_index": 7,
+          "pitch_spread_deg": 0.0,
+          "min_pitch": 33.865,
+          "max_pitch": 33.865,
+          "n_points_min": 43241,
+          "n_points_max": 43241
+        },
+        {
+          "facet_index": 8,
+          "pitch_spread_deg": 0.0,
+          "min_pitch": 34.4337,
+          "max_pitch": 34.4337,
+          "n_points_min": 53543,
+          "n_points_max": 53543
+        },
+        {
+          "facet_index": 9,
+          "pitch_spread_deg": 0.0,
+          "min_pitch": 33.9186,
+          "max_pitch": 33.9186,
+          "n_points_min": 38590,
+          "n_points_max": 38590
+        },
+        {
+          "facet_index": 10,
+          "pitch_spread_deg": 0.0,
+          "min_pitch": 34.8954,
+          "max_pitch": 34.8954,
+          "n_points_min": 44174,
+          "n_points_max": 44174
+        },
+        {
+          "facet_index": 11,
+          "pitch_spread_deg": 0.0,
+          "min_pitch": 34.6531,
+          "max_pitch": 34.6531,
+          "n_points_min": 30395,
+          "n_points_max": 30395
+        },
+        {
+          "facet_index": 12,
+          "pitch_spread_deg": 0.0,
+          "min_pitch": 32.9261,
+          "max_pitch": 32.9261,
+          "n_points_min": 25969,
+          "n_points_max": 25969
+        },
+        {
+          "facet_index": 13,
+          "pitch_spread_deg": 0.0,
+          "min_pitch": 33.7513,
+          "max_pitch": 33.7513,
+          "n_points_min": 21389,
+          "n_points_max": 21389
+        },
+        {
+          "facet_index": 14,
+          "pitch_spread_deg": 0.0,
+          "min_pitch": 23.259,
+          "max_pitch": 23.259,
+          "n_points_min": 19807,
+          "n_points_max": 19807
+        },
+        {
+          "facet_index": 15,
+          "pitch_spread_deg": 0.0,
+          "min_pitch": 33.3386,
+          "max_pitch": 33.3386,
+          "n_points_min": 14132,
+          "n_points_max": 14132
+        },
+        {
+          "facet_index": 16,
+          "pitch_spread_deg": 0.0,
+          "min_pitch": 54.8128,
+          "max_pitch": 54.8128,
+          "n_points_min": 665,
+          "n_points_max": 665
+        },
+        {
+          "facet_index": 17,
+          "pitch_spread_deg": 0.0,
+          "min_pitch": 33.0365,
+          "max_pitch": 33.0365,
+          "n_points_min": 10620,
+          "n_points_max": 10620
+        },
+        {
+          "facet_index": 18,
+          "pitch_spread_deg": 0.0,
+          "min_pitch": 40.6201,
+          "max_pitch": 40.6201,
+          "n_points_min": 395,
+          "n_points_max": 395
+        }
+      ],
+      "variant": "probability=1.0 only",
+      "floor_applied": false,
+      "probability": 1.0,
+      "min_points": null,
+      "min_area_cu2": null
+    },
+    {
+      "reps": 25,
+      "counts_observed": [
+        17
+      ],
+      "count_stable": true,
+      "worst_pitch_spread_deg": 0.0,
+      "bit_identical_point_counts": true,
+      "per_facet": [
+        {
+          "facet_index": 0,
+          "pitch_spread_deg": 0.0,
+          "min_pitch": 23.6285,
+          "max_pitch": 23.6285,
+          "n_points_min": 63544,
+          "n_points_max": 63544
+        },
+        {
+          "facet_index": 1,
+          "pitch_spread_deg": 0.0,
+          "min_pitch": 10.2719,
+          "max_pitch": 10.2719,
+          "n_points_min": 13505,
+          "n_points_max": 13505
+        },
+        {
+          "facet_index": 2,
+          "pitch_spread_deg": 0.0,
+          "min_pitch": 22.1089,
+          "max_pitch": 22.1089,
+          "n_points_min": 80784,
+          "n_points_max": 80784
+        },
+        {
+          "facet_index": 3,
+          "pitch_spread_deg": 0.0,
+          "min_pitch": 22.7057,
+          "max_pitch": 22.7057,
+          "n_points_min": 24453,
+          "n_points_max": 24453
+        },
+        {
+          "facet_index": 4,
+          "pitch_spread_deg": 0.0,
+          "min_pitch": 35.0961,
+          "max_pitch": 35.0961,
+          "n_points_min": 68561,
+          "n_points_max": 68561
+        },
+        {
+          "facet_index": 5,
+          "pitch_spread_deg": 0.0,
+          "min_pitch": 33.9252,
+          "max_pitch": 33.9252,
+          "n_points_min": 55362,
+          "n_points_max": 55362
+        },
+        {
+          "facet_index": 6,
+          "pitch_spread_deg": 0.0,
+          "min_pitch": 35.1193,
+          "max_pitch": 35.1193,
+          "n_points_min": 54863,
+          "n_points_max": 54863
+        },
+        {
+          "facet_index": 7,
+          "pitch_spread_deg": 0.0,
+          "min_pitch": 33.865,
+          "max_pitch": 33.865,
+          "n_points_min": 43241,
+          "n_points_max": 43241
+        },
+        {
+          "facet_index": 8,
+          "pitch_spread_deg": 0.0,
+          "min_pitch": 34.4166,
+          "max_pitch": 34.4166,
+          "n_points_min": 53329,
+          "n_points_max": 53329
+        },
+        {
+          "facet_index": 9,
+          "pitch_spread_deg": 0.0,
+          "min_pitch": 33.9102,
+          "max_pitch": 33.9102,
+          "n_points_min": 38804,
+          "n_points_max": 38804
+        },
+        {
+          "facet_index": 10,
+          "pitch_spread_deg": 0.0,
+          "min_pitch": 34.897,
+          "max_pitch": 34.897,
+          "n_points_min": 44254,
+          "n_points_max": 44254
+        },
+        {
+          "facet_index": 11,
+          "pitch_spread_deg": 0.0,
+          "min_pitch": 34.6633,
+          "max_pitch": 34.6633,
+          "n_points_min": 30315,
+          "n_points_max": 30315
+        },
+        {
+          "facet_index": 12,
+          "pitch_spread_deg": 0.0,
+          "min_pitch": 32.8933,
+          "max_pitch": 32.8933,
+          "n_points_min": 25668,
+          "n_points_max": 25668
+        },
+        {
+          "facet_index": 13,
+          "pitch_spread_deg": 0.0,
+          "min_pitch": 33.7328,
+          "max_pitch": 33.7328,
+          "n_points_min": 21363,
+          "n_points_max": 21363
+        },
+        {
+          "facet_index": 14,
+          "pitch_spread_deg": 0.0,
+          "min_pitch": 23.259,
+          "max_pitch": 23.259,
+          "n_points_min": 19807,
+          "n_points_max": 19807
+        },
+        {
+          "facet_index": 15,
+          "pitch_spread_deg": 0.0,
+          "min_pitch": 33.3327,
+          "max_pitch": 33.3327,
+          "n_points_min": 14226,
+          "n_points_max": 14226
+        },
+        {
+          "facet_index": 16,
+          "pitch_spread_deg": 0.0,
+          "min_pitch": 33.0365,
+          "max_pitch": 33.0365,
+          "n_points_min": 10621,
+          "n_points_max": 10621
+        }
+      ],
+      "variant": "floor + probability=1.0",
+      "floor_applied": true,
+      "probability": 1.0,
+      "min_points": 2000,
+      "min_area_cu2": 0.1
+    }
+  ]
+}

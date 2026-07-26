@@ -12,3 +12,5 @@ datasets/
 # Editor state and generated tool output (repo holds only code)
 .obsidian/
 graphify-out/
+
+run.log

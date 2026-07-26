@@ -1,0 +1,167 @@
+{
+  "task": "6A part 2: does the determinism fix move the frozen main facets, and is the full pipeline reproducible",
+  "dataset": "big_house",
+  "date": "2026-07-25",
+  "reps": 5,
+  "frozen_file": "preregistered-2026-07-18.json",
+  "frozen_note": "read-only input; never edited",
+  "spacing_cu": 0.005196,
+  "discovery": {
+    "default_probability": {
+      "probability": 0.99999999,
+      "reps": 5,
+      "stability": {
+        "count_stable": true,
+        "counts": [
+          8
+        ],
+        "worst_pitch_spread_deg": 0.0,
+        "bit_identical": true
+      },
+      "versus_frozen": {
+        "worst_delta_deg": 0.00043,
+        "per_facet": [
+          {
+            "frozen_facet": 0,
+            "frozen_pitch": 21.188,
+            "fitted_pitch": 21.1883,
+            "delta_deg": 0.00033
+          },
+          {
+            "frozen_facet": 1,
+            "frozen_pitch": 33.067,
+            "fitted_pitch": 33.0669,
+            "delta_deg": 8e-05
+          },
+          {
+            "frozen_facet": 2,
+            "frozen_pitch": 22.722,
+            "fitted_pitch": 22.7224,
+            "delta_deg": 0.00043
+          },
+          {
+            "frozen_facet": 3,
+            "frozen_pitch": 34.006,
+            "fitted_pitch": 34.0059,
+            "delta_deg": 0.00013
+          },
+          {
+            "frozen_facet": 4,
+            "frozen_pitch": 20.99,
+            "fitted_pitch": 20.9901,
+            "delta_deg": 0.00011
+          },
+          {
+            "frozen_facet": 5,
+            "frozen_pitch": 21.357,
+            "fitted_pitch": 21.3571,
+            "delta_deg": 8e-05
+          },
+          {
+            "frozen_facet": 6,
+            "frozen_pitch": 33.757,
+            "fitted_pitch": 33.7566,
+            "delta_deg": 0.00043
+          },
+          {
+            "frozen_facet": 7,
+            "frozen_pitch": 33.515,
+            "fitted_pitch": 33.5153,
+            "delta_deg": 0.00031
+          }
+        ]
+      },
+      "n_facets": 8,
+      "band_cu": 0.065863
+    },
+    "probability_1.0": {
+      "probability": 1.0,
+      "reps": 5,
+      "stability": {
+        "count_stable": true,
+        "counts": [
+          8
+        ],
+        "worst_pitch_spread_deg": 0.0,
+        "bit_identical": true
+      },
+      "versus_frozen": {
+        "worst_delta_deg": 0.00043,
+        "per_facet": [
+          {
+            "frozen_facet": 0,
+            "frozen_pitch": 21.188,
+            "fitted_pitch": 21.1883,
+            "delta_deg": 0.00033
+          },
+          {
+            "frozen_facet": 1,
+            "frozen_pitch": 33.067,
+            "fitted_pitch": 33.0669,
+            "delta_deg": 8e-05
+          },
+          {
+            "frozen_facet": 2,
+            "frozen_pitch": 22.722,
+            "fitted_pitch": 22.7224,
+            "delta_deg": 0.00043
+          },
+          {
+            "frozen_facet": 3,
+            "frozen_pitch": 34.006,
+            "fitted_pitch": 34.0059,
+            "delta_deg": 0.00013
+          },
+          {
+            "frozen_facet": 4,
+            "frozen_pitch": 20.99,
+            "fitted_pitch": 20.9901,
+            "delta_deg": 0.00011
+          },
+          {
+            "frozen_facet": 5,
+            "frozen_pitch": 21.357,
+            "fitted_pitch": 21.3571,
+            "delta_deg": 8e-05
+          },
+          {
+            "frozen_facet": 6,
+            "frozen_pitch": 33.757,
+            "fitted_pitch": 33.7566,
+            "delta_deg": 0.00043
+          },
+          {
+            "frozen_facet": 7,
+            "frozen_pitch": 33.515,
+            "fitted_pitch": 33.5153,
+            "delta_deg": 0.00031
+          }
+        ]
+      },
+      "n_facets": 8,
+      "band_cu": 0.065863
+    }
+  },
+  "full_pipeline": {
+    "probability": 1.0,
+    "stability": {
+      "count_stable": true,
+      "counts": [
+        26
+      ],
+      "worst_pitch_spread_deg": 0.0,
+      "bit_identical": true
+    },
+    "counts_per_rep": [
+      26,
+      26,
+      26,
+      26,
+      26
+    ]
+  },
+  "interpretation": {
+    "frozen_safe": "compare discovery.probability_1.0.versus_frozen.worst_delta_deg against the frozen file's own reported precision; a delta at or below the 0.0004 deg run-to-run wobble already measured means the fix does not restate the frozen result",
+    "gate": "Emmett's gate: facet COUNT stable across repeated runs"
+  }
+}

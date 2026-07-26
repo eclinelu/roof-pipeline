@@ -1,0 +1,71 @@
+{
+  "finding": "Open3D segment_plane is not reproducible under a fixed seed on small point sets",
+  "dataset": "big_house",
+  "measured_on": "2026-07-25",
+  "open3d_version": "0.19.0",
+  "method": "o3d.utility.random.seed(0) immediately before each repetition, identical input points, identical parameters; compare the returned plane point-counts and pitches",
+  "why_it_matters": "Facet recovery fits planes inside small residual blobs. The main facets (300k-1.5M points) are over-determined and reproduce to <0.001 deg. The recovered dormer facets are not, and the smallest ones appear in one run and vanish in the next. This is the same class of failure the config's expected_facets guard was created to catch, now reappearing inside the coverage recovery step.",
+  "consequence": "The exact 26-facet state of 2026-07-23 cannot be regenerated. Its facet GEOMETRY was never written to disk, only per-facet summary rows, so it is not recoverable from the comparison file either.",
+  "probes": [
+    {
+      "which": "largest",
+      "facet": 0,
+      "n_points": 1538098,
+      "reps": 8,
+      "distinct_results": 1,
+      "reproducible_under_fixed_seed": true,
+      "pitch_spread_deg": 0.0,
+      "note": "single outcome observed; with this many points the fit is over-determined",
+      "outcome_distribution": [
+        {
+          "result": [
+            [
+              1538098,
+              21.1878
+            ]
+          ],
+          "count": 8
+        }
+      ]
+    },
+    {
+      "which": "smallest",
+      "facet": 23,
+      "n_points": 664,
+      "reps": 25,
+      "distinct_results": 3,
+      "reproducible_under_fixed_seed": false,
+      "pitch_spread_deg": 0.0427,
+      "note": "multiple outcomes under an IDENTICAL seed",
+      "outcome_distribution": [
+        {
+          "result": [
+            [
+              662,
+              54.8095
+            ]
+          ],
+          "count": 20
+        },
+        {
+          "result": [
+            [
+              663,
+              54.8148
+            ]
+          ],
+          "count": 4
+        },
+        {
+          "result": [
+            [
+              662,
+              54.8522
+            ]
+          ],
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

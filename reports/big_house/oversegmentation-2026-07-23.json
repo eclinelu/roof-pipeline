@@ -1,0 +1,1774 @@
+{
+  "task": "5C over-segmentation evidence (report only, no fix applied)",
+  "dataset": "big_house",
+  "facet_state_date": "2026-07-23",
+  "source_run": "coverage-comparison-2026-07-23.json",
+  "reproduction_check": {
+    "verdict": "REPRODUCED_PARTIAL",
+    "facet_count_expected": 26,
+    "facet_count_rebuilt": 25,
+    "count_matches": false,
+    "facets_compared": 25,
+    "main_worst_delta_deg": 0.0004,
+    "main_tolerance_deg": 0.01,
+    "main_ok": true,
+    "dormer_worst_delta_deg": 0.4076,
+    "dormer_tolerance_deg": 1.0,
+    "dormer_ok": true,
+    "missing_facets": [
+      {
+        "facet": 25,
+        "kind": "dormer",
+        "pitch": 51.998,
+        "gross": 0.019,
+        "net": 0.019
+      }
+    ],
+    "per_facet": [
+      {
+        "facet": 0,
+        "kind": "main",
+        "json_pitch": 21.188,
+        "rebuilt_pitch": 21.188,
+        "delta_deg": 0.0003,
+        "n_points": 1538098,
+        "json_net_cu2": 42.457
+      },
+      {
+        "facet": 1,
+        "kind": "main",
+        "json_pitch": 33.067,
+        "rebuilt_pitch": 33.067,
+        "delta_deg": 0.0001,
+        "n_points": 1154335,
+        "json_net_cu2": 67.241
+      },
+      {
+        "facet": 2,
+        "kind": "main",
+        "json_pitch": 22.722,
+        "rebuilt_pitch": 22.722,
+        "delta_deg": 0.0004,
+        "n_points": 693991,
+        "json_net_cu2": 30.348
+      },
+      {
+        "facet": 3,
+        "kind": "main",
+        "json_pitch": 34.006,
+        "rebuilt_pitch": 34.006,
+        "delta_deg": 0.0001,
+        "n_points": 850268,
+        "json_net_cu2": 52.711
+      },
+      {
+        "facet": 4,
+        "kind": "main",
+        "json_pitch": 20.99,
+        "rebuilt_pitch": 20.99,
+        "delta_deg": 0.0001,
+        "n_points": 744303,
+        "json_net_cu2": 28.639
+      },
+      {
+        "facet": 5,
+        "kind": "main",
+        "json_pitch": 21.357,
+        "rebuilt_pitch": 21.357,
+        "delta_deg": 0.0001,
+        "n_points": 669484,
+        "json_net_cu2": 18.499
+      },
+      {
+        "facet": 6,
+        "kind": "main",
+        "json_pitch": 33.757,
+        "rebuilt_pitch": 33.757,
+        "delta_deg": 0.0004,
+        "n_points": 403109,
+        "json_net_cu2": 33.422
+      },
+      {
+        "facet": 7,
+        "kind": "main",
+        "json_pitch": 33.515,
+        "rebuilt_pitch": 33.515,
+        "delta_deg": 0.0003,
+        "n_points": 297583,
+        "json_net_cu2": 36.605
+      },
+      {
+        "facet": 8,
+        "kind": "dormer",
+        "json_pitch": 23.523,
+        "rebuilt_pitch": 23.53,
+        "delta_deg": 0.0066,
+        "n_points": 99482,
+        "json_net_cu2": 4.452
+      },
+      {
+        "facet": 9,
+        "kind": "dormer",
+        "json_pitch": 22.101,
+        "rebuilt_pitch": 22.101,
+        "delta_deg": 0.0002,
+        "n_points": 80887,
+        "json_net_cu2": 2.648
+      },
+      {
+        "facet": 10,
+        "kind": "dormer",
+        "json_pitch": 22.68,
+        "rebuilt_pitch": 22.679,
+        "delta_deg": 0.0013,
+        "n_points": 24493,
+        "json_net_cu2": 1.49
+      },
+      {
+        "facet": 11,
+        "kind": "dormer",
+        "json_pitch": 35.088,
+        "rebuilt_pitch": 35.081,
+        "delta_deg": 0.0073,
+        "n_points": 67725,
+        "json_net_cu2": 1.803
+      },
+      {
+        "facet": 12,
+        "kind": "dormer",
+        "json_pitch": 33.953,
+        "rebuilt_pitch": 33.917,
+        "delta_deg": 0.036,
+        "n_points": 55880,
+        "json_net_cu2": 2.068
+      },
+      {
+        "facet": 13,
+        "kind": "dormer",
+        "json_pitch": 35.106,
+        "rebuilt_pitch": 35.106,
+        "delta_deg": 0.0003,
+        "n_points": 55178,
+        "json_net_cu2": 1.799
+      },
+      {
+        "facet": 14,
+        "kind": "dormer",
+        "json_pitch": 33.879,
+        "rebuilt_pitch": 33.879,
+        "delta_deg": 0.0002,
+        "n_points": 42793,
+        "json_net_cu2": 1.619
+      },
+      {
+        "facet": 15,
+        "kind": "dormer",
+        "json_pitch": 34.427,
+        "rebuilt_pitch": 34.189,
+        "delta_deg": 0.2378,
+        "n_points": 53023,
+        "json_net_cu2": 1.471
+      },
+      {
+        "facet": 16,
+        "kind": "dormer",
+        "json_pitch": 33.915,
+        "rebuilt_pitch": 33.867,
+        "delta_deg": 0.0476,
+        "n_points": 39079,
+        "json_net_cu2": 1.673
+      },
+      {
+        "facet": 17,
+        "kind": "dormer",
+        "json_pitch": 34.899,
+        "rebuilt_pitch": 34.893,
+        "delta_deg": 0.0064,
+        "n_points": 44649,
+        "json_net_cu2": 1.758
+      },
+      {
+        "facet": 18,
+        "kind": "dormer",
+        "json_pitch": 34.679,
+        "rebuilt_pitch": 34.7,
+        "delta_deg": 0.0213,
+        "n_points": 29920,
+        "json_net_cu2": 1.726
+      },
+      {
+        "facet": 19,
+        "kind": "dormer",
+        "json_pitch": 32.952,
+        "rebuilt_pitch": 32.947,
+        "delta_deg": 0.0052,
+        "n_points": 26495,
+        "json_net_cu2": 1.195
+      },
+      {
+        "facet": 20,
+        "kind": "dormer",
+        "json_pitch": 33.831,
+        "rebuilt_pitch": 33.83,
+        "delta_deg": 0.0015,
+        "n_points": 20903,
+        "json_net_cu2": 1.167
+      },
+      {
+        "facet": 21,
+        "kind": "dormer",
+        "json_pitch": 23.259,
+        "rebuilt_pitch": 23.259,
+        "delta_deg": 0.0,
+        "n_points": 19795,
+        "json_net_cu2": 1.127
+      },
+      {
+        "facet": 22,
+        "kind": "dormer",
+        "json_pitch": 33.338,
+        "rebuilt_pitch": 33.339,
+        "delta_deg": 0.0008,
+        "n_points": 14130,
+        "json_net_cu2": 0.378
+      },
+      {
+        "facet": 23,
+        "kind": "dormer",
+        "json_pitch": 55.272,
+        "rebuilt_pitch": 54.864,
+        "delta_deg": 0.4076,
+        "n_points": 664,
+        "json_net_cu2": 0.01
+      },
+      {
+        "facet": 24,
+        "kind": "dormer",
+        "json_pitch": 33.036,
+        "rebuilt_pitch": 33.036,
+        "delta_deg": 0.0005,
+        "n_points": 10614,
+        "json_net_cu2": 0.811
+      }
+    ],
+    "caveat": "Open3D 0.19 segment_plane is NONDETERMINISTIC: with an identical seed and identical input points it returns different planes on small point sets (measured; see ransac-nondeterminism report). Main facets (300k-1.5M points) reproduce to <0.001 deg. Recovered dormer facets reproduce only approximately, and the smallest ones may not reproduce at all. Treat every recovered-facet number below as carrying the per-facet delta shown here as its reproducibility uncertainty."
+  },
+  "expectation": {
+    "main_slopes": 8,
+    "physical_dormers": 5,
+    "max_expected_if_every_dormer_is_a_two_slope_gable": 18,
+    "actual_facets_in_source_run": 26,
+    "actual_facets_reproduced": 25,
+    "actual_dormer_kind_reproduced": 17,
+    "excess_vs_expectation": 8
+  },
+  "not_reproduced": {
+    "facets": [
+      {
+        "facet": 25,
+        "kind": "dormer",
+        "pitch": 51.998,
+        "gross": 0.019,
+        "net": 0.019
+      }
+    ],
+    "note": "Present in the 2026-07-23 run, absent from this rebuild. These are the SMALLEST facets, and their disappearance under an identical seed is itself over-segmentation evidence: a facet that exists in one run and not the next is not a physical roof surface, it is a fit to whatever points RANSAC happened to grab."
+  },
+  "plan_footprint_note": "plan_footprint_cu2 counts distinct plan cells the facet's points occupy (cell-occupancy, quantized, holes not closed). plan_from_alpha_gross_cu2 is the comparison file's alpha gross area times cos(pitch). They measure different things and will not agree exactly; both are given so neither is mistaken for the other.",
+  "dormer_facets": [
+    {
+      "facet": 8,
+      "blob": 0,
+      "n_points": 99482,
+      "pitch_deg": 23.53,
+      "azimuth_deg": 269.56,
+      "plan_footprint_cells": 24192,
+      "plan_footprint_cu2": 4.0824,
+      "plan_from_alpha_gross_cu2": 4.0837,
+      "location_raw": {
+        "utm": {
+          "x": [
+            553486.2,
+            553488.38
+          ],
+          "y": [
+            4543287.59,
+            4543290.91
+          ]
+        },
+        "short": {
+          "x": [
+            86.2,
+            88.38
+          ],
+          "y": [
+            287.59,
+            290.91
+          ]
+        }
+      },
+      "bbox_span_cu": [
+        2.18,
+        3.32
+      ],
+      "gross_cu2": 4.454,
+      "net_cu2": 4.452,
+      "centroid_short": [
+        87.29,
+        289.33
+      ]
+    },
+    {
+      "facet": 9,
+      "blob": 1,
+      "n_points": 80887,
+      "pitch_deg": 22.101,
+      "azimuth_deg": 265.66,
+      "plan_footprint_cells": 14925,
+      "plan_footprint_cu2": 2.5186,
+      "plan_from_alpha_gross_cu2": 2.5322,
+      "location_raw": {
+        "utm": {
+          "x": [
+            553486.88,
+            553488.26
+          ],
+          "y": [
+            4543294.19,
+            4543296.16
+          ]
+        },
+        "short": {
+          "x": [
+            86.88,
+            88.26
+          ],
+          "y": [
+            294.19,
+            296.16
+          ]
+        }
+      },
+      "bbox_span_cu": [
+        1.38,
+        1.97
+      ],
+      "gross_cu2": 2.733,
+      "net_cu2": 2.648,
+      "centroid_short": [
+        87.49,
+        295.27
+      ]
+    },
+    {
+      "facet": 10,
+      "blob": 1,
+      "n_points": 24493,
+      "pitch_deg": 22.679,
+      "azimuth_deg": 92.72,
+      "plan_footprint_cells": 8178,
+      "plan_footprint_cu2": 1.38,
+      "plan_from_alpha_gross_cu2": 1.4237,
+      "location_raw": {
+        "utm": {
+          "x": [
+            553488.07,
+            553488.99
+          ],
+          "y": [
+            4543294.19,
+            4543296.16
+          ]
+        },
+        "short": {
+          "x": [
+            88.07,
+            88.99
+          ],
+          "y": [
+            294.19,
+            296.16
+          ]
+        }
+      },
+      "bbox_span_cu": [
+        0.92,
+        1.97
+      ],
+      "gross_cu2": 1.543,
+      "net_cu2": 1.49,
+      "centroid_short": [
+        88.51,
+        295.32
+      ]
+    },
+    {
+      "facet": 11,
+      "blob": 2,
+      "n_points": 67725,
+      "pitch_deg": 35.081,
+      "azimuth_deg": 266.6,
+      "plan_footprint_cells": 9336,
+      "plan_footprint_cu2": 1.5755,
+      "plan_from_alpha_gross_cu2": 1.4935,
+      "location_raw": {
+        "utm": {
+          "x": [
+            553483.38,
+            553484.17
+          ],
+          "y": [
+            4543293.67,
+            4543296.41
+          ]
+        },
+        "short": {
+          "x": [
+            83.38,
+            84.17
+          ],
+          "y": [
+            293.67,
+            296.41
+          ]
+        }
+      },
+      "bbox_span_cu": [
+        0.79,
+        2.74
+      ],
+      "gross_cu2": 1.825,
+      "net_cu2": 1.803,
+      "centroid_short": [
+        83.75,
+        295.36
+      ]
+    },
+    {
+      "facet": 12,
+      "blob": 2,
+      "n_points": 55880,
+      "pitch_deg": 33.917,
+      "azimuth_deg": 90.72,
+      "plan_footprint_cells": 10456,
+      "plan_footprint_cu2": 1.7645,
+      "plan_from_alpha_gross_cu2": 1.7418,
+      "location_raw": {
+        "utm": {
+          "x": [
+            553483.98,
+            553484.81
+          ],
+          "y": [
+            4543293.67,
+            4543296.44
+          ]
+        },
+        "short": {
+          "x": [
+            83.98,
+            84.81
+          ],
+          "y": [
+            293.67,
+            296.44
+          ]
+        }
+      },
+      "bbox_span_cu": [
+        0.83,
+        2.77
+      ],
+      "gross_cu2": 2.099,
+      "net_cu2": 2.068,
+      "centroid_short": [
+        84.39,
+        295.49
+      ]
+    },
+    {
+      "facet": 13,
+      "blob": 3,
+      "n_points": 55178,
+      "pitch_deg": 35.106,
+      "azimuth_deg": 267.25,
+      "plan_footprint_cells": 9184,
+      "plan_footprint_cu2": 1.5498,
+      "plan_from_alpha_gross_cu2": 1.4767,
+      "location_raw": {
+        "utm": {
+          "x": [
+            553478.36,
+            553479.11
+          ],
+          "y": [
+            4543293.89,
+            4543296.29
+          ]
+        },
+        "short": {
+          "x": [
+            78.36,
+            79.11
+          ],
+          "y": [
+            293.89,
+            296.29
+          ]
+        }
+      },
+      "bbox_span_cu": [
+        0.75,
+        2.4
+      ],
+      "gross_cu2": 1.805,
+      "net_cu2": 1.799,
+      "centroid_short": [
+        78.69,
+        295.2
+      ]
+    },
+    {
+      "facet": 14,
+      "blob": 3,
+      "n_points": 42793,
+      "pitch_deg": 33.879,
+      "azimuth_deg": 89.3,
+      "plan_footprint_cells": 8335,
+      "plan_footprint_cu2": 1.4065,
+      "plan_from_alpha_gross_cu2": 1.3607,
+      "location_raw": {
+        "utm": {
+          "x": [
+            553478.91,
+            553479.62
+          ],
+          "y": [
+            4543293.89,
+            4543296.29
+          ]
+        },
+        "short": {
+          "x": [
+            78.91,
+            79.62
+          ],
+          "y": [
+            293.89,
+            296.29
+          ]
+        }
+      },
+      "bbox_span_cu": [
+        0.71,
+        2.4
+      ],
+      "gross_cu2": 1.639,
+      "net_cu2": 1.619,
+      "centroid_short": [
+        79.29,
+        295.32
+      ]
+    },
+    {
+      "facet": 15,
+      "blob": 4,
+      "n_points": 53023,
+      "pitch_deg": 34.189,
+      "azimuth_deg": 267.1,
+      "plan_footprint_cells": 7570,
+      "plan_footprint_cu2": 1.2774,
+      "plan_from_alpha_gross_cu2": 1.2416,
+      "location_raw": {
+        "utm": {
+          "x": [
+            553480.88,
+            553481.61
+          ],
+          "y": [
+            4543294.47,
+            4543296.34
+          ]
+        },
+        "short": {
+          "x": [
+            80.88,
+            81.61
+          ],
+          "y": [
+            294.47,
+            296.34
+          ]
+        }
+      },
+      "bbox_span_cu": [
+        0.73,
+        1.87
+      ],
+      "gross_cu2": 1.501,
+      "net_cu2": 1.471,
+      "centroid_short": [
+        81.21,
+        295.46
+      ]
+    },
+    {
+      "facet": 16,
+      "blob": 4,
+      "n_points": 39079,
+      "pitch_deg": 33.867,
+      "azimuth_deg": 89.95,
+      "plan_footprint_cells": 8570,
+      "plan_footprint_cu2": 1.4462,
+      "plan_from_alpha_gross_cu2": 1.4099,
+      "location_raw": {
+        "utm": {
+          "x": [
+            553481.45,
+            553482.31
+          ],
+          "y": [
+            4543294.47,
+            4543296.34
+          ]
+        },
+        "short": {
+          "x": [
+            81.45,
+            82.31
+          ],
+          "y": [
+            294.47,
+            296.34
+          ]
+        }
+      },
+      "bbox_span_cu": [
+        0.86,
+        1.87
+      ],
+      "gross_cu2": 1.698,
+      "net_cu2": 1.673,
+      "centroid_short": [
+        81.89,
+        295.49
+      ]
+    },
+    {
+      "facet": 17,
+      "blob": 5,
+      "n_points": 44649,
+      "pitch_deg": 34.893,
+      "azimuth_deg": 88.39,
+      "plan_footprint_cells": 8923,
+      "plan_footprint_cu2": 1.5058,
+      "plan_from_alpha_gross_cu2": 1.4502,
+      "location_raw": {
+        "utm": {
+          "x": [
+            553476.41,
+            553477.24
+          ],
+          "y": [
+            4543294.23,
+            4543296.29
+          ]
+        },
+        "short": {
+          "x": [
+            76.41,
+            77.24
+          ],
+          "y": [
+            294.23,
+            296.29
+          ]
+        }
+      },
+      "bbox_span_cu": [
+        0.83,
+        2.06
+      ],
+      "gross_cu2": 1.768,
+      "net_cu2": 1.758,
+      "centroid_short": [
+        76.86,
+        295.26
+      ]
+    },
+    {
+      "facet": 18,
+      "blob": 5,
+      "n_points": 29920,
+      "pitch_deg": 34.7,
+      "azimuth_deg": 267.46,
+      "plan_footprint_cells": 8631,
+      "plan_footprint_cu2": 1.4565,
+      "plan_from_alpha_gross_cu2": 1.4289,
+      "location_raw": {
+        "utm": {
+          "x": [
+            553475.75,
+            553476.56
+          ],
+          "y": [
+            4543294.23,
+            4543296.26
+          ]
+        },
+        "short": {
+          "x": [
+            75.75,
+            76.56
+          ],
+          "y": [
+            294.23,
+            296.26
+          ]
+        }
+      },
+      "bbox_span_cu": [
+        0.81,
+        2.03
+      ],
+      "gross_cu2": 1.738,
+      "net_cu2": 1.726,
+      "centroid_short": [
+        76.15,
+        295.21
+      ]
+    },
+    {
+      "facet": 19,
+      "blob": 7,
+      "n_points": 26495,
+      "pitch_deg": 32.947,
+      "azimuth_deg": 358.69,
+      "plan_footprint_cells": 6959,
+      "plan_footprint_cu2": 1.1743,
+      "plan_from_alpha_gross_cu2": 1.1513,
+      "location_raw": {
+        "utm": {
+          "x": [
+            553477.87,
+            553479.84
+          ],
+          "y": [
+            4543283.73,
+            4543284.56
+          ]
+        },
+        "short": {
+          "x": [
+            77.87,
+            79.84
+          ],
+          "y": [
+            283.73,
+            284.56
+          ]
+        }
+      },
+      "bbox_span_cu": [
+        1.97,
+        0.83
+      ],
+      "gross_cu2": 1.372,
+      "net_cu2": 1.195,
+      "centroid_short": [
+        78.87,
+        284.16
+      ]
+    },
+    {
+      "facet": 20,
+      "blob": 7,
+      "n_points": 20903,
+      "pitch_deg": 33.83,
+      "azimuth_deg": 177.76,
+      "plan_footprint_cells": 5894,
+      "plan_footprint_cu2": 0.9946,
+      "plan_from_alpha_gross_cu2": 0.9869,
+      "location_raw": {
+        "utm": {
+          "x": [
+            553477.87,
+            553479.84
+          ],
+          "y": [
+            4543283.21,
+            4543283.95
+          ]
+        },
+        "short": {
+          "x": [
+            77.87,
+            79.84
+          ],
+          "y": [
+            283.21,
+            283.95
+          ]
+        }
+      },
+      "bbox_span_cu": [
+        1.97,
+        0.74
+      ],
+      "gross_cu2": 1.188,
+      "net_cu2": 1.167,
+      "centroid_short": [
+        78.93,
+        283.57
+      ]
+    },
+    {
+      "facet": 21,
+      "blob": 9,
+      "n_points": 19795,
+      "pitch_deg": 23.259,
+      "azimuth_deg": 85.34,
+      "plan_footprint_cells": 5936,
+      "plan_footprint_cu2": 1.0017,
+      "plan_from_alpha_gross_cu2": 1.0354,
+      "location_raw": {
+        "utm": {
+          "x": [
+            553488.94,
+            553489.74
+          ],
+          "y": [
+            4543288.68,
+            4543290.12
+          ]
+        },
+        "short": {
+          "x": [
+            88.94,
+            89.74
+          ],
+          "y": [
+            288.68,
+            290.12
+          ]
+        }
+      },
+      "bbox_span_cu": [
+        0.8,
+        1.44
+      ],
+      "gross_cu2": 1.127,
+      "net_cu2": 1.127,
+      "centroid_short": [
+        89.36,
+        289.4
+      ]
+    },
+    {
+      "facet": 22,
+      "blob": 10,
+      "n_points": 14130,
+      "pitch_deg": 33.339,
+      "azimuth_deg": 358.93,
+      "plan_footprint_cells": 3605,
+      "plan_footprint_cu2": 0.6083,
+      "plan_from_alpha_gross_cu2": 0.5923,
+      "location_raw": {
+        "utm": {
+          "x": [
+            553477.57,
+            553478.7
+          ],
+          "y": [
+            4543283.85,
+            4543284.55
+          ]
+        },
+        "short": {
+          "x": [
+            77.57,
+            78.7
+          ],
+          "y": [
+            283.85,
+            284.55
+          ]
+        }
+      },
+      "bbox_span_cu": [
+        1.13,
+        0.7
+      ],
+      "gross_cu2": 0.709,
+      "net_cu2": 0.378,
+      "centroid_short": [
+        78.11,
+        284.21
+      ]
+    },
+    {
+      "facet": 23,
+      "blob": 10,
+      "n_points": 664,
+      "pitch_deg": 54.864,
+      "azimuth_deg": 269.52,
+      "plan_footprint_cells": 279,
+      "plan_footprint_cu2": 0.0471,
+      "plan_from_alpha_gross_cu2": 0.0449,
+      "location_raw": {
+        "utm": {
+          "x": [
+            553477.63,
+            553478.69
+          ],
+          "y": [
+            4543283.86,
+            4543284.55
+          ]
+        },
+        "short": {
+          "x": [
+            77.63,
+            78.69
+          ],
+          "y": [
+            283.86,
+            284.55
+          ]
+        }
+      },
+      "bbox_span_cu": [
+        1.06,
+        0.69
+      ],
+      "gross_cu2": 0.078,
+      "net_cu2": 0.01,
+      "centroid_short": [
+        77.83,
+        284.11
+      ]
+    },
+    {
+      "facet": 24,
+      "blob": 11,
+      "n_points": 10614,
+      "pitch_deg": 33.036,
+      "azimuth_deg": 357.54,
+      "plan_footprint_cells": 3893,
+      "plan_footprint_cu2": 0.6569,
+      "plan_from_alpha_gross_cu2": 0.6799,
+      "location_raw": {
+        "utm": {
+          "x": [
+            553484.3,
+            553485.63
+          ],
+          "y": [
+            4543284.08,
+            4543284.71
+          ]
+        },
+        "short": {
+          "x": [
+            84.3,
+            85.63
+          ],
+          "y": [
+            284.08,
+            284.71
+          ]
+        }
+      },
+      "bbox_span_cu": [
+        1.33,
+        0.63
+      ],
+      "gross_cu2": 0.811,
+      "net_cu2": 0.811,
+      "centroid_short": [
+        85.06,
+        284.43
+      ]
+    }
+  ],
+  "blob_to_facets": [
+    {
+      "blob": 0,
+      "blob_area_cu2": 5.2596,
+      "location_raw": {
+        "utm": {
+          "x": [
+            553486.2,
+            553488.38
+          ],
+          "y": [
+            4543287.59,
+            4543290.91
+          ]
+        },
+        "short": {
+          "x": [
+            86.2,
+            88.38
+          ],
+          "y": [
+            287.59,
+            290.91
+          ]
+        }
+      },
+      "box_leveled": {
+        "x": [
+          553194.72,
+          553199.18
+        ],
+        "y": [
+          4543210.58,
+          4543213.9
+        ]
+      },
+      "n_facets": 1,
+      "facets": [
+        8
+      ],
+      "facet_pitches": [
+        23.53
+      ],
+      "facet_net_cu2": [
+        4.452
+      ]
+    },
+    {
+      "blob": 1,
+      "blob_area_cu2": 2.4167,
+      "location_raw": {
+        "utm": {
+          "x": [
+            553486.88,
+            553488.99
+          ],
+          "y": [
+            4543294.19,
+            4543296.16
+          ]
+        },
+        "short": {
+          "x": [
+            86.88,
+            88.99
+          ],
+          "y": [
+            294.19,
+            296.16
+          ]
+        }
+      },
+      "box_leveled": {
+        "x": [
+          553197.43,
+          553199.55
+        ],
+        "y": [
+          4543217.17,
+          4543219.15
+        ]
+      },
+      "n_facets": 2,
+      "facets": [
+        9,
+        10
+      ],
+      "facet_pitches": [
+        22.101,
+        22.679
+      ],
+      "facet_net_cu2": [
+        2.648,
+        1.49
+      ]
+    },
+    {
+      "blob": 2,
+      "blob_area_cu2": 2.2673,
+      "location_raw": {
+        "utm": {
+          "x": [
+            553483.38,
+            553484.81
+          ],
+          "y": [
+            4543293.67,
+            4543296.44
+          ]
+        },
+        "short": {
+          "x": [
+            83.38,
+            84.81
+          ],
+          "y": [
+            293.67,
+            296.44
+          ]
+        }
+      },
+      "box_leveled": {
+        "x": [
+          553193.94,
+          553195.37
+        ],
+        "y": [
+          4543216.65,
+          4543219.47
+        ]
+      },
+      "n_facets": 2,
+      "facets": [
+        11,
+        12
+      ],
+      "facet_pitches": [
+        35.081,
+        33.917
+      ],
+      "facet_net_cu2": [
+        1.803,
+        2.068
+      ]
+    },
+    {
+      "blob": 3,
+      "blob_area_cu2": 2.2052,
+      "location_raw": {
+        "utm": {
+          "x": [
+            553478.36,
+            553479.62
+          ],
+          "y": [
+            4543293.89,
+            4543296.29
+          ]
+        },
+        "short": {
+          "x": [
+            78.36,
+            79.62
+          ],
+          "y": [
+            293.89,
+            296.29
+          ]
+        }
+      },
+      "box_leveled": {
+        "x": [
+          553188.91,
+          553190.17
+        ],
+        "y": [
+          4543216.88,
+          4543219.28
+        ]
+      },
+      "n_facets": 2,
+      "facets": [
+        13,
+        14
+      ],
+      "facet_pitches": [
+        35.106,
+        33.879
+      ],
+      "facet_net_cu2": [
+        1.799,
+        1.619
+      ]
+    },
+    {
+      "blob": 4,
+      "blob_area_cu2": 2.0429,
+      "location_raw": {
+        "utm": {
+          "x": [
+            553480.88,
+            553482.31
+          ],
+          "y": [
+            4543294.47,
+            4543296.34
+          ]
+        },
+        "short": {
+          "x": [
+            80.88,
+            82.31
+          ],
+          "y": [
+            294.47,
+            296.34
+          ]
+        }
+      },
+      "box_leveled": {
+        "x": [
+          553191.43,
+          553192.86
+        ],
+        "y": [
+          4543217.46,
+          4543219.33
+        ]
+      },
+      "n_facets": 2,
+      "facets": [
+        15,
+        16
+      ],
+      "facet_pitches": [
+        34.189,
+        33.867
+      ],
+      "facet_net_cu2": [
+        1.471,
+        1.673
+      ]
+    },
+    {
+      "blob": 5,
+      "blob_area_cu2": 1.7388,
+      "location_raw": {
+        "utm": {
+          "x": [
+            553475.75,
+            553477.24
+          ],
+          "y": [
+            4543294.23,
+            4543296.29
+          ]
+        },
+        "short": {
+          "x": [
+            75.75,
+            77.24
+          ],
+          "y": [
+            294.23,
+            296.29
+          ]
+        }
+      },
+      "box_leveled": {
+        "x": [
+          553186.3,
+          553187.8
+        ],
+        "y": [
+          4543217.21,
+          4543219.49
+        ]
+      },
+      "n_facets": 2,
+      "facets": [
+        17,
+        18
+      ],
+      "facet_pitches": [
+        34.893,
+        34.7
+      ],
+      "facet_net_cu2": [
+        1.758,
+        1.726
+      ]
+    },
+    {
+      "blob": 7,
+      "blob_area_cu2": 0.9757,
+      "location_raw": {
+        "utm": {
+          "x": [
+            553477.87,
+            553479.84
+          ],
+          "y": [
+            4543283.21,
+            4543284.56
+          ]
+        },
+        "short": {
+          "x": [
+            77.87,
+            79.84
+          ],
+          "y": [
+            283.21,
+            284.56
+          ]
+        }
+      },
+      "box_leveled": {
+        "x": [
+          553188.43,
+          553190.39
+        ],
+        "y": [
+          4543206.2,
+          4543207.55
+        ]
+      },
+      "n_facets": 2,
+      "facets": [
+        19,
+        20
+      ],
+      "facet_pitches": [
+        32.947,
+        33.83
+      ],
+      "facet_net_cu2": [
+        1.195,
+        1.167
+      ]
+    },
+    {
+      "blob": 9,
+      "blob_area_cu2": 0.3709,
+      "location_raw": {
+        "utm": {
+          "x": [
+            553488.94,
+            553489.74
+          ],
+          "y": [
+            4543288.68,
+            4543290.12
+          ]
+        },
+        "short": {
+          "x": [
+            88.94,
+            89.74
+          ],
+          "y": [
+            288.68,
+            290.12
+          ]
+        }
+      },
+      "box_leveled": {
+        "x": [
+          553199.5,
+          553200.29
+        ],
+        "y": [
+          4543211.67,
+          4543213.11
+        ]
+      },
+      "n_facets": 1,
+      "facets": [
+        21
+      ],
+      "facet_pitches": [
+        23.259
+      ],
+      "facet_net_cu2": [
+        1.127
+      ]
+    },
+    {
+      "blob": 10,
+      "blob_area_cu2": 0.2729,
+      "location_raw": {
+        "utm": {
+          "x": [
+            553477.57,
+            553478.7
+          ],
+          "y": [
+            4543283.85,
+            4543284.55
+          ]
+        },
+        "short": {
+          "x": [
+            77.57,
+            78.7
+          ],
+          "y": [
+            283.85,
+            284.55
+          ]
+        }
+      },
+      "box_leveled": {
+        "x": [
+          553188.13,
+          553189.25
+        ],
+        "y": [
+          4543206.83,
+          4543207.54
+        ]
+      },
+      "n_facets": 2,
+      "facets": [
+        22,
+        23
+      ],
+      "facet_pitches": [
+        33.339,
+        54.864
+      ],
+      "facet_net_cu2": [
+        0.378,
+        0.01
+      ]
+    },
+    {
+      "blob": 11,
+      "blob_area_cu2": 0.2108,
+      "location_raw": {
+        "utm": {
+          "x": [
+            553484.3,
+            553485.63
+          ],
+          "y": [
+            4543284.08,
+            4543284.71
+          ]
+        },
+        "short": {
+          "x": [
+            84.3,
+            85.63
+          ],
+          "y": [
+            284.08,
+            284.71
+          ]
+        }
+      },
+      "box_leveled": {
+        "x": [
+          553194.86,
+          553196.19
+        ],
+        "y": [
+          4543207.07,
+          4543207.69
+        ]
+      },
+      "n_facets": 1,
+      "facets": [
+        24
+      ],
+      "facet_pitches": [
+        33.036
+      ],
+      "facet_net_cu2": [
+        0.811
+      ]
+    }
+  ],
+  "blobs_with_more_than_two_facets": {
+    "count": 0,
+    "note": "2 facets per blob is the expected signature of one gabled dormer (two opposing faces). More than 2 means the blob yielded more planes than a single gable can explain.",
+    "blobs": []
+  },
+  "suspicious_facets": {
+    "rule": "net < 0.05 cu^2 OR pitch > 45 deg",
+    "note": "Reported, not removed. These are planar, so the fit-quality bar cannot reject them; that is the predicted failure mode of relaxing the size floor inside residual blobs.",
+    "facets": [
+      {
+        "facet": 23,
+        "blob": 10,
+        "n_points": 664,
+        "pitch_deg": 54.864,
+        "azimuth_deg": 269.52,
+        "plan_footprint_cells": 279,
+        "plan_footprint_cu2": 0.0471,
+        "plan_from_alpha_gross_cu2": 0.0449,
+        "location_raw": {
+          "utm": {
+            "x": [
+              553477.63,
+              553478.69
+            ],
+            "y": [
+              4543283.86,
+              4543284.55
+            ]
+          },
+          "short": {
+            "x": [
+              77.63,
+              78.69
+            ],
+            "y": [
+              283.86,
+              284.55
+            ]
+          }
+        },
+        "bbox_span_cu": [
+          1.06,
+          0.69
+        ],
+        "gross_cu2": 0.078,
+        "net_cu2": 0.01,
+        "centroid_short": [
+          77.83,
+          284.11
+        ]
+      }
+    ]
+  },
+  "recovery_log": [
+    {
+      "blob": 0,
+      "blob_area_cu2": 5.2596,
+      "n_candidate_points": 241190,
+      "skipped": null,
+      "planes": [
+        {
+          "n_points": 109972,
+          "pitch_deg": 10.8,
+          "quality": 3.927,
+          "bar": 2.948,
+          "kept": false
+        },
+        {
+          "n_points": 99482,
+          "pitch_deg": 23.53,
+          "quality": 0.892,
+          "bar": 2.948,
+          "kept": true
+        }
+      ]
+    },
+    {
+      "blob": 1,
+      "blob_area_cu2": 2.4167,
+      "n_candidate_points": 119288,
+      "skipped": null,
+      "planes": [
+        {
+          "n_points": 80887,
+          "pitch_deg": 22.1,
+          "quality": 1.204,
+          "bar": 2.948,
+          "kept": true
+        },
+        {
+          "n_points": 24493,
+          "pitch_deg": 22.68,
+          "quality": 0.852,
+          "bar": 2.948,
+          "kept": true
+        }
+      ]
+    },
+    {
+      "blob": 2,
+      "blob_area_cu2": 2.2673,
+      "n_candidate_points": 135594,
+      "skipped": null,
+      "planes": [
+        {
+          "n_points": 67725,
+          "pitch_deg": 35.08,
+          "quality": 0.688,
+          "bar": 2.948,
+          "kept": true
+        },
+        {
+          "n_points": 55880,
+          "pitch_deg": 33.92,
+          "quality": 0.959,
+          "bar": 2.948,
+          "kept": true
+        }
+      ]
+    },
+    {
+      "blob": 3,
+      "blob_area_cu2": 2.2052,
+      "n_candidate_points": 100636,
+      "skipped": null,
+      "planes": [
+        {
+          "n_points": 55178,
+          "pitch_deg": 35.11,
+          "quality": 0.725,
+          "bar": 2.948,
+          "kept": true
+        },
+        {
+          "n_points": 42793,
+          "pitch_deg": 33.88,
+          "quality": 0.784,
+          "bar": 2.948,
+          "kept": true
+        }
+      ]
+    },
+    {
+      "blob": 4,
+      "blob_area_cu2": 2.0429,
+      "n_candidate_points": 97917,
+      "skipped": null,
+      "planes": [
+        {
+          "n_points": 53023,
+          "pitch_deg": 34.19,
+          "quality": 0.522,
+          "bar": 2.948,
+          "kept": true
+        },
+        {
+          "n_points": 39079,
+          "pitch_deg": 33.87,
+          "quality": 0.608,
+          "bar": 2.948,
+          "kept": true
+        }
+      ]
+    },
+    {
+      "blob": 5,
+      "blob_area_cu2": 1.7388,
+      "n_candidate_points": 77810,
+      "skipped": null,
+      "planes": [
+        {
+          "n_points": 44649,
+          "pitch_deg": 34.89,
+          "quality": 0.921,
+          "bar": 2.948,
+          "kept": true
+        },
+        {
+          "n_points": 29920,
+          "pitch_deg": 34.7,
+          "quality": 0.929,
+          "bar": 2.948,
+          "kept": true
+        }
+      ]
+    },
+    {
+      "blob": 6,
+      "blob_area_cu2": 1.0734,
+      "n_candidate_points": 51437,
+      "skipped": null,
+      "planes": []
+    },
+    {
+      "blob": 7,
+      "blob_area_cu2": 0.9757,
+      "n_candidate_points": 47473,
+      "skipped": null,
+      "planes": [
+        {
+          "n_points": 26495,
+          "pitch_deg": 32.95,
+          "quality": 0.807,
+          "bar": 2.948,
+          "kept": true
+        },
+        {
+          "n_points": 20903,
+          "pitch_deg": 33.83,
+          "quality": 0.761,
+          "bar": 2.948,
+          "kept": true
+        }
+      ]
+    },
+    {
+      "blob": 8,
+      "blob_area_cu2": 0.5648,
+      "n_candidate_points": 70643,
+      "skipped": null,
+      "planes": [
+        {
+          "n_points": 11234,
+          "pitch_deg": 17.31,
+          "quality": 7.432,
+          "bar": 2.948,
+          "kept": false
+        }
+      ]
+    },
+    {
+      "blob": 9,
+      "blob_area_cu2": 0.3709,
+      "n_candidate_points": 20987,
+      "skipped": null,
+      "planes": [
+        {
+          "n_points": 19795,
+          "pitch_deg": 23.26,
+          "quality": 0.767,
+          "bar": 2.948,
+          "kept": true
+        }
+      ]
+    },
+    {
+      "blob": 10,
+      "blob_area_cu2": 0.2729,
+      "n_candidate_points": 14802,
+      "skipped": null,
+      "planes": [
+        {
+          "n_points": 14130,
+          "pitch_deg": 33.34,
+          "quality": 0.917,
+          "bar": 2.948,
+          "kept": true
+        },
+        {
+          "n_points": 664,
+          "pitch_deg": 54.86,
+          "quality": 1.306,
+          "bar": 2.948,
+          "kept": true
+        }
+      ]
+    },
+    {
+      "blob": 11,
+      "blob_area_cu2": 0.2108,
+      "n_candidate_points": 12862,
+      "skipped": null,
+      "planes": [
+        {
+          "n_points": 10614,
+          "pitch_deg": 33.04,
+          "quality": 1.633,
+          "bar": 2.948,
+          "kept": true
+        }
+      ]
+    },
+    {
+      "blob": 12,
+      "blob_area_cu2": 0.1601,
+      "n_candidate_points": 22571,
+      "skipped": null,
+      "planes": []
+    },
+    {
+      "blob": 13,
+      "blob_area_cu2": 0.1593,
+      "n_candidate_points": 22892,
+      "skipped": null,
+      "planes": []
+    }
+  ]
+}
