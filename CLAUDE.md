@@ -48,6 +48,9 @@ on. Small steps, plain language on code, never a quiz.
   reassembling the original and diffing against the last committed version.
 - Use the `decision-log` skill to add entries. Opposite update rules, so do not
   mix the two: state gets rewritten, entries never do.
+- Entries are WRITTEN as decisions happen, with no approval gate (2026-07-26).
+  The separate rule stands: never attribute a "Why" to me that I did not state;
+  mark your own reasoning as yours.
 
 ## Architecture the seam
 - `roofkitio.py` is the ONLY module that touches file formats. It reads a cloud

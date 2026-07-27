@@ -4,6 +4,10 @@ _Append only. Newest at the top. Past entries are never edited. A reversal is a 
 
 ## Entries (newest first)
 
+- [2026-07-21 (written late, 2026-07-26): Dormer area ownership is highest-surface-wins, and the parent is charged only the overlap it actually counted](2026-07-21-dormer-area-ownership-highest-surface-wins.md)
+- [2026-07-21 (written late, 2026-07-26): Coverage replaces expected_facets as the completeness gate](2026-07-21-coverage-replaces-expected-facets.md)
+- [2026-07-26: Decision entries are written without waiting for approval](2026-07-26-decision-entries-need-no-approval.md)
+- [2026-07-26: CORRECTION: min_pitch=5 excludes 0.326 cu^2, not 19.04 cu^2; the quality bar is what holds back blob 0](2026-07-26-correction-min-pitch-exclusion-figure.md)
 - [2026-07-26: Coverage splits into a capture metric and a segmentation metric, over a hole-filled footprint](2026-07-26-coverage-split-capture-and-segmentation.md)
 - [2026-07-26: min_pitch is a definition of what counts as a roof, not a filter; set to 5, with a separate low-slope label](2026-07-26-min-pitch-definition-not-filter.md)
 - [2026-07-26: Blob candidates are selected by CELLS, not bounding box; a permanent assertion enforces single ownership](2026-07-26-duplicate-points-cell-selection.md)

@@ -106,8 +106,8 @@ So: when logging a decision that rests on how a tool actually behaves, cite the 
 ## Workflow
 
 1. Read `decisions/README.md` before proposing an update, plus any entry files it points to that look related, so entries are consistent and no decision is logged twice. The index is short by design; read it first rather than every entry.
-2. Draft the entry.
-3. SHOW IT TO THE USER BEFORE WRITING. The user owns the reasoning; do not put words in their mouth. If the "Why" is not something they actually said or agreed to, it does not go in.
+2. Write the entry. **Do NOT wait for approval** (Emmett, 2026-07-26: *"you should no longer look for my approval on any future decision entries"*). An entry is a record, not a request. The log is append-only, so a wrong entry is corrected by a later entry rather than prevented by a gate, and the gate was costing a round trip on every decision.
+3. ATTRIBUTE THE REASONING HONESTLY. This is a separate rule from approval and it still applies in full: never put words in the user's mouth. Where he stated the reasoning, quote him and say so. Where he did not, write the best reasoning you have and mark it as yours (for example "Reasoning not stated by Emmett; this is the measured case"). An entry whose "Why" is silently attributed to him when he never said it is worse than no entry, because the log's whole value is that it records what was actually thought at the time.
 4. Update `STATE.md` if the state changed.
 5. If this entry reverses or changes a standing rule, sweep every instruction-bearing layer (CLAUDE.md, agent memory, other skills, reusable plan templates) for the old rule and update each in the same pass; list the layers you changed in the entry. A reversal logged but not propagated leaves stale layers that resurrect the old behavior on the next session that reads them.
 6. Write the new file in `decisions/`, and add its line to the TOP of the index list in `decisions/README.md`. Both, or the entry is invisible.
@@ -117,4 +117,4 @@ So: when logging a decision that rests on how a tool actually behaves, cite the 
 
 Ask: was anything chosen, rejected, reversed, or discovered today?
 
-If yes, propose the entries before the session ends. Decisions not written down the day they are made get reconstructed later from memory, and reconstructed reasoning is not evidence.
+If yes, WRITE the entries before the session ends, without waiting to be asked. Decisions not written down the day they are made get reconstructed later from memory, and reconstructed reasoning is not evidence.
