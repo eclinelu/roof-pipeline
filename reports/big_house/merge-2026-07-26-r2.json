@@ -1,0 +1,208 @@
+{
+  "task": "Task 6 step 5 (6B): adjacent-coplanar merge check on the canonical 2026-07-26-r2 state",
+  "dataset": "big_house",
+  "date": "2026-07-26-r2",
+  "n_facets": 29,
+  "rule": "A merge requires coplanarity AND spatial connectivity (decision 2026-07-25). Plane agreement alone is necessary but not sufficient: opposite slopes of a hip roof, or the same dormer face repeated across a building, are parallel and offset by almost nothing in the offset metric while being metres apart on the roof. Merging those would fuse two real facets into one.",
+  "tolerances": {
+    "angle_deg": 2.0,
+    "angle_reasoning": "adjacent standard roof pitches differ by about 3 deg, so a 2 deg window cannot bridge two pitch classes; scale-independent because it is an angle",
+    "offset_cu": 0.065863,
+    "offset_form": "1 x the RANSAC band",
+    "offset_reasoning": "two planes closer than the band the fit used are indistinguishable to that fit; the band is a length derived from point spacing, so this rescales with any cloud",
+    "connectivity": "plan footprints overlap or lie within one grid cell (0.01299 cu) of each other"
+  },
+  "merge_pairs": [],
+  "coplanar_but_disconnected": [
+    {
+      "a": 9,
+      "b": 11,
+      "kind_a": "recovered",
+      "kind_b": "recovered",
+      "angle_deg": 1.7608,
+      "offset_cu": 0.05063,
+      "offset_over_band": 0.769,
+      "coplanar": true,
+      "connected": false,
+      "merge": false
+    },
+    {
+      "a": 12,
+      "b": 24,
+      "kind_a": "recovered",
+      "kind_b": "recovered",
+      "angle_deg": 1.2334,
+      "offset_cu": 0.00424,
+      "offset_over_band": 0.064,
+      "coplanar": true,
+      "connected": false,
+      "merge": false
+    },
+    {
+      "a": 21,
+      "b": 28,
+      "kind_a": "recovered",
+      "kind_b": "recovered",
+      "angle_deg": 0.3303,
+      "offset_cu": 0.0018,
+      "offset_over_band": 0.027,
+      "coplanar": true,
+      "connected": false,
+      "merge": false
+    },
+    {
+      "a": 22,
+      "b": 25,
+      "kind_a": "recovered",
+      "kind_b": "recovered",
+      "angle_deg": 1.1109,
+      "offset_cu": 0.02322,
+      "offset_over_band": 0.353,
+      "coplanar": true,
+      "connected": false,
+      "merge": false
+    },
+    {
+      "a": 22,
+      "b": 26,
+      "kind_a": "recovered",
+      "kind_b": "recovered",
+      "angle_deg": 0.8616,
+      "offset_cu": 0.02132,
+      "offset_over_band": 0.324,
+      "coplanar": true,
+      "connected": false,
+      "merge": false
+    },
+    {
+      "a": 22,
+      "b": 27,
+      "kind_a": "recovered",
+      "kind_b": "recovered",
+      "angle_deg": 0.5264,
+      "offset_cu": 0.00148,
+      "offset_over_band": 0.022,
+      "coplanar": true,
+      "connected": false,
+      "merge": false
+    },
+    {
+      "a": 25,
+      "b": 26,
+      "kind_a": "recovered",
+      "kind_b": "recovered",
+      "angle_deg": 0.3896,
+      "offset_cu": 0.00184,
+      "offset_over_band": 0.028,
+      "coplanar": true,
+      "connected": false,
+      "merge": false
+    },
+    {
+      "a": 25,
+      "b": 27,
+      "kind_a": "recovered",
+      "kind_b": "recovered",
+      "angle_deg": 1.0784,
+      "offset_cu": 0.02343,
+      "offset_over_band": 0.356,
+      "coplanar": true,
+      "connected": false,
+      "merge": false
+    },
+    {
+      "a": 26,
+      "b": 27,
+      "kind_a": "recovered",
+      "kind_b": "recovered",
+      "angle_deg": 0.7072,
+      "offset_cu": 0.02028,
+      "offset_over_band": 0.308,
+      "coplanar": true,
+      "connected": false,
+      "merge": false
+    }
+  ],
+  "summary": {
+    "coplanar_pairs": 9,
+    "coplanar_and_connected": 0,
+    "coplanar_but_disconnected": 9,
+    "verdict": "NO MERGES: no facet pair is both coplanar and touching, so the state shows no over-segmentation under this rule"
+  },
+  "nothing_was_merged": "This diagnostic FLAGS candidates; it merges nothing. Whether a flagged pair is one surface split in two or two genuinely separate coplanar neighbours is a physical judgement about the building, so it belongs to Emmett with the render in front of him, not to a tolerance.",
+  "sensitivity": [
+    {
+      "angle_tol_deg": 1.0,
+      "offset_tol_bands": 0.5,
+      "coplanar_pairs": 5,
+      "also_connected": 0
+    },
+    {
+      "angle_tol_deg": 1.0,
+      "offset_tol_bands": 1.0,
+      "coplanar_pairs": 5,
+      "also_connected": 0
+    },
+    {
+      "angle_tol_deg": 1.0,
+      "offset_tol_bands": 2.0,
+      "coplanar_pairs": 5,
+      "also_connected": 0
+    },
+    {
+      "angle_tol_deg": 2.0,
+      "offset_tol_bands": 0.5,
+      "coplanar_pairs": 8,
+      "also_connected": 0
+    },
+    {
+      "angle_tol_deg": 2.0,
+      "offset_tol_bands": 1.0,
+      "coplanar_pairs": 9,
+      "also_connected": 0
+    },
+    {
+      "angle_tol_deg": 2.0,
+      "offset_tol_bands": 2.0,
+      "coplanar_pairs": 9,
+      "also_connected": 0
+    },
+    {
+      "angle_tol_deg": 3.0,
+      "offset_tol_bands": 0.5,
+      "coplanar_pairs": 8,
+      "also_connected": 0
+    },
+    {
+      "angle_tol_deg": 3.0,
+      "offset_tol_bands": 1.0,
+      "coplanar_pairs": 9,
+      "also_connected": 0
+    },
+    {
+      "angle_tol_deg": 3.0,
+      "offset_tol_bands": 2.0,
+      "coplanar_pairs": 9,
+      "also_connected": 0
+    },
+    {
+      "angle_tol_deg": 5.0,
+      "offset_tol_bands": 0.5,
+      "coplanar_pairs": 8,
+      "also_connected": 0
+    },
+    {
+      "angle_tol_deg": 5.0,
+      "offset_tol_bands": 1.0,
+      "coplanar_pairs": 9,
+      "also_connected": 0
+    },
+    {
+      "angle_tol_deg": 5.0,
+      "offset_tol_bands": 2.0,
+      "coplanar_pairs": 9,
+      "also_connected": 0
+    }
+  ],
+  "note": "coplanar_but_disconnected is the interesting column: those are the pairs a coplanarity-only rule would have merged wrongly. A non-empty list here is the evidence for the adjacency clause."
+}

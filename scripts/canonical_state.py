@@ -50,22 +50,51 @@ from dataset_config import load_config                           # noqa: E402
 from recon_common import discover_facets                         # noqa: E402
 from roofkit.stats import median_nn_spacing                      # noqa: E402
 from roofkit.segment import level_cloud                          # noqa: E402
-from roofkit.measure import up_from_tilt, azimuth_degrees        # noqa: E402
+from roofkit.measure import (up_from_tilt, azimuth_degrees,      # noqa: E402
+                             facet_area, rise_over_12, is_low_slope,
+                             LOW_SLOPE_DEG)
+from roofkit.segment import assert_single_ownership              # noqa: E402
 from roofkit import coverage as cov                              # noqa: E402
 
 # Same constants the whole 6-series uses, so every state is comparable.
 COVERAGE_CELL_MULT = 2.5
 MIN_BLOB_AREA = 0.15
 
-# THE SIZE FLOOR, as adopted 2026-07-25 and carried unchanged into this state.
-# MIN_AREA is already in transferable form: a POINT-COUNT EQUIVALENT times
-# spacing^2, so it rescales itself to any cloud's own point density. MIN_POINTS
-# is still a raw count here, which is NOT transferable; restating it is a
-# separate step (Task 6, step 4) that measures the band structure on THIS state
-# before choosing a form. Recorded in the output so the state says which floor
-# produced it.
-MIN_POINTS = 2000
+# THE SIZE FLOOR, both thresholds in transferable form (decision 2026-07-26).
+#
+#   MIN_AREA   = 3704 x spacing^2
+#   MIN_POINTS = 3704 x d, where d is the run's OWN measured surface point
+#                density: the median, over the MAIN facets, of
+#                n_points x spacing^2 / gross_area.
+#
+# Neither is a raw constant. A raw point count would be a per-site constant in
+# disguise, because point density depends on flight altitude and image overlap,
+# so "2000 points" covers a different physical patch on every cloud. Main facets
+# are used for d because they exist BEFORE recovery runs, so the floor can be
+# derived without circularity.
+#
+# The value this works out to varies by dataset, so THE VALUE ACTUALLY USED IS
+# WRITTEN INTO EVERY RUN'S OUTPUT. A threshold nobody can audit is not a
+# threshold (Emmett, 2026-07-26).
 MIN_AREA_POINTS_EQUIV = 3704          # MIN_AREA_CU2 = this x spacing^2
+MIN_POINTS_LEGACY_RAW = 2000          # what it was; kept only for the report
+
+
+def measured_point_density(facets, spacing, alpha_mult):
+    """Surface point density: points per spacing^2 of facet surface, median
+    over the given facets. Dimensionless.
+
+    A value near 1.0 would mean one point per spacing-square, which is what
+    median nearest-neighbour spacing implies. It measures below that in
+    practice (about 0.52 on big_house) because the alpha surface spans area the
+    points do not densely fill: bridged gaps and trimmed clutter."""
+    d = []
+    for f in facets:
+        pts = np.asarray(f["points"], float)
+        s_f = float(np.median(cov._nn(pts)))
+        gross = float(facet_area(pts, f["normal"], alpha_mult * s_f))
+        d.append(len(pts) * spacing ** 2 / max(gross, 1e-12))
+    return float(np.median(d)), [round(float(x), 4) for x in d]
 
 REPO = Path(__file__).resolve().parents[1]
 
@@ -108,6 +137,13 @@ def facet_record(k, f, kind, spacing):
         blob=(int(f["blob"]) if "blob" in f else None),
         n_points=int(len(pts)),
         pitch_deg=round(float(f["pitch"]), 4),
+        # Pitch in the form roofers state it, and the steep/low-slope class.
+        # low_slope is a REPORTING LABEL, never an exclusion: the facet is
+        # measured and counted exactly like any other. It exists because below
+        # 2:12 the assembly, the material and the price all change, so a report
+        # has to break the two out.
+        pitch_rise_over_12=round(rise_over_12(f["pitch"]), 2),
+        low_slope=is_low_slope(f["pitch"]),
         azimuth_deg=round(float(azimuth_degrees(f["normal"])), 4),
         quality_rms_over_spacing=round(float(q), 4),
         # exact, for replay
@@ -123,12 +159,12 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("dataset")
     ap.add_argument("--stamp", default=str(date.today()))
-    # Override the point floor. Used to test whether the transferable form of
-    # MIN_POINTS (Task 6 step 4) would change the state at all; NOT a knob for
-    # normal use, which is why it has no effect unless passed explicitly.
-    ap.add_argument("--min-points", type=int, default=MIN_POINTS)
+    # Override the DERIVED point floor. Only for probes that ask what a
+    # different floor would do; normal runs derive it from the cloud and never
+    # pass this.
+    ap.add_argument("--min-points", type=int, default=None)
     args = ap.parse_args()
-    min_points_hard = args.min_points
+    min_points_override = args.min_points
     cfg = load_config(args.dataset)
     out = REPO / "reports" / Path(args.dataset).name
     out.mkdir(parents=True, exist_ok=True)
@@ -148,6 +184,20 @@ def main():
     facets, band, s_full = discover_facets(points, cfg, probability=1.0,
                                            spacing=spacing)
     bar, ratios = cov.calibrate_quality_bar(facets, s_full)
+
+    # The point floor, DERIVED from this run's own main facets rather than
+    # typed in. Computed here, after main discovery and before recovery, which
+    # is the only moment where it can be both measured and used.
+    density, density_per_facet = measured_point_density(facets, spacing,
+                                                        cfg["alpha_mult"])
+    derived_min_points = int(round(MIN_AREA_POINTS_EQUIV * density))
+    min_points_hard = (derived_min_points if min_points_override is None
+                       else int(min_points_override))
+    print(f"  measured point density d = {density:.4f}  ->  MIN_POINTS = "
+          f"{MIN_AREA_POINTS_EQUIV} x d = {derived_min_points}"
+          + ("" if min_points_override is None
+             else f"   (OVERRIDDEN to {min_points_hard})"))
+
     cell = COVERAGE_CELL_MULT * s_full
     masks, g, _, dist = cov.coverage_masks(points, facets, band, cell)
     blobs = cov.residual_blobs(masks["residual"], g, MIN_BLOB_AREA)
@@ -155,10 +205,17 @@ def main():
     new = cov.recover_facets(points, blobs, None, dist, band, s_full, bar,
                              alpha_mult=cfg["alpha_mult"], probability=1.0,
                              min_points_hard=min_points_hard,
-                             min_area_hard=min_area, log=log)
+                             min_area_hard=min_area, log=log, grid=g)
     allf = facets + new
     print(f"  {len(facets)} main + {len(new)} recovered = {len(allf)} facets "
           f"({len(blobs)} residual blobs)")
+
+    # --- THE PERMANENT SINGLE-OWNERSHIP ASSERTION -------------------------
+    # Every point belongs to exactly one facet. Runs on every run, fails loudly.
+    # Cell-based blob selection is meant to make double ownership impossible;
+    # this proves it each time rather than assuming it.
+    assert_single_ownership(allf, where="canonical_state")
+    print("  single-ownership check PASSED: no point is owned by two facets")
 
     # --- THE GUARD: do the saved indices really rebuild the facets? --------
     # Checked bit for bit on float64, not within a tolerance. Indices are a
@@ -185,6 +242,11 @@ def main():
     print(f"  index check PASSED: points[idx] rebuilds all {len(allf)} facets "
           f"bit for bit")
 
+    # --- POST-recovery masks, for the reported coverage --------------------
+    # Recomputed with every accepted facet counting as an explainer. Pure
+    # arithmetic over fixed points: no fitting, no randomness.
+    masks_post, g_post, _, _ = cov.coverage_masks(points, allf, band, cell)
+
     # --- write ------------------------------------------------------------
     npz = out / f"canonical-{args.stamp}.npz"
     np.savez_compressed(
@@ -197,12 +259,30 @@ def main():
         task="canonical facet state under probability=1.0 + size floor (R1)",
         dataset=Path(args.dataset).name, date=args.stamp,
         supersedes=dict(
-            state="2026-07-23 26-facet state",
-            status="SUPERSEDED, not corrected",
-            reason="that state was one sample from a distribution: it was "
-                   "produced by a nondeterministic fit and its geometry was "
-                   "never written to disk, so it is permanently unrecoverable. "
-                   "Its files stay on disk as the evidence of the defect."),
+            states=[
+                dict(state="2026-07-23 26-facet state",
+                     status="SUPERSEDED, not corrected",
+                     reason="one sample from a distribution: produced by a "
+                            "nondeterministic fit, and its geometry was never "
+                            "written to disk, so it is permanently "
+                            "unrecoverable. Its files stay on disk as the "
+                            "evidence of the defect."),
+                dict(state="canonical-2026-07-26 (25 facets)",
+                     status="SUPERSEDED, not overwritten; its files remain",
+                     reason="three defects were fixed after it: blob candidates "
+                            "were selected by bounding box, so two facets owned "
+                            "9,739 of the same points; min_pitch=10 was "
+                            "deleting real low-slope roof; and the coverage "
+                            "denominator was eroded with its holes still in it, "
+                            "discarding 32.5 percent of the footprint. The "
+                            "change in coverage between the two states is "
+                            "decomposed cause by cause in "
+                            "attribution-2026-07-26.json."),
+            ],
+            rule="supersede, never overwrite. A corrected file implies the old "
+                 "numbers were an arithmetic mistake; they were not, they were "
+                 "correct computations under a defective definition, and that "
+                 "distinction is the finding."),
         replay=dict(
             how="np.load(roof.npy) -> level_cloud(...) -> points; then "
                 "points[npz['facet_k']] rebuilds facet k exactly.",
@@ -216,14 +296,27 @@ def main():
             source_cloud_sha256=cloud_sha(points),
             source_cloud_n=int(len(points))),
         params=dict(probability=1.0,
+                    min_pitch_deg=5.0,
+                    max_pitch_deg=60.0,
+                    min_pitch_note="5, not 10. min_pitch is a DEFINITION of "
+                                   "what counts as a roof, not a filter; see "
+                                   "decisions/2026-07-26-min-pitch-definition.",
+                    # THE FLOOR ACTUALLY USED, written out so it can be audited.
+                    # It is derived per dataset, so a reader cannot look it up
+                    # in the source. (Emmett, 2026-07-26.)
                     min_points_hard=min_points_hard,
-                    min_points_hard_form=("RAW COUNT, not yet transferable; "
-                                          "see Task 6 step 4"
-                                          if min_points_hard == MIN_POINTS else
-                                          "overridden from the command line"),
+                    min_points_hard_form=f"{MIN_AREA_POINTS_EQUIV} x d, "
+                                         f"d = measured point density",
+                    min_points_hard_derived=derived_min_points,
+                    min_points_hard_overridden=(min_points_override is not None),
+                    measured_point_density_d=round(float(density), 4),
+                    measured_point_density_per_main_facet=density_per_facet,
+                    min_points_legacy_raw_value=MIN_POINTS_LEGACY_RAW,
                     min_area_hard_cu2=fhex(min_area),
+                    min_area_hard_cu2_readable=round(float(min_area), 6),
                     min_area_hard_form=f"{MIN_AREA_POINTS_EQUIV} x spacing^2 "
                                        f"(transferable)",
+                    low_slope_boundary_deg=round(LOW_SLOPE_DEG, 4),
                     coverage_cell_mult=COVERAGE_CELL_MULT,
                     min_blob_area_cu2=MIN_BLOB_AREA,
                     band_mult=cfg["band_mult"], trim_mult=cfg["trim_mult"],
@@ -239,7 +332,21 @@ def main():
                      quality_bar_readable=round(float(bar), 4)),
         main_quality_ratios=[round(float(r), 4) for r in ratios],
         counts=dict(n_main=len(facets), n_recovered=len(new),
-                    n_total=len(allf), n_blobs=len(blobs)),
+                    n_total=len(allf), n_blobs=len(blobs),
+                    n_low_slope=sum(1 for f in allf if is_low_slope(f["pitch"])),
+                    n_steep_slope=sum(1 for f in allf
+                                      if not is_low_slope(f["pitch"]))),
+        # B2: the footprint three ways, so the cost of each step is visible
+        # without the reader having to know the erosion defect exists.
+        footprint=cov.footprint_three_ways(masks_post, cell),
+        filled_holes=cov.filled_hole_report(masks_post, cell),
+        # B3: the two metrics the old single coverage number was conflating.
+        coverage=cov.split_coverage(masks_post, cell),
+        single_ownership_check=dict(
+            ran=True, passed=True,
+            what="no point index appears in two facets' index arrays",
+            why="permanent, every run, fails loudly. Only possible because R1 "
+                "persists inlier indices."),
         blobs=[dict(blob=i, area_cu2=round(float(b["area_cu2"]), 4),
                     n_cells=int(len(b["cells"])),
                     box=[[round(float(v), 4) for v in b["box"][0]],
@@ -254,7 +361,27 @@ def main():
     )
     jf = out / f"canonical-{args.stamp}.json"
     jf.write_text(json.dumps(doc, indent=2, default=float))
-    print(f"  wrote {jf}")
+
+    fp = doc["footprint"]
+    cvg = doc["coverage"]
+    print(f"\n  footprint  raw(>=2 pts) {fp['raw_cu2']} cu^2  -> "
+          f"holes filled +{fp['holes_filled_cu2']} -> {fp['filled_cu2']} cu^2 "
+          f"-> eroded {fp['eroded_cu2']} cu^2 "
+          f"(erosion costs {fp['erosion_cost_pct_of_filled']}%)")
+    print(f"  filled holes: {doc['filled_holes']['n_holes']:,}, largest "
+          f"{doc['filled_holes']['largest'][0]['cu2'] if doc['filled_holes']['largest'] else 0} cu^2")
+    d1 = cvg["density_testable_fraction"]
+    d2 = cvg["facet_coverage"]
+    print(f"  density-testable fraction (CAPTURE)  {d1['pct']:.2f}%  "
+          f"({d1['testable_cu2']} of {d1['footprint_cu2']} cu^2)")
+    print(f"  facet coverage (SEGMENTATION)        {d2['pct']:.2f}%  "
+          f"({d2['explained_cu2']} of {d2['testable_cu2']} cu^2)")
+    lo = [f for f in doc["facets"] if f["low_slope"]]
+    print(f"  low-slope facets (< 2:12): {len(lo)}"
+          + ("".join(f"\n    facet {f['facet']}: {f['pitch_deg']} deg "
+                     f"({f['pitch_rise_over_12']}:12), {f['n_points']:,} pts"
+                     for f in lo) if lo else ""))
+    print(f"\n  wrote {jf}")
     print(f"  wrote {npz}  ({npz.stat().st_size / 1e6:.1f} MB)")
 
 

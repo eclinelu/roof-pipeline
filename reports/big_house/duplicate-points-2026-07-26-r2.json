@@ -1,0 +1,55 @@
+{
+  "task": "Task 6 step 5b: are any points owned by more than one facet? canonical 2026-07-26-r2 state",
+  "dataset": "big_house",
+  "date": "2026-07-26-r2",
+  "why_this_test": "Coplanarity asks whether two facets lie on the same plane, which is a modelling judgement. This asks whether they own the same measured POINTS, which is not a judgement at all. Only possible because standing rule R1 persists inlier indices.",
+  "totals": {
+    "facet_point_entries": 7145953,
+    "distinct_points": 7145953,
+    "duplicated_entries": 0,
+    "pct_duplicated": 0.0
+  },
+  "sharing_pairs": [],
+  "blob_box_overlaps": [
+    {
+      "blob_a": 0,
+      "blob_b": 15,
+      "overlap_cu2": 0.73396,
+      "pct_of_smaller_box": 97.4
+    },
+    {
+      "blob_a": 7,
+      "blob_b": 12,
+      "overlap_cu2": 1.01109,
+      "pct_of_smaller_box": 75.56
+    },
+    {
+      "blob_a": 1,
+      "blob_b": 8,
+      "overlap_cu2": 2.53609,
+      "pct_of_smaller_box": 75.33
+    },
+    {
+      "blob_a": 7,
+      "blob_b": 16,
+      "overlap_cu2": 0.31186,
+      "pct_of_smaller_box": 56.62
+    },
+    {
+      "blob_a": 10,
+      "blob_b": 11,
+      "overlap_cu2": 0.4387,
+      "pct_of_smaller_box": 38.25
+    },
+    {
+      "blob_a": 2,
+      "blob_b": 9,
+      "overlap_cu2": 0.37333,
+      "pct_of_smaller_box": 25.3
+    }
+  ],
+  "mechanism": "recover_facets selects a blob's candidate points with a BOUNDING BOX test (roof[:, 0] between the blob's x limits, and likewise y), not with the blob's own cells. Connected-component labelling guarantees blobs are disjoint as CELL SETS, but says nothing about their bounding boxes, which can overlap or nest. Second, `dist` is computed ONCE against the main facets before recovery starts and is never updated as recovered facets are accepted. So a point already claimed by an earlier blob's facet still reads as unexplained when a later, box-overlapping blob looks at it, and gets fitted a second time.",
+  "verdict": "NO DUPLICATION: every point belongs to exactly one facet",
+  "area_impact": null,
+  "not_fixed": "Nothing was changed. Two repairs are available and they are not equivalent: (a) select a blob's candidates by its CELLS instead of its bounding box, which is the narrow fix for exactly this leak; (b) update `dist` as each recovered facet is accepted, so no later blob can re-fit claimed points, which is the general fix and also makes the recovery order matter. Choosing between them is Emmett's call, and either one changes the canonical state, so it cannot be slipped in mid-diagnostic."
+}

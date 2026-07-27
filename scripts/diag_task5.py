@@ -259,6 +259,7 @@ def rebuild_state(cfg):
     # 5. recovery (RANSAC calls #2..N on the shared stream, blob order fixed)
     rec_log = []
     new = cov.recover_facets(points, blobs, owner, dist, band, s_full, bar,
+                             grid=g1,
                              log=rec_log)
     print(f"  recovered facets: {len(new)}  -> total {len(facets) + len(new)}")
 

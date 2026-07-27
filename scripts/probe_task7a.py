@@ -105,7 +105,7 @@ def gap_containing(values, floor):
 # A1: the pitch distribution of every peeled plane
 # ---------------------------------------------------------------------------
 def a1_pitch_distribution(doc, points, cfg, band, spacing, bar, dist, blobs_raw,
-                          out, stamp):
+                          g, out, stamp):
     # (a) The canonical run's own peels: authoritative, but TRUNCATED twice.
     canon = []
     for e in doc["recovery_log"]:
@@ -125,7 +125,7 @@ def a1_pitch_distribution(doc, points, cfg, band, spacing, bar, dist, blobs_raw,
                        alpha_mult=cfg["alpha_mult"], probability=1.0,
                        size_floor=300, min_points_hard=None,
                        min_area_hard=None, max_planes_per_blob=12,
-                       log=deep_log)
+                       log=deep_log, grid=g)
     deep = []
     for e in deep_log:
         for p in e.get("peels", []):
@@ -674,7 +674,7 @@ def main():
 
     print("\n  A1: pitch of every peeled plane")
     a1 = a1_pitch_distribution(doc, points, cfg, band, spacing, bar, dist_main,
-                               blobs_raw, out, args.stamp)
+                               blobs_raw, g, out, args.stamp)
     for k in ("main_discovery", "canonical_run", "deeper_sweep"):
         s = a1[k]
         print(f"    {s['label']:<38} {s['n_planes']:>3} planes  "

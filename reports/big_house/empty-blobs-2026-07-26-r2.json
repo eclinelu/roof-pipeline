@@ -1,0 +1,160 @@
+{
+  "task": "Task 6 step 6 (6C): blobs producing no accepted facet, canonical 2026-07-26-r2 state",
+  "dataset": "big_house",
+  "date": "2026-07-26-r2",
+  "instrument": "find_roof_planes now takes a peel_log and records EVERY plane it peels, with its pitch, BEFORE the pitch window filters it. Previously that filter was silent, so a blob yielding no facet could not be told apart from a blob where RANSAC found nothing at all. Those are different diagnoses and only one of them is a problem.",
+  "pitch_window_deg": [
+    10.0,
+    60.0
+  ],
+  "n_blobs_total": 17,
+  "n_blobs_empty": 2,
+  "blobs": [
+    {
+      "blob": 0,
+      "plan_area_cu2": 11.5703,
+      "n_unexplained_points": 180861,
+      "n_planes_peeled": 3,
+      "points_in_peeled_planes": 178155,
+      "pitches_deg": [
+        3.774,
+        85.881,
+        85.335
+      ],
+      "n_near_vertical": 2,
+      "n_near_flat": 1,
+      "terminated": "largest remaining plane has 1857 inliers < min_points 1933",
+      "why_no_facet": "mixed: 2 near-vertical (85.9, 85.3 deg) and 1 near-flat (3.8 deg) surface(s), none inside the 5.0-60.0 deg roof window",
+      "contents_measured": [
+        {
+          "n_points": 147505,
+          "pitch_deg": 3.743,
+          "rise_over_12": 0.78,
+          "quality": 2.833,
+          "quality_bar": 2.948,
+          "passes_quality_bar": true,
+          "gross_cu2": 16.0915
+        },
+        {
+          "n_points": 10827,
+          "pitch_deg": 85.854,
+          "rise_over_12": 165.55,
+          "quality": 4.619,
+          "quality_bar": 2.948,
+          "passes_quality_bar": false,
+          "gross_cu2": 1.2575
+        },
+        {
+          "n_points": 6829,
+          "pitch_deg": 3.624,
+          "rise_over_12": 0.76,
+          "quality": 1.823,
+          "quality_bar": 2.948,
+          "passes_quality_bar": true,
+          "gross_cu2": 1.0718
+        },
+        {
+          "n_points": 2751,
+          "pitch_deg": 85.409,
+          "rise_over_12": 149.43,
+          "quality": 3.654,
+          "quality_bar": 2.948,
+          "passes_quality_bar": false,
+          "gross_cu2": 0.2732
+        },
+        {
+          "n_points": 3867,
+          "pitch_deg": 85.03,
+          "rise_over_12": 137.99,
+          "quality": 2.514,
+          "quality_bar": 2.948,
+          "passes_quality_bar": true,
+          "gross_cu2": 0.4688
+        },
+        {
+          "n_points": 9058,
+          "pitch_deg": 3.574,
+          "rise_over_12": 0.75,
+          "quality": 1.01,
+          "quality_bar": 2.948,
+          "passes_quality_bar": true,
+          "gross_cu2": 1.5532
+        }
+      ]
+    },
+    {
+      "blob": 15,
+      "plan_area_cu2": 0.2096,
+      "n_unexplained_points": 2623,
+      "n_planes_peeled": 1,
+      "points_in_peeled_planes": 2623,
+      "pitches_deg": [
+        4.01
+      ],
+      "n_near_vertical": 0,
+      "n_near_flat": 1,
+      "terminated": "remaining points 0 < min_points 1933",
+      "why_no_facet": "every surface here is near-FLAT (4.0 deg, below the 5.0 deg minimum). This is a low-slope surface sitting outside the roof-facet definition, not a facet the fit failed to find.",
+      "contents_measured": [
+        {
+          "n_points": 2623,
+          "pitch_deg": 4.01,
+          "rise_over_12": 0.84,
+          "quality": 2.147,
+          "quality_bar": 2.948,
+          "passes_quality_bar": true,
+          "gross_cu2": 0.326
+        }
+      ]
+    }
+  ],
+  "well_fitted_surfaces_excluded_by_pitch": {
+    "n": 4,
+    "total_gross_cu2": 19.0425,
+    "total_points": 166015,
+    "planes": [
+      {
+        "blob": 0,
+        "n_points": 147505,
+        "pitch_deg": 3.743,
+        "rise_over_12": 0.78,
+        "quality": 2.833,
+        "quality_bar": 2.948,
+        "passes_quality_bar": true,
+        "gross_cu2": 16.0915
+      },
+      {
+        "blob": 0,
+        "n_points": 9058,
+        "pitch_deg": 3.574,
+        "rise_over_12": 0.75,
+        "quality": 1.01,
+        "quality_bar": 2.948,
+        "passes_quality_bar": true,
+        "gross_cu2": 1.5532
+      },
+      {
+        "blob": 0,
+        "n_points": 6829,
+        "pitch_deg": 3.624,
+        "rise_over_12": 0.76,
+        "quality": 1.823,
+        "quality_bar": 2.948,
+        "passes_quality_bar": true,
+        "gross_cu2": 1.0718
+      },
+      {
+        "blob": 15,
+        "n_points": 2623,
+        "pitch_deg": 4.01,
+        "rise_over_12": 0.84,
+        "quality": 2.147,
+        "quality_bar": 2.948,
+        "passes_quality_bar": true,
+        "gross_cu2": 0.326
+      }
+    ],
+    "reading": "These planes CLEAR the same fit-quality bar the accepted facets clear. They are excluded solely because their pitch falls outside the roof window, which is a DEFINITION, so this number is the area the current definition of 'roof' is choosing not to measure. It belongs in the report as a stated exclusion, never as silence."
+  },
+  "interpretation": "A residual blob is unexplained PLAN AREA. It is not automatically a missing roof facet. Coverage is a plan-view test, so a vertical surface standing inside the footprint (a dormer cheek, a gable end) occupies plan cells whose points belong to no roof facet, and registers as a gap that no roof facet can ever close. Those blobs are a permanent floor on coverage, not a defect."
+}

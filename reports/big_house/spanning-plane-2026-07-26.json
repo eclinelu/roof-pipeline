@@ -1,0 +1,134 @@
+{
+  "task": "Task 7B: is the sub-10-degree main-discovery plane a spanning artifact or a physical surface?",
+  "dataset": "big_house",
+  "date": "2026-07-26",
+  "why_this_matters": "min_pitch is being lowered from 10 to 5. The reason must be that the ~4 degree plane is an artifact, NOT that excluding it keeps a published number intact. Choosing a threshold to preserve a frozen result is the one thing this project cannot do, so the artifact claim has to stand on its own measurement.",
+  "quality_bar": 2.948,
+  "reference_quality_ratios": [
+    1.3054,
+    2.2951,
+    1.0069,
+    1.8003,
+    2.948,
+    2.6648,
+    1.8218,
+    2.0741
+  ],
+  "the_plane": {
+    "pitch_deg": 4.0354,
+    "pitch_as_rise_over_12": 0.85,
+    "azimuth_deg": 94.47,
+    "n_points": 275975,
+    "gross_cu2": 24.874,
+    "quality_rms_over_spacing": 3.0757,
+    "passes_quality_bar": false,
+    "below_low_slope_boundary": true
+  },
+  "quality_verdict": "FAILS the quality bar, so it is a badly fitted plane and excluding it needs no further argument",
+  "overlap_with_reference_facets": [
+    {
+      "reference_facet": 0,
+      "reference_pitch_deg": 21.188,
+      "reference_azimuth_deg": 290.36,
+      "reference_n_points": 1538098,
+      "points_taken": 8336,
+      "pct_of_that_facet": 0.542,
+      "plan_cells_shared": 3535,
+      "pct_of_that_facet_footprint": 1.43,
+      "pct_of_the_plane_footprint": 2.77
+    },
+    {
+      "reference_facet": 1,
+      "reference_pitch_deg": 33.067,
+      "reference_azimuth_deg": 358.33,
+      "reference_n_points": 1154335,
+      "points_taken": 3587,
+      "pct_of_that_facet": 0.311,
+      "plan_cells_shared": 1759,
+      "pct_of_that_facet_footprint": 0.54,
+      "pct_of_the_plane_footprint": 1.38
+    },
+    {
+      "reference_facet": 2,
+      "reference_pitch_deg": 22.722,
+      "reference_azimuth_deg": 112.73,
+      "reference_n_points": 693991,
+      "points_taken": 1191,
+      "pct_of_that_facet": 0.172,
+      "plan_cells_shared": 1607,
+      "pct_of_that_facet_footprint": 0.97,
+      "pct_of_the_plane_footprint": 1.26
+    },
+    {
+      "reference_facet": 3,
+      "reference_pitch_deg": 34.006,
+      "reference_azimuth_deg": 178.87,
+      "reference_n_points": 850268,
+      "points_taken": 887,
+      "pct_of_that_facet": 0.104,
+      "plan_cells_shared": 1848,
+      "pct_of_that_facet_footprint": 0.74,
+      "pct_of_the_plane_footprint": 1.45
+    },
+    {
+      "reference_facet": 4,
+      "reference_pitch_deg": 20.99,
+      "reference_azimuth_deg": 22.9,
+      "reference_n_points": 744303,
+      "points_taken": 0,
+      "pct_of_that_facet": 0.0,
+      "plan_cells_shared": 886,
+      "pct_of_that_facet_footprint": 0.57,
+      "pct_of_the_plane_footprint": 0.69
+    },
+    {
+      "reference_facet": 5,
+      "reference_pitch_deg": 21.357,
+      "reference_azimuth_deg": 201.97,
+      "reference_n_points": 669484,
+      "points_taken": 126,
+      "pct_of_that_facet": 0.019,
+      "plan_cells_shared": 275,
+      "pct_of_that_facet_footprint": 0.26,
+      "pct_of_the_plane_footprint": 0.22
+    },
+    {
+      "reference_facet": 6,
+      "reference_pitch_deg": 33.757,
+      "reference_azimuth_deg": 268.67,
+      "reference_n_points": 403109,
+      "points_taken": 1648,
+      "pct_of_that_facet": 0.409,
+      "plan_cells_shared": 969,
+      "pct_of_that_facet_footprint": 0.65,
+      "pct_of_the_plane_footprint": 0.76
+    },
+    {
+      "reference_facet": 7,
+      "reference_pitch_deg": 33.515,
+      "reference_azimuth_deg": 88.38,
+      "reference_n_points": 297583,
+      "points_taken": 532,
+      "pct_of_that_facet": 0.179,
+      "plan_cells_shared": 836,
+      "pct_of_that_facet_footprint": 0.56,
+      "pct_of_the_plane_footprint": 0.65
+    }
+  ],
+  "overlap_summary": {
+    "n_reference_facets": 8,
+    "n_reference_facets_it_takes_from": 7,
+    "total_points_taken": 16307,
+    "pct_of_the_plane_that_is_taken": 5.91,
+    "measured_how": "direct intersection of persisted inlier INDEX arrays, not net point-count deltas. Net deltas can hide offsetting movement; index overlap cannot."
+  },
+  "spanning_by_footprint": {
+    "measured_how": "overlap of PLAN-VIEW cell sets. This is the real spanning test. 'Takes points from' is not: a plane can nibble points off a facet's edge without lying over it, and can lie across a facet while taking none of its points, if those points are nearer their own plane.",
+    "plane_footprint_cells": 127795,
+    "n_facets_overlapped": 8,
+    "n_facets_overlapped_by_5pct_or_more": 0
+  },
+  "spanning_verdict": "SPANS THE BUILDING: the plane's plan footprint lies over 8 of 8 main facets (0 of them by 5 percent of their footprint or more), across 24.9 cu^2 of alpha surface at 4.04 degrees. A physical roof surface borders two or three neighbours; a near-horizontal plane laid across a pitched roof cuts a contour band through every slope on it, which is what this is.",
+  "honest_correction": "The point-theft framing does NOT survive direct measurement. It takes points from 7 of 8 facets, not all eight (facet 4 loses none), and the amounts are small: 16,307 points total, 5.91 percent of the plane, and under 0.6 percent of any facet it touches. The overwhelming majority of the plane's membership is points that belonged to no main facet before. Net point-count deltas suggested a bigger effect than there is; the index overlap is the reliable measurement and it says the plane mostly claims previously-unassigned points.",
+  "low_slope_boundary_deg": 9.4623
+}

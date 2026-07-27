@@ -573,7 +573,54 @@ def render_merge(points, facets, g, merge_now, coplanar_only, path, stamp):
 # ---------------------------------------------------------------------------
 # STEP 6 (6C): the blobs that produced no facet
 # ---------------------------------------------------------------------------
-def step6_empty_blobs(doc, out, stamp):
+def step6_empty_blobs(doc, out, stamp, points=None, cfg=None, band=None,
+                      spacing=None, bar=None, dist=None, blobs_raw=None, g=None):
+    # Measure the QUALITY of what each empty blob contains, not just its pitch.
+    # Without this the report says "rejected for pitch" and stops, which cannot
+    # distinguish a junk plane from a well-fitted real surface that the pitch
+    # definition happens to exclude. That distinction is the whole question, and
+    # leaving it out once already cost a round trip (Task 7A3).
+    measured = {}
+    if points is not None and blobs_raw is not None:
+        from roofkit.segment import find_roof_planes
+        from roofkit.measure import rise_over_12
+        ny1 = np.int64(g["ny"] + 1)
+        pi = np.clip(((points[:, 0] - g["xlo"]) / g["cell"]).astype(np.int64),
+                     0, g["nx"] - 1)
+        pj = np.clip(((points[:, 1] - g["ylo"]) / g["cell"]).astype(np.int64),
+                     0, g["ny"] - 1)
+        pcell = pi * ny1 + pj
+        unexplained = dist > band
+        empty_ids = {e["blob"] for e in doc["recovery_log"] if not e["planes"]}
+        for bi in empty_ids:
+            if bi >= len(blobs_raw):
+                continue
+            b = blobs_raw[bi]
+            bc = (b["cells"][:, 0].astype(np.int64) * ny1 +
+                  b["cells"][:, 1].astype(np.int64))
+            cand = points[np.flatnonzero(unexplained & np.isin(pcell, bc))]
+            if len(cand) < 300:
+                continue
+            planes = find_roof_planes(cand, distance_threshold=band,
+                                      min_points=300, min_pitch=0.0,
+                                      max_pitch=90.0, max_planes=6,
+                                      probability=1.0)
+            got = []
+            for p in planes:
+                pts = np.asarray(p["points"], float)
+                q, _ = cov.facet_quality(pts, p["normal"], spacing)
+                s_f = float(np.median(cov._nn(pts)))
+                gross = float(facet_area(pts, p["normal"],
+                                         cfg["alpha_mult"] * s_f))
+                got.append(dict(n_points=int(len(pts)),
+                                pitch_deg=round(float(p["pitch"]), 3),
+                                rise_over_12=round(rise_over_12(p["pitch"]), 2),
+                                quality=round(float(q), 3),
+                                quality_bar=round(float(bar), 3),
+                                passes_quality_bar=bool(q <= bar),
+                                gross_cu2=round(gross, 4)))
+            measured[bi] = got
+
     rows = []
     for e in doc["recovery_log"]:
         if e["planes"]:
@@ -613,8 +660,19 @@ def step6_empty_blobs(doc, out, stamp):
             n_near_vertical=len(near_vert), n_near_flat=len(near_flat),
             terminated=(stops[0]["stopped"] if stops else
                         "hit max_planes_per_blob"),
-            why_no_facet=why))
+            why_no_facet=why,
+            contents_measured=measured.get(e["blob"], [])))
     rows.sort(key=lambda r: -r["plan_area_cu2"])
+
+    # THE HEADLINE THIS DIAGNOSTIC MUST NOT BURY: an empty blob whose contents
+    # are WELL FITTED is a surface the pitch definition is discarding, not a
+    # surface the fit failed to find. Those are opposite findings.
+    clean = []
+    for r in rows:
+        for p in r["contents_measured"]:
+            if p["passes_quality_bar"] and p["pitch_deg"] < 10.0:
+                clean.append(dict(blob=r["blob"], **p))
+    clean.sort(key=lambda p: -p["gross_cu2"])
 
     doc6 = dict(
         task=f"Task 6 step 6 (6C): blobs producing no accepted facet, "
@@ -630,6 +688,18 @@ def step6_empty_blobs(doc, out, stamp):
         n_blobs_total=doc["counts"]["n_blobs"],
         n_blobs_empty=len(rows),
         blobs=rows,
+        well_fitted_surfaces_excluded_by_pitch=dict(
+            n=len(clean),
+            total_gross_cu2=round(sum(p["gross_cu2"] for p in clean), 4),
+            total_points=sum(p["n_points"] for p in clean),
+            planes=clean,
+            reading=("These planes CLEAR the same fit-quality bar the accepted "
+                     "facets clear. They are excluded solely because their "
+                     "pitch falls outside the roof window, which is a "
+                     "DEFINITION, so this number is the area the current "
+                     "definition of 'roof' is choosing not to measure. It "
+                     "belongs in the report as a stated exclusion, never as "
+                     "silence.")),
         interpretation=(
             "A residual blob is unexplained PLAN AREA. It is not automatically "
             "a missing roof facet. Coverage is a plan-view test, so a vertical "
@@ -701,7 +771,18 @@ def step7_coverage(doc, points, facets, cfg, masks, g, out, stamp):
                   nx=int(g["nx"]), ny=int(g["ny"]),
                   cell_mult_of_spacing=2.5,
                   spacing_cu=round(scalar(doc, "spacing_cu"), 6)),
-        raw_coverage=dict(
+        # THE HEADLINE NUMBERS (decision 2026-07-26). The single coverage
+        # percentage was answering two questions at once against a base that
+        # hole-erosion had shrunk by a third. It is split, and the footprint is
+        # reported three ways so the base is visible rather than assumed.
+        footprint=cov.footprint_three_ways(masks, cell),
+        filled_holes=cov.filled_hole_report(masks, cell),
+        coverage=cov.split_coverage(masks, cell),
+        legacy_single_number=dict(
+            note="the old single metric, kept only so the superseded numbers "
+                 "can be compared like for like. It is NOT a headline: its "
+                 "denominator excludes filled holes and it mixes a capture "
+                 "shortfall into a segmentation score.",
             definition="1 - residual cells / interior building cells, where "
                        "interior is the footprint eroded by one cell",
             coverage_pct=round(100.0 * float(frac), 2),
@@ -709,7 +790,16 @@ def step7_coverage(doc, points, facets, cfg, masks, g, out, stamp):
             interior_building_cu2=round(interior_building * cell_area, 3),
             residual_cells=resid_cells,
             residual_cu2=round(resid_cells * cell_area, 4)),
-        coverage_excluding_edge_ring=dict(
+        coverage_excluding_edge_ring_DEPRECATED=dict(
+            why_deprecated=(
+                "the ring rows were an attempt to separate a ragged eave from "
+                "real unexplained area, and they were measuring something "
+                "else. 90 to 95 percent of what each ring removed was the "
+                "boundary of an interior HOLE, not the building outline, so "
+                "the deep rings sampled only the densest roof. Hole filling "
+                "removes the reason these rows existed: the erosion now costs "
+                "a few percent instead of a third. Kept for one revision so "
+                "the superseded numbers remain checkable."),
             headline_ring_cells=HEADLINE_RING,
             headline=headline_ring,
             all_ring_widths=rings,
@@ -735,7 +825,7 @@ def step7_coverage(doc, points, facets, cfg, masks, g, out, stamp):
     )
     write_json(out / f"coverage-map-{stamp}.json", doc7)
     render(masks, g, depth, out / f"coverage-map-{stamp}.png", stamp,
-           doc7["raw_coverage"]["coverage_pct"])
+           doc7["coverage"]["facet_coverage"]["pct"])
     return doc7
 
 
@@ -770,6 +860,11 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("dataset")
     ap.add_argument("--stamp", default=str(date.today()))
+    # The blob-0 comparison targets the 2026-07-23 state by hard-coded numbers.
+    # Once the blob table changes, "blob 0" is a different feature and the
+    # comparison is meaningless, so it is opt-in rather than silently stale.
+    ap.add_argument("--blob0", action="store_true",
+                    help="run the legacy blob-0 comparison against 2026-07-23")
     args = ap.parse_args()
 
     out = REPO / "reports" / Path(args.dataset).name
@@ -782,17 +877,32 @@ def main():
 
     # Plan-view masks POST-recovery: every accepted facet counts as an
     # explainer. Pure arithmetic over fixed points, no fitting.
+    # POST-recovery masks: every accepted facet counts as an explainer. These
+    # are what coverage is reported from.
     masks, g, _, dist = cov.coverage_masks(points, facets, band, cell)
+    # PRE-recovery masks: main facets only. This is the state the recovery pass
+    # actually saw, so it is the only way to reconstruct the blobs it worked on
+    # and re-measure what they contain. Using the post-recovery masks here would
+    # describe different blobs than the ones in the recovery log.
+    main_only = [f for f in facets if f["kind"] == "main"]
+    masks_main, g_main, _, dist_main = cov.coverage_masks(points, main_only,
+                                                          band, cell)
+    blobs_raw = cov.residual_blobs(masks_main["residual"], g_main, 0.15)
 
-    print("\n  step 3: blob 0, old state vs new")
-    d3 = step3_blob0(doc, points, facets, cfg, masks, g, dist, band, out,
-                     args.stamp)
-    q = d3["query_box"]
-    print(f"    old {q['old']['explained_pct']:.2f} pct explained, "
-          f"residual {q['old']['residual_cu2']:.4f} cu^2")
-    print(f"    new {q['new']['explained_pct']:.2f} pct explained, "
-          f"residual {q['new']['residual_cu2']:.4f} cu^2")
-    print(f"    {q['verdict']}")
+    if args.blob0:
+        print("\n  step 3: blob 0, old state vs new")
+        d3 = step3_blob0(doc, points, facets, cfg, masks, g, dist, band, out,
+                         args.stamp)
+        q = d3["query_box"]
+        print(f"    old {q['old']['explained_pct']:.2f} pct explained, "
+              f"residual {q['old']['residual_cu2']:.4f} cu^2")
+        print(f"    new {q['new']['explained_pct']:.2f} pct explained, "
+              f"residual {q['new']['residual_cu2']:.4f} cu^2")
+        print(f"    {q['verdict']}")
+    else:
+        print("\n  step 3 (blob 0 vs 2026-07-23): SKIPPED. The blob table has "
+              "changed, so 'blob 0' is no longer the same feature and the "
+              "comparison would be nonsense. Pass --blob0 to force it.")
 
     print("\n  step 5 (6B): merge check")
     d5 = step5_merge(doc, points, facets, g, band, out, args.stamp)
@@ -814,19 +924,35 @@ def main():
               f"{ai['overcount_cu2']} cu^2 ({ai['overcount_pct_of_union']}%)")
 
     print("\n  step 6 (6C): blobs producing no facet")
-    d6 = step6_empty_blobs(doc, out, args.stamp)
+    d6 = step6_empty_blobs(doc, out, args.stamp, points=points, cfg=cfg,
+                           band=band, spacing=scalar(doc, "spacing_cu"),
+                           bar=scalar(doc, "quality_bar"), dist=dist_main,
+                           blobs_raw=blobs_raw, g=g_main)
     for r in d6["blobs"]:
         print(f"    blob {r['blob']:>2}  {r['plan_area_cu2']:.4f} cu^2  "
               f"pitches {r['pitches_deg']}")
+    w = d6["well_fitted_surfaces_excluded_by_pitch"]
+    print(f"    WELL-FITTED surface excluded by the pitch definition: "
+          f"{w['n']} plane(s), {w['total_gross_cu2']} cu^2 gross, "
+          f"{w['total_points']:,} points")
+    for p_ in w["planes"][:5]:
+        print(f"      blob {p_['blob']:>2}  {p_['n_points']:>8,} pts  "
+              f"{p_['pitch_deg']:>6.3f} deg ({p_['rise_over_12']}:12)  "
+              f"quality {p_['quality']} vs bar {p_['quality_bar']}  "
+              f"gross {p_['gross_cu2']} cu^2")
 
     print("\n  step 7: coverage and residual map")
     d7 = step7_coverage(doc, points, facets, cfg, masks, g, out, args.stamp)
-    print(f"    raw coverage {d7['raw_coverage']['coverage_pct']:.2f} pct "
-          f"(residual {d7['raw_coverage']['residual_cu2']:.4f} cu^2)")
-    hr = d7["coverage_excluding_edge_ring"]["headline"]
-    print(f"    excluding a {HEADLINE_RING}-cell edge ring: "
-          f"{hr['coverage_pct']:.2f} pct "
-          f"(residual {hr['residual_cu2']:.4f} cu^2)")
+    fp = d7["footprint"]
+    print(f"    footprint  raw {fp['raw_cu2']} -> filled {fp['filled_cu2']} -> "
+          f"eroded {fp['eroded_cu2']} cu^2 "
+          f"(erosion costs {fp['erosion_cost_pct_of_filled']}%)")
+    c1 = d7["coverage"]["density_testable_fraction"]
+    c2 = d7["coverage"]["facet_coverage"]
+    print(f"    density-testable fraction (CAPTURE)  {c1['pct']:.2f} pct  "
+          f"({c1['testable_cu2']} of {c1['footprint_cu2']} cu^2)")
+    print(f"    facet coverage (SEGMENTATION)        {c2['pct']:.2f} pct  "
+          f"({c2['explained_cu2']} of {c2['testable_cu2']} cu^2)")
 
 
 if __name__ == "__main__":

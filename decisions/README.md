@@ -4,6 +4,7 @@ _Append only. Newest at the top. Past entries are never edited. A reversal is a 
 
 ## Entries (newest first)
 
+- [2026-07-26: Blob candidates are selected by CELLS, not bounding box; a permanent assertion enforces single ownership](2026-07-26-duplicate-points-cell-selection.md)
 - [2026-07-26: The 2026-07-23 facet state is SUPERSEDED, not corrected](2026-07-26-2026-07-23-state-superseded.md)
 - [2026-07-26: The size floor is kept as a junk-facet filter, and both thresholds are stated in transferable form](2026-07-26-size-floor-as-junk-filter.md)
 - [2026-07-26: Open3D's RANSAC is nondeterministic under a fixed seed; `probability=1.0` becomes the default](2026-07-26-ransac-nondeterminism-probability-1.md)

@@ -1,0 +1,322 @@
+{
+  "task": "Task 7B: attribution of the coverage change to its three causes",
+  "dataset": "big_house",
+  "date": "2026-07-26",
+  "why": "three changes land in the same run and all three move coverage. Reported as one before-and-after, the number moves and nobody can say why.",
+  "order_note": "the decomposition is SEQUENTIAL and not commutative: admitting a facet changes what is explained, filling holes changes what is divided by. The order is facets, then the duplicate, then the base, and a different order would split the same total differently.",
+  "metric": "one consistent metric across all four rows: the OLD single coverage number, residual over interior-and-testable. The new split metrics are reported per row as well, but only the final row's are meaningful as headline numbers.",
+  "configurations": [
+    {
+      "key": "baseline",
+      "label": "baseline: the 2026-07-26 canonical state as published",
+      "settings": {
+        "min_pitch": 10.0,
+        "selection": "box",
+        "fill_holes": false
+      },
+      "derived_min_points": 1933,
+      "measured_density_d": 0.5218,
+      "counts": {
+        "n_main": 8,
+        "n_recovered": 17,
+        "n_total": 25,
+        "n_blobs": 14,
+        "n_low_slope": 0
+      },
+      "low_slope_facets": [],
+      "duplicated_point_entries": 9829,
+      "coverage": {
+        "coverage_pct": 93.508,
+        "denominator_cells": 1198049,
+        "denominator_cu2": 202.171,
+        "residual_cells": 77783,
+        "residual_cu2": 13.1259
+      },
+      "split_coverage": {
+        "density_testable_fraction": {
+          "question": "how much of the footprint has enough points to test at all",
+          "kind": "CAPTURE quality: the flight and the reconstruction, not the segmentation",
+          "testable_cells": 1198049,
+          "testable_cu2": 202.171,
+          "footprint_cells": 1198049,
+          "footprint_cu2": 202.171,
+          "untestable_cu2": 0.0,
+          "pct": 100.0
+        },
+        "facet_coverage": {
+          "question": "of the testable region, how much does a facet explain",
+          "kind": "SEGMENTATION: this is what the coverage gate was built to measure",
+          "explained_cells": 1120266,
+          "explained_cu2": 189.045,
+          "testable_cells": 1198049,
+          "testable_cu2": 202.171,
+          "unexplained_cu2": 13.126,
+          "pct": 93.51
+        },
+        "note": "these two do not multiply to the old single number, and are not meant to. The old number mixed a capture shortfall into a segmentation score against a base that hole-erosion had already shrunk by a third."
+      },
+      "footprint": {
+        "raw_cells_at_2_points": 1775726,
+        "raw_cu2": 299.654,
+        "holes_filled_cells": 0,
+        "holes_filled_cu2": 0.0,
+        "filled_cells": 1775726,
+        "filled_cu2": 299.654,
+        "eroded_cells": 1198049,
+        "eroded_cu2": 202.171,
+        "erosion_cost_cells": 577677,
+        "erosion_cost_cu2": 97.483,
+        "erosion_cost_pct_of_filled": 32.53
+      }
+    },
+    {
+      "key": "a_min_pitch_5",
+      "label": "a: + min_pitch 5 (admits low-slope facets)",
+      "settings": {
+        "min_pitch": 5.0,
+        "selection": "box",
+        "fill_holes": false
+      },
+      "derived_min_points": 1933,
+      "measured_density_d": 0.5218,
+      "counts": {
+        "n_main": 8,
+        "n_recovered": 19,
+        "n_total": 27,
+        "n_blobs": 14,
+        "n_low_slope": 2
+      },
+      "low_slope_facets": [
+        {
+          "pitch_deg": 8.359,
+          "rise_over_12": 1.76,
+          "n_points": 51432
+        },
+        {
+          "pitch_deg": 3.492,
+          "rise_over_12": 0.73,
+          "n_points": 11470
+        }
+      ],
+      "duplicated_point_entries": 16555,
+      "coverage": {
+        "coverage_pct": 94.773,
+        "denominator_cells": 1198049,
+        "denominator_cu2": 202.171,
+        "residual_cells": 62619,
+        "residual_cu2": 10.567
+      },
+      "split_coverage": {
+        "density_testable_fraction": {
+          "question": "how much of the footprint has enough points to test at all",
+          "kind": "CAPTURE quality: the flight and the reconstruction, not the segmentation",
+          "testable_cells": 1198049,
+          "testable_cu2": 202.171,
+          "footprint_cells": 1198049,
+          "footprint_cu2": 202.171,
+          "untestable_cu2": 0.0,
+          "pct": 100.0
+        },
+        "facet_coverage": {
+          "question": "of the testable region, how much does a facet explain",
+          "kind": "SEGMENTATION: this is what the coverage gate was built to measure",
+          "explained_cells": 1135430,
+          "explained_cu2": 191.604,
+          "testable_cells": 1198049,
+          "testable_cu2": 202.171,
+          "unexplained_cu2": 10.567,
+          "pct": 94.77
+        },
+        "note": "these two do not multiply to the old single number, and are not meant to. The old number mixed a capture shortfall into a segmentation score against a base that hole-erosion had already shrunk by a third."
+      },
+      "footprint": {
+        "raw_cells_at_2_points": 1775726,
+        "raw_cu2": 299.654,
+        "holes_filled_cells": 0,
+        "holes_filled_cu2": 0.0,
+        "filled_cells": 1775726,
+        "filled_cu2": 299.654,
+        "eroded_cells": 1198049,
+        "eroded_cu2": 202.171,
+        "erosion_cost_cells": 577677,
+        "erosion_cost_cu2": 97.483,
+        "erosion_cost_pct_of_filled": 32.53
+      }
+    },
+    {
+      "key": "b_cell_selection",
+      "label": "b: + cell-based blob selection (removes the duplicate facet)",
+      "settings": {
+        "min_pitch": 5.0,
+        "selection": "cells",
+        "fill_holes": false
+      },
+      "derived_min_points": 1933,
+      "measured_density_d": 0.5218,
+      "counts": {
+        "n_main": 8,
+        "n_recovered": 19,
+        "n_total": 27,
+        "n_blobs": 14,
+        "n_low_slope": 1
+      },
+      "low_slope_facets": [
+        {
+          "pitch_deg": 8.488,
+          "rise_over_12": 1.79,
+          "n_points": 28719
+        }
+      ],
+      "duplicated_point_entries": 0,
+      "coverage": {
+        "coverage_pct": 94.719,
+        "denominator_cells": 1198049,
+        "denominator_cu2": 202.171,
+        "residual_cells": 63274,
+        "residual_cu2": 10.6775
+      },
+      "split_coverage": {
+        "density_testable_fraction": {
+          "question": "how much of the footprint has enough points to test at all",
+          "kind": "CAPTURE quality: the flight and the reconstruction, not the segmentation",
+          "testable_cells": 1198049,
+          "testable_cu2": 202.171,
+          "footprint_cells": 1198049,
+          "footprint_cu2": 202.171,
+          "untestable_cu2": 0.0,
+          "pct": 100.0
+        },
+        "facet_coverage": {
+          "question": "of the testable region, how much does a facet explain",
+          "kind": "SEGMENTATION: this is what the coverage gate was built to measure",
+          "explained_cells": 1134775,
+          "explained_cu2": 191.493,
+          "testable_cells": 1198049,
+          "testable_cu2": 202.171,
+          "unexplained_cu2": 10.677,
+          "pct": 94.72
+        },
+        "note": "these two do not multiply to the old single number, and are not meant to. The old number mixed a capture shortfall into a segmentation score against a base that hole-erosion had already shrunk by a third."
+      },
+      "footprint": {
+        "raw_cells_at_2_points": 1775726,
+        "raw_cu2": 299.654,
+        "holes_filled_cells": 0,
+        "holes_filled_cu2": 0.0,
+        "filled_cells": 1775726,
+        "filled_cu2": 299.654,
+        "eroded_cells": 1198049,
+        "eroded_cu2": 202.171,
+        "erosion_cost_cells": 577677,
+        "erosion_cost_cu2": 97.483,
+        "erosion_cost_pct_of_filled": 32.53
+      }
+    },
+    {
+      "key": "c_hole_filling",
+      "label": "c: + hole filling (changes the denominator)",
+      "settings": {
+        "min_pitch": 5.0,
+        "selection": "cells",
+        "fill_holes": true
+      },
+      "derived_min_points": 1933,
+      "measured_density_d": 0.5218,
+      "counts": {
+        "n_main": 8,
+        "n_recovered": 21,
+        "n_total": 29,
+        "n_blobs": 17,
+        "n_low_slope": 1
+      },
+      "low_slope_facets": [
+        {
+          "pitch_deg": 8.487,
+          "rise_over_12": 1.79,
+          "n_points": 34880
+        }
+      ],
+      "duplicated_point_entries": 0,
+      "coverage": {
+        "coverage_pct": 88.396,
+        "denominator_cells": 1720035,
+        "denominator_cu2": 290.256,
+        "residual_cells": 199596,
+        "residual_cu2": 33.6818
+      },
+      "split_coverage": {
+        "density_testable_fraction": {
+          "question": "how much of the footprint has enough points to test at all",
+          "kind": "CAPTURE quality: the flight and the reconstruction, not the segmentation",
+          "testable_cells": 1720035,
+          "testable_cu2": 290.256,
+          "footprint_cells": 2090114,
+          "footprint_cu2": 352.707,
+          "untestable_cu2": 62.451,
+          "pct": 82.29
+        },
+        "facet_coverage": {
+          "question": "of the testable region, how much does a facet explain",
+          "kind": "SEGMENTATION: this is what the coverage gate was built to measure",
+          "explained_cells": 1520439,
+          "explained_cu2": 256.574,
+          "testable_cells": 1720035,
+          "testable_cu2": 290.256,
+          "unexplained_cu2": 33.682,
+          "pct": 88.4
+        },
+        "note": "these two do not multiply to the old single number, and are not meant to. The old number mixed a capture shortfall into a segmentation score against a base that hole-erosion had already shrunk by a third."
+      },
+      "footprint": {
+        "raw_cells_at_2_points": 1775726,
+        "raw_cu2": 299.654,
+        "holes_filled_cells": 370079,
+        "holes_filled_cu2": 62.451,
+        "filled_cells": 2145805,
+        "filled_cu2": 362.105,
+        "eroded_cells": 2090114,
+        "eroded_cu2": 352.707,
+        "erosion_cost_cells": 55691,
+        "erosion_cost_cu2": 9.398,
+        "erosion_cost_pct_of_filled": 2.6
+      }
+    }
+  ],
+  "decomposition": [
+    {
+      "step": "a_min_pitch_5",
+      "label": "a: + min_pitch 5 (admits low-slope facets)",
+      "coverage_before_pct": 93.508,
+      "coverage_after_pct": 94.773,
+      "delta_pct_points": 1.265,
+      "residual_delta_cu2": -2.5589,
+      "denominator_delta_cu2": 0.0,
+      "facet_count_delta": 2,
+      "duplicated_points_delta": 6726
+    },
+    {
+      "step": "b_cell_selection",
+      "label": "b: + cell-based blob selection (removes the duplicate facet)",
+      "coverage_before_pct": 94.773,
+      "coverage_after_pct": 94.719,
+      "delta_pct_points": -0.054,
+      "residual_delta_cu2": 0.1105,
+      "denominator_delta_cu2": 0.0,
+      "facet_count_delta": 0,
+      "duplicated_points_delta": -16555
+    },
+    {
+      "step": "c_hole_filling",
+      "label": "c: + hole filling (changes the denominator)",
+      "coverage_before_pct": 94.719,
+      "coverage_after_pct": 88.396,
+      "delta_pct_points": -6.323,
+      "residual_delta_cu2": 23.0043,
+      "denominator_delta_cu2": 88.085,
+      "facet_count_delta": 2,
+      "duplicated_points_delta": 0
+    }
+  ],
+  "total_change_pct_points": -5.112,
+  "cross_check": "the final configuration is the same one canonical_state.py runs, so its numbers must match the canonical file. If they do not, one of the two is wrong."
+}

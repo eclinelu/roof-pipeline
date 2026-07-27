@@ -52,7 +52,7 @@ def fit_ground_plane(points, distance_threshold=0.2):
     return normal, ground_points, inlier_mask
 
 def find_roof_planes(points, distance_threshold=0.2, min_points=300,
-                     min_pitch=10, max_pitch=60, max_planes=8,
+                     min_pitch=5, max_pitch=60, max_planes=8,
                      probability=1.0, peel_log=None):
     """Peel flat planes off the cloud one at a time with RANSAC, keeping only
     the ones tilted like a roof. Returns a list of facets, each a dict holding
@@ -106,6 +106,29 @@ def find_roof_planes(points, distance_threshold=0.2, min_points=300,
     # traced back to the input after several peels.
     live = np.arange(len(points))
 
+    # WHY min_pitch DEFAULTS TO 5 AND NOT 10 (decision 2026-07-26). min_pitch is
+    # a DEFINITION of what counts as a roof surface, not a filter against error,
+    # and that was measured rather than assumed. Of the four sub-10-degree planes
+    # a 10 degree floor rejected on big_house, two also failed the fit-quality
+    # bar independently, so the floor was not what excluded them; the other two
+    # were well-fitted planar surfaces carrying 62,427 points and 2.969 cu^2 of
+    # roof. Ground is removed upstream by the crop box and height cutoff, walls
+    # by max_pitch, foliage by colour then planarity, and noise by the quality
+    # bar. min_pitch protects against none of those, so at 10 it was deleting
+    # real low-slope roof and protecting nothing.
+    #
+    # 5 rather than lower: a near-horizontal plane laid across a pitched roof
+    # cuts a thin contour band through every slope on it, and RANSAC will fit
+    # that band as a plane. On big_house that artifact appears at 4.04 degrees.
+    # It FAILS the quality bar (3.076 against a 2.948 bar) and its plan footprint
+    # lies over all 8 main facets while covering only 0.3 to 1.4 percent of each,
+    # which is the signature of a contour band rather than a surface. 5 excludes
+    # it; it sits in the measured 0.922-to-5.866 degree gap in the recovery pitch
+    # distribution.
+    #
+    # HONEST LIMIT: that gap is about 1.8 degrees of usable plateau, against the
+    # 15.9x and 9.0x empty bands the size floors sit in. The evidence for this
+    # value is thinner than for those, and it should be re-measured per cloud.
     facets = []
     for peel in range(max_planes):
         # Stop if too little is left to be a real surface.
@@ -176,6 +199,60 @@ def find_roof_planes(points, distance_threshold=0.2, min_points=300,
             f["pitch"] = tilt_degrees(f["normal"])
 
     return facets
+
+
+def assert_single_ownership(facets, where=""):
+    """EVERY POINT BELONGS TO EXACTLY ONE FACET. Raises if it does not.
+
+    This runs on every run, permanently, and is meant to fail loudly rather than
+    be handled. It exists because of a defect it would have caught immediately:
+    two recovered facets on big_house owned 9,739 of the same points, because
+    blob candidate points were selected by the blob's BOUNDING BOX and two
+    blobs' boxes overlapped. The duplication survived undetected through a full
+    diagnostic pass, and was only found by chance while investigating a merge
+    question.
+
+    The narrow fix (selecting candidates by the blob's CELLS) makes that
+    particular leak impossible. This assertion is the more valuable half: it
+    makes the whole CLASS of defect self-detecting, whatever future change
+    introduces it. It is the same principle as ground-truth-is-audit-only,
+    applied to code. Measure the overlap; never let it feed back.
+
+    It is only possible because standing rule R1 persists inlier indices. With
+    summary rows alone, double ownership is invisible.
+
+    Costs one concatenate and one unique over a few million ints, which is
+    nothing beside the fit that produced the facets."""
+    have = [f for f in facets if "idx" in f]
+    if len(have) != len(facets):
+        raise AssertionError(
+            f"single-ownership check{' ' + where if where else ''}: "
+            f"{len(facets) - len(have)} of {len(facets)} facets carry no index "
+            f"array, so ownership cannot be checked. Every facet must carry "
+            f"'idx' (standing rule R1).")
+    if not have:
+        return 0
+    allc = np.concatenate([np.asarray(f["idx"], np.int64) for f in have])
+    uniq, counts = np.unique(allc, return_counts=True)
+    dup = int(len(allc) - len(uniq))
+    if dup == 0:
+        return 0
+
+    # Name the offending pairs, so the failure says WHERE and not just THAT.
+    bad = set(uniq[counts > 1].tolist())
+    pairs = []
+    for i in range(len(have)):
+        si = bad & set(np.asarray(have[i]["idx"], np.int64).tolist())
+        if not si:
+            continue
+        for j in range(i + 1, len(have)):
+            n = len(si & set(np.asarray(have[j]["idx"], np.int64).tolist()))
+            if n:
+                pairs.append(f"facets {i} and {j} share {n:,} points")
+    raise AssertionError(
+        f"single-ownership check{' ' + where if where else ''} FAILED: "
+        f"{dup:,} point entries are owned by more than one facet. "
+        + "; ".join(pairs))
 
 
 def _pitch_verdict(pitch, min_pitch, max_pitch):

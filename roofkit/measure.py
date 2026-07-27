@@ -1,6 +1,36 @@
 import numpy as np
 from scipy.spatial import ConvexHull, Delaunay
 
+# THE LOW-SLOPE BOUNDARY (adopted 2026-07-26). 2:12 is the roofing-practice
+# division between steep-slope and low-slope assemblies. Below it, shingles are
+# not used: the assembly changes to a membrane or a rolled product, the labour
+# differs, and the price per square differs. Commercial roof reports break the
+# two out separately for exactly that reason.
+#
+# THIS IS A REPORTING CATEGORY, NOT AN ADMISSION RULE. A low-slope facet is a
+# real roof surface and is measured, counted and reported like any other; it is
+# merely LABELLED so the report can separate the two assemblies. The earlier
+# 10 degree min_pitch sat suspiciously close to this line (2:12 is 9.4623 deg),
+# which is probably why 10 "felt right" as a cutoff. It is a good category
+# boundary and was a bad exclusion rule: at 10 degrees the pipeline was deleting
+# a 51,435-point, 1.72:12 surface on big_house instead of labelling it.
+LOW_SLOPE_RISE_OVER_12 = 2.0
+LOW_SLOPE_DEG = float(np.degrees(np.arctan2(LOW_SLOPE_RISE_OVER_12, 12.0)))
+
+
+def rise_over_12(pitch_deg):
+    """A pitch in degrees expressed the way roofers state it: inches of rise
+    per 12 inches of run. 4:12 is a common shallow residential roof, 8:12 a
+    steep one. Reported alongside degrees because the trade reads this form."""
+    return float(12.0 * np.tan(np.radians(float(pitch_deg))))
+
+
+def is_low_slope(pitch_deg):
+    """Is this facet a low-slope assembly (below 2:12)? A LABEL, never a
+    filter: nothing is excluded on the strength of this returning True."""
+    return bool(float(pitch_deg) < LOW_SLOPE_DEG)
+
+
 def tilt_degrees(normal):
     """Angle of a surface from horizontal, given its normal (a, b, c).
     0 = flat (ground), 90 = vertical (wall). For a roof face, this tilt is the pitch."""

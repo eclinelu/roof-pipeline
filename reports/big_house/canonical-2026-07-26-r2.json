@@ -1,0 +1,2343 @@
+{
+  "task": "canonical facet state under probability=1.0 + size floor (R1)",
+  "dataset": "big_house",
+  "date": "2026-07-26-r2",
+  "supersedes": {
+    "states": [
+      {
+        "state": "2026-07-23 26-facet state",
+        "status": "SUPERSEDED, not corrected",
+        "reason": "one sample from a distribution: produced by a nondeterministic fit, and its geometry was never written to disk, so it is permanently unrecoverable. Its files stay on disk as the evidence of the defect."
+      },
+      {
+        "state": "canonical-2026-07-26 (25 facets)",
+        "status": "SUPERSEDED, not overwritten; its files remain",
+        "reason": "three defects were fixed after it: blob candidates were selected by bounding box, so two facets owned 9,739 of the same points; min_pitch=10 was deleting real low-slope roof; and the coverage denominator was eroded with its holes still in it, discarding 32.5 percent of the footprint. The change in coverage between the two states is decomposed cause by cause in attribution-2026-07-26.json."
+      }
+    ],
+    "rule": "supersede, never overwrite. A corrected file implies the old numbers were an arithmetic mistake; they were not, they were correct computations under a defective definition, and that distinction is the finding."
+  },
+  "replay": {
+    "how": "np.load(roof.npy) -> level_cloud(...) -> points; then points[npz['facet_k']] rebuilds facet k exactly.",
+    "index_frame": "row numbers into the LEVELED roof point array; leveling is a rotation, so row order is unchanged from roof.npy",
+    "index_check": "points[idx] compared to the fitted points bit for bit (np.array_equal on float64) before this file was written; a mismatch aborts the run",
+    "npz": "canonical-2026-07-26-r2.npz",
+    "source_cloud_sha256": "1e04669c7f9b079d16dc4bf6efbd0a6bebd0c8f7b5782c0f0977e680d1b27335",
+    "source_cloud_n": 9293239
+  },
+  "params": {
+    "probability": 1.0,
+    "min_pitch_deg": 5.0,
+    "max_pitch_deg": 60.0,
+    "min_pitch_note": "5, not 10. min_pitch is a DEFINITION of what counts as a roof, not a filter; see decisions/2026-07-26-min-pitch-definition.",
+    "min_points_hard": 1933,
+    "min_points_hard_form": "3704 x d, d = measured point density",
+    "min_points_hard_derived": 1933,
+    "min_points_hard_overridden": false,
+    "measured_point_density_d": 0.5218,
+    "measured_point_density_per_main_facet": [
+      0.9393,
+      0.4479,
+      0.5958,
+      0.4304,
+      0.6981,
+      0.9652,
+      0.3227,
+      0.2165
+    ],
+    "min_points_legacy_raw_value": 2000,
+    "min_area_hard_cu2": "0x1.99a1fedfa5076p-4",
+    "min_area_hard_cu2_readable": 0.100008,
+    "min_area_hard_form": "3704 x spacing^2 (transferable)",
+    "low_slope_boundary_deg": 9.4623,
+    "coverage_cell_mult": 2.5,
+    "min_blob_area_cu2": 0.15,
+    "band_mult": 3.0,
+    "trim_mult": 3.0,
+    "alpha_mult": 4.0,
+    "min_points_frac": 0.025,
+    "fit_sample": 200000,
+    "max_planes": 12
+  },
+  "scalars": {
+    "spacing_cu": "0x1.5488f976ee19ep-8",
+    "band_cu": "0x1.0dc6e11141ee2p-4",
+    "cell_cu": "0x1.a9ab37d4a9a06p-7",
+    "quality_bar": "0x1.7957f5ed10c3ep+1",
+    "n_points": 9293239,
+    "spacing_cu_readable": 0.005196,
+    "band_cu_readable": 0.065863,
+    "cell_cu_readable": 0.01299,
+    "quality_bar_readable": 2.948
+  },
+  "main_quality_ratios": [
+    1.3054,
+    2.2951,
+    1.0069,
+    1.8003,
+    2.948,
+    2.6648,
+    1.8218,
+    2.0741
+  ],
+  "counts": {
+    "n_main": 8,
+    "n_recovered": 21,
+    "n_total": 29,
+    "n_blobs": 17,
+    "n_low_slope": 1,
+    "n_steep_slope": 28
+  },
+  "footprint": {
+    "raw_cells_at_2_points": 1775726,
+    "raw_cu2": 299.654,
+    "holes_filled_cells": 370079,
+    "holes_filled_cu2": 62.451,
+    "filled_cells": 2145805,
+    "filled_cu2": 362.105,
+    "eroded_cells": 2090114,
+    "eroded_cu2": 352.707,
+    "erosion_cost_cells": 55691,
+    "erosion_cost_cu2": 9.398,
+    "erosion_cost_pct_of_filled": 2.6
+  },
+  "filled_holes": {
+    "n_holes": 111154,
+    "total_cells": 370079,
+    "total_cu2": 62.4508,
+    "median_size_cells": 1,
+    "size_histogram": [
+      {
+        "size_cells": "1",
+        "n_holes": 75034,
+        "total_cells": 75034,
+        "total_cu2": 12.662
+      },
+      {
+        "size_cells": "2",
+        "n_holes": 15111,
+        "total_cells": 30222,
+        "total_cu2": 5.1
+      },
+      {
+        "size_cells": "3-4",
+        "n_holes": 10782,
+        "total_cells": 36182,
+        "total_cu2": 6.1057
+      },
+      {
+        "size_cells": "5-9",
+        "n_holes": 6334,
+        "total_cells": 40209,
+        "total_cu2": 6.7853
+      },
+      {
+        "size_cells": "10-24",
+        "n_holes": 2865,
+        "total_cells": 40642,
+        "total_cu2": 6.8583
+      },
+      {
+        "size_cells": "25-99",
+        "n_holes": 852,
+        "total_cells": 35925,
+        "total_cu2": 6.0623
+      },
+      {
+        "size_cells": "100-999",
+        "n_holes": 158,
+        "total_cells": 39662,
+        "total_cu2": 6.693
+      },
+      {
+        "size_cells": "1000-1000000000",
+        "n_holes": 18,
+        "total_cells": 72203,
+        "total_cu2": 12.1843
+      }
+    ],
+    "largest": [
+      {
+        "rank": 1,
+        "cells": 15846,
+        "cu2": 2.674
+      },
+      {
+        "rank": 2,
+        "cells": 14063,
+        "cu2": 2.3731
+      },
+      {
+        "rank": 3,
+        "cells": 5960,
+        "cu2": 1.0058
+      },
+      {
+        "rank": 4,
+        "cells": 4909,
+        "cu2": 0.8284
+      },
+      {
+        "rank": 5,
+        "cells": 4070,
+        "cu2": 0.6868
+      },
+      {
+        "rank": 6,
+        "cells": 3526,
+        "cu2": 0.595
+      },
+      {
+        "rank": 7,
+        "cells": 3321,
+        "cu2": 0.5604
+      },
+      {
+        "rank": 8,
+        "cells": 3096,
+        "cu2": 0.5225
+      },
+      {
+        "rank": 9,
+        "cells": 3028,
+        "cu2": 0.511
+      },
+      {
+        "rank": 10,
+        "cells": 2203,
+        "cu2": 0.3718
+      }
+    ],
+    "reading": "largest single filled region is 2.6740 cu^2. If that is a meaningful fraction of the roof, check it against the imagery before trusting the filled footprint: a real courtyard or light well would look exactly like this."
+  },
+  "coverage": {
+    "density_testable_fraction": {
+      "question": "how much of the footprint has enough points to test at all",
+      "kind": "CAPTURE quality: the flight and the reconstruction, not the segmentation",
+      "testable_cells": 1720035,
+      "testable_cu2": 290.256,
+      "footprint_cells": 2090114,
+      "footprint_cu2": 352.707,
+      "untestable_cu2": 62.451,
+      "pct": 82.29
+    },
+    "facet_coverage": {
+      "question": "of the testable region, how much does a facet explain",
+      "kind": "SEGMENTATION: this is what the coverage gate was built to measure",
+      "explained_cells": 1520439,
+      "explained_cu2": 256.574,
+      "testable_cells": 1720035,
+      "testable_cu2": 290.256,
+      "unexplained_cu2": 33.682,
+      "pct": 88.4
+    },
+    "note": "these two do not multiply to the old single number, and are not meant to. The old number mixed a capture shortfall into a segmentation score against a base that hole-erosion had already shrunk by a third."
+  },
+  "single_ownership_check": {
+    "ran": true,
+    "passed": true,
+    "what": "no point index appears in two facets' index arrays",
+    "why": "permanent, every run, fails loudly. Only possible because R1 persists inlier indices."
+  },
+  "blobs": [
+    {
+      "blob": 0,
+      "area_cu2": 11.5703,
+      "n_cells": 68565,
+      "box": [
+        [
+          553200.8771,
+          4543210.5231
+        ],
+        [
+          553204.8911,
+          4543217.0703
+        ]
+      ]
+    },
+    {
+      "blob": 1,
+      "area_cu2": 11.4532,
+      "n_cells": 67871,
+      "box": [
+        [
+          553194.7197,
+          4543208.6655
+        ],
+        [
+          553200.3445,
+          4543213.9136
+        ]
+      ]
+    },
+    {
+      "blob": 2,
+      "area_cu2": 3.4027,
+      "n_cells": 20164,
+      "box": [
+        [
+          553197.4347,
+          4543216.6676
+        ],
+        [
+          553199.5521,
+          4543219.1487
+        ]
+      ]
+    },
+    {
+      "blob": 3,
+      "area_cu2": 3.0184,
+      "n_cells": 17887,
+      "box": [
+        [
+          553186.2759,
+          4543216.4597
+        ],
+        [
+          553187.8088,
+          4543219.5125
+        ]
+      ]
+    },
+    {
+      "blob": 4,
+      "area_cu2": 2.6229,
+      "n_cells": 15543,
+      "box": [
+        [
+          553193.9402,
+          4543216.6546
+        ],
+        [
+          553195.3692,
+          4543219.4735
+        ]
+      ]
+    },
+    {
+      "blob": 5,
+      "area_cu2": 2.6195,
+      "n_cells": 15523,
+      "box": [
+        [
+          553188.9,
+          4543216.4987
+        ],
+        [
+          553190.173,
+          4543219.3046
+        ]
+      ]
+    },
+    {
+      "blob": 6,
+      "area_cu2": 2.5839,
+      "n_cells": 15312,
+      "box": [
+        [
+          553191.4071,
+          4543216.6806
+        ],
+        [
+          553192.888,
+          4543219.3566
+        ]
+      ]
+    },
+    {
+      "blob": 7,
+      "area_cu2": 1.595,
+      "n_cells": 9452,
+      "box": [
+        [
+          553188.4323,
+          4543206.0544
+        ],
+        [
+          553190.4328,
+          4543207.5613
+        ]
+      ]
+    },
+    {
+      "blob": 8,
+      "area_cu2": 1.3461,
+      "n_cells": 7977,
+      "box": [
+        [
+          553194.239,
+          4543211.1467
+        ],
+        [
+          553196.1876,
+          4543212.8744
+        ]
+      ]
+    },
+    {
+      "blob": 9,
+      "area_cu2": 0.6976,
+      "n_cells": 4134,
+      "box": [
+        [
+          553199.3702,
+          4543217.0963
+        ],
+        [
+          553200.0587,
+          4543219.2397
+        ]
+      ]
+    },
+    {
+      "blob": 10,
+      "area_cu2": 0.6726,
+      "n_cells": 3986,
+      "box": [
+        [
+          553193.5375,
+          4543206.678
+        ],
+        [
+          553195.3822,
+          4543207.6912
+        ]
+      ]
+    },
+    {
+      "blob": 11,
+      "area_cu2": 0.4992,
+      "n_cells": 2958,
+      "box": [
+        [
+          553194.8626,
+          4543206.8469
+        ],
+        [
+          553196.2006,
+          4543207.7042
+        ]
+      ]
+    },
+    {
+      "blob": 12,
+      "area_cu2": 0.4298,
+      "n_cells": 2547,
+      "box": [
+        [
+          553188.1335,
+          4543206.8339
+        ],
+        [
+          553189.8223,
+          4543207.6263
+        ]
+      ]
+    },
+    {
+      "blob": 13,
+      "area_cu2": 0.3566,
+      "n_cells": 2113,
+      "box": [
+        [
+          553189.1988,
+          4543209.7697
+        ],
+        [
+          553190.8355,
+          4543210.666
+        ]
+      ]
+    },
+    {
+      "blob": 14,
+      "area_cu2": 0.212,
+      "n_cells": 1256,
+      "box": [
+        [
+          553204.3715,
+          4543229.9437
+        ],
+        [
+          553204.8911,
+          4543231.009
+        ]
+      ]
+    },
+    {
+      "blob": 15,
+      "area_cu2": 0.2096,
+      "n_cells": 1242,
+      "box": [
+        [
+          553203.9169,
+          4543210.6011
+        ],
+        [
+          553204.9171,
+          4543211.3545
+        ]
+      ]
+    },
+    {
+      "blob": 16,
+      "area_cu2": 0.2037,
+      "n_cells": 1207,
+      "box": [
+        [
+          553188.1465,
+          4543205.9635
+        ],
+        [
+          553188.9779,
+          4543206.626
+        ]
+      ]
+    }
+  ],
+  "facets": [
+    {
+      "facet": 0,
+      "kind": "main",
+      "blob": null,
+      "n_points": 1538098,
+      "pitch_deg": 21.1883,
+      "pitch_rise_over_12": 4.65,
+      "low_slope": false,
+      "azimuth_deg": 290.3559,
+      "quality_rms_over_spacing": 1.3054,
+      "plane_abcd_hex": [
+        "0x1.5afef5cca6ccap-2",
+        "-0x1.017c24a2ec5f8p-3",
+        "-0x1.dd63316825fcap-1",
+        "0x1.59a925f10bffep+18"
+      ],
+      "centroid_hex": [
+        "0x1.0e1d97f67d2b7p+19",
+        "0x1.154be3804db02p+22",
+        "-0x1.f317ec1d1e0e8p+14"
+      ],
+      "plane_abcd": [
+        0.338863221,
+        -0.125725065,
+        -0.932397407,
+        353956.592837334
+      ],
+      "centroid": [
+        553196.7488,
+        4543224.8753,
+        -31941.9806
+      ]
+    },
+    {
+      "facet": 1,
+      "kind": "main",
+      "blob": null,
+      "n_points": 1154335,
+      "pitch_deg": 33.0669,
+      "pitch_rise_over_12": 7.81,
+      "low_slope": false,
+      "azimuth_deg": 358.3269,
+      "quality_rms_over_spacing": 2.2951,
+      "plane_abcd_hex": [
+        "0x1.04ffb4db9f5b6p-6",
+        "-0x1.173cca1388f3dp-1",
+        "-0x1.ad12c5686f918p-1",
+        "0x1.2a1f8ff2dbc66p+21"
+      ],
+      "centroid_hex": [
+        "0x1.0e1d260397ab6p+19",
+        "0x1.154bc6e6e2a88p+22",
+        "-0x1.f312c721b5211p+14"
+      ],
+      "plane_abcd": [
+        0.015930106,
+        -0.545385661,
+        -0.838033837,
+        2442225.99358325
+      ],
+      "centroid": [
+        553193.1879,
+        4543217.7255,
+        -31940.6945
+      ]
+    },
+    {
+      "facet": 2,
+      "kind": "main",
+      "blob": null,
+      "n_points": 693991,
+      "pitch_deg": 22.7224,
+      "pitch_rise_over_12": 5.03,
+      "low_slope": false,
+      "azimuth_deg": 112.7335,
+      "quality_rms_over_spacing": 1.0069,
+      "plane_abcd_hex": [
+        "0x1.6ccf1e69d5064p-2",
+        "-0x1.31b52d0fe56afp-3",
+        "0x1.d8431a74046dfp-1",
+        "0x1.f2965b7ef8ed1p+18"
+      ],
+      "centroid_hex": [
+        "0x1.0e1e074bb6dd1p+19",
+        "0x1.154bdfc13d030p+22",
+        "-0x1.f317676043740p+14"
+      ],
+      "plane_abcd": [
+        0.356258846,
+        -0.149271347,
+        0.922386958,
+        510553.429624778
+      ],
+      "centroid": [
+        553200.228,
+        4543223.9387,
+        -31941.851
+      ]
+    },
+    {
+      "facet": 3,
+      "kind": "main",
+      "blob": null,
+      "n_points": 850268,
+      "pitch_deg": 34.0059,
+      "pitch_rise_over_12": 8.1,
+      "low_slope": false,
+      "azimuth_deg": 178.8681,
+      "quality_rms_over_spacing": 1.8003,
+      "plane_abcd_hex": [
+        "0x1.6a02f3ab25c36p-7",
+        "-0x1.1e4b5b61f1b95p-1",
+        "0x1.a8701b19b789ep-1",
+        "0x1.3898a70ba9c4cp+21"
+      ],
+      "centroid_hex": [
+        "0x1.0e1d04eec4ba0p+19",
+        "0x1.154bb56b56027p+22",
+        "-0x1.f310bdf0fb7c2p+14"
+      ],
+      "plane_abcd": [
+        0.011047715,
+        -0.559168678,
+        0.8289803,
+        2560788.880694902
+      ],
+      "centroid": [
+        553192.1541,
+        4543213.3548,
+        -31940.1855
+      ]
+    },
+    {
+      "facet": 4,
+      "kind": "main",
+      "blob": null,
+      "n_points": 744303,
+      "pitch_deg": 20.9901,
+      "pitch_rise_over_12": 4.6,
+      "low_slope": false,
+      "azimuth_deg": 22.9037,
+      "quality_rms_over_spacing": 2.948,
+      "plane_abcd_hex": [
+        "0x1.1d8202535a16bp-3",
+        "0x1.51e2956c87251p-2",
+        "0x1.de065bc1b330fp-1",
+        "-0x1.798aad2eb1ae6p+20"
+      ],
+      "centroid_hex": [
+        "0x1.0e1e2ce3eab9ep+19",
+        "0x1.154c0356fe1ccp+22",
+        "-0x1.f315e39123445p+14"
+      ],
+      "plane_abcd": [
+        0.139408129,
+        0.329965911,
+        0.933642261,
+        -1546410.823899919
+      ],
+      "centroid": [
+        553201.4028,
+        4543232.835,
+        -31941.4722
+      ]
+    },
+    {
+      "facet": 5,
+      "kind": "main",
+      "blob": null,
+      "n_points": 669484,
+      "pitch_deg": 21.3571,
+      "pitch_rise_over_12": 4.69,
+      "low_slope": false,
+      "azimuth_deg": 201.9709,
+      "quality_rms_over_spacing": 2.6648,
+      "plane_abcd_hex": [
+        "0x1.170b79dcabad0p-3",
+        "0x1.59d5fe27f45fep-2",
+        "-0x1.dcd7239ee0debp-1",
+        "-0x1.9045588e993e5p+20"
+      ],
+      "centroid_hex": [
+        "0x1.0e1e103e6d4b7p+19",
+        "0x1.154bf664062cep+22",
+        "-0x1.f315d4885522bp+14"
+      ],
+      "plane_abcd": [
+        0.136252358,
+        0.33773038,
+        -0.931328881,
+        -1639509.534814113
+      ],
+      "centroid": [
+        553200.5076,
+        4543229.5977,
+        -31941.4576
+      ]
+    },
+    {
+      "facet": 6,
+      "kind": "main",
+      "blob": null,
+      "n_points": 403109,
+      "pitch_deg": 33.7566,
+      "pitch_rise_over_12": 8.02,
+      "low_slope": false,
+      "azimuth_deg": 268.6701,
+      "quality_rms_over_spacing": 1.8218,
+      "plane_abcd_hex": [
+        "0x1.1c6c936250b64p-1",
+        "0x1.a697d5a0811c0p-7",
+        "-0x1.a9ae095b6cab2p-1",
+        "-0x1.7f413e937ab1cp+18"
+      ],
+      "centroid_hex": [
+        "0x1.0e1cb78ff44f5p+19",
+        "0x1.154ba7666c1dep+22",
+        "-0x1.f312edf1dcb26p+14"
+      ],
+      "plane_abcd": [
+        0.555515867,
+        0.012896518,
+        -0.831405919,
+        -392452.977751421
+      ],
+      "centroid": [
+        553189.7363,
+        4543209.85,
+        -31940.7324
+      ]
+    },
+    {
+      "facet": 7,
+      "kind": "main",
+      "blob": null,
+      "n_points": 297583,
+      "pitch_deg": 33.5153,
+      "pitch_rise_over_12": 7.95,
+      "low_slope": false,
+      "azimuth_deg": 88.3822,
+      "quality_rms_over_spacing": 2.0741,
+      "plane_abcd_hex": [
+        "-0x1.1a97d5db504f2p-1",
+        "-0x1.fecdff6cb313ep-7",
+        "-0x1.aadfc03131ef5p-1",
+        "0x1.555467eab4cfbp+18"
+      ],
+      "centroid_hex": [
+        "0x1.0e1d40655e097p+19",
+        "0x1.154ba75929093p+22",
+        "-0x1.f311fe01e1f8fp+14"
+      ],
+      "plane_abcd": [
+        -0.551939662,
+        -0.015588522,
+        -0.833738333,
+        349521.623700335
+      ],
+      "centroid": [
+        553194.0124,
+        4543209.8371,
+        -31940.4981
+      ]
+    },
+    {
+      "facet": 8,
+      "kind": "recovered",
+      "blob": 1,
+      "n_points": 101684,
+      "pitch_deg": 9.7924,
+      "pitch_rise_over_12": 2.07,
+      "low_slope": false,
+      "azimuth_deg": 257.4423,
+      "quality_rms_over_spacing": 2.5989,
+      "plane_abcd_hex": [
+        "0x1.53fcc6c9c62e1p-3",
+        "0x1.2eee501756bf1p-5",
+        "-0x1.f88a5b322ea5bp-1",
+        "-0x1.1c7c7760e95dcp+18"
+      ],
+      "centroid_hex": [
+        "0x1.0e1d97354f342p+19",
+        "0x1.154bae7b71bb4p+22",
+        "-0x1.f311f11136236p+14"
+      ],
+      "plane_abcd": [
+        0.166009477,
+        0.036978871,
+        -0.985430574,
+        -291313.865290014
+      ],
+      "centroid": [
+        553196.7253,
+        4543211.6206,
+        -31940.4854
+      ]
+    },
+    {
+      "facet": 9,
+      "kind": "recovered",
+      "blob": 1,
+      "n_points": 81511,
+      "pitch_deg": 23.1987,
+      "pitch_rise_over_12": 5.14,
+      "low_slope": false,
+      "azimuth_deg": 269.5031,
+      "quality_rms_over_spacing": 0.9523,
+      "plane_abcd_hex": [
+        "0x1.935c4f0bae4a2p-2",
+        "0x1.bfca6fa455902p-9",
+        "-0x1.d69a0bd8946fcp-1",
+        "-0x1.00a0d4677696dp+18"
+      ],
+      "centroid_hex": [
+        "0x1.0e1dbd27606ccp+19",
+        "0x1.154bb14813925p+22",
+        "-0x1.f3108ad756125p+14"
+      ],
+      "plane_abcd": [
+        0.393906818,
+        0.003416372,
+        -0.91914403,
+        -262787.318814895
+      ],
+      "centroid": [
+        553197.9111,
+        4543212.3204,
+        -31940.1356
+      ]
+    },
+    {
+      "facet": 10,
+      "kind": "recovered",
+      "blob": 1,
+      "n_points": 27410,
+      "pitch_deg": 38.9061,
+      "pitch_rise_over_12": 9.68,
+      "low_slope": false,
+      "azimuth_deg": 188.5243,
+      "quality_rms_over_spacing": 1.5869,
+      "plane_abcd_hex": [
+        "-0x1.7d50809cbf761p-4",
+        "-0x1.3e01e3bbc8d36p-1",
+        "0x1.8e6d19ff6c139p-1",
+        "0x1.61c820d597db4p+21"
+      ],
+      "centroid_hex": [
+        "0x1.0e1d931f8bfa3p+19",
+        "0x1.154ba8a029b89p+22",
+        "-0x1.f313dbcd4e816p+14"
+      ],
+      "plane_abcd": [
+        -0.093094351,
+        -0.621108166,
+        0.778176129,
+        2898180.104293549
+      ],
+      "centroid": [
+        553196.5976,
+        4543210.1564,
+        -31940.9647
+      ]
+    },
+    {
+      "facet": 11,
+      "kind": "recovered",
+      "blob": 2,
+      "n_points": 77994,
+      "pitch_deg": 22.146,
+      "pitch_rise_over_12": 4.88,
+      "low_slope": false,
+      "azimuth_deg": 265.8398,
+      "quality_rms_over_spacing": 1.2258,
+      "plane_abcd_hex": [
+        "0x1.80ff9ff2d5935p-2",
+        "0x1.c00e0211cfd01p-6",
+        "-0x1.da3a4f93e76cbp-1",
+        "-0x1.615610053a51cp+18"
+      ],
+      "centroid_hex": [
+        "0x1.0e1dc274d160ep+19",
+        "0x1.154bc8c239bbap+22",
+        "-0x1.f310503ddf9e7p+14"
+      ],
+      "plane_abcd": [
+        0.375975131,
+        0.02734709,
+        -0.926226126,
+        -361816.25031908
+      ],
+      "centroid": [
+        553198.0768,
+        4543218.1897,
+        -31940.0784
+      ]
+    },
+    {
+      "facet": 12,
+      "kind": "recovered",
+      "blob": 2,
+      "n_points": 19906,
+      "pitch_deg": 22.67,
+      "pitch_rise_over_12": 5.01,
+      "low_slope": false,
+      "azimuth_deg": 92.8014,
+      "quality_rms_over_spacing": 0.8087,
+      "plane_abcd_hex": [
+        "-0x1.8a336c6197661p-2",
+        "0x1.34a08936a10a0p-6",
+        "-0x1.d871693f764a2p-1",
+        "0x1.7e73288d97a13p+16"
+      ],
+      "centroid_hex": [
+        "0x1.0e1de0e8f1d50p+19",
+        "0x1.154bc978c0243p+22",
+        "-0x1.f30fb69f2aeefp+14"
+      ],
+      "plane_abcd": [
+        -0.38496179,
+        0.018837103,
+        -0.922740258,
+        97907.158410527
+      ],
+      "centroid": [
+        553199.0284,
+        4543218.3679,
+        -31939.9283
+      ]
+    },
+    {
+      "facet": 13,
+      "kind": "recovered",
+      "blob": 3,
+      "n_points": 41761,
+      "pitch_deg": 35.141,
+      "pitch_rise_over_12": 8.45,
+      "low_slope": false,
+      "azimuth_deg": 88.213,
+      "quality_rms_over_spacing": 0.8511,
+      "plane_abcd_hex": [
+        "0x1.268f2760f825fp-1",
+        "0x1.26136eec6d080p-6",
+        "0x1.a2ae88ae45b1cp-1",
+        "-0x1.6cec8ce90e7d6p+18"
+      ],
+      "centroid_hex": [
+        "0x1.0e1c6bff77fd3p+19",
+        "0x1.154bc85a975dfp+22",
+        "-0x1.f3105d9320393p+14"
+      ],
+      "plane_abcd": [
+        0.575310927,
+        0.017948969,
+        0.817737838,
+        -373682.201724646
+      ],
+      "centroid": [
+        553187.3749,
+        4543218.0885,
+        -31940.0914
+      ]
+    },
+    {
+      "facet": 14,
+      "kind": "recovered",
+      "blob": 3,
+      "n_points": 33268,
+      "pitch_deg": 34.667,
+      "pitch_rise_over_12": 8.3,
+      "low_slope": false,
+      "azimuth_deg": 267.5834,
+      "quality_rms_over_spacing": 0.9849,
+      "plane_abcd_hex": [
+        "0x1.22f84068b8f41p-1",
+        "0x1.88f440805bce0p-6",
+        "-0x1.a51b0061a4dc2p-1",
+        "-0x1.b712a55f4e578p+18"
+      ],
+      "centroid_hex": [
+        "0x1.0e1c577c89f74p+19",
+        "0x1.154bc81968b9dp+22",
+        "-0x1.f31050229e369p+14"
+      ],
+      "plane_abcd": [
+        0.568300259,
+        0.023984015,
+        -0.82247163,
+        -449610.583942018
+      ],
+      "centroid": [
+        553186.734,
+        4543218.0248,
+        -31940.0783
+      ]
+    },
+    {
+      "facet": 15,
+      "kind": "recovered",
+      "blob": 4,
+      "n_points": 63633,
+      "pitch_deg": 35.1565,
+      "pitch_rise_over_12": 8.45,
+      "low_slope": false,
+      "azimuth_deg": 266.625,
+      "quality_rms_over_spacing": 0.6488,
+      "plane_abcd_hex": [
+        "0x1.264def0a56433p-1",
+        "0x1.15b29c67fe921p-5",
+        "-0x1.a29a1f5da029bp-1",
+        "-0x1.e66e828dd6f03p+18"
+      ],
+      "centroid_hex": [
+        "0x1.0e1d4a6811cbep+19",
+        "0x1.154bc95d25982p+22",
+        "-0x1.f3103945e288cp+14"
+      ],
+      "plane_abcd": [
+        0.574813337,
+        0.033898645,
+        -0.817582112,
+        -498106.039907202
+      ],
+      "centroid": [
+        553194.3252,
+        4543218.341,
+        -31940.0559
+      ]
+    },
+    {
+      "facet": 16,
+      "kind": "recovered",
+      "blob": 4,
+      "n_points": 45197,
+      "pitch_deg": 34.1054,
+      "pitch_rise_over_12": 8.13,
+      "low_slope": false,
+      "azimuth_deg": 90.6353,
+      "quality_rms_over_spacing": 0.8896,
+      "plane_abcd_hex": [
+        "-0x1.1f11ba308f87dp-1",
+        "0x1.976ed1dd95e00p-8",
+        "-0x1.a7f0a33381b01p-1",
+        "0x1.f2f97fc6d55f9p+17"
+      ],
+      "centroid_hex": [
+        "0x1.0e1d5d0a7cff6p+19",
+        "0x1.154bc9dc1300bp+22",
+        "-0x1.f3103885dfe6ep+14"
+      ],
+      "plane_abcd": [
+        -0.560682124,
+        0.006216933,
+        -0.828007793,
+        255474.998255417
+      ],
+      "centroid": [
+        553194.9075,
+        4543218.4649,
+        -31940.0552
+      ]
+    },
+    {
+      "facet": 17,
+      "kind": "recovered",
+      "blob": 5,
+      "n_points": 52573,
+      "pitch_deg": 35.1738,
+      "pitch_rise_over_12": 8.46,
+      "low_slope": false,
+      "azimuth_deg": 267.2675,
+      "quality_rms_over_spacing": 0.7419,
+      "plane_abcd_hex": [
+        "-0x1.269b41a899539p-1",
+        "-0x1.c1f01740dbe1ep-6",
+        "0x1.a2836364a10fdp-1",
+        "0x1.ca2f3eafe714bp+18"
+      ],
+      "centroid_hex": [
+        "0x1.0e1ca8a2d59b1p+19",
+        "0x1.154bc8a467b1ep+22",
+        "-0x1.f31044baebc9ep+14"
+      ],
+      "plane_abcd": [
+        -0.575403263,
+        -0.027462027,
+        0.817408663,
+        469180.979486246
+      ],
+      "centroid": [
+        553189.2699,
+        4543218.1606,
+        -31940.0671
+      ]
+    },
+    {
+      "facet": 18,
+      "kind": "recovered",
+      "blob": 5,
+      "n_points": 40884,
+      "pitch_deg": 33.9676,
+      "pitch_rise_over_12": 8.08,
+      "low_slope": false,
+      "azimuth_deg": 89.6351,
+      "quality_rms_over_spacing": 0.6979,
+      "plane_abcd_hex": [
+        "-0x1.1e0f97f5381fep-1",
+        "-0x1.d268de0921700p-9",
+        "-0x1.a8a109cc92eaep-1",
+        "0x1.23bfd3e0ec3edp+18"
+      ],
+      "centroid_hex": [
+        "0x1.0e1cbaf576dc8p+19",
+        "0x1.154bc952a9bf7p+22",
+        "-0x1.f3102413f3880p+14"
+      ],
+      "plane_abcd": [
+        -0.55871272,
+        -0.003558423,
+        -0.829353625,
+        298751.3106032
+      ],
+      "centroid": [
+        553189.8425,
+        4543218.3307,
+        -31940.0352
+      ]
+    },
+    {
+      "facet": 19,
+      "kind": "recovered",
+      "blob": 6,
+      "n_points": 54203,
+      "pitch_deg": 34.4991,
+      "pitch_rise_over_12": 8.25,
+      "low_slope": false,
+      "azimuth_deg": 267.1344,
+      "quality_rms_over_spacing": 0.6553,
+      "plane_abcd_hex": [
+        "0x1.21a16bffe91d0p-1",
+        "0x1.cfec168603a5ep-6",
+        "-0x1.a5f51193ae72ep-1",
+        "-0x1.c8eeb799ba403p+18"
+      ],
+      "centroid_hex": [
+        "0x1.0e1cf93dc5967p+19",
+        "0x1.154bc96756ad5p+22",
+        "-0x1.f3105a6954901p+14"
+      ],
+      "plane_abcd": [
+        0.565684676,
+        0.028315565,
+        -0.82413535,
+        -467898.868757785
+      ],
+      "centroid": [
+        553191.7888,
+        4543218.3509,
+        -31940.0883
+      ]
+    },
+    {
+      "facet": 20,
+      "kind": "recovered",
+      "blob": 6,
+      "n_points": 34629,
+      "pitch_deg": 34.0105,
+      "pitch_rise_over_12": 8.1,
+      "low_slope": false,
+      "azimuth_deg": 89.8868,
+      "quality_rms_over_spacing": 0.6002,
+      "plane_abcd_hex": [
+        "0x1.1e626381287eep-1",
+        "0x1.21923076e9c00p-10",
+        "0x1.a86a1ec946248p-1",
+        "-0x1.1937d91795f8fp+18"
+      ],
+      "centroid_hex": [
+        "0x1.0e1d0d4923120p+19",
+        "0x1.154bc9c222e48p+22",
+        "-0x1.f310565ee2e69p+14"
+      ],
+      "plane_abcd": [
+        0.559344396,
+        0.001104626,
+        0.828934633,
+        -287967.392064565
+      ],
+      "centroid": [
+        553192.4152,
+        4543218.4396,
+        -31940.0843
+      ]
+    },
+    {
+      "facet": 21,
+      "kind": "recovered",
+      "blob": 7,
+      "n_points": 19576,
+      "pitch_deg": 33.353,
+      "pitch_rise_over_12": 7.9,
+      "low_slope": false,
+      "azimuth_deg": 177.7235,
+      "quality_rms_over_spacing": 0.9465,
+      "plane_abcd_hex": [
+        "0x1.65cf1d4a35d2ep-6",
+        "-0x1.19460b980b6fbp-1",
+        "0x1.abac448942932p-1",
+        "0x1.32740f9d066d0p+21"
+      ],
+      "centroid_hex": [
+        "0x1.0e1cb1a0dd11bp+19",
+        "0x1.154b9a17decdbp+22",
+        "-0x1.f310c2a9bdd14p+14"
+      ],
+      "plane_abcd": [
+        0.021838931,
+        -0.549362528,
+        0.835298673,
+        2510465.951672412
+      ],
+      "centroid": [
+        553189.5509,
+        4543206.5233,
+        -31940.1901
+      ]
+    },
+    {
+      "facet": 22,
+      "kind": "recovered",
+      "blob": 7,
+      "n_points": 19017,
+      "pitch_deg": 32.7529,
+      "pitch_rise_over_12": 7.72,
+      "low_slope": false,
+      "azimuth_deg": 358.887,
+      "quality_rms_over_spacing": 0.8168,
+      "plane_abcd_hex": [
+        "0x1.585c24e3b7739p-7",
+        "-0x1.14f2b61f805bcp-1",
+        "-0x1.ae99232746148p-1",
+        "0x1.27ff4ec17decfp+21"
+      ],
+      "centroid_hex": [
+        "0x1.0e1cb438f1bf7p+19",
+        "0x1.154b9c3ba8ec4p+22",
+        "-0x1.f310aafb412f9p+14"
+      ],
+      "plane_abcd": [
+        0.010509031,
+        -0.540914241,
+        -0.841012095,
+        2424809.844478465
+      ],
+      "centroid": [
+        553189.632,
+        4543207.0583,
+        -31940.167
+      ]
+    },
+    {
+      "facet": 23,
+      "kind": "recovered",
+      "blob": 8,
+      "n_points": 34880,
+      "pitch_deg": 8.4873,
+      "pitch_rise_over_12": 1.79,
+      "low_slope": true,
+      "azimuth_deg": 215.8336,
+      "quality_rms_over_spacing": 1.5816,
+      "plane_abcd_hex": [
+        "0x1.61e92122e3239p-4",
+        "0x1.ea1a9e2765b7fp-4",
+        "-0x1.fa64953480a3fp-1",
+        "-0x1.30337e7508d74p+19"
+      ],
+      "centroid_hex": [
+        "0x1.0e1d61e402d0cp+19",
+        "0x1.154bb0bbb8696p+22",
+        "-0x1.f312a7b8d7ca7p+14"
+      ],
+      "plane_abcd": [
+        0.08640397,
+        0.119654291,
+        -0.989048636,
+        -623003.951786442
+      ],
+      "centroid": [
+        553195.0591,
+        4543212.1833,
+        -31940.6638
+      ]
+    },
+    {
+      "facet": 24,
+      "kind": "recovered",
+      "blob": 9,
+      "n_points": 13970,
+      "pitch_deg": 21.5685,
+      "pitch_rise_over_12": 4.74,
+      "low_slope": false,
+      "azimuth_deg": 91.3269,
+      "quality_rms_over_spacing": 2.0455,
+      "plane_abcd_hex": [
+        "-0x1.7855d45cc9ed3p-2",
+        "0x1.16f469f6e5350p-7",
+        "-0x1.dc2629dcfa0fdp-1",
+        "0x1.078874917a3fap+17"
+      ],
+      "centroid_hex": [
+        "0x1.0e1df875689dep+19",
+        "0x1.154bc8b727688p+22",
+        "-0x1.f310ea83aaafbp+14"
+      ],
+      "plane_abcd": [
+        -0.367514914,
+        0.008513023,
+        -0.929978665,
+        134928.910689622
+      ],
+      "centroid": [
+        553199.7643,
+        4543218.1789,
+        -31940.229
+      ]
+    },
+    {
+      "facet": 25,
+      "kind": "recovered",
+      "blob": 10,
+      "n_points": 9839,
+      "pitch_deg": 32.7878,
+      "pitch_rise_over_12": 7.73,
+      "low_slope": false,
+      "azimuth_deg": 356.8356,
+      "quality_rms_over_spacing": 1.7211,
+      "plane_abcd_hex": [
+        "0x1.e9c64227a6f72p-6",
+        "-0x1.14d71a56db95dp-1",
+        "-0x1.ae6dda5dd49f4p-1",
+        "0x1.2692a0bc1018ap+21"
+      ],
+      "centroid_hex": [
+        "0x1.0e1d4d86f32fep+19",
+        "0x1.154b9cb296dc6p+22",
+        "-0x1.f3109f4316b95p+14"
+      ],
+      "plane_abcd": [
+        0.02989346,
+        -0.540703605,
+        -0.840681862,
+        2413140.091827576
+      ],
+      "centroid": [
+        553194.4227,
+        4543207.1744,
+        -31940.1555
+      ]
+    },
+    {
+      "facet": 26,
+      "kind": "recovered",
+      "blob": 11,
+      "n_points": 8532,
+      "pitch_deg": 33.0358,
+      "pitch_rise_over_12": 7.8,
+      "low_slope": false,
+      "azimuth_deg": 357.3886,
+      "quality_rms_over_spacing": 1.5408,
+      "plane_abcd_hex": [
+        "-0x1.96f67ae2d1b97p-6",
+        "0x1.16d568ea64f11p-1",
+        "0x1.ad399726b5ca2p-1",
+        "-0x1.29151c14b51b6p+21"
+      ],
+      "centroid_hex": [
+        "0x1.0e1d75c9cedcdp+19",
+        "0x1.154b9d8231b12p+22",
+        "-0x1.f310fb4b897d5p+14"
+      ],
+      "plane_abcd": [
+        -0.024839039,
+        0.544596938,
+        0.838330005,
+        -2433699.510111059
+      ],
+      "centroid": [
+        553195.6809,
+        4543207.3771,
+        -31940.2454
+      ]
+    },
+    {
+      "facet": 27,
+      "kind": "recovered",
+      "blob": 12,
+      "n_points": 10345,
+      "pitch_deg": 33.2582,
+      "pitch_rise_over_12": 7.87,
+      "low_slope": false,
+      "azimuth_deg": 358.6163,
+      "quality_rms_over_spacing": 0.8299,
+      "plane_abcd_hex": [
+        "0x1.b1f24c4a77a2dp-7",
+        "-0x1.18b48cb85df73p-1",
+        "-0x1.ac2374cf257f0p-1",
+        "0x1.2be6b0600d724p+21"
+      ],
+      "centroid_hex": [
+        "0x1.0e1c96769176fp+19",
+        "0x1.154b9d1b566f5p+22",
+        "-0x1.f3114d5342859p+14"
+      ],
+      "plane_abcd": [
+        0.013242996,
+        -0.548252485,
+        -0.83620801,
+        2456790.046900647
+      ],
+      "centroid": [
+        553188.702,
+        4543207.2767,
+        -31940.3255
+      ]
+    },
+    {
+      "facet": 28,
+      "kind": "recovered",
+      "blob": 16,
+      "n_points": 3970,
+      "pitch_deg": 33.2342,
+      "pitch_rise_over_12": 7.86,
+      "low_slope": false,
+      "azimuth_deg": 178.285,
+      "quality_rms_over_spacing": 1.104,
+      "plane_abcd_hex": [
+        "-0x1.0cbdd9f87e74ap-6",
+        "0x1.187b7492a7f57p-1",
+        "-0x1.ac41878758dcep-1",
+        "-0x1.31f7bb7f38d3fp+21"
+      ],
+      "centroid_hex": [
+        "0x1.0e1c8ef4c8b65p+19",
+        "0x1.154b990709e01p+22",
+        "-0x1.f31157ecf043bp+14"
+      ],
+      "plane_abcd": [
+        -0.016402686,
+        0.54781689,
+        -0.83643745,
+        -2506487.437120109
+      ],
+      "centroid": [
+        553188.4674,
+        4543206.2569,
+        -31940.3359
+      ]
+    }
+  ],
+  "recovery_log": [
+    {
+      "blob": 0,
+      "area_cu2": 11.570344521464438,
+      "n_candidate": 180861,
+      "planes": [],
+      "peels": [
+        {
+          "peel": 0,
+          "n_inliers": 162938,
+          "pitch_deg": 3.774,
+          "pitch_window": [
+            5.0,
+            60.0
+          ],
+          "kept_by_pitch": false,
+          "surface": "near-flat (3.8 deg < 5.0 deg)"
+        },
+        {
+          "peel": 1,
+          "n_inliers": 13010,
+          "pitch_deg": 85.881,
+          "pitch_window": [
+            5.0,
+            60.0
+          ],
+          "kept_by_pitch": false,
+          "surface": "near-vertical (85.9 deg > 60.0 deg)"
+        },
+        {
+          "peel": 2,
+          "n_inliers": 2207,
+          "pitch_deg": 85.335,
+          "pitch_window": [
+            5.0,
+            60.0
+          ],
+          "kept_by_pitch": false,
+          "surface": "near-vertical (85.3 deg > 60.0 deg)"
+        },
+        {
+          "peel": 3,
+          "stopped": "largest remaining plane has 1857 inliers < min_points 1933"
+        }
+      ]
+    },
+    {
+      "blob": 1,
+      "area_cu2": 11.453232013655843,
+      "n_candidate": 295300,
+      "planes": [
+        {
+          "n": 101684,
+          "pitch": 9.79,
+          "quality": 2.599,
+          "bar": 2.948,
+          "normal_hex": [
+            "0x1.53fcc6c9c62e0p-3",
+            "0x1.2eee501756bf0p-5",
+            "-0x1.f88a5b322ea5ap-1"
+          ],
+          "gross_cu2": 4.5126,
+          "kept": true
+        },
+        {
+          "n": 81511,
+          "pitch": 23.2,
+          "quality": 0.952,
+          "bar": 2.948,
+          "normal_hex": [
+            "0x1.935c4f0bae4a0p-2",
+            "0x1.bfca6fa455900p-9",
+            "-0x1.d69a0bd8946fap-1"
+          ],
+          "gross_cu2": 3.6851,
+          "kept": true
+        },
+        {
+          "n": 42732,
+          "pitch": 27.51,
+          "quality": 5.259,
+          "bar": 2.948,
+          "normal_hex": [
+            "0x1.d3e149f8cc929p-2",
+            "0x1.15282df884284p-4",
+            "0x1.c61c23a7fb67ep-1"
+          ],
+          "gross_cu2": 2.6327,
+          "rejected_by": "quality 5.259 > bar 2.948",
+          "kept": false
+        },
+        {
+          "n": 27410,
+          "pitch": 38.91,
+          "quality": 1.587,
+          "bar": 2.948,
+          "normal_hex": [
+            "-0x1.7d50809cbf761p-4",
+            "-0x1.3e01e3bbc8d36p-1",
+            "0x1.8e6d19ff6c139p-1"
+          ],
+          "gross_cu2": 2.4363,
+          "kept": true
+        }
+      ],
+      "peels": [
+        {
+          "peel": 0,
+          "n_inliers": 139386,
+          "pitch_deg": 11.562,
+          "pitch_window": [
+            5.0,
+            60.0
+          ],
+          "kept_by_pitch": true,
+          "surface": "roof-pitched"
+        },
+        {
+          "peel": 1,
+          "n_inliers": 53080,
+          "pitch_deg": 20.153,
+          "pitch_window": [
+            5.0,
+            60.0
+          ],
+          "kept_by_pitch": true,
+          "surface": "roof-pitched"
+        },
+        {
+          "peel": 2,
+          "n_inliers": 38425,
+          "pitch_deg": 27.735,
+          "pitch_window": [
+            5.0,
+            60.0
+          ],
+          "kept_by_pitch": true,
+          "surface": "roof-pitched"
+        },
+        {
+          "peel": 3,
+          "n_inliers": 22446,
+          "pitch_deg": 38.313,
+          "pitch_window": [
+            5.0,
+            60.0
+          ],
+          "kept_by_pitch": true,
+          "surface": "roof-pitched"
+        }
+      ]
+    },
+    {
+      "blob": 2,
+      "area_cu2": 3.4026752268768163,
+      "n_candidate": 103274,
+      "planes": [
+        {
+          "n": 77994,
+          "pitch": 22.15,
+          "quality": 1.226,
+          "bar": 2.948,
+          "normal_hex": [
+            "0x1.80ff9ff2d5934p-2",
+            "0x1.c00e0211cfd00p-6",
+            "-0x1.da3a4f93e76cap-1"
+          ],
+          "gross_cu2": 2.8293,
+          "kept": true
+        },
+        {
+          "n": 19906,
+          "pitch": 22.67,
+          "quality": 0.809,
+          "bar": 2.948,
+          "normal_hex": [
+            "-0x1.8a336c6197661p-2",
+            "0x1.34a08936a10a0p-6",
+            "-0x1.d871693f764a2p-1"
+          ],
+          "gross_cu2": 1.2914,
+          "kept": true
+        }
+      ],
+      "peels": [
+        {
+          "peel": 0,
+          "n_inliers": 83562,
+          "pitch_deg": 21.889,
+          "pitch_window": [
+            5.0,
+            60.0
+          ],
+          "kept_by_pitch": true,
+          "surface": "roof-pitched"
+        },
+        {
+          "peel": 1,
+          "n_inliers": 14338,
+          "pitch_deg": 21.856,
+          "pitch_window": [
+            5.0,
+            60.0
+          ],
+          "kept_by_pitch": true,
+          "surface": "roof-pitched"
+        },
+        {
+          "peel": 2,
+          "n_inliers": 4440,
+          "pitch_deg": 88.93,
+          "pitch_window": [
+            5.0,
+            60.0
+          ],
+          "kept_by_pitch": false,
+          "surface": "near-vertical (88.9 deg > 60.0 deg)"
+        },
+        {
+          "peel": 3,
+          "stopped": "remaining points 934 < min_points 1933"
+        }
+      ]
+    },
+    {
+      "blob": 3,
+      "area_cu2": 3.0184314512569737,
+      "n_candidate": 77548,
+      "planes": [
+        {
+          "n": 41761,
+          "pitch": 35.14,
+          "quality": 0.851,
+          "bar": 2.948,
+          "normal_hex": [
+            "0x1.268f2760f825fp-1",
+            "0x1.26136eec6d080p-6",
+            "0x1.a2ae88ae45b1cp-1"
+          ],
+          "gross_cu2": 1.8492,
+          "kept": true
+        },
+        {
+          "n": 33268,
+          "pitch": 34.67,
+          "quality": 0.985,
+          "bar": 2.948,
+          "normal_hex": [
+            "0x1.22f84068b8f41p-1",
+            "0x1.88f440805bce0p-6",
+            "-0x1.a51b0061a4dc2p-1"
+          ],
+          "gross_cu2": 2.093,
+          "kept": true
+        }
+      ],
+      "peels": [
+        {
+          "peel": 0,
+          "n_inliers": 48481,
+          "pitch_deg": 32.604,
+          "pitch_window": [
+            5.0,
+            60.0
+          ],
+          "kept_by_pitch": true,
+          "surface": "roof-pitched"
+        },
+        {
+          "peel": 1,
+          "n_inliers": 26548,
+          "pitch_deg": 33.75,
+          "pitch_window": [
+            5.0,
+            60.0
+          ],
+          "kept_by_pitch": true,
+          "surface": "roof-pitched"
+        },
+        {
+          "peel": 2,
+          "stopped": "largest remaining plane has 1919 inliers < min_points 1933"
+        }
+      ]
+    },
+    {
+      "blob": 4,
+      "area_cu2": 2.6228814248832752,
+      "n_candidate": 111200,
+      "planes": [
+        {
+          "n": 63633,
+          "pitch": 35.16,
+          "quality": 0.649,
+          "bar": 2.948,
+          "normal_hex": [
+            "0x1.264def0a56432p-1",
+            "0x1.15b29c67fe920p-5",
+            "-0x1.a29a1f5da029ap-1"
+          ],
+          "gross_cu2": 1.7386,
+          "kept": true
+        },
+        {
+          "n": 45197,
+          "pitch": 34.11,
+          "quality": 0.89,
+          "bar": 2.948,
+          "normal_hex": [
+            "-0x1.1f11ba308f87dp-1",
+            "0x1.976ed1dd95e00p-8",
+            "-0x1.a7f0a33381b01p-1"
+          ],
+          "gross_cu2": 1.6053,
+          "kept": true
+        }
+      ],
+      "peels": [
+        {
+          "peel": 0,
+          "n_inliers": 74232,
+          "pitch_deg": 31.826,
+          "pitch_window": [
+            5.0,
+            60.0
+          ],
+          "kept_by_pitch": true,
+          "surface": "roof-pitched"
+        },
+        {
+          "peel": 1,
+          "n_inliers": 34598,
+          "pitch_deg": 33.799,
+          "pitch_window": [
+            5.0,
+            60.0
+          ],
+          "kept_by_pitch": true,
+          "surface": "roof-pitched"
+        },
+        {
+          "peel": 2,
+          "stopped": "largest remaining plane has 1462 inliers < min_points 1933"
+        }
+      ]
+    },
+    {
+      "blob": 5,
+      "area_cu2": 2.6195064246582436,
+      "n_candidate": 93660,
+      "planes": [
+        {
+          "n": 52573,
+          "pitch": 35.17,
+          "quality": 0.742,
+          "bar": 2.948,
+          "normal_hex": [
+            "-0x1.269b41a89953ap-1",
+            "-0x1.c1f01740dbe20p-6",
+            "0x1.a2836364a10ffp-1"
+          ],
+          "gross_cu2": 1.7932,
+          "kept": true
+        },
+        {
+          "n": 40884,
+          "pitch": 33.97,
+          "quality": 0.698,
+          "bar": 2.948,
+          "normal_hex": [
+            "-0x1.1e0f97f5381fep-1",
+            "-0x1.d268de0921700p-9",
+            "-0x1.a8a109cc92eaep-1"
+          ],
+          "gross_cu2": 1.4467,
+          "kept": true
+        }
+      ],
+      "peels": [
+        {
+          "peel": 0,
+          "n_inliers": 62412,
+          "pitch_deg": 31.796,
+          "pitch_window": [
+            5.0,
+            60.0
+          ],
+          "kept_by_pitch": true,
+          "surface": "roof-pitched"
+        },
+        {
+          "peel": 1,
+          "n_inliers": 31045,
+          "pitch_deg": 33.747,
+          "pitch_window": [
+            5.0,
+            60.0
+          ],
+          "kept_by_pitch": true,
+          "surface": "roof-pitched"
+        },
+        {
+          "peel": 2,
+          "stopped": "remaining points 203 < min_points 1933"
+        }
+      ]
+    },
+    {
+      "blob": 6,
+      "area_cu2": 2.5839001722841606,
+      "n_candidate": 91531,
+      "planes": [
+        {
+          "n": 54203,
+          "pitch": 34.5,
+          "quality": 0.655,
+          "bar": 2.948,
+          "normal_hex": [
+            "0x1.21a16bffe91d1p-1",
+            "0x1.cfec168603a60p-6",
+            "-0x1.a5f51193ae730p-1"
+          ],
+          "gross_cu2": 1.7713,
+          "kept": true
+        },
+        {
+          "n": 34629,
+          "pitch": 34.01,
+          "quality": 0.6,
+          "bar": 2.948,
+          "normal_hex": [
+            "0x1.1e626381287eep-1",
+            "0x1.21923076e9c00p-10",
+            "0x1.a86a1ec946248p-1"
+          ],
+          "gross_cu2": 1.5587,
+          "kept": true
+        }
+      ],
+      "peels": [
+        {
+          "peel": 0,
+          "n_inliers": 61549,
+          "pitch_deg": 31.749,
+          "pitch_window": [
+            5.0,
+            60.0
+          ],
+          "kept_by_pitch": true,
+          "surface": "roof-pitched"
+        },
+        {
+          "peel": 1,
+          "n_inliers": 27283,
+          "pitch_deg": 33.426,
+          "pitch_window": [
+            5.0,
+            60.0
+          ],
+          "kept_by_pitch": true,
+          "surface": "roof-pitched"
+        },
+        {
+          "peel": 2,
+          "n_inliers": 2164,
+          "pitch_deg": 89.194,
+          "pitch_window": [
+            5.0,
+            60.0
+          ],
+          "kept_by_pitch": false,
+          "surface": "near-vertical (89.2 deg > 60.0 deg)"
+        },
+        {
+          "peel": 3,
+          "stopped": "remaining points 535 < min_points 1933"
+        }
+      ]
+    },
+    {
+      "blob": 7,
+      "area_cu2": 1.5950251063499141,
+      "n_candidate": 38603,
+      "planes": [
+        {
+          "n": 19576,
+          "pitch": 33.35,
+          "quality": 0.947,
+          "bar": 2.948,
+          "normal_hex": [
+            "0x1.65cf1d4a35d2dp-6",
+            "-0x1.19460b980b6fap-1",
+            "0x1.abac448942931p-1"
+          ],
+          "gross_cu2": 1.1543,
+          "kept": true
+        },
+        {
+          "n": 19017,
+          "pitch": 32.75,
+          "quality": 0.817,
+          "bar": 2.948,
+          "normal_hex": [
+            "0x1.585c24e3b7739p-7",
+            "-0x1.14f2b61f805bcp-1",
+            "-0x1.ae99232746148p-1"
+          ],
+          "gross_cu2": 0.9532,
+          "kept": true
+        }
+      ],
+      "peels": [
+        {
+          "peel": 0,
+          "n_inliers": 25203,
+          "pitch_deg": 29.048,
+          "pitch_window": [
+            5.0,
+            60.0
+          ],
+          "kept_by_pitch": true,
+          "surface": "roof-pitched"
+        },
+        {
+          "peel": 1,
+          "n_inliers": 13390,
+          "pitch_deg": 32.176,
+          "pitch_window": [
+            5.0,
+            60.0
+          ],
+          "kept_by_pitch": true,
+          "surface": "roof-pitched"
+        },
+        {
+          "peel": 2,
+          "stopped": "remaining points 10 < min_points 1933"
+        }
+      ]
+    },
+    {
+      "blob": 8,
+      "area_cu2": 1.3461188397538368,
+      "n_candidate": 34880,
+      "planes": [
+        {
+          "n": 34880,
+          "pitch": 8.49,
+          "quality": 1.582,
+          "bar": 2.948,
+          "normal_hex": [
+            "0x1.61e92122e3239p-4",
+            "0x1.ea1a9e2765b7fp-4",
+            "-0x1.fa64953480a3fp-1"
+          ],
+          "gross_cu2": 1.4483,
+          "kept": true
+        }
+      ],
+      "peels": [
+        {
+          "peel": 0,
+          "n_inliers": 34880,
+          "pitch_deg": 8.487,
+          "pitch_window": [
+            5.0,
+            60.0
+          ],
+          "kept_by_pitch": true,
+          "surface": "roof-pitched"
+        },
+        {
+          "peel": 1,
+          "stopped": "remaining points 0 < min_points 1933"
+        }
+      ]
+    },
+    {
+      "blob": 9,
+      "area_cu2": 0.6976125465140229,
+      "n_candidate": 15474,
+      "planes": [
+        {
+          "n": 13970,
+          "pitch": 21.57,
+          "quality": 2.045,
+          "bar": 2.948,
+          "normal_hex": [
+            "-0x1.7855d45cc9ed3p-2",
+            "0x1.16f469f6e5350p-7",
+            "-0x1.dc2629dcfa0fdp-1"
+          ],
+          "gross_cu2": 0.915,
+          "kept": true
+        }
+      ],
+      "peels": [
+        {
+          "peel": 0,
+          "n_inliers": 13970,
+          "pitch_deg": 21.212,
+          "pitch_window": [
+            5.0,
+            60.0
+          ],
+          "kept_by_pitch": true,
+          "surface": "roof-pitched"
+        },
+        {
+          "peel": 1,
+          "stopped": "remaining points 1504 < min_points 1933"
+        }
+      ]
+    },
+    {
+      "blob": 10,
+      "area_cu2": 0.6726375448487895,
+      "n_candidate": 10390,
+      "planes": [
+        {
+          "n": 9839,
+          "pitch": 32.79,
+          "quality": 1.721,
+          "bar": 2.948,
+          "normal_hex": [
+            "0x1.e9c64227a6f72p-6",
+            "-0x1.14d71a56db95dp-1",
+            "-0x1.ae6dda5dd49f4p-1"
+          ],
+          "gross_cu2": 0.9676,
+          "kept": true
+        }
+      ],
+      "peels": [
+        {
+          "peel": 0,
+          "n_inliers": 9839,
+          "pitch_deg": 30.536,
+          "pitch_window": [
+            5.0,
+            60.0
+          ],
+          "kept_by_pitch": true,
+          "surface": "roof-pitched"
+        },
+        {
+          "peel": 1,
+          "stopped": "remaining points 551 < min_points 1933"
+        }
+      ]
+    },
+    {
+      "blob": 11,
+      "area_cu2": 0.49916253328216736,
+      "n_candidate": 10524,
+      "planes": [
+        {
+          "n": 8532,
+          "pitch": 33.04,
+          "quality": 1.541,
+          "bar": 2.948,
+          "normal_hex": [
+            "-0x1.96f67ae2d1b97p-6",
+            "0x1.16d568ea64f11p-1",
+            "0x1.ad399726b5ca2p-1"
+          ],
+          "gross_cu2": 0.7222,
+          "kept": true
+        }
+      ],
+      "peels": [
+        {
+          "peel": 0,
+          "n_inliers": 8532,
+          "pitch_deg": 32.415,
+          "pitch_window": [
+            5.0,
+            60.0
+          ],
+          "kept_by_pitch": true,
+          "surface": "roof-pitched"
+        },
+        {
+          "peel": 1,
+          "stopped": "largest remaining plane has 1676 inliers < min_points 1933"
+        }
+      ]
+    },
+    {
+      "blob": 12,
+      "area_cu2": 0.4298062786577689,
+      "n_candidate": 10887,
+      "planes": [
+        {
+          "n": 10345,
+          "pitch": 33.26,
+          "quality": 0.83,
+          "bar": 2.948,
+          "normal_hex": [
+            "0x1.b1f24c4a77a2dp-7",
+            "-0x1.18b48cb85df73p-1",
+            "-0x1.ac2374cf257f0p-1"
+          ],
+          "gross_cu2": 0.5665,
+          "kept": true
+        }
+      ],
+      "peels": [
+        {
+          "peel": 0,
+          "n_inliers": 10345,
+          "pitch_deg": 33.222,
+          "pitch_window": [
+            5.0,
+            60.0
+          ],
+          "kept_by_pitch": true,
+          "surface": "roof-pitched"
+        },
+        {
+          "peel": 1,
+          "stopped": "remaining points 542 < min_points 1933"
+        }
+      ]
+    },
+    {
+      "blob": 13,
+      "area_cu2": 0.35656877377458407,
+      "n_candidate": 18467,
+      "planes": [
+        {
+          "n": 2206,
+          "pitch": 42.42,
+          "quality": 4.693,
+          "bar": 2.948,
+          "normal_hex": [
+            "0x1.591966e58f8c4p-1",
+            "0x1.bcae8f5beee40p-6",
+            "0x1.79f6ff6f5e8bcp-1"
+          ],
+          "gross_cu2": 0.1332,
+          "rejected_by": "quality 4.693 > bar 2.948",
+          "kept": false
+        }
+      ],
+      "peels": [
+        {
+          "peel": 0,
+          "n_inliers": 9471,
+          "pitch_deg": 88.359,
+          "pitch_window": [
+            5.0,
+            60.0
+          ],
+          "kept_by_pitch": false,
+          "surface": "near-vertical (88.4 deg > 60.0 deg)"
+        },
+        {
+          "peel": 1,
+          "n_inliers": 5100,
+          "pitch_deg": 88.583,
+          "pitch_window": [
+            5.0,
+            60.0
+          ],
+          "kept_by_pitch": false,
+          "surface": "near-vertical (88.6 deg > 60.0 deg)"
+        },
+        {
+          "peel": 2,
+          "n_inliers": 2206,
+          "pitch_deg": 42.596,
+          "pitch_window": [
+            5.0,
+            60.0
+          ],
+          "kept_by_pitch": true,
+          "surface": "roof-pitched"
+        },
+        {
+          "peel": 3,
+          "stopped": "remaining points 1690 < min_points 1933"
+        }
+      ]
+    },
+    {
+      "blob": 14,
+      "area_cu2": 0.21195001413198183,
+      "n_candidate": 4585,
+      "planes": [
+        {
+          "n": 3253,
+          "pitch": 19.2,
+          "quality": 6.823,
+          "bar": 2.948,
+          "normal_hex": [
+            "-0x1.d0fb94b537a00p-3",
+            "-0x1.e73cb16a513d4p-3",
+            "-0x1.e3859c3ba3684p-1"
+          ],
+          "gross_cu2": 0.1946,
+          "rejected_by": "quality 6.823 > bar 2.948",
+          "kept": false
+        }
+      ],
+      "peels": [
+        {
+          "peel": 0,
+          "n_inliers": 3253,
+          "pitch_deg": 18.278,
+          "pitch_window": [
+            5.0,
+            60.0
+          ],
+          "kept_by_pitch": true,
+          "surface": "roof-pitched"
+        },
+        {
+          "peel": 1,
+          "stopped": "remaining points 1332 < min_points 1933"
+        }
+      ]
+    },
+    {
+      "blob": 15,
+      "area_cu2": 0.20958751397445974,
+      "n_candidate": 2623,
+      "planes": [],
+      "peels": [
+        {
+          "peel": 0,
+          "n_inliers": 2623,
+          "pitch_deg": 4.01,
+          "pitch_window": [
+            5.0,
+            60.0
+          ],
+          "kept_by_pitch": false,
+          "surface": "near-flat (4.0 deg < 5.0 deg)"
+        },
+        {
+          "peel": 1,
+          "stopped": "remaining points 0 < min_points 1933"
+        }
+      ]
+    },
+    {
+      "blob": 16,
+      "area_cu2": 0.2036812635806545,
+      "n_candidate": 4294,
+      "planes": [
+        {
+          "n": 3970,
+          "pitch": 33.23,
+          "quality": 1.104,
+          "bar": 2.948,
+          "normal_hex": [
+            "-0x1.0cbdd9f87e74ap-6",
+            "0x1.187b7492a7f57p-1",
+            "-0x1.ac41878758dcep-1"
+          ],
+          "gross_cu2": 0.2884,
+          "kept": true
+        }
+      ],
+      "peels": [
+        {
+          "peel": 0,
+          "n_inliers": 3970,
+          "pitch_deg": 32.699,
+          "pitch_window": [
+            5.0,
+            60.0
+          ],
+          "kept_by_pitch": true,
+          "surface": "roof-pitched"
+        },
+        {
+          "peel": 1,
+          "stopped": "remaining points 324 < min_points 1933"
+        }
+      ]
+    }
+  ],
+  "wall_clock_s": 172.0
+}

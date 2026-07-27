@@ -29,7 +29,8 @@
 #   area      -> each plan cell belongs to exactly ONE facet (see the
 #                area-ownership logic in the recon, not here).
 import numpy as np
-from scipy.ndimage import binary_erosion, label, find_objects
+from scipy.ndimage import (binary_erosion, binary_fill_holes, label,
+                           find_objects)
 from scipy.spatial import Delaunay
 
 from roofkit.segment import (find_roof_planes, assign_to_planes,
@@ -56,15 +57,39 @@ def cell_centers(cells, g):
                             g["ylo"] + (cells[:, 1] + 0.5) * g["cell"]])
 
 
-def coverage_masks(roof, facets, band, cell, min_pts=2):
-    """Split the plan grid into building / explained / residual masks.
+def coverage_masks(roof, facets, band, cell, min_pts=2, fill_holes=True):
+    """Split the plan grid into footprint / explained / residual masks.
 
-    building : a cell holding at least min_pts roof points (real surface).
-    interior : building eroded by one cell, so the partially-filled
+    testable : a cell holding at least min_pts roof points. Only these can be
+               tested at all: a cell with one point cannot show whether a
+               facet explains it.
+    footprint: `testable` with ENCLOSED HOLES FILLED. A cell completely
+               surrounded by roof is inside the building whatever its point
+               count, because a roof is a closed surface. See below.
+    interior : footprint eroded by one cell, so the partially-filled
                perimeter fringe cannot masquerade as unexplained (trap 1).
     explained: a cell at least min_pts of whose points lie within `band`
                of some accepted facet plane (its points belong to a facet).
-    residual : interior building cells that are NOT explained -> the gaps.
+    residual : interior TESTABLE cells that are NOT explained -> the gaps.
+
+    `building` is kept as an alias of `testable` so older callers still work.
+
+    WHY HOLES ARE FILLED BEFORE ERODING (decision 2026-07-26). The mask is not
+    a clean outline. On big_house it contains 111,154 enclosed holes totalling
+    370,079 cells, most of them a single cell, because a cell needs 2 points to
+    count and 249,745 cells inside the roof hold exactly 1. Eroding that mask
+    widens every hole from the inside: 90 to 95 percent of what each erosion
+    ring removed was hole boundary, not building outline, and the one-cell
+    erosion alone discarded 32.5 percent of the roof. Coverage was therefore
+    being reported as a percentage of something that was not the footprint.
+
+    Filling is not a patch, it is the project's own invariant applied to the
+    mask instead of to the facets: a roof is a CLOSED SURFACE, so a cell
+    entirely enclosed by roof is roof. It introduces no parameter and no
+    threshold. It cannot bridge a real courtyard or light well either, because
+    binary_fill_holes only fills regions with no path to the outside, and any
+    genuine opening is reported in the filled-hole size table so a real one
+    surfaces instead of being silently absorbed.
 
     Returns (masks dict, grid dict, owner, dist). owner/dist come from
     assign_to_planes so the caller can pull a blob's unexplained points."""
@@ -78,13 +103,141 @@ def coverage_masks(roof, facets, band, cell, min_pts=2):
                                 range=[[g["xlo"], g["xlo"] + g["nx"] * cell],
                                        [g["ylo"], g["ylo"] + g["ny"] * cell]],
                                 weights=w)
-    building = Hall >= min_pts
-    interior = binary_erosion(building, iterations=1)
+    testable = Hall >= min_pts
+    # fill_holes=False reproduces the PRE-2026-07-26 base, in which the mask was
+    # eroded with its holes still in it. It exists so the coverage change can be
+    # attributed step by step to its three causes, and so a superseded number
+    # can be recomputed rather than merely quoted. Never use it for a real run:
+    # it is the defect, kept runnable on purpose.
+    footprint = binary_fill_holes(testable) if fill_holes else testable
+    interior = binary_erosion(footprint, iterations=1)
     explained = Hexp >= min_pts
-    residual = interior & building & ~explained
-    masks = dict(building=building, interior=interior,
-                 explained=explained, residual=residual)
+    # Residual counts only cells that CAN be tested. A filled hole holds fewer
+    # than 2 points, so no facet could ever explain it; charging it as
+    # unexplained would blame the segmentation for a capture shortfall. It is
+    # counted instead by the density-testable fraction, which is what that
+    # shortfall actually is.
+    residual = interior & testable & ~explained
+    masks = dict(testable=testable, footprint=footprint,
+                 building=testable,          # alias, kept for older callers
+                 filled=footprint & ~testable,
+                 interior=interior, explained=explained, residual=residual)
     return masks, g, owner, dist
+
+
+def footprint_three_ways(masks, cell):
+    """The three footprint numbers that make the erosion defect visible to any
+    reader, without them having to know it exists (decision 2026-07-26).
+
+    raw      : cells holding at least 2 points.
+    filled   : the same mask with enclosed holes filled.
+    eroded   : filled, then eroded by one cell. THIS is the base coverage is
+               reported against, and before hole filling it was a third
+               smaller than the roof.
+
+    Reporting one number invites the reader to assume it is the footprint.
+    Reporting all three shows what each step costs."""
+    a = cell * cell
+    raw = int(masks["testable"].sum())
+    fil = int(masks["footprint"].sum())
+    ero = int((masks["interior"] & masks["footprint"]).sum())
+    return dict(
+        raw_cells_at_2_points=raw, raw_cu2=round(raw * a, 3),
+        holes_filled_cells=fil - raw, holes_filled_cu2=round((fil - raw) * a, 3),
+        filled_cells=fil, filled_cu2=round(fil * a, 3),
+        eroded_cells=ero, eroded_cu2=round(ero * a, 3),
+        erosion_cost_cells=fil - ero, erosion_cost_cu2=round((fil - ero) * a, 3),
+        erosion_cost_pct_of_filled=round(100.0 * (fil - ero) / max(fil, 1), 2))
+
+
+def filled_hole_report(masks, cell, top_n=10):
+    """Size distribution of the enclosed holes that were filled, plus the
+    largest few.
+
+    Filling is safe on a roof, but it must not be silent. A genuine courtyard,
+    light well or atrium on a future building would also be an enclosed hole,
+    and filling it would quietly add area that is not roof. So every filled
+    region is measured and the largest are named: a single hole of a few square
+    metres is a feature, ten thousand single-cell holes are sparse capture."""
+    lab, n = label(masks["filled"])
+    a = cell * cell
+    if n == 0:
+        return dict(n_holes=0, total_cells=0, total_cu2=0.0, size_histogram=[],
+                    largest=[], reading="no enclosed holes")
+    sizes = np.bincount(lab.ravel())[1:]
+    buckets = [(1, 1), (2, 2), (3, 4), (5, 9), (10, 24), (25, 99),
+               (100, 999), (1000, 10 ** 9)]
+    hist = []
+    for lo, hi in buckets:
+        m = (sizes >= lo) & (sizes <= hi)
+        if m.any():
+            hist.append(dict(size_cells=(f"{lo}" if lo == hi else f"{lo}-{hi}"),
+                             n_holes=int(m.sum()),
+                             total_cells=int(sizes[m].sum()),
+                             total_cu2=round(float(sizes[m].sum()) * a, 4)))
+    order = np.argsort(sizes)[::-1][:top_n]
+    largest = [dict(rank=r + 1, cells=int(sizes[k]),
+                    cu2=round(float(sizes[k]) * a, 4))
+               for r, k in enumerate(order)]
+    biggest = float(sizes.max()) * a
+    return dict(
+        n_holes=int(n), total_cells=int(sizes.sum()),
+        total_cu2=round(float(sizes.sum()) * a, 4),
+        median_size_cells=int(np.median(sizes)),
+        size_histogram=hist, largest=largest,
+        reading=(f"largest single filled region is {biggest:.4f} cu^2. If that "
+                 f"is a meaningful fraction of the roof, check it against the "
+                 f"imagery before trusting the filled footprint: a real "
+                 f"courtyard or light well would look exactly like this."))
+
+
+def split_coverage(masks, cell):
+    """Coverage split into the two questions it was conflating (decision
+    2026-07-26).
+
+    One percentage was answering two things at once, so a change in it could
+    not be attributed. They are separated:
+
+      density_testable_fraction = testable cells / footprint cells, inside the
+        eroded interior. How much of the roof has enough points to test AT ALL.
+        This is a CAPTURE-QUALITY metric: it measures the flight, the overlap
+        and the reconstruction, and the segmentation cannot move it.
+
+      facet_coverage = explained / testable, inside the eroded interior. Of the
+        region that can be tested, how much a facet explains. This is the
+        SEGMENTATION metric, and it is the one the coverage gate was built to
+        produce.
+
+    Keeping them apart matters because they move for opposite reasons. A sparse
+    capture drags the combined number down and looks like a segmentation
+    failure; that is exactly what was happening."""
+    a = cell * cell
+    interior = masks["interior"]
+    testable = interior & masks["testable"]
+    foot = interior & masks["footprint"]
+    expl = testable & masks["explained"]
+    n_t, n_f, n_e = int(testable.sum()), int(foot.sum()), int(expl.sum())
+    return dict(
+        density_testable_fraction=dict(
+            question="how much of the footprint has enough points to test at all",
+            kind="CAPTURE quality: the flight and the reconstruction, not the "
+                 "segmentation",
+            testable_cells=n_t, testable_cu2=round(n_t * a, 3),
+            footprint_cells=n_f, footprint_cu2=round(n_f * a, 3),
+            untestable_cu2=round((n_f - n_t) * a, 3),
+            pct=round(100.0 * n_t / max(n_f, 1), 2)),
+        facet_coverage=dict(
+            question="of the testable region, how much does a facet explain",
+            kind="SEGMENTATION: this is what the coverage gate was built to "
+                 "measure",
+            explained_cells=n_e, explained_cu2=round(n_e * a, 3),
+            testable_cells=n_t, testable_cu2=round(n_t * a, 3),
+            unexplained_cu2=round((n_t - n_e) * a, 3),
+            pct=round(100.0 * n_e / max(n_t, 1), 2)),
+        note="these two do not multiply to the old single number, and are not "
+             "meant to. The old number mixed a capture shortfall into a "
+             "segmentation score against a base that hole-erosion had already "
+             "shrunk by a third.")
 
 
 def residual_blobs(residual_mask, g, min_area):
@@ -155,10 +308,10 @@ def calibrate_quality_bar(facets, spacing):
 
 
 def recover_facets(roof, blobs, owner, dist, band, spacing, quality_bar,
-                   min_pitch=10.0, max_pitch=60.0, size_floor=300,
+                   min_pitch=5.0, max_pitch=60.0, size_floor=300,
                    max_planes_per_blob=4, log=None,
                    min_points_hard=None, min_area_hard=None, alpha_mult=4.0,
-                   probability=1.0):
+                   probability=1.0, selection="cells", *, grid):
     """Recover the missing facets inside residual blobs.
 
     For each blob we take its UNEXPLAINED points (dist > band: the surfaces
@@ -192,21 +345,60 @@ def recover_facets(roof, blobs, owner, dist, band, spacing, quality_bar,
     fail the same floor on net. A final net-area check belongs after area
     accounting, where net actually exists.
 
+    CANDIDATE SELECTION IS BY CELL, NOT BY BOUNDING BOX (decision 2026-07-26).
+    `grid` is the plan grid from coverage_masks and is REQUIRED, because
+    selecting by box was a real defect, not a theoretical one: two recovered
+    facets on big_house ended up owning 9,739 of the same points. Connected
+    components guarantee that two blobs share no CELL, but they say nothing
+    about their bounding BOXES, which can overlap or even nest; blob 7's and
+    blob 10's overlapped by 73 percent of the smaller. A point inside both boxes
+    was offered to both blobs and fitted twice.
+
+    Selecting by the blob's own cells makes that impossible BY CONSTRUCTION
+    rather than unlikely: blobs share no cell, and every point falls in exactly
+    one cell, so no point can be offered to two blobs. That is a structural
+    guarantee, which is worth more than a fix that removes the observed case.
+    `assert_single_ownership` then checks the guarantee on every run.
+
     Returns a list of new facet dicts {points, normal, pitch, blob, quality}.
     `log`, if given a list, receives one dict per blob describing the pass
     (points tried, planes found, why each was kept or rejected)."""
+    # Every roof point's plan cell, computed once. Cell membership is what makes
+    # the blobs disjoint, so it is what selection must use.
+    g = grid
+    ny1 = np.int64(g["ny"] + 1)
+    pi = np.clip(((roof[:, 0] - g["xlo"]) / g["cell"]).astype(np.int64),
+                 0, g["nx"] - 1)
+    pj = np.clip(((roof[:, 1] - g["ylo"]) / g["cell"]).astype(np.int64),
+                 0, g["ny"] - 1)
+    point_cell = pi * ny1 + pj
+    unexplained = dist > band
+
+    if selection not in ("cells", "box"):
+        raise ValueError(f"selection must be 'cells' or 'box', got {selection!r}")
+
     new_facets = []
-    building_pt_cell = None
     for bi, blob in enumerate(blobs):
-        # unexplained points geographically inside this blob's cells
-        cx0, cy0 = blob["box"][0]
-        cx1, cy1 = blob["box"][1]
-        inbox = ((roof[:, 0] >= cx0) & (roof[:, 0] <= cx1) &
-                 (roof[:, 1] >= cy0) & (roof[:, 1] <= cy1))
         # cand_idx: where each candidate point sits in `roof`. find_roof_planes
         # returns indices into what IT was given (cand), so composing the two
         # gives indices into roof. Carried for R1; nothing numeric reads it.
-        cand_idx = np.flatnonzero(inbox & (dist > band))
+        if selection == "cells":
+            # The blob's OWN cells, as the same single-integer ids. Two blobs
+            # never share a cell, and a point sits in exactly one cell, so no
+            # point can be offered to two blobs.
+            blob_cells = (blob["cells"][:, 0].astype(np.int64) * ny1 +
+                          blob["cells"][:, 1].astype(np.int64))
+            cand_idx = np.flatnonzero(unexplained &
+                                      np.isin(point_cell, blob_cells))
+        else:
+            # THE DEFECT, kept runnable so superseded states can be reproduced
+            # and the coverage change attributed. Blob bounding boxes overlap
+            # even though blob cells do not, so this hands the same points to
+            # two blobs and fits them twice. Never use it for a real run.
+            (cx0, cy0), (cx1, cy1) = blob["box"]
+            inbox = ((roof[:, 0] >= cx0) & (roof[:, 0] <= cx1) &
+                     (roof[:, 1] >= cy0) & (roof[:, 1] <= cy1))
+            cand_idx = np.flatnonzero(inbox & unexplained)
         cand = roof[cand_idx]
         entry = dict(blob=bi, area_cu2=blob["area_cu2"], n_candidate=len(cand),
                      planes=[])

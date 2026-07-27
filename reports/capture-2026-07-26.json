@@ -1,0 +1,103 @@
+{
+  "task": "capture quality: density-testable fraction, measured BEFORE the pipeline runs",
+  "date": "2026-07-26",
+  "why": "big_house's mask is riddled with single-point cells, which is a capture shortfall and is permanent for that site because it cannot be re-flown. bungalow was flown by the same operator, so the same question has to be asked before anything is frozen on it.",
+  "comparability": "raw-cloud figures are comparable only to other raw-cloud figures: a raw cloud mixes ground, vegetation and walls with the roof and their densities differ. Roof-only figures are comparable to other roof-only figures.",
+  "method": {
+    "cell": "2.5 x median nearest-neighbour spacing, the pipeline's own grid rule, so the number means the same thing here as in the coverage report",
+    "testable": "a cell holding at least 2 points",
+    "footprint": "occupied cells with enclosed holes filled"
+  },
+  "measurements": [
+    {
+      "subject": "bungalow (raw cloud)",
+      "n_points": 19537267,
+      "spacing_cu": 0.005385,
+      "cell_cu": 0.013463,
+      "grid": {
+        "nx": 5703,
+        "ny": 5017
+      },
+      "footprint_cells": 4096698,
+      "footprint_cu2": 742.526,
+      "occupied_cells": 3716553,
+      "testable_cells": 2748358,
+      "density_testable_pct": 67.09,
+      "untestable_cells": 1348340,
+      "untestable_cu2": 244.387,
+      "cells_with_1_point": 968195,
+      "cells_with_0_points": 380145,
+      "enclosed_holes": 118861,
+      "enclosed_hole_cells": 380145,
+      "median_hole_cells": 1,
+      "points_per_occupied_cell": {
+        "mean": 5.26,
+        "median": 3.0,
+        "p10": 1.0,
+        "p25": 1.0,
+        "p90": 11.0
+      },
+      "reading": "points_per_occupied_cell p10 is the number that matters: the cell size is 2.5 x spacing, so a UNIFORM cloud would put several points in every occupied cell. A p10 of 1 means the sparsest tenth of the surface cannot be tested at all."
+    },
+    {
+      "subject": "big_house (raw cloud)",
+      "n_points": 21325293,
+      "spacing_cu": 0.005099,
+      "cell_cu": 0.012748,
+      "grid": {
+        "nx": 3133,
+        "ny": 4806
+      },
+      "footprint_cells": 5218517,
+      "footprint_cu2": 848.009,
+      "occupied_cells": 4426038,
+      "testable_cells": 3166437,
+      "density_testable_pct": 60.68,
+      "untestable_cells": 2052080,
+      "untestable_cu2": 333.463,
+      "cells_with_1_point": 1259601,
+      "cells_with_0_points": 792479,
+      "enclosed_holes": 198107,
+      "enclosed_hole_cells": 792479,
+      "median_hole_cells": 1,
+      "points_per_occupied_cell": {
+        "mean": 4.82,
+        "median": 3.0,
+        "p10": 1.0,
+        "p25": 1.0,
+        "p90": 11.0
+      },
+      "reading": "points_per_occupied_cell p10 is the number that matters: the cell size is 2.5 x spacing, so a UNIFORM cloud would put several points in every occupied cell. A p10 of 1 means the sparsest tenth of the surface cannot be tested at all."
+    },
+    {
+      "subject": "big_house (isolated roof)",
+      "n_points": 9293239,
+      "spacing_cu": 0.005196,
+      "cell_cu": 0.01299,
+      "grid": {
+        "nx": 2237,
+        "ny": 2699
+      },
+      "footprint_cells": 2274654,
+      "footprint_cu2": 383.848,
+      "occupied_cells": 2091839,
+      "testable_cells": 1774384,
+      "density_testable_pct": 78.01,
+      "untestable_cells": 500270,
+      "untestable_cu2": 84.421,
+      "cells_with_1_point": 317455,
+      "cells_with_0_points": 182815,
+      "enclosed_holes": 77487,
+      "enclosed_hole_cells": 182815,
+      "median_hole_cells": 1,
+      "points_per_occupied_cell": {
+        "mean": 4.44,
+        "median": 4.0,
+        "p10": 1.0,
+        "p25": 2.0,
+        "p90": 8.0
+      },
+      "reading": "points_per_occupied_cell p10 is the number that matters: the cell size is 2.5 x spacing, so a UNIFORM cloud would put several points in every occupied cell. A p10 of 1 means the sparsest tenth of the surface cannot be tested at all."
+    }
+  ]
+}

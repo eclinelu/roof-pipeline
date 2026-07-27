@@ -160,7 +160,8 @@ def main():
         masks, g, _, dist = cov.coverage_masks(points, facets, band, cell)
         blobs = cov.residual_blobs(masks["residual"], g, MIN_BLOB_AREA)
         new = cov.recover_facets(points, blobs, None, dist, band, s_full, bar,
-                                 alpha_mult=cfg["alpha_mult"], probability=1.0)
+                                 alpha_mult=cfg["alpha_mult"], probability=1.0,
+                                 grid=g)
         allf = facets + new
         full.append([dict(pitch=float(f["pitch"]), n=int(len(f["points"])))
                      for f in allf])

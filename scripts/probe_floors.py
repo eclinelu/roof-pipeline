@@ -129,7 +129,7 @@ def main():
     new = cov.recover_facets(points, blobs, None, dist, band, s_full, bar,
                              alpha_mult=cfg["alpha_mult"], probability=1.0,
                              min_points_hard=None, min_area_hard=None,
-                             log=log)
+                             log=log, grid=g)
     print(f"  UNFLOORED: {len(facets)} main + {len(new)} recovered = "
           f"{len(facets) + len(new)}   (canonical floored run: 8 + 17 = 25)")
 

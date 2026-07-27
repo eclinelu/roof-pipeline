@@ -118,7 +118,8 @@ def main():
 
     # 6. recover facets (relaxed SIZE, identical QUALITY)
     log = []
-    new = cov.recover_facets(points, blobs, owner, dist, band, s_full, bar, log=log)
+    new = cov.recover_facets(points, blobs, owner, dist, band, s_full, bar,
+                             log=log, grid=g)
     print(f"\n6. RECOVERED {len(new)} facets (relaxed size, fixed quality):")
     for e in log:
         head = f"   blob {e['blob']} ({e['area_cu2']:.2f} cu^2, {e['n_candidate']:,} unexpl pts)"

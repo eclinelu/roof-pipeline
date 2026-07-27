@@ -168,7 +168,7 @@ def run_once(dataset, out_path):
     new = cov.recover_facets(points, blobs, None, dist, band, s_full, bar,
                              alpha_mult=cfg["alpha_mult"], probability=1.0,
                              min_points_hard=MIN_POINTS,
-                             min_area_hard=min_area, log=log)
+                             min_area_hard=min_area, log=log, grid=g)
     t["recovery_s"] = time.perf_counter() - t0
     t["total_s"] = sum(t.values())
 

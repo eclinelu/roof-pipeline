@@ -147,13 +147,13 @@ def summarize(reps):
 
 
 def run_variant(points, blobs, dist, band, spacing, bar, reps, alpha_mult,
-                use_floor, probability, label):
+                use_floor, probability, label, g):
     """Run recovery `reps` times, re-seeding identically before each."""
     got = []
     for _ in range(reps):
         o3d.utility.random.seed(0)          # SAME seed every repetition
         new = cov.recover_facets(
-            points, blobs, None, dist, band, spacing, bar,
+            points, blobs, None, dist, band, spacing, bar, grid=g,
             min_points_hard=(MIN_POINTS if use_floor else None),
             min_area_hard=(MIN_AREA_CU2 if use_floor else None),
             alpha_mult=alpha_mult, probability=probability)
@@ -212,7 +212,7 @@ def main():
     for label, use_floor, prob in variants:
         results.append(run_variant(points, blobs, dist, band, spacing, bar,
                                    args.reps, cfg["alpha_mult"],
-                                   use_floor, prob, label))
+                                   use_floor, prob, label, g))
 
     tag = f"-{_THREADS}thread" if _THREADS else ""
     doc = dict(
