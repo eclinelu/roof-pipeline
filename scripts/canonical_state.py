@@ -300,7 +300,8 @@ def main():
                     max_pitch_deg=60.0,
                     min_pitch_note="5, not 10. min_pitch is a DEFINITION of "
                                    "what counts as a roof, not a filter; see "
-                                   "decisions/2026-07-26-min-pitch-definition.",
+                                   "decisions/"
+                                   "2026-07-26-min-pitch-definition-not-filter.md",
                     # THE FLOOR ACTUALLY USED, written out so it can be audited.
                     # It is derived per dataset, so a reader cannot look it up
                     # in the source. (Emmett, 2026-07-26.)

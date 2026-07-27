@@ -4,6 +4,8 @@ _Append only. Newest at the top. Past entries are never edited. A reversal is a 
 
 ## Entries (newest first)
 
+- [2026-07-26: Coverage splits into a capture metric and a segmentation metric, over a hole-filled footprint](2026-07-26-coverage-split-capture-and-segmentation.md)
+- [2026-07-26: min_pitch is a definition of what counts as a roof, not a filter; set to 5, with a separate low-slope label](2026-07-26-min-pitch-definition-not-filter.md)
 - [2026-07-26: Blob candidates are selected by CELLS, not bounding box; a permanent assertion enforces single ownership](2026-07-26-duplicate-points-cell-selection.md)
 - [2026-07-26: The 2026-07-23 facet state is SUPERSEDED, not corrected](2026-07-26-2026-07-23-state-superseded.md)
 - [2026-07-26: The size floor is kept as a junk-facet filter, and both thresholds are stated in transferable form](2026-07-26-size-floor-as-junk-filter.md)
