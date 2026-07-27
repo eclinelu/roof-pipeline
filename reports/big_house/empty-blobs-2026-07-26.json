@@ -1,0 +1,77 @@
+{
+  "task": "Task 6 step 6 (6C): blobs producing no accepted facet, canonical 2026-07-26 state",
+  "dataset": "big_house",
+  "date": "2026-07-26",
+  "instrument": "find_roof_planes now takes a peel_log and records EVERY plane it peels, with its pitch, BEFORE the pitch window filters it. Previously that filter was silent, so a blob yielding no facet could not be told apart from a blob where RANSAC found nothing at all. Those are different diagnoses and only one of them is a problem.",
+  "pitch_window_deg": [
+    10.0,
+    60.0
+  ],
+  "n_blobs_total": 14,
+  "n_blobs_empty": 4,
+  "blobs": [
+    {
+      "blob": 6,
+      "plan_area_cu2": 1.0734,
+      "n_unexplained_points": 51437,
+      "n_planes_peeled": 1,
+      "points_in_peeled_planes": 51432,
+      "pitches_deg": [
+        8.158
+      ],
+      "n_near_vertical": 0,
+      "n_near_flat": 1,
+      "terminated": "remaining points 5 < min_points 2000",
+      "why_no_facet": "every surface here is near-FLAT (8.2 deg, below the 10.0 deg minimum). This is a low-slope surface sitting outside the roof-facet definition, not a facet the fit failed to find."
+    },
+    {
+      "blob": 8,
+      "plan_area_cu2": 0.5648,
+      "n_unexplained_points": 70643,
+      "n_planes_peeled": 4,
+      "points_in_peeled_planes": 63698,
+      "pitches_deg": [
+        89.136,
+        88.52,
+        6.143,
+        87.644
+      ],
+      "n_near_vertical": 3,
+      "n_near_flat": 1,
+      "terminated": "hit max_planes_per_blob",
+      "why_no_facet": "mixed: 3 near-vertical (89.1, 88.5, 87.6 deg) and 1 near-flat (6.1 deg) surface(s), none inside the 10.0-60.0 deg roof window"
+    },
+    {
+      "blob": 12,
+      "plan_area_cu2": 0.1601,
+      "n_unexplained_points": 22571,
+      "n_planes_peeled": 2,
+      "points_in_peeled_planes": 21443,
+      "pitches_deg": [
+        89.07,
+        88.617
+      ],
+      "n_near_vertical": 2,
+      "n_near_flat": 0,
+      "terminated": "remaining points 1128 < min_points 2000",
+      "why_no_facet": "every surface here is near-VERTICAL (89.1, 88.6 deg, above the 60.0 deg maximum). Vertical surfaces are not roof facets: they are dormer cheeks, gable ends or wall tops. Nothing is missing here."
+    },
+    {
+      "blob": 13,
+      "plan_area_cu2": 0.1593,
+      "n_unexplained_points": 22892,
+      "n_planes_peeled": 3,
+      "points_in_peeled_planes": 22349,
+      "pitches_deg": [
+        88.16,
+        84.316,
+        65.69
+      ],
+      "n_near_vertical": 3,
+      "n_near_flat": 0,
+      "terminated": "remaining points 543 < min_points 2000",
+      "why_no_facet": "every surface here is near-VERTICAL (88.2, 84.3, 65.7 deg, above the 60.0 deg maximum). Vertical surfaces are not roof facets: they are dormer cheeks, gable ends or wall tops. Nothing is missing here."
+    }
+  ],
+  "interpretation": "A residual blob is unexplained PLAN AREA. It is not automatically a missing roof facet. Coverage is a plan-view test, so a vertical surface standing inside the footprint (a dormer cheek, a gable end) occupies plan cells whose points belong to no roof facet, and registers as a gap that no roof facet can ever close. Those blobs are a permanent floor on coverage, not a defect."
+}

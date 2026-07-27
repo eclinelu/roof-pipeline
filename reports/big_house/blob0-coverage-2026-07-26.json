@@ -1,0 +1,92 @@
+{
+  "task": "Task 6 step 3: blob 0 coverage, 2026-07-23 state vs canonical 2026-07-26 state",
+  "dataset": "big_house",
+  "date": "2026-07-26",
+  "the_question": "The new partition of blob 0 into two planes is better in MEANING (two real surfaces instead of one fit spanning both), but it explains FEWER points: 76,595 against 99,482. Better meaning and worse coverage are different things and the second has to be measured, not assumed away.",
+  "point_accounting": {
+    "old_facet_points": 99482,
+    "old_facet_pitch_deg": 23.53,
+    "new_facets": [
+      {
+        "facet": 8,
+        "n_points": 62496,
+        "pitch_deg": 23.594,
+        "azimuth_deg": 269.69,
+        "quality": 0.7584
+      },
+      {
+        "facet": 9,
+        "n_points": 14099,
+        "pitch_deg": 10.506,
+        "azimuth_deg": 248.65,
+        "quality": 1.5967
+      }
+    ],
+    "new_facet_points_total": 76595,
+    "delta_points": -22887,
+    "note": "point counts are NOT the coverage measure. A point count says how many points a plane owns; coverage asks how much PLAN AREA is explained. A facet can own fewer points and still cover the same footprint, if the points it dropped sat on top of area other points already cover."
+  },
+  "query_box": {
+    "method": "RAW UTM box on points, cells read from the leveled grid; identical to the 2026-07-23 measurement",
+    "box_short": {
+      "x": [
+        84.0,
+        90.0
+      ],
+      "y": [
+        285.0,
+        291.0
+      ]
+    },
+    "box_utm": {
+      "x": [
+        553484.0,
+        553490.0
+      ],
+      "y": [
+        4543285.0,
+        4543291.0
+      ]
+    },
+    "roof_points_in_box": 606353,
+    "old": {
+      "building_cu2": 21.3786,
+      "explained_cu2": 14.7015,
+      "residual_cu2": 4.252,
+      "explained_pct": 68.77,
+      "source": "residual-map-2026-07-23.json"
+    },
+    "new": {
+      "building_cu2": 21.3786,
+      "explained_cu2": 15.5662,
+      "residual_cu2": 3.5765,
+      "explained_pct": 72.81
+    },
+    "delta": {
+      "explained_pct": 4.04,
+      "residual_cu2": -0.6755,
+      "explained_cu2": 0.8647,
+      "building_cu2": 0.0
+    },
+    "verdict": "COVERAGE IMPROVED"
+  },
+  "blob0_own_cells": {
+    "method": "the same measurement over blob 0's own bounding box from the canonical blob table, not the hand-drawn query box",
+    "blob_plan_area_cu2": 5.2596,
+    "box_leveled": [
+      [
+        553194.7197,
+        4543210.5751
+      ],
+      [
+        553199.1754,
+        4543213.9006
+      ]
+    ],
+    "building_cu2": 12.8677,
+    "explained_cu2": 9.451,
+    "residual_cu2": 2.6421,
+    "explained_pct": 73.45
+  },
+  "caveat": "The old building_cu2 and the new one are both measured on the same cloud with the same cell size, so any difference between them is a difference in which cells hold >= 2 roof points, which cannot change between runs. A non-zero building delta would mean the two measurements are not over the same region and the comparison is invalid."
+}

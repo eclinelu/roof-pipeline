@@ -1,13 +1,13 @@
 ---
 name: decision-log
-description: Record significant project decisions and current state in DECISIONS.md. Use this skill whenever a design choice is made, an approach is selected over alternatives, an earlier decision is reversed, a blocker is resolved, or the project phase changes. Also use it at the end of any working session, and whenever the user says "log this", "record this decision", "update decisions", or asks what was decided and why. Consult this before ending a session in which anything was chosen, rejected, or changed.
+description: Record significant project decisions in decisions/ and current state in STATE.md. Use this skill whenever a design choice is made, an approach is selected over alternatives, an earlier decision is reversed, a blocker is resolved, or the project phase changes. Also use it at the end of any working session, and whenever the user says "log this", "record this decision", "update decisions", or asks what was decided and why. Consult this before ending a session in which anything was chosen, rejected, or changed.
 ---
 
 # Decision log
 
-DECISIONS.md is the project's memory of WHY, not WHAT. The code shows what was built. This file explains why it was built that way, what was rejected, and what would have to be true for the choice to be wrong.
+The `decisions/` directory is the project's memory of WHY, not WHAT. The code shows what was built. These entries explain why it was built that way, what was rejected, and what would have to be true for the choice to be wrong.
 
-For this project the decision log is not bookkeeping. It IS the deliverable that gets defended. Anyone can produce a roof area number. The defensible thing is the reasoning chain that produced it. Treat this file as a primary artifact, not as documentation overhead.
+For this project the decision log is not bookkeeping. It IS the deliverable that gets defended. Anyone can produce a roof area number. The defensible thing is the reasoning chain that produced it. Treat these entries as a primary artifact, not as documentation overhead.
 
 ## What counts as significant
 
@@ -39,9 +39,20 @@ Bias toward logging fewer, better entries. A log full of noise stops being read,
 
 ## File structure
 
-DECISIONS.md has two sections with OPPOSITE update rules. Do not mix them.
+The record lives in two places with OPPOSITE update rules. Do not mix them.
 
-### Current state: overwrite in place
+```
+STATE.md                              current state, overwritten in place
+decisions/
+  README.md                           the log's rules + the ordered index
+  2026-07-26-ransac-nondeterminism-probability-1.md
+  2026-07-25-persist-geometry-and-diagnostics.md
+  ...                                 one entry per file, never edited
+```
+
+These were one file (`DECISIONS.md`) until 2026-07-26. The split changed no entry text; `python scripts/verify_decisions_split.py` reassembles the original from the pieces and diffs it against the last committed `DECISIONS.md` to prove it. Keep that script passing: it is what makes "these entries were never edited" a checkable claim instead of a promise.
+
+### STATE.md: overwrite in place
 
 Always short, always true right now. Stale state is worse than no state. Rewrite it; never append to it.
 
@@ -54,17 +65,19 @@ Always short, always true right now. Stale state is worse than no state. Rewrite
 - Next action:
 ```
 
-### Decision log: append only
+### decisions/: append only, one file per entry
 
-Newest at the top. NEVER edit or delete a past entry. Its value is that it is evidence. A log that gets rewritten stops being a record and becomes a story.
+Filename is `YYYY-MM-DD-short-slug.md`, from the entry's date and title. A new entry is a NEW file plus a new line at the TOP of the index list in `decisions/README.md`. That list is the record of order: several entries share a date, so sorting filenames cannot recover the sequence they were written in.
 
-If a past decision turns out to be wrong, do not fix it in place. Write a NEW entry that reverses it and references the original. The reversal is more interesting than either position alone.
+NEVER edit or delete a past entry file. Its value is that it is evidence. A log that gets rewritten stops being a record and becomes a story. One file per entry makes this easier to hold to, because any change to a past decision now shows up as a modified file in `git status` instead of hiding inside a diff to one large file.
+
+If a past decision turns out to be wrong, do not fix it in place. Write a NEW entry that reverses it and references the original by filename. The reversal is more interesting than either position alone.
 
 **A reversal is not finished when the entry is written.** The rule you just reversed usually lives in other instruction-bearing layers too: project instructions (CLAUDE.md), agent memory, other skills, reusable plan templates. Editing only this log leaves those stale layers to silently reassert the old behavior on the next session that reads them, and the agent re-applies whichever layer it read most recently. So when you write a reversal, sweep every instruction-bearing layer for the old rule and update each one in the same pass, and record in the entry which layers you changed. This project has been burned by exactly this failure: an instruction the decision log had already reversed survived in CLAUDE.md, agent memory, and a plan file, and kept resurrecting until every layer was found and fixed.
 
 ## Entry format
 
-Use this exact template:
+One entry per file in `decisions/`, using this exact template. The `###` heading is kept (rather than promoted to `#`) so entry text stays identical to how it was written when the log was a single file:
 
 ```markdown
 ### YYYY-MM-DD: One-line statement of the decision
@@ -79,7 +92,7 @@ Use this exact template:
 
 **Cost if wrong:** What breaks, and how expensive is the recovery.
 
-**Reverses:** (only if applicable) The date and title of the entry this overturns.
+**Reverses:** (only if applicable) The date, title, and filename of the entry this overturns.
 ```
 
 Not every field applies to every entry. Omit rather than pad. But "Why" and "Rejected" are close to mandatory: an entry without them is a note, not a decision.
@@ -92,12 +105,12 @@ So: when logging a decision that rests on how a tool actually behaves, cite the 
 
 ## Workflow
 
-1. Read DECISIONS.md before proposing an update, so entries are consistent and no decision is logged twice.
+1. Read `decisions/README.md` before proposing an update, plus any entry files it points to that look related, so entries are consistent and no decision is logged twice. The index is short by design; read it first rather than every entry.
 2. Draft the entry.
 3. SHOW IT TO THE USER BEFORE WRITING. The user owns the reasoning; do not put words in their mouth. If the "Why" is not something they actually said or agreed to, it does not go in.
-4. Update the Current state block if the state changed.
+4. Update `STATE.md` if the state changed.
 5. If this entry reverses or changes a standing rule, sweep every instruction-bearing layer (CLAUDE.md, agent memory, other skills, reusable plan templates) for the old rule and update each in the same pass; list the layers you changed in the entry. A reversal logged but not propagated leaves stale layers that resurrect the old behavior on the next session that reads them.
-6. Write the file.
+6. Write the new file in `decisions/`, and add its line to the TOP of the index list in `decisions/README.md`. Both, or the entry is invisible.
 7. Commit, with a message naming the decision.
 
 ## At the end of a session

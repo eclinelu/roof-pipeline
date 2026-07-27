@@ -1,0 +1,150 @@
+{
+  "task": "Task 6 step 5 (6B): adjacent-coplanar merge check on the canonical 2026-07-26 state",
+  "dataset": "big_house",
+  "date": "2026-07-26",
+  "n_facets": 25,
+  "rule": "A merge requires coplanarity AND spatial connectivity (decision 2026-07-25). Plane agreement alone is necessary but not sufficient: opposite slopes of a hip roof, or the same dormer face repeated across a building, are parallel and offset by almost nothing in the offset metric while being metres apart on the roof. Merging those would fuse two real facets into one.",
+  "tolerances": {
+    "angle_deg": 2.0,
+    "angle_reasoning": "adjacent standard roof pitches differ by about 3 deg, so a 2 deg window cannot bridge two pitch classes; scale-independent because it is an angle",
+    "offset_cu": 0.065863,
+    "offset_form": "1 x the RANSAC band",
+    "offset_reasoning": "two planes closer than the band the fit used are indistinguishable to that fit; the band is a length derived from point spacing, so this rescales with any cloud",
+    "connectivity": "plan footprints overlap or lie within one grid cell (0.01299 cu) of each other"
+  },
+  "merge_pairs": [
+    {
+      "a": 20,
+      "b": 23,
+      "kind_a": "recovered",
+      "kind_b": "recovered",
+      "angle_deg": 0.4457,
+      "offset_cu": 0.00036,
+      "offset_over_band": 0.005,
+      "coplanar": true,
+      "connected": true,
+      "merge": true,
+      "contact_detail": {
+        "shared_cells": 2537,
+        "cells_within_one": 2595,
+        "footprint_cells_a": 6900,
+        "footprint_cells_b": 3621,
+        "shared_pct_of_smaller": 70.06,
+        "contact": "OVERLAPPING",
+        "physical_question": "one surface split in two (merge) or two coplanar neighbours such as adjacent dormer faces (do not merge)? Overlap argues for the first, pure abutment for the second. This is a call to make from the render, not from the numbers alone."
+      },
+      "n_points_a": 25834,
+      "n_points_b": 14226,
+      "blob_a": 7,
+      "blob_b": 10
+    }
+  ],
+  "coplanar_but_disconnected": [
+    {
+      "a": 20,
+      "b": 24,
+      "kind_a": "recovered",
+      "kind_b": "recovered",
+      "angle_deg": 0.616,
+      "offset_cu": 0.0163,
+      "offset_over_band": 0.247,
+      "coplanar": true,
+      "connected": false,
+      "merge": false
+    },
+    {
+      "a": 23,
+      "b": 24,
+      "kind_a": "recovered",
+      "kind_b": "recovered",
+      "angle_deg": 0.8142,
+      "offset_cu": 0.02298,
+      "offset_over_band": 0.349,
+      "coplanar": true,
+      "connected": false,
+      "merge": false
+    }
+  ],
+  "summary": {
+    "coplanar_pairs": 3,
+    "coplanar_and_connected": 1,
+    "coplanar_but_disconnected": 2,
+    "verdict": "1 MERGE CANDIDATE(S): see merge_pairs"
+  },
+  "nothing_was_merged": "This diagnostic FLAGS candidates; it merges nothing. Whether a flagged pair is one surface split in two or two genuinely separate coplanar neighbours is a physical judgement about the building, so it belongs to Emmett with the render in front of him, not to a tolerance.",
+  "sensitivity": [
+    {
+      "angle_tol_deg": 1.0,
+      "offset_tol_bands": 0.5,
+      "coplanar_pairs": 3,
+      "also_connected": 1
+    },
+    {
+      "angle_tol_deg": 1.0,
+      "offset_tol_bands": 1.0,
+      "coplanar_pairs": 3,
+      "also_connected": 1
+    },
+    {
+      "angle_tol_deg": 1.0,
+      "offset_tol_bands": 2.0,
+      "coplanar_pairs": 3,
+      "also_connected": 1
+    },
+    {
+      "angle_tol_deg": 2.0,
+      "offset_tol_bands": 0.5,
+      "coplanar_pairs": 3,
+      "also_connected": 1
+    },
+    {
+      "angle_tol_deg": 2.0,
+      "offset_tol_bands": 1.0,
+      "coplanar_pairs": 3,
+      "also_connected": 1
+    },
+    {
+      "angle_tol_deg": 2.0,
+      "offset_tol_bands": 2.0,
+      "coplanar_pairs": 3,
+      "also_connected": 1
+    },
+    {
+      "angle_tol_deg": 3.0,
+      "offset_tol_bands": 0.5,
+      "coplanar_pairs": 3,
+      "also_connected": 1
+    },
+    {
+      "angle_tol_deg": 3.0,
+      "offset_tol_bands": 1.0,
+      "coplanar_pairs": 4,
+      "also_connected": 1
+    },
+    {
+      "angle_tol_deg": 3.0,
+      "offset_tol_bands": 2.0,
+      "coplanar_pairs": 5,
+      "also_connected": 1
+    },
+    {
+      "angle_tol_deg": 5.0,
+      "offset_tol_bands": 0.5,
+      "coplanar_pairs": 3,
+      "also_connected": 1
+    },
+    {
+      "angle_tol_deg": 5.0,
+      "offset_tol_bands": 1.0,
+      "coplanar_pairs": 4,
+      "also_connected": 1
+    },
+    {
+      "angle_tol_deg": 5.0,
+      "offset_tol_bands": 2.0,
+      "coplanar_pairs": 5,
+      "also_connected": 1
+    }
+  ],
+  "note": "coplanar_but_disconnected is the interesting column: those are the pairs a coplanarity-only rule would have merged wrongly. A non-empty list here is the evidence for the adjacency clause."
+}

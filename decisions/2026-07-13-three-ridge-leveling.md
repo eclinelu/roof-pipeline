@@ -1,0 +1,11 @@
+### 2026-07-13: Leveling applied from the three-ridge least squares; null check passed; pitch floor is 0.20 degrees
+
+**Decision:** big_house is leveled by 1.083 degrees, uphill azimuth 75.1: the least-squares tilt over all three validated ridges, applied in measure_roof.py before any coordinate is read, from values stored in roofkit.json. The pitch uncertainty floor is 0.20 degrees, the worst residual ridge inclination after leveling. Diagnostics now print in cloud units, never cm/m, because labeling unverified GPS scale as a real unit presents an assumption as fact.
+
+**Why:** A third true ridge pair (4,5, ridge azimuth 112.6, contact fractions 0.99/0.99, ~15k contact points) validated and read +0.66 where the two-ridge model predicts ~1.05, so the three ridges are inconsistent with a single rigid tilt at the ~0.2 degree level. Using only the two ridges that match the previously approved answer would be anchoring, the exact failure mode this log keeps recording. The scatter across all three is the instrument's honest limit and becomes the reported floor.
+
+**Rejected:** Leveling by the approved two-ridge vector (logged as 1.25 at azimuth 81.3; reproduced by the committed instrument as 1.24 at 80.6). It forces the full 0.39 degree inconsistency onto pair 4,5 by construction instead of exposing it as shared instrument scatter.
+
+**Evidence:** Post-leveling, the ridges re-read +0.18 / -0.20 / +0.08 and the residual tilt vector reads 0.001 degrees: the null check the reversal entry required, passed. "Uphill azimuth" in that entry is empirically confirmed by the null (the opposite sign would have doubled the readings to ~2.5). HYPOTHESIS KILLED, recorded rather than quietly dropped: the reversal's prediction that ~1.2 degrees of genuine building asymmetry would survive on pair 1,3 (Emmett's hypothesis) did NOT reproduce. Observed 0.47, and every pair asymmetry collapsed after leveling (0.72 to 0.47, 0.84 to 0.18, 1.17 to 0.12). The building is substantially more symmetric than that entry estimated. Seed-pinned runs of 2026-07-13.
+
+**Cost if wrong:** If ridge 4,5 is genuinely non-level (a sagged or rebuilt ridge beam) rather than instrument noise, the true tilt is nearer the two-ridge value and every pitch carries up to ~0.2 degrees of extra bias, which is already inside the reported floor.

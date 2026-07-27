@@ -1,0 +1,1347 @@
+{
+  "task": "Task 7A: measurement only. No state changed, no threshold adopted, nothing decided.",
+  "dataset": "big_house",
+  "date": "2026-07-26",
+  "canonical_state": "canonical-2026-07-26.json",
+  "scalars": {
+    "spacing_cu": 0.005196,
+    "band_cu": 0.065863,
+    "cell_cu": 0.01299,
+    "quality_bar": 2.948
+  },
+  "A1_pitch_distribution": {
+    "question": "pitch of EVERY plane peeled across ALL blobs, before the pitch window filters anything",
+    "pitch_window_deg": [
+      10.0,
+      60.0
+    ],
+    "main_discovery": {
+      "note": "main-facet discovery on the 200k subsample. The pitch window does not change WHICH planes are peeled (each peel removes its points whether the plane is kept or not), so this one run enumerates every plane main discovery can ever propose.",
+      "label": "main discovery peels",
+      "n_planes": 9,
+      "n_below_min_pitch": 1,
+      "n_inside_window": 8,
+      "n_above_max_pitch": 0,
+      "histogram_2deg": [
+        {
+          "deg_lo": 4.0,
+          "deg_hi": 6.0,
+          "n_planes": 1
+        },
+        {
+          "deg_lo": 20.0,
+          "deg_hi": 22.0,
+          "n_planes": 3
+        },
+        {
+          "deg_lo": 22.0,
+          "deg_hi": 24.0,
+          "n_planes": 1
+        },
+        {
+          "deg_lo": 32.0,
+          "deg_hi": 34.0,
+          "n_planes": 4
+        }
+      ],
+      "all_pitches_sorted": [
+        4.053,
+        21.05,
+        21.06,
+        21.483,
+        22.702,
+        33.06,
+        33.452,
+        33.78,
+        33.98
+      ],
+      "below_min_pitch": [
+        {
+          "peel": 8,
+          "n": 5956,
+          "pitch": 4.053,
+          "kept": false
+        }
+      ],
+      "above_max_pitch": [],
+      "gaps_below_window": {
+        "values_below": [
+          4.053
+        ],
+        "gaps": []
+      },
+      "where_min_pitch_sits": {
+        "floor": 10.0,
+        "nearest_below": 4.053,
+        "nearest_above": 21.05,
+        "gap_width_deg": 16.997,
+        "slack_down_deg": 5.947,
+        "slack_up_deg": 11.05,
+        "in_gap": true
+      },
+      "where_max_pitch_sits": {
+        "floor": 60.0,
+        "in_gap": false,
+        "note": "no plane on one side of the floor"
+      }
+    },
+    "canonical_run": {
+      "label": "canonical run peels",
+      "n_planes": 36,
+      "n_below_min_pitch": 3,
+      "n_inside_window": 17,
+      "n_above_max_pitch": 16,
+      "histogram_2deg": [
+        {
+          "deg_lo": 6.0,
+          "deg_hi": 8.0,
+          "n_planes": 1
+        },
+        {
+          "deg_lo": 8.0,
+          "deg_hi": 10.0,
+          "n_planes": 2
+        },
+        {
+          "deg_lo": 10.0,
+          "deg_hi": 12.0,
+          "n_planes": 1
+        },
+        {
+          "deg_lo": 20.0,
+          "deg_hi": 22.0,
+          "n_planes": 3
+        },
+        {
+          "deg_lo": 22.0,
+          "deg_hi": 24.0,
+          "n_planes": 1
+        },
+        {
+          "deg_lo": 28.0,
+          "deg_hi": 30.0,
+          "n_planes": 1
+        },
+        {
+          "deg_lo": 30.0,
+          "deg_hi": 32.0,
+          "n_planes": 2
+        },
+        {
+          "deg_lo": 32.0,
+          "deg_hi": 34.0,
+          "n_planes": 9
+        },
+        {
+          "deg_lo": 64.0,
+          "deg_hi": 66.0,
+          "n_planes": 1
+        },
+        {
+          "deg_lo": 78.0,
+          "deg_hi": 80.0,
+          "n_planes": 1
+        },
+        {
+          "deg_lo": 84.0,
+          "deg_hi": 86.0,
+          "n_planes": 1
+        },
+        {
+          "deg_lo": 86.0,
+          "deg_hi": 88.0,
+          "n_planes": 2
+        },
+        {
+          "deg_lo": 88.0,
+          "deg_hi": 90.0,
+          "n_planes": 11
+        }
+      ],
+      "all_pitches_sorted": [
+        6.143,
+        8.158,
+        9.284,
+        10.444,
+        21.001,
+        21.898,
+        21.989,
+        23.597,
+        28.852,
+        31.854,
+        31.895,
+        32.09,
+        32.225,
+        32.609,
+        33.031,
+        33.044,
+        33.14,
+        33.499,
+        33.505,
+        33.777,
+        65.69,
+        79.426,
+        84.316,
+        87.033,
+        87.644,
+        88.16,
+        88.52,
+        88.617,
+        88.938,
+        89.041,
+        89.07,
+        89.136,
+        89.177,
+        89.336,
+        89.453,
+        89.794
+      ],
+      "below_min_pitch": [
+        {
+          "blob": 0,
+          "peel": 0,
+          "n": 153357,
+          "pitch": 9.284,
+          "kept": false
+        },
+        {
+          "blob": 6,
+          "peel": 0,
+          "n": 51432,
+          "pitch": 8.158,
+          "kept": false
+        },
+        {
+          "blob": 8,
+          "peel": 2,
+          "n": 11470,
+          "pitch": 6.143,
+          "kept": false
+        }
+      ],
+      "above_max_pitch": [
+        {
+          "blob": 8,
+          "peel": 0,
+          "n": 21728,
+          "pitch": 89.136,
+          "kept": false
+        },
+        {
+          "blob": 8,
+          "peel": 1,
+          "n": 20429,
+          "pitch": 88.52,
+          "kept": false
+        },
+        {
+          "blob": 12,
+          "peel": 0,
+          "n": 17134,
+          "pitch": 89.07,
+          "kept": false
+        },
+        {
+          "blob": 13,
+          "peel": 0,
+          "n": 14913,
+          "pitch": 88.16,
+          "kept": false
+        },
+        {
+          "blob": 8,
+          "peel": 3,
+          "n": 10071,
+          "pitch": 87.644,
+          "kept": false
+        },
+        {
+          "blob": 1,
+          "peel": 2,
+          "n": 9939,
+          "pitch": 89.794,
+          "kept": false
+        },
+        {
+          "blob": 0,
+          "peel": 3,
+          "n": 8443,
+          "pitch": 89.453,
+          "kept": false
+        },
+        {
+          "blob": 2,
+          "peel": 2,
+          "n": 6689,
+          "pitch": 88.938,
+          "kept": false
+        },
+        {
+          "blob": 13,
+          "peel": 1,
+          "n": 5222,
+          "pitch": 84.316,
+          "kept": false
+        },
+        {
+          "blob": 4,
+          "peel": 2,
+          "n": 4500,
+          "pitch": 89.041,
+          "kept": false
+        },
+        {
+          "blob": 12,
+          "peel": 1,
+          "n": 4309,
+          "pitch": 88.617,
+          "kept": false
+        },
+        {
+          "blob": 2,
+          "peel": 3,
+          "n": 3331,
+          "pitch": 87.033,
+          "kept": false
+        },
+        {
+          "blob": 1,
+          "peel": 3,
+          "n": 3321,
+          "pitch": 89.336,
+          "kept": false
+        },
+        {
+          "blob": 5,
+          "peel": 2,
+          "n": 2550,
+          "pitch": 79.426,
+          "kept": false
+        },
+        {
+          "blob": 13,
+          "peel": 2,
+          "n": 2214,
+          "pitch": 65.69,
+          "kept": false
+        },
+        {
+          "blob": 3,
+          "peel": 2,
+          "n": 2203,
+          "pitch": 89.177,
+          "kept": false
+        }
+      ],
+      "gaps_below_window": {
+        "values_below": [
+          6.143,
+          8.158,
+          9.284,
+          10.444
+        ],
+        "gaps": [
+          {
+            "lo": 6.143,
+            "hi": 8.158,
+            "width_deg": 2.015
+          },
+          {
+            "lo": 9.284,
+            "hi": 10.444,
+            "width_deg": 1.16
+          },
+          {
+            "lo": 8.158,
+            "hi": 9.284,
+            "width_deg": 1.126
+          }
+        ]
+      },
+      "where_min_pitch_sits": {
+        "floor": 10.0,
+        "nearest_below": 9.284,
+        "nearest_above": 10.444,
+        "gap_width_deg": 1.16,
+        "slack_down_deg": 0.716,
+        "slack_up_deg": 0.444,
+        "in_gap": true
+      },
+      "where_max_pitch_sits": {
+        "floor": 60.0,
+        "nearest_below": 33.777,
+        "nearest_above": 65.69,
+        "gap_width_deg": 31.913,
+        "slack_down_deg": 26.223,
+        "slack_up_deg": 5.69,
+        "in_gap": true
+      }
+    },
+    "canonical_caveat": "TRUNCATED TWICE and therefore not the full distribution: the peel loop stops as soon as the largest remaining plane falls below the point floor (1933-2000), and it is capped at 4 planes per blob. Both cut off exactly the small planes a distribution question cares about.",
+    "deeper_sweep": {
+      "label": "probe sweep, floor 300, 12 planes/blob",
+      "n_planes": 51,
+      "n_below_min_pitch": 4,
+      "n_inside_window": 21,
+      "n_above_max_pitch": 26,
+      "histogram_2deg": [
+        {
+          "deg_lo": 0.0,
+          "deg_hi": 2.0,
+          "n_planes": 1
+        },
+        {
+          "deg_lo": 4.0,
+          "deg_hi": 6.0,
+          "n_planes": 1
+        },
+        {
+          "deg_lo": 8.0,
+          "deg_hi": 10.0,
+          "n_planes": 2
+        },
+        {
+          "deg_lo": 10.0,
+          "deg_hi": 12.0,
+          "n_planes": 1
+        },
+        {
+          "deg_lo": 18.0,
+          "deg_hi": 20.0,
+          "n_planes": 1
+        },
+        {
+          "deg_lo": 20.0,
+          "deg_hi": 22.0,
+          "n_planes": 3
+        },
+        {
+          "deg_lo": 22.0,
+          "deg_hi": 24.0,
+          "n_planes": 1
+        },
+        {
+          "deg_lo": 24.0,
+          "deg_hi": 26.0,
+          "n_planes": 1
+        },
+        {
+          "deg_lo": 28.0,
+          "deg_hi": 30.0,
+          "n_planes": 1
+        },
+        {
+          "deg_lo": 30.0,
+          "deg_hi": 32.0,
+          "n_planes": 3
+        },
+        {
+          "deg_lo": 32.0,
+          "deg_hi": 34.0,
+          "n_planes": 8
+        },
+        {
+          "deg_lo": 42.0,
+          "deg_hi": 44.0,
+          "n_planes": 1
+        },
+        {
+          "deg_lo": 54.0,
+          "deg_hi": 56.0,
+          "n_planes": 1
+        },
+        {
+          "deg_lo": 64.0,
+          "deg_hi": 66.0,
+          "n_planes": 1
+        },
+        {
+          "deg_lo": 78.0,
+          "deg_hi": 80.0,
+          "n_planes": 1
+        },
+        {
+          "deg_lo": 80.0,
+          "deg_hi": 82.0,
+          "n_planes": 1
+        },
+        {
+          "deg_lo": 84.0,
+          "deg_hi": 86.0,
+          "n_planes": 1
+        },
+        {
+          "deg_lo": 86.0,
+          "deg_hi": 88.0,
+          "n_planes": 5
+        },
+        {
+          "deg_lo": 88.0,
+          "deg_hi": 90.0,
+          "n_planes": 17
+        }
+      ],
+      "all_pitches_sorted": [
+        0.922,
+        5.866,
+        8.159,
+        9.732,
+        10.437,
+        19.61,
+        20.493,
+        21.719,
+        21.837,
+        23.599,
+        24.618,
+        28.963,
+        31.529,
+        31.845,
+        31.865,
+        32.298,
+        32.419,
+        32.77,
+        33.033,
+        33.044,
+        33.316,
+        33.684,
+        33.69,
+        42.88,
+        54.709,
+        65.058,
+        78.785,
+        80.947,
+        84.209,
+        86.537,
+        87.182,
+        87.463,
+        87.692,
+        87.885,
+        88.497,
+        88.57,
+        88.614,
+        88.756,
+        88.809,
+        89.029,
+        89.041,
+        89.109,
+        89.123,
+        89.177,
+        89.378,
+        89.412,
+        89.58,
+        89.612,
+        89.717,
+        89.783,
+        89.853
+      ],
+      "below_min_pitch": [
+        {
+          "blob": 0,
+          "peel": 0,
+          "n": 153173,
+          "pitch": 9.732,
+          "kept": false
+        },
+        {
+          "blob": 6,
+          "peel": 0,
+          "n": 51433,
+          "pitch": 8.159,
+          "kept": false
+        },
+        {
+          "blob": 8,
+          "peel": 2,
+          "n": 11450,
+          "pitch": 5.866,
+          "kept": false
+        },
+        {
+          "blob": 8,
+          "peel": 4,
+          "n": 5694,
+          "pitch": 0.922,
+          "kept": false
+        }
+      ],
+      "above_max_pitch": [
+        {
+          "blob": 8,
+          "peel": 0,
+          "n": 21824,
+          "pitch": 89.029,
+          "kept": false
+        },
+        {
+          "blob": 8,
+          "peel": 1,
+          "n": 20644,
+          "pitch": 88.57,
+          "kept": false
+        },
+        {
+          "blob": 12,
+          "peel": 0,
+          "n": 17087,
+          "pitch": 88.809,
+          "kept": false
+        },
+        {
+          "blob": 13,
+          "peel": 0,
+          "n": 14926,
+          "pitch": 89.123,
+          "kept": false
+        },
+        {
+          "blob": 1,
+          "peel": 2,
+          "n": 9881,
+          "pitch": 89.853,
+          "kept": false
+        },
+        {
+          "blob": 8,
+          "peel": 3,
+          "n": 9839,
+          "pitch": 87.463,
+          "kept": false
+        },
+        {
+          "blob": 0,
+          "peel": 3,
+          "n": 8686,
+          "pitch": 89.378,
+          "kept": false
+        },
+        {
+          "blob": 2,
+          "peel": 2,
+          "n": 6450,
+          "pitch": 89.109,
+          "kept": false
+        },
+        {
+          "blob": 13,
+          "peel": 1,
+          "n": 5724,
+          "pitch": 84.209,
+          "kept": false
+        },
+        {
+          "blob": 4,
+          "peel": 2,
+          "n": 4500,
+          "pitch": 89.041,
+          "kept": false
+        },
+        {
+          "blob": 12,
+          "peel": 1,
+          "n": 4099,
+          "pitch": 88.497,
+          "kept": false
+        },
+        {
+          "blob": 1,
+          "peel": 3,
+          "n": 3422,
+          "pitch": 89.612,
+          "kept": false
+        },
+        {
+          "blob": 2,
+          "peel": 3,
+          "n": 3308,
+          "pitch": 87.692,
+          "kept": false
+        },
+        {
+          "blob": 5,
+          "peel": 2,
+          "n": 2531,
+          "pitch": 78.785,
+          "kept": false
+        },
+        {
+          "blob": 3,
+          "peel": 2,
+          "n": 2203,
+          "pitch": 89.177,
+          "kept": false
+        },
+        {
+          "blob": 13,
+          "peel": 2,
+          "n": 1917,
+          "pitch": 65.058,
+          "kept": false
+        },
+        {
+          "blob": 11,
+          "peel": 1,
+          "n": 1893,
+          "pitch": 88.614,
+          "kept": false
+        },
+        {
+          "blob": 2,
+          "peel": 4,
+          "n": 1634,
+          "pitch": 89.783,
+          "kept": false
+        },
+        {
+          "blob": 4,
+          "peel": 3,
+          "n": 1262,
+          "pitch": 88.756,
+          "kept": false
+        },
+        {
+          "blob": 9,
+          "peel": 1,
+          "n": 1179,
+          "pitch": 87.885,
+          "kept": false
+        },
+        {
+          "blob": 12,
+          "peel": 2,
+          "n": 892,
+          "pitch": 86.537,
+          "kept": false
+        },
+        {
+          "blob": 5,
+          "peel": 3,
+          "n": 637,
+          "pitch": 80.947,
+          "kept": false
+        },
+        {
+          "blob": 1,
+          "peel": 4,
+          "n": 500,
+          "pitch": 87.182,
+          "kept": false
+        },
+        {
+          "blob": 12,
+          "peel": 3,
+          "n": 372,
+          "pitch": 89.412,
+          "kept": false
+        },
+        {
+          "blob": 11,
+          "peel": 2,
+          "n": 337,
+          "pitch": 89.58,
+          "kept": false
+        },
+        {
+          "blob": 3,
+          "peel": 3,
+          "n": 323,
+          "pitch": 89.717,
+          "kept": false
+        }
+      ],
+      "gaps_below_window": {
+        "values_below": [
+          0.922,
+          5.866,
+          8.159,
+          9.732,
+          10.437
+        ],
+        "gaps": [
+          {
+            "lo": 0.922,
+            "hi": 5.866,
+            "width_deg": 4.944
+          },
+          {
+            "lo": 5.866,
+            "hi": 8.159,
+            "width_deg": 2.293
+          },
+          {
+            "lo": 8.159,
+            "hi": 9.732,
+            "width_deg": 1.573
+          },
+          {
+            "lo": 9.732,
+            "hi": 10.437,
+            "width_deg": 0.705
+          }
+        ]
+      },
+      "where_min_pitch_sits": {
+        "floor": 10.0,
+        "nearest_below": 9.732,
+        "nearest_above": 10.437,
+        "gap_width_deg": 0.705,
+        "slack_down_deg": 0.268,
+        "slack_up_deg": 0.437,
+        "in_gap": true
+      },
+      "where_max_pitch_sits": {
+        "floor": 60.0,
+        "nearest_below": 54.709,
+        "nearest_above": 65.058,
+        "gap_width_deg": 10.349,
+        "slack_down_deg": 5.291,
+        "slack_up_deg": 5.058,
+        "in_gap": true
+      }
+    },
+    "deeper_sweep_note": "A PROBE. Same points, same band, same quality bar, but the point floor is dropped to 300 and the per-blob budget raised to 12 so peeling continues far past where the canonical run stops. No state was written and the canonical facets are unchanged. Note this is not a superset of the canonical peels: a lower floor changes which planes get peeled at all, because each peel removes its points before the next one runs."
+  },
+  "A2_main_discovery_sensitivity": {
+    "question": "does lowering min_pitch change MAIN facet discovery, and so reach the frozen 313.188 cu^2 total?",
+    "method": "main-facet discovery only, at min_pitch 10 / 5 / 2, compared bit for bit on point count, unit normal and plane offset d",
+    "why_not_recompute_area": "if the facets are bit-identical then every derived quantity is identical, including the total. Comparing the facets is stronger than comparing two area numbers, and it cannot be confounded by the area code.",
+    "control_matches_canonical_state": true,
+    "runs": {
+      "min_pitch_10": {
+        "min_pitch": 10.0,
+        "n_main_facets": 8,
+        "identical_to_min_pitch_10": true,
+        "facets": [
+          {
+            "pitch_deg": 21.1883,
+            "n_points": 1538098
+          },
+          {
+            "pitch_deg": 33.0669,
+            "n_points": 1154335
+          },
+          {
+            "pitch_deg": 22.7224,
+            "n_points": 693991
+          },
+          {
+            "pitch_deg": 34.0059,
+            "n_points": 850268
+          },
+          {
+            "pitch_deg": 20.9901,
+            "n_points": 744303
+          },
+          {
+            "pitch_deg": 21.3571,
+            "n_points": 669484
+          },
+          {
+            "pitch_deg": 33.7566,
+            "n_points": 403109
+          },
+          {
+            "pitch_deg": 33.5153,
+            "n_points": 297583
+          }
+        ],
+        "differences": []
+      },
+      "min_pitch_5": {
+        "min_pitch": 5.0,
+        "n_main_facets": 8,
+        "identical_to_min_pitch_10": true,
+        "facets": [
+          {
+            "pitch_deg": 21.1883,
+            "n_points": 1538098
+          },
+          {
+            "pitch_deg": 33.0669,
+            "n_points": 1154335
+          },
+          {
+            "pitch_deg": 22.7224,
+            "n_points": 693991
+          },
+          {
+            "pitch_deg": 34.0059,
+            "n_points": 850268
+          },
+          {
+            "pitch_deg": 20.9901,
+            "n_points": 744303
+          },
+          {
+            "pitch_deg": 21.3571,
+            "n_points": 669484
+          },
+          {
+            "pitch_deg": 33.7566,
+            "n_points": 403109
+          },
+          {
+            "pitch_deg": 33.5153,
+            "n_points": 297583
+          }
+        ],
+        "differences": []
+      },
+      "min_pitch_2": {
+        "min_pitch": 2.0,
+        "n_main_facets": 9,
+        "identical_to_min_pitch_10": false,
+        "facets": [
+          {
+            "pitch_deg": 21.1878,
+            "n_points": 1530252
+          },
+          {
+            "pitch_deg": 33.0661,
+            "n_points": 1150203
+          },
+          {
+            "pitch_deg": 22.7206,
+            "n_points": 690834
+          },
+          {
+            "pitch_deg": 34.0064,
+            "n_points": 849300
+          },
+          {
+            "pitch_deg": 20.9901,
+            "n_points": 744309
+          },
+          {
+            "pitch_deg": 21.3577,
+            "n_points": 669260
+          },
+          {
+            "pitch_deg": 33.7562,
+            "n_points": 399860
+          },
+          {
+            "pitch_deg": 33.5221,
+            "n_points": 296195
+          },
+          {
+            "pitch_deg": 4.0354,
+            "n_points": 275975
+          }
+        ],
+        "differences": [
+          {
+            "facet": 0,
+            "at_10": {
+              "pitch": 21.1883,
+              "n": 1538098
+            },
+            "at_this": {
+              "pitch": 21.1878,
+              "n": 1530252
+            }
+          },
+          {
+            "facet": 1,
+            "at_10": {
+              "pitch": 33.0669,
+              "n": 1154335
+            },
+            "at_this": {
+              "pitch": 33.0661,
+              "n": 1150203
+            }
+          },
+          {
+            "facet": 2,
+            "at_10": {
+              "pitch": 22.7224,
+              "n": 693991
+            },
+            "at_this": {
+              "pitch": 22.7206,
+              "n": 690834
+            }
+          },
+          {
+            "facet": 3,
+            "at_10": {
+              "pitch": 34.0059,
+              "n": 850268
+            },
+            "at_this": {
+              "pitch": 34.0064,
+              "n": 849300
+            }
+          },
+          {
+            "facet": 4,
+            "at_10": {
+              "pitch": 20.9901,
+              "n": 744303
+            },
+            "at_this": {
+              "pitch": 20.9901,
+              "n": 744309
+            }
+          },
+          {
+            "facet": 5,
+            "at_10": {
+              "pitch": 21.3571,
+              "n": 669484
+            },
+            "at_this": {
+              "pitch": 21.3577,
+              "n": 669260
+            }
+          },
+          {
+            "facet": 6,
+            "at_10": {
+              "pitch": 33.7566,
+              "n": 403109
+            },
+            "at_this": {
+              "pitch": 33.7562,
+              "n": 399860
+            }
+          },
+          {
+            "facet": 7,
+            "at_10": {
+              "pitch": 33.5153,
+              "n": 297583
+            },
+            "at_this": {
+              "pitch": 33.5221,
+              "n": 296195
+            }
+          },
+          {
+            "facet": 8,
+            "at_10": null,
+            "at_this": {
+              "pitch": 4.0354,
+              "n": 275975
+            }
+          }
+        ]
+      }
+    },
+    "verdict": "MAIN FACETS MOVE: lowering min_pitch changes main discovery, so any change would propagate to the frozen comparison",
+    "frozen_total_cu2": 313.188,
+    "frozen_file": "preregistered-2026-07-18.json (read-only, never edited)"
+  },
+  "A3_what_min_pitch_protects": {
+    "method": "each residual blob re-peeled with the pitch window opened to 0-90 so the sub-window planes are returned and can be measured. Opening the window does not change which planes are peeled, only which are returned.",
+    "sub_window_planes_measured": [
+      {
+        "blob": 0,
+        "n_points": 115092,
+        "pitch_deg": 8.858,
+        "quality": 3.561,
+        "quality_bar": 2.948,
+        "passes_quality_bar": false,
+        "gross_cu2": 5.2528,
+        "pitch_as_rise_over_12": 1.87
+      },
+      {
+        "blob": 6,
+        "n_points": 51435,
+        "pitch_deg": 8.158,
+        "quality": 2.219,
+        "quality_bar": 2.948,
+        "passes_quality_bar": true,
+        "gross_cu2": 2.2339,
+        "pitch_as_rise_over_12": 1.72
+      },
+      {
+        "blob": 8,
+        "n_points": 10992,
+        "pitch_deg": 6.792,
+        "quality": 2.741,
+        "quality_bar": 2.948,
+        "passes_quality_bar": true,
+        "gross_cu2": 0.7347,
+        "pitch_as_rise_over_12": 1.43
+      },
+      {
+        "blob": 8,
+        "n_points": 9087,
+        "pitch_deg": 1.215,
+        "quality": 3.3,
+        "quality_bar": 2.948,
+        "passes_quality_bar": false,
+        "gross_cu2": 0.5056,
+        "pitch_as_rise_over_12": 0.25
+      }
+    ],
+    "n_sub_window_planes": 4,
+    "n_passing_quality_bar": 2,
+    "points_in_sub_window_planes": 186606,
+    "points_in_clean_sub_window_planes": 62427,
+    "gross_cu2_in_clean_sub_window_planes": 2.9686,
+    "verdict": "NOT REDUNDANT: 2 of 4 sub-window planes PASS the quality bar, carrying 62,427 points and 2.969 cu^2 of gross surface. min_pitch is discarding well-fitted planar surface, so it is acting as a DEFINITION of what counts as a roof, not as a filter against error.",
+    "question": "what does a 10 degree floor reject that nothing else rejects?",
+    "upstream_filters": {
+      "ground": "removed by crop box + z_min height cutoff BEFORE any segmentation (decision 2026-07-12: no ground-plane RANSAC). So min_pitch is not the ground filter.",
+      "walls": "near-vertical, so they are rejected by max_pitch=60, not by min_pitch.",
+      "foliage": "removed by the ExG colour cutoff then the planarity score (decision 2026-07-12). Foliage is not planar, so the quality bar is its backstop, not min_pitch.",
+      "noise_planes": "held out by the fit-quality bar, which a recovered facet must clear at the same value the roughest main facet already achieves."
+    },
+    "quality_bar": 2.948,
+    "reading": "A definition boundary and a safety filter are defended differently. A filter is justified by what goes wrong without it; a definition is justified by what a roof IS, and has to be stated as a scope choice rather than as a margin."
+  },
+  "A4_vertical_surfaces": {
+    "question": "how much plan area inside the footprint is vertical surface that no roof facet can ever explain?",
+    "instrument": {
+      "what": "vertical extent (z max minus z min) of the points in each plan cell",
+      "threshold_cu": 0.12373,
+      "threshold_derivation": "a single surface at the 60.0 deg pitch limit spans at most cell x sqrt(2) x tan(60) = 0.03182 cu across one cell diagonal; the fit-quality bar permits scatter up to 2.948 x spacing RMS, so +/- 3 RMS adds 0.09191 cu. A cell spanning more than their sum cannot hold one roof-pitched surface.",
+      "not_tuned": "derived from the pitch window, the cell size and the quality bar, all of which already exist. No new parameter was introduced."
+    },
+    "z_span_distribution": {
+      "percentiles": [
+        {
+          "percentile": 50,
+          "z_span_cu": 0.01001
+        },
+        {
+          "percentile": 75,
+          "z_span_cu": 0.01818
+        },
+        {
+          "percentile": 90,
+          "z_span_cu": 0.03106
+        },
+        {
+          "percentile": 95,
+          "z_span_cu": 0.04396
+        },
+        {
+          "percentile": 99,
+          "z_span_cu": 1.27624
+        },
+        {
+          "percentile": 99.9,
+          "z_span_cu": 2.62039
+        }
+      ],
+      "histogram": [
+        {
+          "z_span_lo_cu": 0.0,
+          "z_span_hi_cu": 0.03093,
+          "multiple_of_bound": "0.00-0.25",
+          "cells": 1592852
+        },
+        {
+          "z_span_lo_cu": 0.03093,
+          "z_span_hi_cu": 0.06186,
+          "multiple_of_bound": "0.25-0.50",
+          "cells": 128845
+        },
+        {
+          "z_span_lo_cu": 0.06186,
+          "z_span_hi_cu": 0.0928,
+          "multiple_of_bound": "0.50-0.75",
+          "cells": 10401
+        },
+        {
+          "z_span_lo_cu": 0.0928,
+          "z_span_hi_cu": 0.12373,
+          "multiple_of_bound": "0.75-1.00",
+          "cells": 1700
+        },
+        {
+          "z_span_lo_cu": 0.12373,
+          "z_span_hi_cu": 0.18559,
+          "multiple_of_bound": "1.00-1.50",
+          "cells": 1941
+        },
+        {
+          "z_span_lo_cu": 0.18559,
+          "z_span_hi_cu": 0.24746,
+          "multiple_of_bound": "1.50-2.00",
+          "cells": 1439
+        },
+        {
+          "z_span_lo_cu": 0.24746,
+          "z_span_hi_cu": 0.37119,
+          "multiple_of_bound": "2.00-3.00",
+          "cells": 2085
+        },
+        {
+          "z_span_lo_cu": 0.37119,
+          "z_span_hi_cu": 0.61865,
+          "multiple_of_bound": "3.00-5.00",
+          "cells": 4643
+        },
+        {
+          "z_span_lo_cu": 0.61865,
+          "z_span_hi_cu": 1.23729,
+          "multiple_of_bound": "5.00-10.00",
+          "cells": 13234
+        },
+        {
+          "z_span_lo_cu": 1.23729,
+          "z_span_hi_cu": null,
+          "multiple_of_bound": ">10.00",
+          "cells": 18586
+        }
+      ]
+    },
+    "areas": {
+      "building_cells": 1775726,
+      "building_cu2": 299.654,
+      "vertical_cells": 41928,
+      "vertical_cu2": 7.0754,
+      "vertical_pct_of_building": 2.36,
+      "interior_building_cells": 1198049,
+      "interior_building_cu2": 202.171,
+      "residual_cells": 77783,
+      "residual_cu2": 13.1259,
+      "vertical_residual_cells": 4296,
+      "vertical_residual_cu2": 0.725,
+      "vertical_share_of_residual_pct": 5.52
+    },
+    "coverage_two_denominators": {
+      "raw": {
+        "definition": "residual / interior building area",
+        "denominator_cu2": 202.171,
+        "unexplained_cu2": 13.1259,
+        "coverage_pct": 93.51
+      },
+      "explainable": {
+        "definition": "vertical-surface cells removed from BOTH the numerator and the denominator, since they are neither explainable nor a failure to explain",
+        "denominator_cu2": 201.446,
+        "unexplained_cu2": 12.4009,
+        "coverage_pct": 93.84
+      },
+      "both_reported": "deliberately. The raw figure is the honest total and stays the headline; the explainable figure is what the segmentation can actually be held to."
+    }
+  },
+  "A5_denominator_collapse": {
+    "question": "the coverage denominator falls 202 -> 141 -> 96 -> 72 cu^2 across erosion rings. Eroding a compact shape by one cell should cost its outline, a few thousand cells; this costs about 360,000. Why?",
+    "hypothesis": "the building mask is peppered with sub-threshold holes and erosion widens every one of them",
+    "method": "erode the real mask and a hole-FILLED copy of it, ring by ring. The filled copy can only lose its outer outline, so everything the real mask loses beyond that is the holes' contribution.",
+    "holes": {
+      "n_holes": 111154,
+      "total_hole_cells": 370079,
+      "total_hole_cu2": 62.4508,
+      "median_hole_cells": 1,
+      "largest_hole_cells": 15846,
+      "size_histogram": [
+        {
+          "hole_size_cells": "1",
+          "n_holes": 75034,
+          "total_cells": 75034
+        },
+        {
+          "hole_size_cells": "2",
+          "n_holes": 15111,
+          "total_cells": 30222
+        },
+        {
+          "hole_size_cells": "3-4",
+          "n_holes": 10782,
+          "total_cells": 36182
+        },
+        {
+          "hole_size_cells": "5-9",
+          "n_holes": 6334,
+          "total_cells": 40209
+        },
+        {
+          "hole_size_cells": "10-24",
+          "n_holes": 2865,
+          "total_cells": 40642
+        },
+        {
+          "hole_size_cells": "25-99",
+          "n_holes": 852,
+          "total_cells": 35925
+        },
+        {
+          "hole_size_cells": "100-999",
+          "n_holes": 158,
+          "total_cells": 39662
+        },
+        {
+          "hole_size_cells": "1000-1000000000",
+          "n_holes": 18,
+          "total_cells": 72203
+        }
+      ]
+    },
+    "threshold_punched_holes": {
+      "note": "a cell counts as building only with >= 2 points, so cells inside the footprint holding 0 or 1 point are holes the THRESHOLD created, not gaps in the data",
+      "cells_with_exactly_1_point": 249745,
+      "cells_with_0_points": 139804,
+      "combined_cu2": 65.7364
+    },
+    "erosion_rings": [
+      {
+        "ring": 0,
+        "real_mask_cells": 1775726,
+        "real_mask_cu2": 299.654,
+        "filled_mask_cells": 2145805,
+        "filled_mask_cu2": 362.105
+      },
+      {
+        "ring": 1,
+        "real_mask_cells": 1198049,
+        "real_mask_cu2": 202.171,
+        "filled_mask_cells": 2090114,
+        "filled_mask_cu2": 352.707,
+        "cells_lost_this_ring": 577677,
+        "cells_lost_if_no_holes": 55691,
+        "extra_lost_to_holes": 521986,
+        "hole_share_of_loss_pct": 90.4
+      },
+      {
+        "ring": 2,
+        "real_mask_cells": 835642,
+        "real_mask_cu2": 141.015,
+        "filled_mask_cells": 2072297,
+        "filled_mask_cu2": 349.7,
+        "cells_lost_this_ring": 362407,
+        "cells_lost_if_no_holes": 17817,
+        "extra_lost_to_holes": 344590,
+        "hole_share_of_loss_pct": 95.1
+      },
+      {
+        "ring": 3,
+        "real_mask_cells": 566827,
+        "real_mask_cu2": 95.652,
+        "filled_mask_cells": 2056850,
+        "filled_mask_cu2": 347.093,
+        "cells_lost_this_ring": 268815,
+        "cells_lost_if_no_holes": 15447,
+        "extra_lost_to_holes": 253368,
+        "hole_share_of_loss_pct": 94.3
+      },
+      {
+        "ring": 4,
+        "real_mask_cells": 424530,
+        "real_mask_cu2": 71.639,
+        "filled_mask_cells": 2044819,
+        "filled_mask_cu2": 345.063,
+        "cells_lost_this_ring": 142297,
+        "cells_lost_if_no_holes": 12031,
+        "extra_lost_to_holes": 130266,
+        "hole_share_of_loss_pct": 91.5
+      }
+    ],
+    "what_the_headline_measures": {
+      "building_cells": 1775726,
+      "building_cu2": 299.654,
+      "interior_cells": 1198049,
+      "interior_cu2": 202.171,
+      "discarded_by_the_one_cell_erosion_cu2": 97.483,
+      "discarded_pct": 32.5,
+      "reading": "the one-cell erosion was introduced to stop the partially-filled perimeter fringe masquerading as unexplained area. On a mask with this many interior holes it removes far more than a fringe, so the headline coverage denominator is not the building footprint."
+    },
+    "verdict": "CONFIRMED: the collapse is dominated by hole boundaries, not by the building outline",
+    "caveat_for_deep_rings": "If confirmed, the deep-ring coverage figures (3 and 4 cells) do not measure 'the roof away from its eaves'. They measure whatever survives after every hole has been widened by 3 or 4 cells, which is the DENSEST roof only. Those rows must carry that caveat or be dropped; the 1 and 2 cell rows are the defensible ones."
+  }
+}

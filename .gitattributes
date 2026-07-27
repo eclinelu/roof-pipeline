@@ -1,0 +1,14 @@
+# Line endings for the decision log.
+#
+# core.autocrlf is true on this machine, so by default git checks text files
+# out with CRLF while storing them with LF. That is harmless for code, but it
+# would silently break the append-only proof: scripts/verify_decisions_split.py
+# reassembles decisions/* and diffs the result against the LF blob of the old
+# DECISIONS.md that git still holds. On a fresh clone the working files would be
+# CRLF, the blob LF, and every single line would report as changed. The proof
+# would look like evidence of tampering when nothing had been touched.
+#
+# eol=lf pins these files to LF in the working tree on every platform, so the
+# comparison stays byte-for-byte meaningful.
+STATE.md            text eol=lf
+decisions/**.md     text eol=lf

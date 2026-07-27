@@ -203,7 +203,11 @@ def recover_facets(roof, blobs, owner, dist, band, spacing, quality_bar,
         cx1, cy1 = blob["box"][1]
         inbox = ((roof[:, 0] >= cx0) & (roof[:, 0] <= cx1) &
                  (roof[:, 1] >= cy0) & (roof[:, 1] <= cy1))
-        cand = roof[inbox & (dist > band)]
+        # cand_idx: where each candidate point sits in `roof`. find_roof_planes
+        # returns indices into what IT was given (cand), so composing the two
+        # gives indices into roof. Carried for R1; nothing numeric reads it.
+        cand_idx = np.flatnonzero(inbox & (dist > band))
+        cand = roof[cand_idx]
         entry = dict(blob=bi, area_cu2=blob["area_cu2"], n_candidate=len(cand),
                      planes=[])
         if len(cand) < size_floor:
@@ -218,11 +222,17 @@ def recover_facets(roof, blobs, owner, dist, band, spacing, quality_bar,
         # plane has already had its points removed from the cloud, which
         # changes what the NEXT peel sees.
         floor = max(size_floor, min_points_hard or 0)
+        # peel_log records EVERY plane RANSAC peeled inside this blob, including
+        # the ones the pitch window discards. Without it, a blob that yields no
+        # facet is indistinguishable from a blob where RANSAC found nothing at
+        # all, and those are different diagnoses (Task 6C, 2026-07-26).
+        peels = []
         planes = find_roof_planes(cand, distance_threshold=band,
                                   min_points=floor,
                                   min_pitch=min_pitch, max_pitch=max_pitch,
                                   max_planes=max_planes_per_blob,
-                                  probability=probability)
+                                  probability=probability, peel_log=peels)
+        entry["peels"] = peels
         for p in planes:
             q, normal = facet_quality(p["points"], p["normal"], spacing)
             pitch = tilt_degrees(normal)
@@ -258,7 +268,8 @@ def recover_facets(roof, blobs, owner, dist, band, spacing, quality_bar,
             entry["planes"].append(rec)
             if ok:
                 new_facets.append(dict(points=p["points"], normal=normal,
-                                       pitch=pitch, blob=bi, quality=q))
+                                       pitch=pitch, blob=bi, quality=q,
+                                       idx=cand_idx[p["idx"]]))
         if log is not None:
             log.append(entry)
     return new_facets

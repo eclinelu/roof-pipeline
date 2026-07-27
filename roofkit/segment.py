@@ -53,7 +53,7 @@ def fit_ground_plane(points, distance_threshold=0.2):
 
 def find_roof_planes(points, distance_threshold=0.2, min_points=300,
                      min_pitch=10, max_pitch=60, max_planes=8,
-                     probability=1.0):
+                     probability=1.0, peel_log=None):
     """Peel flat planes off the cloud one at a time with RANSAC, keeping only
     the ones tilted like a roof. Returns a list of facets, each a dict holding
     that facet's points, its normal, and its pitch in degrees.
@@ -84,14 +84,35 @@ def find_roof_planes(points, distance_threshold=0.2, min_points=300,
 
     Note this makes scripts/measure_roof.py run at 1.0 as well, since it does
     not pass the argument. That is intended: it is the same verified-identical
-    fit, now reproducible."""
+    fit, now reproducible.
+
+    EVERY returned facet also carries "idx": the positions, in the INPUT
+    `points` array, of the points that facet ended up owning, so that
+    points[facet["idx"]] reproduces facet["points"] exactly. This exists to
+    satisfy standing rule R1 (persist plane coefficients AND inlier indices, so
+    a run is replayable from its own output). It is pure bookkeeping: no number
+    below is computed from it, so it cannot change any result.
+
+    `peel_log`, if given a list, receives one dict per RANSAC peel BEFORE the
+    pitch filter: the plane's pitch, its inlier count, and whether the pitch
+    filter kept it. Without this the pitch filter is silent, and a blob that
+    produces no facet gives no clue whether RANSAC found nothing or found
+    something the wrong shape (measured need, Task 6C, 2026-07-26)."""
     cloud = o3d.geometry.PointCloud()
     cloud.points = o3d.utility.Vector3dVector(points)
 
+    # `live[i]` = where row i of the CURRENT shrunken cloud came from in the
+    # original `points`. Peeling removes rows, so this is how a facet's rows are
+    # traced back to the input after several peels.
+    live = np.arange(len(points))
+
     facets = []
-    for _ in range(max_planes):
+    for peel in range(max_planes):
         # Stop if too little is left to be a real surface.
         if len(cloud.points) < min_points:
+            if peel_log is not None:
+                peel_log.append({"peel": peel, "stopped": "remaining points "
+                                 f"{len(cloud.points)} < min_points {min_points}"})
             break
 
         # RANSAC: grab the biggest flat plane in what remains.
@@ -101,17 +122,35 @@ def find_roof_planes(points, distance_threshold=0.2, min_points=300,
 
         # If even the biggest remaining plane is tiny, we're done finding surfaces.
         if len(inliers) < min_points:
+            if peel_log is not None:
+                peel_log.append({"peel": peel, "stopped": "largest remaining "
+                                 f"plane has {len(inliers)} inliers < min_points "
+                                 f"{min_points}"})
             break
 
         normal = plane_model[:3]          # (a, b, c) from (a, b, c, d)
         pitch = tilt_degrees(normal)
+        in_pitch = bool(min_pitch <= pitch <= max_pitch)
+
+        if peel_log is not None:
+            peel_log.append({"peel": peel, "n_inliers": int(len(inliers)),
+                             "pitch_deg": round(float(pitch), 3),
+                             "pitch_window": [min_pitch, max_pitch],
+                             "kept_by_pitch": in_pitch,
+                             "surface": _pitch_verdict(pitch, min_pitch, max_pitch)})
 
         # Keep it only if it tilts like a roof (not flat ground, not a wall).
-        if min_pitch <= pitch <= max_pitch:
+        if in_pitch:
+            sel = np.asarray(inliers, dtype=np.int64)
             plane_points = np.asarray(cloud.select_by_index(inliers).points)
-            facets.append({"points": plane_points, "normal": np.asarray(normal), "pitch": pitch})
+            facets.append({"points": plane_points, "normal": np.asarray(normal),
+                           "pitch": pitch, "idx": live[sel]})
 
-        # Remove this plane's points (kept or not) so the next loop finds the next surface.
+        # Remove this plane's points (kept or not) so the next loop finds the next
+        # surface. `live` is trimmed the same way, staying row-aligned with the cloud.
+        drop = np.zeros(len(live), dtype=bool)
+        drop[np.asarray(inliers, dtype=np.int64)] = True
+        live = live[~drop]
         cloud = cloud.select_by_index(inliers, invert=True)
 
     # Greedy peeling steals shared-edge points: at a ridge the two roof
@@ -124,6 +163,7 @@ def find_roof_planes(points, distance_threshold=0.2, min_points=300,
     # consensus refits.
     if len(facets) > 1:
         pool = np.vstack([f["points"] for f in facets])
+        pool_idx = np.concatenate([f["idx"] for f in facets])   # same row order as pool
         dists = np.column_stack([_point_plane_dist(pool, f) for f in facets])
         owner = dists.argmin(axis=1)          # index of the closest plane, per point
         for k, f in enumerate(facets):
@@ -131,10 +171,23 @@ def find_roof_planes(points, distance_threshold=0.2, min_points=300,
             if len(mine) < 3:                 # a plane needs 3 points; keep RANSAC's answer
                 continue
             f["points"] = mine
+            f["idx"] = pool_idx[owner == k]   # reassign the labels alongside the points
             f["normal"] = fit_plane_svd(mine)
             f["pitch"] = tilt_degrees(f["normal"])
 
     return facets
+
+
+def _pitch_verdict(pitch, min_pitch, max_pitch):
+    """Plain-language reason a peeled plane failed the pitch window, for the
+    peel log. Below the window a surface is effectively flat (ground, a flat
+    roof deck, a road); above it, effectively vertical (a wall, a dormer cheek,
+    a gable end). Neither is a pitched roof facet."""
+    if pitch < min_pitch:
+        return f"near-flat ({pitch:.1f} deg < {min_pitch} deg)"
+    if pitch > max_pitch:
+        return f"near-vertical ({pitch:.1f} deg > {max_pitch} deg)"
+    return "roof-pitched"
 
 
 def fit_plane_svd(points):

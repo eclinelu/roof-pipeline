@@ -1,0 +1,76 @@
+{
+  "task": "6 T1/T2 comparison: probability=1.0 multithreaded vs single-threaded",
+  "dataset": "big_house",
+  "date": "2026-07-26",
+  "inputs": {
+    "a": "thread-mt.json",
+    "b": "thread-1t.json"
+  },
+  "modes": {
+    "a": {
+      "omp_num_threads": null,
+      "cpu_count": 22,
+      "machine": "AMD64",
+      "python": "3.12.10"
+    },
+    "b": {
+      "omp_num_threads": "1",
+      "cpu_count": 22,
+      "machine": "AMD64",
+      "python": "3.12.10"
+    }
+  },
+  "T1": {
+    "verdict": "BIT-IDENTICAL",
+    "bit_identical": true,
+    "n_differences": 0,
+    "compared": {
+      "main_facets": 8,
+      "recovered_facets": 17,
+      "candidate_planes": 17,
+      "fields_per_facet": [
+        "n_points",
+        "pitch",
+        "plane_d",
+        "normal",
+        "centroid",
+        "points_sha",
+        "members_sha"
+      ],
+      "fields_per_candidate": [
+        "n",
+        "normal_hex",
+        "kept",
+        "rejected_by",
+        "quality",
+        "pitch",
+        "gross_cu2"
+      ]
+    },
+    "differences": [],
+    "candidate_set_identical": true
+  },
+  "T2": {
+    "multithreaded": null,
+    "a_label": "OMP=None",
+    "b_label": "OMP=1",
+    "a_timing": {
+      "spacing_s": 11.209,
+      "discovery_s": 19.479,
+      "coverage_s": 17.843,
+      "recovery_s": 10.479,
+      "total_s": 59.01
+    },
+    "b_timing": {
+      "spacing_s": 5.96,
+      "discovery_s": 21.03,
+      "coverage_s": 19.751,
+      "recovery_s": 21.759,
+      "total_s": 68.5
+    },
+    "total_ratio_b_over_a": 1.161,
+    "discovery_ratio_b_over_a": 1.08,
+    "recovery_ratio_b_over_a": 2.076
+  },
+  "interpretation": "T1 compares point counts AND plane coefficients bit-for-bit (exact hex floats), across every candidate plane including the ones the size floors reject, not merely the facet count. BIT-IDENTICAL means the candidate set does not depend on thread count on this cloud, i.e. no inlier-count tie is being broken by thread finishing order here. It is evidence of thread-invariance on big_house, NOT a proof that ties are impossible in general."
+}

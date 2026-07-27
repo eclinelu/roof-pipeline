@@ -1,0 +1,399 @@
+{
+  "task": "Task 6 step 4: re-measure the size-floor bands on the current pipeline, and restate MIN_POINTS in transferable form",
+  "dataset": "big_house",
+  "date": "2026-07-26",
+  "method": {
+    "what": "full pipeline at probability=1.0 with NO hard floors (min_points_hard=None, min_area_hard=None), so the size distribution is the one the pipeline produces unfiltered",
+    "why": "the canonical state was built WITH the floors, so it contains nothing below them by construction; measuring the band there would be circular",
+    "limitation": "a lower floor is not a superset: the floor is pushed into RANSAC as min_points, and a peeled plane removes its points before the next peel, so the unfloored run is a different decomposition. It is compared as a DISTRIBUTION, never facet-by-facet."
+  },
+  "scalars": {
+    "spacing_cu": 0.005196,
+    "band_cu": 0.065863,
+    "min_points_floor": 2000,
+    "min_area_floor_cu2": 0.100008,
+    "min_area_form": "3704 x spacing^2"
+  },
+  "unfloored_counts": {
+    "n_main": 8,
+    "n_recovered": 18,
+    "n_total": 26,
+    "canonical_floored_total": 25
+  },
+  "recovered_facets": [
+    {
+      "facet": 24,
+      "blob": 10,
+      "n_points": 668,
+      "pitch_deg": 54.863,
+      "gross_cu2": 0.07859,
+      "quality": 1.3389,
+      "points_per_spacing2": 0.23,
+      "passes_point_floor": false,
+      "passes_area_floor": false
+    },
+    {
+      "facet": 25,
+      "blob": 11,
+      "n_points": 10621,
+      "pitch_deg": 33.036,
+      "gross_cu2": 0.81199,
+      "quality": 1.633,
+      "points_per_spacing2": 0.353,
+      "passes_point_floor": true,
+      "passes_area_floor": true
+    },
+    {
+      "facet": 9,
+      "blob": 0,
+      "n_points": 14099,
+      "pitch_deg": 10.506,
+      "gross_cu2": 1.1351,
+      "quality": 1.5967,
+      "points_per_spacing2": 0.335,
+      "passes_point_floor": true,
+      "passes_area_floor": true
+    },
+    {
+      "facet": 23,
+      "blob": 10,
+      "n_points": 14131,
+      "pitch_deg": 33.338,
+      "gross_cu2": 0.70902,
+      "quality": 0.9175,
+      "points_per_spacing2": 0.538,
+      "passes_point_floor": true,
+      "passes_area_floor": true
+    },
+    {
+      "facet": 22,
+      "blob": 9,
+      "n_points": 19807,
+      "pitch_deg": 23.259,
+      "gross_cu2": 1.12951,
+      "quality": 0.7671,
+      "points_per_spacing2": 0.473,
+      "passes_point_floor": true,
+      "passes_area_floor": true
+    },
+    {
+      "facet": 21,
+      "blob": 7,
+      "n_points": 21364,
+      "pitch_deg": 33.757,
+      "gross_cu2": 1.20613,
+      "quality": 0.7888,
+      "points_per_spacing2": 0.478,
+      "passes_point_floor": true,
+      "passes_area_floor": true
+    },
+    {
+      "facet": 11,
+      "blob": 1,
+      "n_points": 24348,
+      "pitch_deg": 22.718,
+      "gross_cu2": 1.53979,
+      "quality": 0.8861,
+      "points_per_spacing2": 0.427,
+      "passes_point_floor": true,
+      "passes_area_floor": true
+    },
+    {
+      "facet": 20,
+      "blob": 7,
+      "n_points": 25978,
+      "pitch_deg": 32.932,
+      "gross_cu2": 1.32234,
+      "quality": 0.798,
+      "points_per_spacing2": 0.53,
+      "passes_point_floor": true,
+      "passes_area_floor": true
+    },
+    {
+      "facet": 19,
+      "blob": 5,
+      "n_points": 30421,
+      "pitch_deg": 34.646,
+      "gross_cu2": 1.74205,
+      "quality": 0.9529,
+      "points_per_spacing2": 0.471,
+      "passes_point_floor": true,
+      "passes_area_floor": true
+    },
+    {
+      "facet": 17,
+      "blob": 4,
+      "n_points": 38641,
+      "pitch_deg": 33.918,
+      "gross_cu2": 1.69744,
+      "quality": 0.6112,
+      "points_per_spacing2": 0.615,
+      "passes_point_floor": true,
+      "passes_area_floor": true
+    },
+    {
+      "facet": 15,
+      "blob": 3,
+      "n_points": 43506,
+      "pitch_deg": 33.855,
+      "gross_cu2": 1.66154,
+      "quality": 0.7827,
+      "points_per_spacing2": 0.707,
+      "passes_point_floor": true,
+      "passes_area_floor": true
+    },
+    {
+      "facet": 18,
+      "blob": 5,
+      "n_points": 44148,
+      "pitch_deg": 34.892,
+      "gross_cu2": 1.74326,
+      "quality": 0.9089,
+      "points_per_spacing2": 0.684,
+      "passes_point_floor": true,
+      "passes_area_floor": true
+    },
+    {
+      "facet": 16,
+      "blob": 4,
+      "n_points": 53492,
+      "pitch_deg": 34.432,
+      "gross_cu2": 1.5014,
+      "quality": 0.6365,
+      "points_per_spacing2": 0.962,
+      "passes_point_floor": true,
+      "passes_area_floor": true
+    },
+    {
+      "facet": 14,
+      "blob": 3,
+      "n_points": 54600,
+      "pitch_deg": 35.113,
+      "gross_cu2": 1.80418,
+      "quality": 0.7259,
+      "points_per_spacing2": 0.817,
+      "passes_point_floor": true,
+      "passes_area_floor": true
+    },
+    {
+      "facet": 13,
+      "blob": 2,
+      "n_points": 55937,
+      "pitch_deg": 33.913,
+      "gross_cu2": 2.1171,
+      "quality": 0.9614,
+      "points_per_spacing2": 0.713,
+      "passes_point_floor": true,
+      "passes_area_floor": true
+    },
+    {
+      "facet": 8,
+      "blob": 0,
+      "n_points": 62496,
+      "pitch_deg": 23.594,
+      "gross_cu2": 3.06336,
+      "quality": 0.7584,
+      "points_per_spacing2": 0.551,
+      "passes_point_floor": true,
+      "passes_area_floor": true
+    },
+    {
+      "facet": 12,
+      "blob": 2,
+      "n_points": 67725,
+      "pitch_deg": 35.08,
+      "gross_cu2": 1.83002,
+      "quality": 0.6879,
+      "points_per_spacing2": 0.999,
+      "passes_point_floor": true,
+      "passes_area_floor": true
+    },
+    {
+      "facet": 10,
+      "blob": 1,
+      "n_points": 81012,
+      "pitch_deg": 22.119,
+      "gross_cu2": 2.74477,
+      "quality": 1.2056,
+      "points_per_spacing2": 0.797,
+      "passes_point_floor": true,
+      "passes_area_floor": true
+    }
+  ],
+  "bands": {
+    "points": {
+      "quantity": "recovered-facet point count",
+      "floor": 2000.0,
+      "n_below_floor": 1,
+      "n_above_floor": 17,
+      "nearest_below": 668.0,
+      "nearest_above": 10621.0,
+      "gap_width": 9953.0,
+      "gap_ratio_hi_over_lo": 15.9,
+      "floor_may_move_down_to": 668.0,
+      "floor_may_move_up_to": 10621.0,
+      "slack_pct_down": 66.6,
+      "slack_pct_up": 431.1,
+      "in_empty_band": true
+    },
+    "area": {
+      "quantity": "recovered-facet gross alpha area (cu^2)",
+      "floor": 0.10000800666813511,
+      "n_below_floor": 1,
+      "n_above_floor": 17,
+      "nearest_below": 0.07859,
+      "nearest_above": 0.70902,
+      "gap_width": 0.63043,
+      "gap_ratio_hi_over_lo": 9.02,
+      "floor_may_move_down_to": 0.07859,
+      "floor_may_move_up_to": 0.70902,
+      "slack_pct_down": 21.4,
+      "slack_pct_up": 609.0,
+      "in_empty_band": true
+    }
+  },
+  "old_claim": {
+    "source": "2026-07-23 facet state (superseded)",
+    "point_band": "smallest accepted facet 664 points, next 10,614: the 2000 floor sat in an empty band",
+    "area_band": "smallest accepted facet 0.019 cu^2, next 0.378 cu^2: the 0.10 floor sat in an empty band",
+    "caveat": "the area figures quoted were NET areas, while the gate that actually runs at recovery time tests GROSS alpha area. This probe measures the gate's own quantity."
+  },
+  "floor_interaction": {
+    "rejected_by_point_floor_only": [],
+    "rejected_by_area_floor_only": [],
+    "rejected_by_both": [
+      24
+    ],
+    "point_floor_ever_decisive": false,
+    "reading": "If rejected_by_point_floor_only is empty, the point floor never rejects anything the area floor does not already reject on this cloud, so it is not doing independent work here."
+  },
+  "density": {
+    "definition": "n_points x spacing^2 / gross_area: points per spacing^2 of facet surface. Dimensionless. Near 1.0 means one point per spacing-square, which is what median nearest-neighbour spacing means by construction. Below 1.0 means the alpha surface spans area the points do not densely fill (bridged gaps, trimmed clutter), which is normal.",
+    "recovered": {
+      "median": 0.544,
+      "min": 0.23,
+      "max": 0.999,
+      "n": 18
+    },
+    "main": {
+      "median": 0.522,
+      "min": 0.216,
+      "max": 0.965,
+      "n": 8,
+      "per_facet": [
+        {
+          "facet": 0,
+          "n_points": 1538098,
+          "gross_cu2": 44.21105,
+          "points_per_spacing2": 0.939
+        },
+        {
+          "facet": 1,
+          "n_points": 1154335,
+          "gross_cu2": 69.58428,
+          "points_per_spacing2": 0.448
+        },
+        {
+          "facet": 2,
+          "n_points": 693991,
+          "gross_cu2": 31.45178,
+          "points_per_spacing2": 0.596
+        },
+        {
+          "facet": 3,
+          "n_points": 850268,
+          "gross_cu2": 53.33724,
+          "points_per_spacing2": 0.43
+        },
+        {
+          "facet": 4,
+          "n_points": 744303,
+          "gross_cu2": 28.78832,
+          "points_per_spacing2": 0.698
+        },
+        {
+          "facet": 5,
+          "n_points": 669484,
+          "gross_cu2": 18.72804,
+          "points_per_spacing2": 0.965
+        },
+        {
+          "facet": 6,
+          "n_points": 403109,
+          "gross_cu2": 33.72717,
+          "points_per_spacing2": 0.323
+        },
+        {
+          "facet": 7,
+          "n_points": 297583,
+          "gross_cu2": 37.11385,
+          "points_per_spacing2": 0.216
+        }
+      ]
+    },
+    "which_to_use": "main: it is measurable before recovery runs, so it can set the recovery floor without circularity"
+  },
+  "transferable_form": {
+    "proposal": "MIN_POINTS = MIN_AREA_POINTS_EQUIV x d, where d is the run's OWN measured surface point density (points per spacing^2 of facet surface), taken as the median over the main facets. Both inputs come from the cloud; nothing is a raw constant.",
+    "derivation": "A facet of gross area A holds about A x d / spacing^2 points, where d is measured from this run's main facets. The area floor is MIN_AREA = 3704 x spacing^2, so the point count it implies is 3704 x d. On big_house d = 0.522, giving 1933 points.",
+    "implied_point_floor_from_main_density": 1933.0,
+    "implied_point_floor_from_recovered_density": 2015.0,
+    "current_raw_floor": 2000,
+    "ratio_current_over_implied": 1.034,
+    "why_raw_2000_is_not_transferable": "Point density depends on flight altitude and image overlap. 2000 points covers one physical patch on big_house and a different one on a cloud flown differently, so a raw 2000 is a per-site constant wearing a scale-free costume. Every other length threshold in this pipeline is already expressed as a multiple of measured point spacing for exactly this reason.",
+    "does_it_make_the_floor_redundant": "Algebraically the transferable form IS the area floor restated, so on a cloud of uniform density the two gates agree by construction and only one is doing work. They come apart where density varies BETWEEN facets: a sparse, spread-out sliver can span enough alpha area to clear the area floor while holding too few points for a stable plane fit. The measured per-facet density spread on this cloud is 0.23 to 0.999, a factor of 4.3, so that window is real here even though no facet landed in it. Keeping both is cheap; dropping the point floor on one cloud's evidence is not warranted."
+  },
+  "recovered_facet_counts_sorted": [
+    668,
+    10621,
+    14099,
+    14131,
+    19807,
+    21364,
+    24348,
+    25978,
+    30421,
+    38641,
+    43506,
+    44148,
+    53492,
+    54600,
+    55937,
+    62496,
+    67725,
+    81012
+  ],
+  "recovered_facet_gross_sorted": [
+    0.07859,
+    0.70902,
+    0.81199,
+    1.12951,
+    1.1351,
+    1.20613,
+    1.32234,
+    1.5014,
+    1.53979,
+    1.66154,
+    1.69744,
+    1.74205,
+    1.74326,
+    1.80418,
+    1.83002,
+    2.1171,
+    2.74477,
+    3.06336
+  ],
+  "equivalence_test": {
+    "question": "Would adopting the transferable form actually change the canonical state? The floor is pushed into RANSAC as its min_points, and the peel loop breaks when the largest remaining plane falls below it, so a different floor can in principle change WHICH planes get peeled, not just which survive. That has to be run, not argued.",
+    "method": "scripts/canonical_state.py rebuilt the full state with --min-points 1933 (the transferable form's value) and the result was diffed against the adopted 2000 state on plane coefficients, centroids, point counts, kinds, blobs, all scalars, and all 25 inlier index arrays.",
+    "raw_floor": 2000,
+    "transferable_floor": 1933,
+    "difference_pct": 3.4,
+    "result": "BIT-IDENTICAL: 0 field differences across 25 facets, all 25 index arrays equal, all scalars equal",
+    "files": [
+      "canonical-2026-07-26.json (adopted, floor 2000)",
+      "floor-equivalence-mp1933-2026-07-26.json (probe, floor 1933)"
+    ],
+    "meaning": "Adopting the transferable form costs nothing on this cloud: not one facet changes. That is expected given the measured empty band, since both 1933 and 2000 sit deep inside a gap running from 668 to 10,621 points, but it is now measured rather than inferred."
+  }
+}

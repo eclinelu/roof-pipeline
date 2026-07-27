@@ -1,0 +1,70 @@
+{
+  "task": "Task 6 step 5b: are any points owned by more than one facet? canonical 2026-07-26 state",
+  "dataset": "big_house",
+  "date": "2026-07-26",
+  "why_this_test": "Coplanarity asks whether two facets lie on the same plane, which is a modelling judgement. This asks whether they own the same measured POINTS, which is not a judgement at all. Only possible because standing rule R1 persists inlier indices.",
+  "totals": {
+    "facet_point_entries": 7013494,
+    "distinct_points": 7003665,
+    "duplicated_entries": 9829,
+    "pct_duplicated": 0.1401
+  },
+  "sharing_pairs": [
+    {
+      "a": 20,
+      "b": 23,
+      "shared_points": 9739,
+      "n_a": 25834,
+      "n_b": 14226,
+      "pct_of_smaller": 68.46,
+      "blob_a": 7,
+      "blob_b": 10
+    },
+    {
+      "a": 21,
+      "b": 23,
+      "shared_points": 90,
+      "n_a": 21411,
+      "n_b": 14226,
+      "pct_of_smaller": 0.63,
+      "blob_a": 7,
+      "blob_b": 10
+    }
+  ],
+  "blob_box_overlaps": [
+    {
+      "blob_a": 0,
+      "blob_b": 6,
+      "overlap_cu2": 2.53609,
+      "pct_of_smaller_box": 75.33
+    },
+    {
+      "blob_a": 7,
+      "blob_b": 10,
+      "overlap_cu2": 0.57403,
+      "pct_of_smaller_box": 73.25
+    },
+    {
+      "blob_a": 0,
+      "blob_b": 8,
+      "overlap_cu2": 0.07489,
+      "pct_of_smaller_box": 4.05
+    }
+  ],
+  "mechanism": "recover_facets selects a blob's candidate points with a BOUNDING BOX test (roof[:, 0] between the blob's x limits, and likewise y), not with the blob's own cells. Connected-component labelling guarantees blobs are disjoint as CELL SETS, but says nothing about their bounding boxes, which can overlap or nest. Second, `dist` is computed ONCE against the main facets before recovery starts and is never updated as recovered facets are accepted. So a point already claimed by an earlier blob's facet still reads as unexplained when a later, box-overlapping blob looks at it, and gets fitted a second time.",
+  "verdict": "DUPLICATION FOUND: 2 facet pair(s) share points; 9829 point entries are duplicates",
+  "area_impact": {
+    "pair": [
+      20,
+      23
+    ],
+    "gross_a_cu2": 1.31085,
+    "gross_b_cu2": 0.71135,
+    "gross_of_union_cu2": 1.53306,
+    "sum_if_counted_separately_cu2": 2.0222,
+    "overcount_cu2": 0.48914,
+    "overcount_pct_of_union": 31.9,
+    "note": "This is the GROSS overcount, i.e. what the total would be inflated by if the two were summed naively. The area accounting stage resolves contested plan cells by highest-surface-wins and charges the loser an occlusion, so the reported NET total is largely protected. The facet COUNT is not protected: it is inflated by one, and facet 23's per-facet numbers describe a fragment of facet 20, not a surface of its own."
+  },
+  "not_fixed": "Nothing was changed. Two repairs are available and they are not equivalent: (a) select a blob's candidates by its CELLS instead of its bounding box, which is the narrow fix for exactly this leak; (b) update `dist` as each recovered facet is accepted, so no later blob can re-fit claimed points, which is the general fix and also makes the recovery order matter. Choosing between them is Emmett's call, and either one changes the canonical state, so it cannot be slipped in mid-diagnostic."
+}

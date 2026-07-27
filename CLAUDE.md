@@ -36,6 +36,19 @@ parsing, ODMDocker commands, environment setup, config files, visualization.
 Default loop: explain the concept, build it, run it, invite questions, move
 on. Small steps, plain language on code, never a quiz.
 
+## Where the project record lives
+- `STATE.md` holds the current state (phase, blocker, last thing verified, next
+  action). It is OVERWRITTEN in place and must be true right now.
+- `decisions/` holds the decision log, ONE FILE PER ENTRY, named
+  `YYYY-MM-DD-short-slug.md`. It is APPEND ONLY: past entries are evidence and
+  are never edited. `decisions/README.md` is the index and carries the order
+  (several entries share a date, so filename sort does not recover it).
+- These were a single `DECISIONS.md` until 2026-07-26. The split copied every
+  entry verbatim; `python scripts/verify_decisions_split.py` proves it by
+  reassembling the original and diffing against the last committed version.
+- Use the `decision-log` skill to add entries. Opposite update rules, so do not
+  mix the two: state gets rewritten, entries never do.
+
 ## Architecture the seam
 - `roofkitio.py` is the ONLY module that touches file formats. It reads a cloud
   and returns plain NumPy XYZ (and optionally colors). Everything else works on

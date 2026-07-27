@@ -1,0 +1,157 @@
+{
+  "task": "Task 6 step 7: coverage and residual map, canonical 2026-07-26 state",
+  "dataset": "big_house",
+  "date": "2026-07-26",
+  "grid": {
+    "cell_cu": 0.01299,
+    "cell_area_cu2": 0.00016875,
+    "nx": 2236,
+    "ny": 2698,
+    "cell_mult_of_spacing": 2.5,
+    "spacing_cu": 0.005196
+  },
+  "raw_coverage": {
+    "definition": "1 - residual cells / interior building cells, where interior is the footprint eroded by one cell",
+    "coverage_pct": 93.51,
+    "interior_building_cells": 1198049,
+    "interior_building_cu2": 202.171,
+    "residual_cells": 77783,
+    "residual_cu2": 13.1259
+  },
+  "coverage_excluding_edge_ring": {
+    "headline_ring_cells": 2,
+    "headline": {
+      "ring_excluded_cells": 2,
+      "ring_excluded_cu": 0.02598,
+      "building_cells": 835642,
+      "building_cu2": 141.015,
+      "residual_cells": 31453,
+      "residual_cu2": 5.3077,
+      "coverage_pct": 96.24
+    },
+    "all_ring_widths": [
+      {
+        "ring_excluded_cells": 1,
+        "ring_excluded_cu": 0.01299,
+        "building_cells": 1198049,
+        "building_cu2": 202.171,
+        "residual_cells": 77783,
+        "residual_cu2": 13.1259,
+        "coverage_pct": 93.51
+      },
+      {
+        "ring_excluded_cells": 2,
+        "ring_excluded_cu": 0.02598,
+        "building_cells": 835642,
+        "building_cu2": 141.015,
+        "residual_cells": 31453,
+        "residual_cu2": 5.3077,
+        "coverage_pct": 96.24
+      },
+      {
+        "ring_excluded_cells": 3,
+        "ring_excluded_cu": 0.03897,
+        "building_cells": 566827,
+        "building_cu2": 95.652,
+        "residual_cells": 13997,
+        "residual_cu2": 2.362,
+        "coverage_pct": 97.53
+      },
+      {
+        "ring_excluded_cells": 4,
+        "ring_excluded_cu": 0.05196,
+        "building_cells": 424530,
+        "building_cu2": 71.639,
+        "residual_cells": 7545,
+        "residual_cu2": 1.2732,
+        "coverage_pct": 98.22
+      }
+    ],
+    "why": "Two numbers, not one. The raw figure is the honest total. The ring-excluded figure separates a ragged reconstructed eave, which is a capture artefact, from unexplained area inside the roof, which would be a missing facet. Reporting the perimeter share as a single ratio is refused: it swings 58 to 90 pct across ring widths 2 to 4 with no flat region, so it has no defensible value."
+  },
+  "depth_histogram": [
+    {
+      "depth_cells": 1,
+      "cells": 32453,
+      "cu2": 5.4764,
+      "pct_of_residual": 41.72
+    },
+    {
+      "depth_cells": 2,
+      "cells": 28854,
+      "cu2": 4.8691,
+      "pct_of_residual": 37.1
+    },
+    {
+      "depth_cells": 3,
+      "cells": 8002,
+      "cu2": 1.3503,
+      "pct_of_residual": 10.29
+    },
+    {
+      "depth_cells": 4,
+      "cells": 3668,
+      "cu2": 0.619,
+      "pct_of_residual": 4.72
+    },
+    {
+      "depth_cells": 5,
+      "cells": 2455,
+      "cu2": 0.4143,
+      "pct_of_residual": 3.16
+    },
+    {
+      "depth_cells": 6,
+      "cells": 807,
+      "cu2": 0.1362,
+      "pct_of_residual": 1.04
+    },
+    {
+      "depth_cells": 7,
+      "cells": 550,
+      "cu2": 0.0928,
+      "pct_of_residual": 0.71
+    },
+    {
+      "depth_cells": 8,
+      "cells": 317,
+      "cu2": 0.0535,
+      "pct_of_residual": 0.41
+    },
+    {
+      "depth_cells": 9,
+      "cells": 161,
+      "cu2": 0.0272,
+      "pct_of_residual": 0.21
+    },
+    {
+      "depth_cells": 10,
+      "cells": 123,
+      "cu2": 0.0208,
+      "pct_of_residual": 0.16
+    },
+    {
+      "depth_cells": 11,
+      "cells": 79,
+      "cu2": 0.0133,
+      "pct_of_residual": 0.1
+    },
+    {
+      "depth_cells": ">=12",
+      "cells": 314,
+      "cu2": 0.053,
+      "pct_of_residual": 0.4
+    }
+  ],
+  "comparison_to_superseded_state": {
+    "source": "residual-map-2026-07-23.json",
+    "note": "the 2026-07-23 state is SUPERSEDED, not corrected. It is quoted here for context only; it can never be recomputed.",
+    "old_coverage_pct": 93.14,
+    "new_coverage_pct": 93.51,
+    "delta_pct": 0.37,
+    "old_residual_cu2": 13.8768,
+    "new_residual_cu2": 13.1259,
+    "old_interior_building_cu2": 202.171,
+    "new_interior_building_cu2": 202.171
+  }
+}

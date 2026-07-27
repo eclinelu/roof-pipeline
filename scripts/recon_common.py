@@ -11,7 +11,8 @@ from roofkit.segment import (find_roof_planes, assign_to_planes,
 from roofkit.measure import tilt_degrees
 
 
-def discover_facets(points, cfg, seed=0, probability=1.0, spacing=None):
+def discover_facets(points, cfg, seed=0, probability=1.0, spacing=None,
+                    min_pitch=10.0, max_pitch=60.0):
     """Segment roof facets exactly as measure_roof.py does.
     Returns (facets, band, spacing_full): facets is a list of dicts
     with the trimmed core points, the robust normal, and the pitch;
@@ -38,8 +39,12 @@ def discover_facets(points, cfg, seed=0, probability=1.0, spacing=None):
     sub = points[rng.choice(len(points), n_fit, replace=False)]
     s_sub = median_nn_spacing(sub)
     band = cfg["band_mult"] * s_sub  # a LENGTH: scale-dependent by design
+    # min_pitch/max_pitch are exposed only so a PROBE can ask what happens at
+    # other values (Task 7A2). The defaults are the pipeline's real values and
+    # no caller in the pipeline passes anything else, so this is inert.
     planes = find_roof_planes(sub, distance_threshold=band,
                               min_points=int(cfg["min_points_frac"] * n_fit),
+                              min_pitch=min_pitch, max_pitch=max_pitch,
                               max_planes=cfg["max_planes"],
                               probability=probability)
     owner, dist = assign_to_planes(points, planes, max_dist=np.inf)
@@ -48,8 +53,14 @@ def discover_facets(points, cfg, seed=0, probability=1.0, spacing=None):
         member = (owner == k) & (dist <= band)
         if member.sum() < 3:
             continue
+        # flatnonzero turns the True/False mask into the row NUMBERS it selects,
+        # in the same order the mask selects them; the trim then keeps a subset
+        # of those rows. So idx tracks points[] exactly through both steps.
+        # Carried for standing rule R1; nothing numeric reads it.
+        member_idx = np.flatnonzero(member)
         mine = points[member]
         normal, keep = fit_plane_trimmed(mine, trim_mult=cfg["trim_mult"])
         facets.append({"points": mine[keep], "normal": normal,
-                       "pitch": tilt_degrees(normal)})
+                       "pitch": tilt_degrees(normal),
+                       "idx": member_idx[keep]})
     return facets, band, s_full
