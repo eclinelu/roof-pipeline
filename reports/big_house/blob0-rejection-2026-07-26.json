@@ -1,0 +1,286 @@
+{
+  "task": "what actually rejects blob 0's large near-flat plane, read from the recovery pass's own candidate log",
+  "dataset": "big_house",
+  "date": "2026-07-26",
+  "correction": "An earlier report claimed min_pitch=5 excludes 166,015 points and 19.04 cu^2 across four planes. That figure came from RE-PEELING each blob with the pitch window opened to 0-90 and max_planes raised to 6, which changes the peel itself and not merely what survives it: find_roof_planes ends with a reassignment pass over every KEPT plane, so opening the window lets near-vertical planes into that pool and alters the near-flat plane's membership and fitted normal. Those planes are not the ones the pipeline is discarding for pitch. The recovery-pitch sweep is the evidence: lowering recovery min_pitch to 1.0 admits ONE facet of 2,623 points, not four totalling 166,015.",
+  "settings": {
+    "main_min_pitch": 5.0,
+    "recovery_min_pitch": 1.0,
+    "quality_bar": 2.948,
+    "point_floor": 1933,
+    "area_floor_cu2": 0.100008
+  },
+  "n_recovered": 22,
+  "blobs": [
+    {
+      "blob": 0,
+      "plan_area_cu2": 11.5703,
+      "n_candidate": 180861,
+      "kept": [],
+      "rejected": [
+        {
+          "n": 162938,
+          "pitch": 3.82,
+          "quality": 2.948,
+          "bar": 2.948,
+          "normal_hex": [
+            "0x1.10cb4dbca397dp-4",
+            "-0x1.2f59bba830380p-9",
+            "0x1.fedca2949746cp-1"
+          ],
+          "gross_cu2": 16.5962,
+          "rejected_by": "quality 2.948 > bar 2.948",
+          "kept": false
+        }
+      ],
+      "peels": [
+        {
+          "peel": 0,
+          "n_inliers": 162938,
+          "pitch_deg": 3.774,
+          "pitch_window": [
+            1.0,
+            60.0
+          ],
+          "kept_by_pitch": true,
+          "surface": "roof-pitched"
+        },
+        {
+          "peel": 1,
+          "n_inliers": 13010,
+          "pitch_deg": 85.881,
+          "pitch_window": [
+            1.0,
+            60.0
+          ],
+          "kept_by_pitch": false,
+          "surface": "near-vertical (85.9 deg > 60.0 deg)"
+        },
+        {
+          "peel": 2,
+          "n_inliers": 2207,
+          "pitch_deg": 85.335,
+          "pitch_window": [
+            1.0,
+            60.0
+          ],
+          "kept_by_pitch": false,
+          "surface": "near-vertical (85.3 deg > 60.0 deg)"
+        },
+        {
+          "peel": 3,
+          "stopped": "largest remaining plane has 1857 inliers < min_points 1933"
+        }
+      ]
+    },
+    {
+      "blob": 1,
+      "plan_area_cu2": 11.4532,
+      "n_candidate": 295300,
+      "kept": [
+        {
+          "n": 101684,
+          "pitch": 9.79,
+          "quality": 2.599,
+          "bar": 2.948,
+          "normal_hex": [
+            "0x1.53fcc6c9c62e0p-3",
+            "0x1.2eee501756bf0p-5",
+            "-0x1.f88a5b322ea5ap-1"
+          ],
+          "gross_cu2": 4.5126,
+          "kept": true
+        },
+        {
+          "n": 81511,
+          "pitch": 23.2,
+          "quality": 0.952,
+          "bar": 2.948,
+          "normal_hex": [
+            "0x1.935c4f0bae4a0p-2",
+            "0x1.bfca6fa455900p-9",
+            "-0x1.d69a0bd8946fap-1"
+          ],
+          "gross_cu2": 3.6851,
+          "kept": true
+        },
+        {
+          "n": 27410,
+          "pitch": 38.91,
+          "quality": 1.587,
+          "bar": 2.948,
+          "normal_hex": [
+            "-0x1.7d50809cbf761p-4",
+            "-0x1.3e01e3bbc8d36p-1",
+            "0x1.8e6d19ff6c139p-1"
+          ],
+          "gross_cu2": 2.4363,
+          "kept": true
+        }
+      ],
+      "rejected": [
+        {
+          "n": 42732,
+          "pitch": 27.51,
+          "quality": 5.259,
+          "bar": 2.948,
+          "normal_hex": [
+            "0x1.d3e149f8cc929p-2",
+            "0x1.15282df884284p-4",
+            "0x1.c61c23a7fb67ep-1"
+          ],
+          "gross_cu2": 2.6327,
+          "rejected_by": "quality 5.259 > bar 2.948",
+          "kept": false
+        }
+      ],
+      "peels": [
+        {
+          "peel": 0,
+          "n_inliers": 139386,
+          "pitch_deg": 11.562,
+          "pitch_window": [
+            1.0,
+            60.0
+          ],
+          "kept_by_pitch": true,
+          "surface": "roof-pitched"
+        },
+        {
+          "peel": 1,
+          "n_inliers": 53080,
+          "pitch_deg": 20.153,
+          "pitch_window": [
+            1.0,
+            60.0
+          ],
+          "kept_by_pitch": true,
+          "surface": "roof-pitched"
+        },
+        {
+          "peel": 2,
+          "n_inliers": 38425,
+          "pitch_deg": 27.735,
+          "pitch_window": [
+            1.0,
+            60.0
+          ],
+          "kept_by_pitch": true,
+          "surface": "roof-pitched"
+        },
+        {
+          "peel": 3,
+          "n_inliers": 22446,
+          "pitch_deg": 38.313,
+          "pitch_window": [
+            1.0,
+            60.0
+          ],
+          "kept_by_pitch": true,
+          "surface": "roof-pitched"
+        }
+      ]
+    },
+    {
+      "blob": 13,
+      "plan_area_cu2": 0.3566,
+      "n_candidate": 18467,
+      "kept": [],
+      "rejected": [
+        {
+          "n": 2206,
+          "pitch": 42.42,
+          "quality": 4.693,
+          "bar": 2.948,
+          "normal_hex": [
+            "0x1.591966e58f8c4p-1",
+            "0x1.bcae8f5beee40p-6",
+            "0x1.79f6ff6f5e8bcp-1"
+          ],
+          "gross_cu2": 0.1332,
+          "rejected_by": "quality 4.693 > bar 2.948",
+          "kept": false
+        }
+      ],
+      "peels": [
+        {
+          "peel": 0,
+          "n_inliers": 9471,
+          "pitch_deg": 88.359,
+          "pitch_window": [
+            1.0,
+            60.0
+          ],
+          "kept_by_pitch": false,
+          "surface": "near-vertical (88.4 deg > 60.0 deg)"
+        },
+        {
+          "peel": 1,
+          "n_inliers": 5100,
+          "pitch_deg": 88.583,
+          "pitch_window": [
+            1.0,
+            60.0
+          ],
+          "kept_by_pitch": false,
+          "surface": "near-vertical (88.6 deg > 60.0 deg)"
+        },
+        {
+          "peel": 2,
+          "n_inliers": 2206,
+          "pitch_deg": 42.596,
+          "pitch_window": [
+            1.0,
+            60.0
+          ],
+          "kept_by_pitch": true,
+          "surface": "roof-pitched"
+        },
+        {
+          "peel": 3,
+          "stopped": "remaining points 1690 < min_points 1933"
+        }
+      ]
+    },
+    {
+      "blob": 14,
+      "plan_area_cu2": 0.212,
+      "n_candidate": 4585,
+      "kept": [],
+      "rejected": [
+        {
+          "n": 3253,
+          "pitch": 19.2,
+          "quality": 6.823,
+          "bar": 2.948,
+          "normal_hex": [
+            "-0x1.d0fb94b537a00p-3",
+            "-0x1.e73cb16a513d4p-3",
+            "-0x1.e3859c3ba3684p-1"
+          ],
+          "gross_cu2": 0.1946,
+          "rejected_by": "quality 6.823 > bar 2.948",
+          "kept": false
+        }
+      ],
+      "peels": [
+        {
+          "peel": 0,
+          "n_inliers": 3253,
+          "pitch_deg": 18.278,
+          "pitch_window": [
+            1.0,
+            60.0
+          ],
+          "kept_by_pitch": true,
+          "surface": "roof-pitched"
+        },
+        {
+          "peel": 1,
+          "stopped": "remaining points 1332 < min_points 1933"
+        }
+      ]
+    }
+  ],
+  "reading": "At recovery min_pitch=1.0 the pitch window cannot be the reason for any rejection. Whatever gate appears in 'rejected_by' below is the real one."
+}
