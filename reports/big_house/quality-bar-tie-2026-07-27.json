@@ -1,0 +1,445 @@
+{
+  "task": "DIAGNOSTIC B: is blob 0's fit quality really EQUAL to the bar, or is three-decimal rounding hiding a near-miss?",
+  "dataset": "big_house",
+  "date": "2026-07-27",
+  "status": "SIDE ARTIFACT ONLY. No threshold changed, no comparison operator changed, no canonical state written. canonical-2026-07-26-r2 remains canonical; published coverage remains 88.40 percent.",
+  "cross_checks": [
+    {
+      "check": "main facets reproduce canonical-2026-07-26-r2",
+      "passed": true,
+      "at_min_pitch_10": {
+        "variant": "min_pitch=10 (recon_common default, which is what canonical_state.py actually passes)",
+        "n_facets": 8,
+        "matches_canonical": true,
+        "per_facet_identical": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "n_points": [
+          1538098,
+          1154335,
+          693991,
+          850268,
+          744303,
+          669484,
+          403109,
+          297583
+        ]
+      },
+      "at_min_pitch_5": {
+        "variant": "min_pitch=5 (what canonical-*.json records)",
+        "n_facets": 8,
+        "matches_canonical": true,
+        "per_facet_identical": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "n_points": [
+          1538098,
+          1154335,
+          693991,
+          850268,
+          744303,
+          669484,
+          403109,
+          297583
+        ]
+      },
+      "used": "min_pitch=5",
+      "why": "both artifacts must describe the PUBLISHED state, so the discovery variant that reproduces the canonical index arrays is the one they are built on"
+    },
+    {
+      "check": "blob 0 reproduces the canonical blob table",
+      "passed": true,
+      "observed": {
+        "area_cu2": 11.5703,
+        "n_cells": 68565
+      },
+      "canonical": {
+        "area_cu2": 11.5703,
+        "n_cells": 68565
+      }
+    },
+    {
+      "check": "blob 0's candidate reproduces blob0-rejection-2026-07-26.json",
+      "passed": true,
+      "observed": {
+        "n": 162938,
+        "pitch": 3.82,
+        "quality": 2.948,
+        "bar": 2.948,
+        "gross_cu2": 16.5962,
+        "rejected_by": "quality 2.948 > bar 2.948",
+        "kept": false
+      },
+      "expected_2026_07_26": {
+        "n": 162938,
+        "pitch": 3.82,
+        "quality": 2.948,
+        "bar": 2.948,
+        "gross_cu2": 16.5962,
+        "rejected_by": "quality 2.948 > bar 2.948"
+      }
+    },
+    {
+      "check": "no reassignment pass contaminated blob 0's candidate",
+      "passed": true,
+      "n_planes_kept_by_pitch_in_blob0": 1,
+      "why": "find_roof_planes only runs its reassignment pass when more than one plane is KEPT. Blob 0's other peels are near-vertical (85.9 and 85.3 deg) and fail max_pitch, so exactly one plane is kept and there is no reassignment: this candidate's membership and normal are RANSAC's own. That is what makes this measurement different in kind from the one that produced the wrong 19.04 cu^2 figure.",
+      "peels": [
+        {
+          "peel": 0,
+          "n_inliers": 162938,
+          "pitch_deg": 3.774,
+          "pitch_window": [
+            1.0,
+            60.0
+          ],
+          "kept_by_pitch": true,
+          "surface": "roof-pitched"
+        },
+        {
+          "peel": 1,
+          "n_inliers": 13010,
+          "pitch_deg": 85.881,
+          "pitch_window": [
+            1.0,
+            60.0
+          ],
+          "kept_by_pitch": false,
+          "surface": "near-vertical (85.9 deg > 60.0 deg)"
+        },
+        {
+          "peel": 2,
+          "n_inliers": 2207,
+          "pitch_deg": 85.335,
+          "pitch_window": [
+            1.0,
+            60.0
+          ],
+          "kept_by_pitch": false,
+          "surface": "near-vertical (85.3 deg > 60.0 deg)"
+        },
+        {
+          "peel": 3,
+          "stopped": "largest remaining plane has 1857 inliers < min_points 1933"
+        }
+      ]
+    },
+    {
+      "check": "the quality figure was READ from inside recover_facets, not re-derived by a second peel",
+      "passed": true,
+      "method": "cov.facet_quality was wrapped for the duration of the recover_facets call and unwrapped immediately after, so the unrounded value is the one production code computed. No production code was modified.",
+      "why_a_re_peel_would_not_do": "Open3D's RANSAC draws from a single GLOBAL stream, so the same call made at a different position in that stream returns a DIFFERENT plane. The re-peel is recorded below as evidence of exactly that, and is NOT the measurement.",
+      "re_peel_from_a_different_stream_position": {
+        "n_planes_kept": 2,
+        "largest_plane_n_points": 157358,
+        "quality": {
+          "repr": "2.9149848064583175",
+          "hex": "0x1.751e38de09a58p+1",
+          "bits": 4613746381044095576
+        },
+        "reassignment_pass_ran": true,
+        "peels": [
+          {
+            "peel": 0,
+            "n_inliers": 162784,
+            "pitch_deg": 3.804,
+            "pitch_window": [
+              1.0,
+              60.0
+            ],
+            "kept_by_pitch": true,
+            "surface": "roof-pitched"
+          },
+          {
+            "peel": 1,
+            "n_inliers": 12849,
+            "pitch_deg": 85.867,
+            "pitch_window": [
+              1.0,
+              60.0
+            ],
+            "kept_by_pitch": false,
+            "surface": "near-vertical (85.9 deg > 60.0 deg)"
+          },
+          {
+            "peel": 2,
+            "n_inliers": 2119,
+            "pitch_deg": 85.297,
+            "pitch_window": [
+              1.0,
+              60.0
+            ],
+            "kept_by_pitch": false,
+            "surface": "near-vertical (85.3 deg > 60.0 deg)"
+          },
+          {
+            "peel": 3,
+            "n_inliers": 1990,
+            "pitch_deg": 3.909,
+            "pitch_window": [
+              1.0,
+              60.0
+            ],
+            "kept_by_pitch": true,
+            "surface": "roof-pitched"
+          }
+        ]
+      }
+    }
+  ],
+  "diagnostic_setting": {
+    "recovery_min_pitch": 1.0,
+    "production_recovery_min_pitch": 5.0,
+    "why": "blob 0's plane sits at 3.774 deg. Under the production value of 5.0 it fails the PITCH window inside find_roof_planes and never becomes a candidate, so the quality bar never sees it. Lowering recovery min_pitch to 1.0 is the only way to make the quality number observable at all. It is a measurement setting, not a proposal: in production blob 0 is rejected by pitch, and this report says what would reject it NEXT."
+  },
+  "the_comparison": {
+    "candidate_quality": {
+      "repr": "2.9482005505438176",
+      "hex": "0x1.795ea2b951442p+1",
+      "bits": 4613821176250438722
+    },
+    "bar": {
+      "repr": "2.9479968459650356",
+      "hex": "0x1.7957f5ed10c3ep+1",
+      "bits": 4613820717548506174
+    },
+    "difference_candidate_minus_bar": {
+      "repr": "0.00020370457878193804",
+      "hex": "0x1.ab33102010000p-13",
+      "bits": 4551647396479696896
+    },
+    "equal_bitwise": false,
+    "ulps_apart": 458701932548,
+    "passes_strict_greater_than_so_is_rejected": true,
+    "would_be_accepted_if_operator_were_ge": false,
+    "rounded_to_3dp": [
+      2.948,
+      2.948
+    ],
+    "reading": "equal at three decimals is a NEAR-MISS; bitwise equal is the same number. ulps_apart counts the representable float64 values between them: 0 means identical, and anything large means the two are numerically distinct and only LOOK equal because the log rounds."
+  },
+  "candidate": {
+    "n_points": 162938,
+    "n_candidate_points_offered": 180861,
+    "pitch_deg": 3.821,
+    "azimuth_deg": 91.99,
+    "normal_hex": [
+      "0x1.10cb4dbca397dp-4",
+      "-0x1.2f59bba830380p-9",
+      "0x1.fedca2949746cp-1"
+    ],
+    "logged_by_recover_facets": {
+      "n": 162938,
+      "pitch": 3.82,
+      "quality": 2.948,
+      "bar": 2.948,
+      "normal_hex": [
+        "0x1.10cb4dbca397dp-4",
+        "-0x1.2f59bba830380p-9",
+        "0x1.fedca2949746cp-1"
+      ],
+      "gross_cu2": 16.5962,
+      "rejected_by": "quality 2.948 > bar 2.948",
+      "kept": false
+    }
+  },
+  "where_the_bar_is_computed": {
+    "definition": "roofkit/coverage.py:301  calibrate_quality_bar(facets, spacing) -> float(max(per-facet trimmed RMS / spacing))",
+    "called_from": [
+      "scripts/canonical_state.py:186  bar, ratios = cov.calibrate_quality_bar(facets, s_full)",
+      "scripts/coverage_recon.py:88   same call, same position",
+      "scripts/probe_blob0_rejection.py:70  same"
+    ],
+    "argument_at_the_call_site": "`facets`, the list returned by discover_facets. That list is MAIN facets only: recovered facets do not exist yet at that line.",
+    "position_relative_to_recovery": "computed at canonical_state.py:186; recover_facets is called at line 205. The bar is fixed 19 lines before the recovery pass begins.",
+    "inside_recover_facets": "quality_bar arrives as a scalar parameter (coverage.py:310) and is READ in exactly two places: line 432, which copies it into the log, and line 455, the test `q > quality_bar`. It is never assigned, never recomputed, and accepted candidates are appended to `new_facets`, which is never fed back into calibrate_quality_bar.",
+    "can_a_candidate_set_its_own_bar": false,
+    "verdict": "NO DEFECT ON THIS AXIS. The bar is computed once, from the 8 main facets, before the recovery loop starts, and is immutable for the whole loop. The failure mode asked about -- a candidate rougher than every main facet raising the max() it is then tested against, and then failing on strict > -- cannot occur, because no candidate ever enters the max(). Every candidate is tested against the same number, whatever any other candidate did."
+  },
+  "which_facet_sets_the_bar": {
+    "facet": 4,
+    "quality": {
+      "repr": "2.9479968459650356",
+      "hex": "0x1.7957f5ed10c3ep+1",
+      "bits": 4613820717548506174
+    },
+    "equals_bar_bitwise": true,
+    "recomputed_independently": {
+      "repr": "2.9479968459650356",
+      "hex": "0x1.7957f5ed10c3ep+1",
+      "bits": 4613820717548506174
+    },
+    "pitch_deg": 20.9901,
+    "azimuth_deg": 22.904,
+    "n_points": 744303,
+    "all_main_qualities_readable": [
+      1.3054,
+      2.2951,
+      1.0069,
+      1.8003,
+      2.948,
+      2.6648,
+      1.8218,
+      2.0741
+    ],
+    "all_main_qualities": [
+      {
+        "repr": "1.3054417963273817",
+        "hex": "0x1.4e316efe0ebebp+0",
+        "bits": 4608558006360140779
+      },
+      {
+        "repr": "2.2951323707090543",
+        "hex": "0x1.25c6e5c417d9ep+1",
+        "bits": 4612350597444763038
+      },
+      {
+        "repr": "1.0069441164664383",
+        "hex": "0x1.01c716f11f7adp+0",
+        "bits": 4607213692320348077
+      },
+      {
+        "repr": "1.8002861143955649",
+        "hex": "0x1.ccdf8d00c5990p+0",
+        "bits": 4610786587046599056
+      },
+      {
+        "repr": "2.9479968459650356",
+        "hex": "0x1.7957f5ed10c3ep+1",
+        "bits": 4613820717548506174
+      },
+      {
+        "repr": "2.664758134702275",
+        "hex": "0x1.5516cb6825eb0p+1",
+        "bits": 4613182920671256240
+      },
+      {
+        "repr": "1.821758048989139",
+        "hex": "0x1.d25ebc49a2140p+0",
+        "bits": 4610883288043233600
+      },
+      {
+        "repr": "2.0741083160522136",
+        "hex": "0x1.097c619ce7276p+1",
+        "bits": 4611852895519666806
+      }
+    ],
+    "margin_to_second_roughest": 0.283239,
+    "note": "the bar IS this facet's quality by construction (max over the main facets), so bitwise equality here is expected. It is a self-check on the arithmetic, not a finding."
+  },
+  "spatial_relation_to_the_bar_facet": {
+    "facet": 4,
+    "pitch_deg": 20.99,
+    "azimuth_deg": 22.9,
+    "plan_cells_shared_with_blob0": 0,
+    "pct_of_blob0_cells": 0.0,
+    "contact_cells": 0,
+    "contact_length_cu": 0.0,
+    "shared_points_with_blob0": 0
+  },
+  "spatial_relation_to_every_main_facet": [
+    {
+      "facet": 0,
+      "pitch_deg": 21.188,
+      "azimuth_deg": 290.36,
+      "plan_cells_shared_with_blob0": 2,
+      "pct_of_blob0_cells": 0.0,
+      "contact_cells": 7,
+      "contact_length_cu": 0.091,
+      "shared_points_with_blob0": 0
+    },
+    {
+      "facet": 1,
+      "pitch_deg": 33.067,
+      "azimuth_deg": 358.33,
+      "plan_cells_shared_with_blob0": 27,
+      "pct_of_blob0_cells": 0.04,
+      "contact_cells": 33,
+      "contact_length_cu": 0.429,
+      "shared_points_with_blob0": 0
+    },
+    {
+      "facet": 2,
+      "pitch_deg": 22.722,
+      "azimuth_deg": 112.73,
+      "plan_cells_shared_with_blob0": 0,
+      "pct_of_blob0_cells": 0.0,
+      "contact_cells": 0,
+      "contact_length_cu": 0.0,
+      "shared_points_with_blob0": 0
+    },
+    {
+      "facet": 3,
+      "pitch_deg": 34.006,
+      "azimuth_deg": 178.87,
+      "plan_cells_shared_with_blob0": 15,
+      "pct_of_blob0_cells": 0.02,
+      "contact_cells": 38,
+      "contact_length_cu": 0.494,
+      "shared_points_with_blob0": 0
+    },
+    {
+      "facet": 4,
+      "pitch_deg": 20.99,
+      "azimuth_deg": 22.9,
+      "plan_cells_shared_with_blob0": 0,
+      "pct_of_blob0_cells": 0.0,
+      "contact_cells": 0,
+      "contact_length_cu": 0.0,
+      "shared_points_with_blob0": 0
+    },
+    {
+      "facet": 5,
+      "pitch_deg": 21.357,
+      "azimuth_deg": 201.97,
+      "plan_cells_shared_with_blob0": 0,
+      "pct_of_blob0_cells": 0.0,
+      "contact_cells": 0,
+      "contact_length_cu": 0.0,
+      "shared_points_with_blob0": 0
+    },
+    {
+      "facet": 6,
+      "pitch_deg": 33.757,
+      "azimuth_deg": 268.67,
+      "plan_cells_shared_with_blob0": 0,
+      "pct_of_blob0_cells": 0.0,
+      "contact_cells": 0,
+      "contact_length_cu": 0.0,
+      "shared_points_with_blob0": 0
+    },
+    {
+      "facet": 7,
+      "pitch_deg": 33.515,
+      "azimuth_deg": 88.38,
+      "plan_cells_shared_with_blob0": 0,
+      "pct_of_blob0_cells": 0.0,
+      "contact_cells": 0,
+      "contact_length_cu": 0.0,
+      "shared_points_with_blob0": 0
+    }
+  ],
+  "geometry_against_the_bar_facet": {
+    "angle_between_normals_deg": 19.9337,
+    "candidate_pitch_deg": 3.821,
+    "bar_facet_pitch_deg": 20.9901,
+    "median_abs_distance_of_blob0_points_to_bar_facet_plane_cu": 7.26805,
+    "band_cu": 0.065863,
+    "shared_points": 0,
+    "reading": "single ownership guarantees zero shared POINTS, so that number is a check, not a finding. A shared underlying SURFACE would show up instead as a small normal angle plus plan adjacency; a coincidence would show up as neither."
+  }
+}

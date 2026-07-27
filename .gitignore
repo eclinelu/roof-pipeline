@@ -14,3 +14,8 @@ datasets/
 graphify-out/
 
 run.log
+
+# Derived render cache: a pure function of the cloud, rebuilt on demand by
+# scripts/review_render.py. The renders themselves ARE committed as evidence;
+# the 28 MB intermediate is not.
+reports/*/review/rgb-raster.npz

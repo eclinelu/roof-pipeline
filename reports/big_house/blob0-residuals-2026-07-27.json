@@ -1,0 +1,1341 @@
+{
+  "task": "DIAGNOSTIC C: is blob 0 one plane or two? Residual DISTRIBUTION and spatial arrangement, not just RMS.",
+  "dataset": "big_house",
+  "date": "2026-07-27",
+  "status": "SIDE ARTIFACT ONLY. No threshold, no comparison operator and no fit changed anywhere in roofkit. canonical-2026-07-26-r2 remains canonical; published coverage remains 88.40 pct. The two-plane fit below is a measurement in this probe, not a split implemented in the pipeline.",
+  "context": "blob 0 confirmed REAL ROOF by physical inspection 2026-07-27: a lower, tree-occluded section of different material on the east elevation of the south wing.",
+  "cross_checks": [
+    {
+      "check": "the plane analysed here IS the plane recover_facets rejected",
+      "passed": true,
+      "n_points": 162938,
+      "normal_hex": [
+        "0x1.10cb4dbca397dp-4",
+        "-0x1.2f59bba830380p-9",
+        "0x1.fedca2949746cp-1"
+      ],
+      "expected_normal_hex": [
+        "0x1.10cb4dbca397dp-4",
+        "-0x1.2f59bba830380p-9",
+        "0x1.fedca2949746cp-1"
+      ],
+      "quality": "2.9482005505438176",
+      "bar": "2.9479968459650356",
+      "why": "a re-peel returns a different plane (2026-07-27-reassignment-pass-contamination), so the identity of the plane has to be checked, not assumed"
+    }
+  ],
+  "scale_in_per_cu": 40.4541,
+  "plane": {
+    "n_points": 162938,
+    "normal_hex": [
+      "0x1.10cb4dbca397dp-4",
+      "-0x1.2f59bba830380p-9",
+      "0x1.fedca2949746cp-1"
+    ],
+    "pitch_deg": 3.821,
+    "quality": "2.9482005505438176",
+    "bar": "2.9479968459650356",
+    "margin": "0.00020370457878193804"
+  },
+  "residual_distribution": {
+    "n": 162938,
+    "n_trimmed_kept": 144787,
+    "trim_discarded_pct": 11.14,
+    "mean": -0.003059413769395642,
+    "median": -5.695619100734228e-05,
+    "std": 0.022722365815461203,
+    "mean_in": -0.12376583056850822,
+    "std_in": 0.919212858935249,
+    "p1": -0.0802014520030081,
+    "p99": 0.04363065402827271,
+    "min": -0.1038133985063071,
+    "max": 0.07827471797114902,
+    "skew": -0.8948326908775949,
+    "excess_kurtosis": 1.9505748695668137,
+    "rms_all": 0.022927405454259486,
+    "rms_trimmed": 0.015319299944048211,
+    "rms_trimmed_over_spacing": 2.9482005505438176,
+    "quality_reported_by_pipeline": 2.9482005505438176,
+    "gaussian_expectation": "skew 0, excess kurtosis 0. A heavy tail reads positive kurtosis; two lobes read negative."
+  },
+  "histogram": {
+    "bin_edges": [
+      -0.1038133985063071,
+      -0.10290295792391982,
+      -0.10199251734153253,
+      -0.10108207675914525,
+      -0.10017163617675798,
+      -0.09926119559437069,
+      -0.09835075501198341,
+      -0.09744031442959614,
+      -0.09652987384720885,
+      -0.09561943326482157,
+      -0.0947089926824343,
+      -0.093798552100047,
+      -0.09288811151765973,
+      -0.09197767093527245,
+      -0.09106723035288516,
+      -0.09015678977049789,
+      -0.08924634918811061,
+      -0.08833590860572332,
+      -0.08742546802333605,
+      -0.08651502744094877,
+      -0.08560458685856148,
+      -0.0846941462761742,
+      -0.08378370569378693,
+      -0.08287326511139964,
+      -0.08196282452901237,
+      -0.08105238394662509,
+      -0.0801419433642378,
+      -0.07923150278185052,
+      -0.07832106219946325,
+      -0.07741062161707596,
+      -0.07650018103468868,
+      -0.0755897404523014,
+      -0.07467929986991412,
+      -0.07376885928752684,
+      -0.07285841870513955,
+      -0.07194797812275228,
+      -0.07103753754036499,
+      -0.07012709695797772,
+      -0.06921665637559044,
+      -0.06830621579320315,
+      -0.06739577521081587,
+      -0.0664853346284286,
+      -0.0655748940460413,
+      -0.06466445346365403,
+      -0.06375401288126675,
+      -0.06284357229887946,
+      -0.06193313171649219,
+      -0.06102269113410491,
+      -0.06011225055171763,
+      -0.059201809969330346,
+      -0.05829136938694307,
+      -0.05738092880455579,
+      -0.056470488222168505,
+      -0.05556004763978123,
+      -0.05464960705739395,
+      -0.053739166475006664,
+      -0.05282872589261939,
+      -0.051918285310232105,
+      -0.05100784472784482,
+      -0.05009740414545754,
+      -0.049186963563070264,
+      -0.04827652298068298,
+      -0.0473660823982957,
+      -0.04645564181590842,
+      -0.04554520123352114,
+      -0.04463476065113386,
+      -0.04372432006874658,
+      -0.0428138794863593,
+      -0.041903438903972016,
+      -0.040992998321584734,
+      -0.04008255773919746,
+      -0.03917211715681018,
+      -0.03826167657442289,
+      -0.03735123599203562,
+      -0.03644079540964834,
+      -0.03553035482726105,
+      -0.034619914244873776,
+      -0.0337094736624865,
+      -0.03279903308009921,
+      -0.031888592497711934,
+      -0.030978151915324645,
+      -0.03006771133293737,
+      -0.029157270750550093,
+      -0.028246830168162804,
+      -0.027336389585775528,
+      -0.026425949003388252,
+      -0.025515508421000963,
+      -0.024605067838613687,
+      -0.02369462725622641,
+      -0.02278418667383912,
+      -0.021873746091451846,
+      -0.02096330550906457,
+      -0.02005286492667728,
+      -0.019142424344290004,
+      -0.01823198376190273,
+      -0.01732154317951544,
+      -0.016411102597128163,
+      -0.015500662014740887,
+      -0.014590221432353598,
+      -0.013679780849966322,
+      -0.012769340267579046,
+      -0.011858899685191757,
+      -0.010948459102804481,
+      -0.010038018520417205,
+      -0.009127577938029915,
+      -0.00821713735564264,
+      -0.007306696773255364,
+      -0.006396256190868074,
+      -0.0054858156084807985,
+      -0.004575375026093523,
+      -0.003664934443706233,
+      -0.0027544938613189573,
+      -0.0018440532789316816,
+      -0.0009336126965443919,
+      -2.3172114157116175e-05,
+      0.0008872684682301735,
+      0.0017977090506174492,
+      0.002708149633004725,
+      0.0036185902153920146,
+      0.00452903079777929,
+      0.005439471380166566,
+      0.006349911962553856,
+      0.007260352544941132,
+      0.008170793127328407,
+      0.009081233709715697,
+      0.009991674292102973,
+      0.010902114874490249,
+      0.011812555456877538,
+      0.012722996039264814,
+      0.01363343662165209,
+      0.01454387720403938,
+      0.015454317786426655,
+      0.01636475836881393,
+      0.01727519895120122,
+      0.018185639533588496,
+      0.019096080115975772,
+      0.02000652069836306,
+      0.020916961280750337,
+      0.021827401863137627,
+      0.02273784244552489,
+      0.02364828302791218,
+      0.024558723610299468,
+      0.02546916419268673,
+      0.02637960477507402,
+      0.02729004535746131,
+      0.02820048593984857,
+      0.02911092652223586,
+      0.03002136710462315,
+      0.030931807687010412,
+      0.0318422482693977,
+      0.03275268885178499,
+      0.033663129434172254,
+      0.03457357001655954,
+      0.03548401059894683,
+      0.036394451181334095,
+      0.037304891763721384,
+      0.038215332346108674,
+      0.039125772928495936,
+      0.040036213510883226,
+      0.040946654093270515,
+      0.041857094675657805,
+      0.04276753525804507,
+      0.043677975840432356,
+      0.044588416422819646,
+      0.04549885700520691,
+      0.0464092975875942,
+      0.04731973816998149,
+      0.04823017875236875,
+      0.04914061933475604,
+      0.05005105991714333,
+      0.05096150049953059,
+      0.05187194108191788,
+      0.05278238166430517,
+      0.05369282224669243,
+      0.05460326282907972,
+      0.05551370341146701,
+      0.05642414399385427,
+      0.05733458457624156,
+      0.05824502515862885,
+      0.059155465741016114,
+      0.060065906323403404,
+      0.06097634690579069,
+      0.061886787488177955,
+      0.06279722807056524,
+      0.06370766865295253,
+      0.0646181092353398,
+      0.06552854981772709,
+      0.06643899040011438,
+      0.06734943098250164,
+      0.06825987156488893,
+      0.06917031214727622,
+      0.07008075272966348,
+      0.07099119331205077,
+      0.07190163389443806,
+      0.07281207447682532,
+      0.07372251505921261,
+      0.0746329556415999,
+      0.07554339622398716,
+      0.07645383680637445,
+      0.07736427738876174,
+      0.07827471797114902
+    ],
+    "counts": [
+      5,
+      6,
+      4,
+      15,
+      15,
+      30,
+      42,
+      43,
+      41,
+      57,
+      49,
+      62,
+      73,
+      72,
+      71,
+      66,
+      97,
+      77,
+      83,
+      104,
+      102,
+      98,
+      106,
+      89,
+      105,
+      125,
+      120,
+      113,
+      115,
+      89,
+      125,
+      115,
+      119,
+      139,
+      124,
+      112,
+      124,
+      105,
+      116,
+      108,
+      115,
+      129,
+      125,
+      125,
+      138,
+      130,
+      132,
+      140,
+      136,
+      164,
+      132,
+      146,
+      157,
+      147,
+      162,
+      166,
+      173,
+      155,
+      202,
+      202,
+      209,
+      221,
+      237,
+      262,
+      286,
+      291,
+      316,
+      327,
+      370,
+      378,
+      424,
+      437,
+      521,
+      528,
+      569,
+      629,
+      697,
+      744,
+      804,
+      863,
+      896,
+      1070,
+      1083,
+      1137,
+      1248,
+      1265,
+      1320,
+      1322,
+      1467,
+      1516,
+      1571,
+      1572,
+      1651,
+      1782,
+      1763,
+      1827,
+      1868,
+      1897,
+      1987,
+      1914,
+      2085,
+      2157,
+      2225,
+      2243,
+      2352,
+      2415,
+      2551,
+      2597,
+      2590,
+      2786,
+      2876,
+      3039,
+      3095,
+      3062,
+      3251,
+      3368,
+      3400,
+      3504,
+      3395,
+      3417,
+      3289,
+      3241,
+      3326,
+      3081,
+      3002,
+      3021,
+      2877,
+      2760,
+      2639,
+      2532,
+      2330,
+      2247,
+      2131,
+      1914,
+      1846,
+      1750,
+      1617,
+      1450,
+      1265,
+      1238,
+      1135,
+      1000,
+      938,
+      854,
+      825,
+      743,
+      703,
+      658,
+      594,
+      586,
+      531,
+      461,
+      417,
+      369,
+      366,
+      313,
+      272,
+      294,
+      243,
+      189,
+      169,
+      186,
+      177,
+      165,
+      144,
+      113,
+      101,
+      91,
+      108,
+      82,
+      78,
+      78,
+      60,
+      58,
+      51,
+      38,
+      41,
+      32,
+      30,
+      25,
+      29,
+      11,
+      27,
+      17,
+      18,
+      17,
+      7,
+      7,
+      5,
+      3,
+      3,
+      1,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      3
+    ]
+  },
+  "bimodality": {
+    "bimodality_coefficient": 0.22648840664927494,
+    "bimodality_coefficient_reading": "BC > 0.555 (the value for a uniform distribution) is the usual flag; a Gaussian sits near 0.333",
+    "two_component_mixture": {
+      "weights": [
+        0.15625256093922021,
+        0.843747439060771
+      ],
+      "means": [
+        -0.026384164214919733,
+        0.0012600683666785387
+      ],
+      "means_in": [
+        -1.0673476175667842,
+        0.05097493171245027
+      ],
+      "sigmas": [
+        0.03302049002444839,
+        0.017046703541539403
+      ],
+      "separation_ashman_D": 1.0520386155549546,
+      "ashman_reading": "D > 2 is the conventional threshold for two RESOLVABLE lobes. Below it the mixture is fitting one lobe with two overlapping Gaussians, which it can always do.",
+      "bic_one_component": -770824.9310133575,
+      "bic_two_component": -790897.305069064,
+      "bic_favours": "two",
+      "bic_reading": "BIC always improves with more parameters on 100k+ points, so a BIC win alone is not evidence. Read it together with Ashman's D and the spatial map."
+    },
+    "note": "a mixture fit measures the SHAPE of the histogram. Two planes would also have to show up as two CONTIGUOUS same-sign regions in the spatial map, which is the test that actually discriminates."
+  },
+  "local_density": {
+    "method": "mean distance to the 8 nearest neighbours, per point. Larger means sparser. Correlated against |residual| on a 50,000-point sample.",
+    "local_spacing_cu": {
+      "p5": 0.009585621507374088,
+      "median": 0.014296556592923408,
+      "p95": 0.022647427923825774,
+      "median_in": 0.5783543300657829
+    },
+    "cloud_median_spacing_cu": 0.005196152595936003,
+    "spearman_rho": 0.23717758392576918,
+    "spearman_p": 0.0,
+    "pearson_r": 0.23612480748874967,
+    "pearson_p": 0.0,
+    "reading": "a strong POSITIVE correlation means the residual is largest where the cloud is thinnest, which is the signature of capture noise rather than shape. Near zero means the roughness is a property of the surface, not of the capture."
+  },
+  "spatial": {
+    "map_cell_cu": 0.05196152595936003,
+    "map_cell_in": 2.1020567673125465,
+    "grid": [
+      121,
+      74
+    ],
+    "occupied_cells": 6382,
+    "sign_regions": {
+      "n_positive_regions": 130,
+      "n_negative_regions": 79,
+      "largest_positive_region_cells": 821,
+      "largest_negative_region_cells": 1675,
+      "largest_positive_pct_of_positive": 28.25,
+      "largest_negative_pct_of_negative": 48.19,
+      "reading": "TWO PLANES would give ~1 large positive region and ~1 large negative region, each holding most of its sign's cells, meeting along a line. Thousands of small regions of both signs, each a few cells, is speckle: noise, not geometry."
+    },
+    "linear_trend": {
+      "slope_u_per_cu": -0.0029006537254361977,
+      "slope_v_per_cu": -0.0007501674111785803,
+      "r_squared": 0.04691573074860411,
+      "reading": "a plane fit removes the linear trend from its own trimmed subset, so a large R^2 here would mean the untrimmed points carry a tilt the trim discarded. Near zero means there is no leftover tilt and the residual is not a smooth ramp."
+    },
+    "per_cell_density_vs_abs_residual": {
+      "spearman_rho": 0.0036451283457067385,
+      "spearman_p": 0.7709413207262431
+    },
+    "points_per_cell": {
+      "median": 25.0,
+      "p5": 9.0,
+      "p95": 45.0
+    }
+  },
+  "edge_profile": {
+    "method": "distance from each point to the boundary of the occupied patch, from a Euclidean distance transform of the occupancy grid. Profiles the residual against depth into the patch.",
+    "rows": [
+      {
+        "from_edge_in": 0.0,
+        "to_edge_in": 2.1,
+        "n_points": 654,
+        "mean_signed_in": -0.3204,
+        "mean_abs_in": 0.8722,
+        "median_local_spacing_in": 0.8289
+      },
+      {
+        "from_edge_in": 2.1,
+        "to_edge_in": 4.2,
+        "n_points": 29019,
+        "mean_signed_in": -0.2102,
+        "mean_abs_in": 0.777,
+        "median_local_spacing_in": 0.6338
+      },
+      {
+        "from_edge_in": 4.2,
+        "to_edge_in": 6.31,
+        "n_points": 35246,
+        "mean_signed_in": -0.1826,
+        "mean_abs_in": 0.7252,
+        "median_local_spacing_in": 0.6013
+      },
+      {
+        "from_edge_in": 6.31,
+        "to_edge_in": 8.41,
+        "n_points": 23475,
+        "mean_signed_in": -0.1584,
+        "mean_abs_in": 0.6747,
+        "median_local_spacing_in": 0.5945
+      },
+      {
+        "from_edge_in": 8.41,
+        "to_edge_in": 12.61,
+        "n_points": 35996,
+        "mean_signed_in": -0.1387,
+        "mean_abs_in": 0.6525,
+        "median_local_spacing_in": 0.5659
+      },
+      {
+        "from_edge_in": 12.61,
+        "to_edge_in": 16.82,
+        "n_points": 17459,
+        "mean_signed_in": -0.0094,
+        "mean_abs_in": 0.6352,
+        "median_local_spacing_in": 0.5324
+      },
+      {
+        "from_edge_in": 16.82,
+        "to_edge_in": 25.22,
+        "n_points": 17716,
+        "mean_signed_in": 0.09,
+        "mean_abs_in": 0.5604,
+        "median_local_spacing_in": 0.5029
+      },
+      {
+        "from_edge_in": 25.22,
+        "to_edge_in": 33.63,
+        "n_points": 3373,
+        "mean_signed_in": -0.0412,
+        "mean_abs_in": 0.5779,
+        "median_local_spacing_in": 0.4926
+      }
+    ],
+    "interior_only": {
+      "depth_threshold_in": 8.41,
+      "n_points": 69763,
+      "pct_of_patch": 42.82,
+      "mean_signed_in": -0.042,
+      "std_in": 0.793,
+      "skew": -0.4003,
+      "excess_kurtosis": 0.7539,
+      "quality_trimmed": 2.908565689719037,
+      "bar": 2.9479968459650356,
+      "interior_alone_clears_bar": true,
+      "comparable_because": "computed by cov.facet_quality, the same function and the same 3x trim that produced the bar",
+      "untrimmed_rms_over_spacing_interior": 3.77758,
+      "untrimmed_rms_over_spacing_whole_patch": 4.41238,
+      "untrimmed_note": "these two are NOT comparable to the bar. They are here only to show that the interior is quieter than the whole patch on a like-for-like untrimmed basis."
+    },
+    "reading": "if the edge rows carry a large systematic offset that the interior does not, the single-plane fit is being charged for a boundary effect rather than for the surface. The interior -only quality says what the surface would score without it."
+  },
+  "directional_profiles": {
+    "axes": {
+      "u_axis_world_xyz": [
+        -0.0,
+        0.9999973098849485,
+        0.0023195307427236736
+      ],
+      "v_axis_world_xyz": [
+        -0.9977797462136755,
+        -0.00015448106171227338,
+        0.06659995631661582
+      ],
+      "note": "+u and +v are the in-plane axes of the fitted plane. Their world x/y components say how they lie on the map: +x is UTM easting, +y is UTM northing, to within the 1.083 deg level tilt."
+    },
+    "along_u": [
+      {
+        "center_in": -138.07,
+        "n_points": 504,
+        "mean_signed_in": -0.4526,
+        "mean_abs_in": 0.8447,
+        "median_spacing_in": 0.696
+      },
+      {
+        "center_in": -131.72,
+        "n_points": 2393,
+        "mean_signed_in": -0.1127,
+        "mean_abs_in": 0.4844,
+        "median_spacing_in": 0.6163
+      },
+      {
+        "center_in": -125.38,
+        "n_points": 2475,
+        "mean_signed_in": -0.1867,
+        "mean_abs_in": 0.5462,
+        "median_spacing_in": 0.5912
+      },
+      {
+        "center_in": -119.03,
+        "n_points": 1708,
+        "mean_signed_in": -0.068,
+        "mean_abs_in": 0.559,
+        "median_spacing_in": 0.6075
+      },
+      {
+        "center_in": -112.68,
+        "n_points": 2268,
+        "mean_signed_in": 0.2182,
+        "mean_abs_in": 0.404,
+        "median_spacing_in": 0.5817
+      },
+      {
+        "center_in": -106.34,
+        "n_points": 2288,
+        "mean_signed_in": 0.2387,
+        "mean_abs_in": 0.5725,
+        "median_spacing_in": 0.6153
+      },
+      {
+        "center_in": -99.99,
+        "n_points": 2381,
+        "mean_signed_in": -0.1069,
+        "mean_abs_in": 0.4479,
+        "median_spacing_in": 0.6005
+      },
+      {
+        "center_in": -93.64,
+        "n_points": 3226,
+        "mean_signed_in": -0.0757,
+        "mean_abs_in": 0.435,
+        "median_spacing_in": 0.5801
+      },
+      {
+        "center_in": -87.29,
+        "n_points": 2954,
+        "mean_signed_in": -0.2084,
+        "mean_abs_in": 0.6446,
+        "median_spacing_in": 0.6638
+      },
+      {
+        "center_in": -80.95,
+        "n_points": 3115,
+        "mean_signed_in": -0.11,
+        "mean_abs_in": 0.4945,
+        "median_spacing_in": 0.6665
+      },
+      {
+        "center_in": -74.6,
+        "n_points": 3037,
+        "mean_signed_in": 0.0181,
+        "mean_abs_in": 0.4495,
+        "median_spacing_in": 0.5911
+      },
+      {
+        "center_in": -68.25,
+        "n_points": 3658,
+        "mean_signed_in": -0.0685,
+        "mean_abs_in": 0.5228,
+        "median_spacing_in": 0.6082
+      },
+      {
+        "center_in": -61.91,
+        "n_points": 3605,
+        "mean_signed_in": -0.0244,
+        "mean_abs_in": 0.5287,
+        "median_spacing_in": 0.5892
+      },
+      {
+        "center_in": -55.56,
+        "n_points": 3864,
+        "mean_signed_in": 0.0101,
+        "mean_abs_in": 0.6063,
+        "median_spacing_in": 0.6453
+      },
+      {
+        "center_in": -49.21,
+        "n_points": 4459,
+        "mean_signed_in": -0.1591,
+        "mean_abs_in": 0.5666,
+        "median_spacing_in": 0.6233
+      },
+      {
+        "center_in": -42.87,
+        "n_points": 3281,
+        "mean_signed_in": 0.2116,
+        "mean_abs_in": 0.5418,
+        "median_spacing_in": 0.5991
+      },
+      {
+        "center_in": -36.52,
+        "n_points": 3477,
+        "mean_signed_in": 0.1382,
+        "mean_abs_in": 0.648,
+        "median_spacing_in": 0.6428
+      },
+      {
+        "center_in": -30.17,
+        "n_points": 3415,
+        "mean_signed_in": 0.1049,
+        "mean_abs_in": 0.5423,
+        "median_spacing_in": 0.6096
+      },
+      {
+        "center_in": -23.83,
+        "n_points": 3300,
+        "mean_signed_in": 0.2061,
+        "mean_abs_in": 0.627,
+        "median_spacing_in": 0.6132
+      },
+      {
+        "center_in": -17.48,
+        "n_points": 3920,
+        "mean_signed_in": -0.0471,
+        "mean_abs_in": 0.6154,
+        "median_spacing_in": 0.6519
+      },
+      {
+        "center_in": -11.13,
+        "n_points": 4303,
+        "mean_signed_in": 0.2299,
+        "mean_abs_in": 0.632,
+        "median_spacing_in": 0.571
+      },
+      {
+        "center_in": -4.79,
+        "n_points": 5722,
+        "mean_signed_in": 0.1145,
+        "mean_abs_in": 0.6532,
+        "median_spacing_in": 0.5742
+      },
+      {
+        "center_in": 1.56,
+        "n_points": 5954,
+        "mean_signed_in": -0.0238,
+        "mean_abs_in": 0.5692,
+        "median_spacing_in": 0.538
+      },
+      {
+        "center_in": 7.91,
+        "n_points": 5125,
+        "mean_signed_in": 0.2148,
+        "mean_abs_in": 0.6261,
+        "median_spacing_in": 0.5327
+      },
+      {
+        "center_in": 14.26,
+        "n_points": 5182,
+        "mean_signed_in": 0.0263,
+        "mean_abs_in": 0.5584,
+        "median_spacing_in": 0.5451
+      },
+      {
+        "center_in": 20.6,
+        "n_points": 5143,
+        "mean_signed_in": 0.1964,
+        "mean_abs_in": 0.6567,
+        "median_spacing_in": 0.5399
+      },
+      {
+        "center_in": 26.95,
+        "n_points": 6243,
+        "mean_signed_in": 0.0103,
+        "mean_abs_in": 0.6841,
+        "median_spacing_in": 0.5547
+      },
+      {
+        "center_in": 33.3,
+        "n_points": 5475,
+        "mean_signed_in": -0.0308,
+        "mean_abs_in": 0.8045,
+        "median_spacing_in": 0.5563
+      },
+      {
+        "center_in": 39.64,
+        "n_points": 4624,
+        "mean_signed_in": 0.2091,
+        "mean_abs_in": 0.588,
+        "median_spacing_in": 0.538
+      },
+      {
+        "center_in": 45.99,
+        "n_points": 4692,
+        "mean_signed_in": -0.0582,
+        "mean_abs_in": 0.5872,
+        "median_spacing_in": 0.5375
+      },
+      {
+        "center_in": 52.34,
+        "n_points": 5018,
+        "mean_signed_in": -0.1173,
+        "mean_abs_in": 0.56,
+        "median_spacing_in": 0.5258
+      },
+      {
+        "center_in": 58.68,
+        "n_points": 4799,
+        "mean_signed_in": -0.1119,
+        "mean_abs_in": 0.5482,
+        "median_spacing_in": 0.5636
+      },
+      {
+        "center_in": 65.03,
+        "n_points": 4413,
+        "mean_signed_in": 0.0517,
+        "mean_abs_in": 0.56,
+        "median_spacing_in": 0.5471
+      },
+      {
+        "center_in": 71.38,
+        "n_points": 5266,
+        "mean_signed_in": -0.0669,
+        "mean_abs_in": 0.6611,
+        "median_spacing_in": 0.5499
+      },
+      {
+        "center_in": 77.72,
+        "n_points": 6289,
+        "mean_signed_in": -0.0277,
+        "mean_abs_in": 0.5954,
+        "median_spacing_in": 0.5558
+      },
+      {
+        "center_in": 84.07,
+        "n_points": 6180,
+        "mean_signed_in": -0.0234,
+        "mean_abs_in": 0.6737,
+        "median_spacing_in": 0.5572
+      },
+      {
+        "center_in": 90.42,
+        "n_points": 5826,
+        "mean_signed_in": -0.1035,
+        "mean_abs_in": 0.5097,
+        "median_spacing_in": 0.5568
+      },
+      {
+        "center_in": 96.76,
+        "n_points": 5667,
+        "mean_signed_in": -0.7027,
+        "mean_abs_in": 0.8419,
+        "median_spacing_in": 0.5243
+      },
+      {
+        "center_in": 103.11,
+        "n_points": 5501,
+        "mean_signed_in": -2.1762,
+        "mean_abs_in": 2.1873,
+        "median_spacing_in": 0.5992
+      },
+      {
+        "center_in": 109.46,
+        "n_points": 2188,
+        "mean_signed_in": -2.7251,
+        "mean_abs_in": 2.7276,
+        "median_spacing_in": 0.6304
+      }
+    ],
+    "along_v": [
+      {
+        "center_in": -82.07,
+        "n_points": 265,
+        "mean_signed_in": -0.6187,
+        "mean_abs_in": 0.7733,
+        "median_spacing_in": 0.8093
+      },
+      {
+        "center_in": -78.18,
+        "n_points": 687,
+        "mean_signed_in": -0.4141,
+        "mean_abs_in": 0.6898,
+        "median_spacing_in": 0.766
+      },
+      {
+        "center_in": -74.29,
+        "n_points": 1309,
+        "mean_signed_in": -0.2207,
+        "mean_abs_in": 0.7605,
+        "median_spacing_in": 0.7478
+      },
+      {
+        "center_in": -70.41,
+        "n_points": 1979,
+        "mean_signed_in": -0.1499,
+        "mean_abs_in": 0.7658,
+        "median_spacing_in": 0.6906
+      },
+      {
+        "center_in": -66.52,
+        "n_points": 2552,
+        "mean_signed_in": 0.0263,
+        "mean_abs_in": 0.6685,
+        "median_spacing_in": 0.66
+      },
+      {
+        "center_in": -62.63,
+        "n_points": 3226,
+        "mean_signed_in": 0.0565,
+        "mean_abs_in": 0.6388,
+        "median_spacing_in": 0.6454
+      },
+      {
+        "center_in": -58.74,
+        "n_points": 3148,
+        "mean_signed_in": 0.0437,
+        "mean_abs_in": 0.6627,
+        "median_spacing_in": 0.6289
+      },
+      {
+        "center_in": -54.86,
+        "n_points": 3456,
+        "mean_signed_in": 0.0234,
+        "mean_abs_in": 0.6483,
+        "median_spacing_in": 0.6086
+      },
+      {
+        "center_in": -50.97,
+        "n_points": 3525,
+        "mean_signed_in": -0.0135,
+        "mean_abs_in": 0.7128,
+        "median_spacing_in": 0.6256
+      },
+      {
+        "center_in": -47.08,
+        "n_points": 3839,
+        "mean_signed_in": -0.06,
+        "mean_abs_in": 0.7442,
+        "median_spacing_in": 0.65
+      },
+      {
+        "center_in": -43.19,
+        "n_points": 3899,
+        "mean_signed_in": -0.0672,
+        "mean_abs_in": 0.6912,
+        "median_spacing_in": 0.6552
+      },
+      {
+        "center_in": -39.3,
+        "n_points": 4184,
+        "mean_signed_in": -0.1208,
+        "mean_abs_in": 0.7152,
+        "median_spacing_in": 0.6464
+      },
+      {
+        "center_in": -35.42,
+        "n_points": 4049,
+        "mean_signed_in": -0.153,
+        "mean_abs_in": 0.6875,
+        "median_spacing_in": 0.636
+      },
+      {
+        "center_in": -31.53,
+        "n_points": 4441,
+        "mean_signed_in": -0.0771,
+        "mean_abs_in": 0.596,
+        "median_spacing_in": 0.6144
+      },
+      {
+        "center_in": -27.64,
+        "n_points": 4416,
+        "mean_signed_in": -0.1301,
+        "mean_abs_in": 0.5839,
+        "median_spacing_in": 0.6194
+      },
+      {
+        "center_in": -23.75,
+        "n_points": 4367,
+        "mean_signed_in": -0.0354,
+        "mean_abs_in": 0.5898,
+        "median_spacing_in": 0.6163
+      },
+      {
+        "center_in": -19.87,
+        "n_points": 4427,
+        "mean_signed_in": -0.0102,
+        "mean_abs_in": 0.7,
+        "median_spacing_in": 0.6534
+      },
+      {
+        "center_in": -15.98,
+        "n_points": 4560,
+        "mean_signed_in": -0.0766,
+        "mean_abs_in": 0.6461,
+        "median_spacing_in": 0.6391
+      },
+      {
+        "center_in": -12.09,
+        "n_points": 4477,
+        "mean_signed_in": -0.0491,
+        "mean_abs_in": 0.6587,
+        "median_spacing_in": 0.6411
+      },
+      {
+        "center_in": -8.2,
+        "n_points": 4502,
+        "mean_signed_in": -0.0491,
+        "mean_abs_in": 0.6794,
+        "median_spacing_in": 0.6263
+      },
+      {
+        "center_in": -4.31,
+        "n_points": 4707,
+        "mean_signed_in": -0.1582,
+        "mean_abs_in": 0.7365,
+        "median_spacing_in": 0.6348
+      },
+      {
+        "center_in": -0.43,
+        "n_points": 5170,
+        "mean_signed_in": -0.2192,
+        "mean_abs_in": 0.7893,
+        "median_spacing_in": 0.5885
+      },
+      {
+        "center_in": 3.46,
+        "n_points": 6112,
+        "mean_signed_in": -0.2541,
+        "mean_abs_in": 0.7406,
+        "median_spacing_in": 0.5486
+      },
+      {
+        "center_in": 7.35,
+        "n_points": 6708,
+        "mean_signed_in": -0.2182,
+        "mean_abs_in": 0.6404,
+        "median_spacing_in": 0.5313
+      },
+      {
+        "center_in": 11.24,
+        "n_points": 6734,
+        "mean_signed_in": -0.1127,
+        "mean_abs_in": 0.6558,
+        "median_spacing_in": 0.5233
+      },
+      {
+        "center_in": 15.12,
+        "n_points": 6174,
+        "mean_signed_in": -0.0223,
+        "mean_abs_in": 0.642,
+        "median_spacing_in": 0.5239
+      },
+      {
+        "center_in": 19.01,
+        "n_points": 6228,
+        "mean_signed_in": -0.0197,
+        "mean_abs_in": 0.6652,
+        "median_spacing_in": 0.52
+      },
+      {
+        "center_in": 22.9,
+        "n_points": 6546,
+        "mean_signed_in": -0.0239,
+        "mean_abs_in": 0.654,
+        "median_spacing_in": 0.5111
+      },
+      {
+        "center_in": 26.79,
+        "n_points": 5490,
+        "mean_signed_in": 0.0637,
+        "mean_abs_in": 0.5843,
+        "median_spacing_in": 0.5267
+      },
+      {
+        "center_in": 30.67,
+        "n_points": 5724,
+        "mean_signed_in": 0.0279,
+        "mean_abs_in": 0.5425,
+        "median_spacing_in": 0.5118
+      },
+      {
+        "center_in": 34.56,
+        "n_points": 4938,
+        "mean_signed_in": -0.0921,
+        "mean_abs_in": 0.6029,
+        "median_spacing_in": 0.5313
+      },
+      {
+        "center_in": 38.45,
+        "n_points": 4654,
+        "mean_signed_in": -0.316,
+        "mean_abs_in": 0.7117,
+        "median_spacing_in": 0.5339
+      },
+      {
+        "center_in": 42.34,
+        "n_points": 4586,
+        "mean_signed_in": -0.3906,
+        "mean_abs_in": 0.7718,
+        "median_spacing_in": 0.5335
+      },
+      {
+        "center_in": 46.23,
+        "n_points": 4254,
+        "mean_signed_in": -0.3453,
+        "mean_abs_in": 0.7495,
+        "median_spacing_in": 0.532
+      },
+      {
+        "center_in": 50.11,
+        "n_points": 3549,
+        "mean_signed_in": -0.5011,
+        "mean_abs_in": 0.7709,
+        "median_spacing_in": 0.5265
+      },
+      {
+        "center_in": 54.0,
+        "n_points": 3275,
+        "mean_signed_in": -0.6002,
+        "mean_abs_in": 0.8051,
+        "median_spacing_in": 0.5248
+      },
+      {
+        "center_in": 57.89,
+        "n_points": 3482,
+        "mean_signed_in": -0.3772,
+        "mean_abs_in": 0.6782,
+        "median_spacing_in": 0.5105
+      },
+      {
+        "center_in": 61.78,
+        "n_points": 3675,
+        "mean_signed_in": -0.1445,
+        "mean_abs_in": 0.6606,
+        "median_spacing_in": 0.5074
+      },
+      {
+        "center_in": 65.66,
+        "n_points": 2930,
+        "mean_signed_in": 0.2016,
+        "mean_abs_in": 0.8595,
+        "median_spacing_in": 0.5401
+      },
+      {
+        "center_in": 69.55,
+        "n_points": 694,
+        "mean_signed_in": -0.4094,
+        "mean_abs_in": 1.1622,
+        "median_spacing_in": 0.6115
+      }
+    ],
+    "swing_u_in": 2.9638,
+    "swing_v_in": 0.8203,
+    "reading": "the swing is the range of the per-bin mean signed residual along that axis. A swing much larger than the per-bin scatter, concentrated at one end, is a one-sided edge effect; a swing spread smoothly across the axis is curvature; a small swing is neither."
+  },
+  "periodicity": {
+    "method": "2D power spectrum of the per-cell mean signed residual.",
+    "map_cell_in": 2.1020567673125465,
+    "nyquist_wavelength_in": 4.204113534625093,
+    "dominant_wavelength_cu": 1.5718361602706412,
+    "dominant_wavelength_in": 63.58721721120454,
+    "dominant_peak_power_fraction": 0.02635972682786024,
+    "reading": "a real periodic structure shows as a sharp peak holding a large share of the non-DC power at one wavelength. A power fraction of a fraction of a percent, with a smooth radial profile, is broadband and means NO periodicity. Reference spacings: standing seam 12-24 in, corrugation about 2.67 in, shingle courses about 5 in."
+  },
+  "two_plane_test": {
+    "status": "fitted as a MEASUREMENT inside this probe; nothing in roofkit changed and no split is implemented",
+    "method": "Lloyd iteration: assign each point to the nearer plane, refit each by SVD, repeat to convergence. Initialised by the sign of the single-plane residual, which is the split the two-plane hypothesis predicts.",
+    "parts": [
+      {
+        "part": 0,
+        "n_points": 61423,
+        "pct": 37.7,
+        "pitch_deg": 3.7803,
+        "quality": 1.7677523501967358,
+        "bar": 2.9479968459650356,
+        "clears_bar": true
+      },
+      {
+        "part": 1,
+        "n_points": 101515,
+        "pct": 62.3,
+        "pitch_deg": 3.7556,
+        "quality": 1.8725538741788335,
+        "bar": 2.9479968459650356,
+        "clears_bar": true
+      }
+    ],
+    "angle_between_planes_deg": 0.2669775166623448,
+    "separation_at_centroid_cu": 0.010505318947972814,
+    "separation_at_centroid_in": 0.424983223253187,
+    "spatial_segregation": {
+      "global_part0_fraction": 0.377,
+      "per_cell_part0_fraction": {
+        "mean": 0.3955,
+        "std": 0.3305,
+        "pct_cells_nearly_pure": 38.94
+      },
+      "majority_part0_regions": 175,
+      "largest_majority_region_cells": 982,
+      "largest_majority_region_pct": 46.36,
+      "reading": "two real surfaces give nearly-pure cells grouped into a few large regions. A per-cell fraction sitting at the global mix everywhere, in hundreds of small regions, means the split is cutting one sheet along its own noise and the RMS gain is free rather than physical."
+    },
+    "rms_one_plane": 0.022927405454259486,
+    "rms_two_planes": 0.013239589075448829,
+    "rms_improvement_pct": 42.25,
+    "reading": "an RMS gain from a two-plane fit is NOT evidence on its own: two planes always beat one, and on a noisy sheet the gain comes from cutting the noise cloud into an upper and a lower half. Two real facets must ALSO show (a) a genuine angle between them, (b) or a real perpendicular separation if they are parallel sheets, and (c) spatial segregation: each part occupying its own contiguous region rather than being interleaved cell by cell."
+  },
+  "signals": {
+    "bimodal": {
+      "verdict": false,
+      "ashman_D": 1.0520386155549546,
+      "threshold_D": 2.0,
+      "bimodality_coefficient": 0.22648840664927494,
+      "threshold_BC": 0.555,
+      "note": "BC below 0.333 (the Gaussian value) means MORE sharply unimodal than a Gaussian, not less."
+    },
+    "two_planes": {
+      "verdict": false,
+      "angle_deg": 0.2669775166623448,
+      "threshold_angle_deg": 2.0,
+      "separation_in": 0.424983223253187,
+      "threshold_separation_in": 1.0,
+      "pct_cells_nearly_pure": 38.94,
+      "threshold_pure_pct": 60.0,
+      "note": "the RMS gain is deliberately NOT part of this test; two planes always beat one."
+    },
+    "spatially_banded": {
+      "verdict": false,
+      "largest_positive_pct": 28.25,
+      "largest_negative_pct": 48.19,
+      "threshold_pct": 50.0
+    },
+    "systematic_global_trend": {
+      "verdict": false,
+      "r_squared": 0.04691573074860411,
+      "threshold": 0.1
+    },
+    "systematic_edge_effect": {
+      "verdict": true,
+      "edge_minus_interior_mean_in": 0.27840000000000004,
+      "threshold_in": 0.25,
+      "n_points_in_outermost_band": 654,
+      "pct_of_patch_in_outermost_band": 0.401,
+      "directional_swing_u_in": 2.9638,
+      "directional_swing_v_in": 0.8203,
+      "note": "a boundary feature is invisible to the global linear trend, so it is tested separately. Read the point count with it: an effect confined to a few hundred of 162,938 points is real but cannot move the patch RMS."
+    },
+    "periodic": {
+      "verdict": false,
+      "dominant_peak_power_fraction": 0.02635972682786024,
+      "threshold": 0.05,
+      "dominant_wavelength_in": 63.58721721120454
+    },
+    "density_tracking": {
+      "verdict": true,
+      "spearman_rho": 0.23717758392576918,
+      "threshold_abs_rho": 0.2
+    },
+    "near_gaussian": {
+      "verdict": false,
+      "skew": -0.8948326908775949,
+      "excess_kurtosis": 1.9505748695668137,
+      "note": "a heavy one-sided tail reads as negative skew plus positive excess kurtosis: a clean core with a contaminating population on one side, which is not the same thing as Gaussian noise."
+    }
+  },
+  "verdict": {
+    "patterns_that_fired": [
+      "systematic_edge_effect",
+      "density_tracking"
+    ],
+    "which_of_the_four": {
+      "capture_noise_metric_confounded": true,
+      "two_planes_split_it": false,
+      "genuinely_not_planar": true,
+      "material_structure": false
+    },
+    "note": "these are not mutually exclusive and more than one can be true. A single label would have to suppress evidence to be stated, so none is offered here; the prose reading belongs in the decision entry, written by a human against these numbers."
+  },
+  "plots": [
+    "blob0-residuals-2026-07-27.png",
+    "blob0-residuals-spectrum-2026-07-27.png",
+    "blob0-residuals-profiles-2026-07-27.png"
+  ]
+}

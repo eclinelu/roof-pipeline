@@ -4,6 +4,17 @@ _Append only. Newest at the top. Past entries are never edited. A reversal is a 
 
 ## Entries (newest first)
 
+- [2026-07-27: Two permanent changes to the review loop, from pass 2 onward: a blind diff, and free text instead of multiple choice](2026-07-27-review-loop-changes-blind-diff-and-free-text.md)
+- [2026-07-27: PRE-REGISTRATION for pass 1 fix, M1a: facet membership gets a connectivity constraint](2026-07-27-m1a-connectivity-preregistration.md)
+- [2026-07-27: Triage pass 1 result: seven mechanisms, and the pre-registration covered a quarter of them](2026-07-27-triage-pass-1-result.md)
+- [2026-07-27: Constraint discovered the hard way: nothing may be added above `## Entries` in decisions/README.md](2026-07-27-readme-header-is-byte-verified.md)
+- [2026-07-27: Defect triage protocol, declared BEFORE the review results are read](2026-07-27-defect-triage-protocol.md)
+- [2026-07-27: STANDING RULE: every diagnostic carries an assertion that fails loudly if it is measuring the wrong thing](2026-07-27-silent-failure-standing-rule.md)
+- [2026-07-27: big_house becomes the DEVELOPMENT site; bungalow and cove_house are held out for validation](2026-07-27-development-vs-validation-split.md)
+- [2026-07-27: CORRECTION: boundary erosion is REFUTED as a fix, and the "interior clears the bar" figure is withdrawn. Three mechanisms proposed for blob 0, three dead](2026-07-27-erosion-refuted-and-interior-retraction.md)
+- [2026-07-27: Blob 0 is real roof, confirmed by physical inspection. Coverage was right, and the defect is upstream of the quality bar](2026-07-27-blob0-confirmed-roof.md)
+- [2026-07-27: A probe run with altered parameters does not measure the production configuration. Standing rule, plus one claim withdrawn](2026-07-27-reassignment-pass-contamination.md)
+- [2026-07-27: Recovery keeps min_pitch = 5. One threshold, not two](2026-07-27-recovery-min-pitch-stays-5.md)
 - [2026-07-21 (written late, 2026-07-26): Dormer area ownership is highest-surface-wins, and the parent is charged only the overlap it actually counted](2026-07-21-dormer-area-ownership-highest-surface-wins.md)
 - [2026-07-21 (written late, 2026-07-26): Coverage replaces expected_facets as the completeness gate](2026-07-21-coverage-replaces-expected-facets.md)
 - [2026-07-26: Decision entries are written without waiting for approval](2026-07-26-decision-entries-need-no-approval.md)
@@ -42,6 +53,21 @@ _Append only. Newest at the top. Past entries are never edited. A reversal is a 
 - [2026-07-12: ODM must run past odm_filterpoints to produce a point cloud](2026-07-12-odm-past-filterpoints.md)
 - [2026-07-12: Claude Code writes the analysis code; the gate is explanation, not authorship](2026-07-12-claude-writes-analysis-code.md)
 - [2026-07-12: Scale comes from one tape-measured ground distance](2026-07-12-scale-from-one-tape-measure.md)
+
+## Working method
+
+Planning and drafting for this project are done with AI assistance, and Emmett
+reviews, edits and approves before anything is committed.
+
+The per-entry **Attribution** lines split reasoning between Emmett and Claude
+*within* a given entry. They have no slot for planning drafted in conversation
+that Emmett then edited and sent, so the method is stated once here rather than
+letting those lines imply something narrower than the truth.
+
+(This note sits BELOW the index deliberately. Everything above
+`## Entries (newest first)` is the original `DECISIONS.md` header, reassembled
+byte-for-byte by `verify_decisions_split.py`; text added there fails that check.
+It did, on the first attempt, which is the check working.)
 
 ## How this directory works
 

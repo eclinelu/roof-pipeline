@@ -1,0 +1,799 @@
+{
+  "review_of": "canonical-2026-07-26-r2",
+  "dataset": "big_house",
+  "date": "2026-07-27",
+  "reviewer": "Emmett",
+  "schema_version": 2,
+  "site_role": "DEVELOPMENT site. See decisions/2026-07-27-development-vs-validation-split.md. No accuracy claim comes from this site. Visual review may establish THAT something is wrong and WHAT it is physically; it may never set a parameter value.",
+  "renders": "reports/big_house/review/2026-07-27",
+  "top_level_observations": [
+    {
+      "observation": "Most facets are IDENTIFIED correctly. The errors are in LINE PLACEMENT, and they are NOT systematic.",
+      "by": "Emmett",
+      "from_": "overview pass, before the per-facet pass",
+      "why_it_matters": "non-systematic placement error points at the segmentation boundary rather than at a global parameter, and it rules out a whole class of fixes before anyone proposes one: no single threshold, offset or erosion width can correct an error that is not consistent."
+    }
+  ],
+  "instructions": {
+    "identity": {
+      "correct": "this facet corresponds to one real roof plane",
+      "merge": "this facet and another are ONE real plane split in two",
+      "split": "this facet is TWO real planes fitted as one",
+      "spurious": "no real roof plane here at all",
+      "unsure": "cannot tell from the render"
+    },
+    "boundary": {
+      "tight": "outline follows the real roof edge",
+      "short": "outline stops INSIDE the real roof edge; roof continues past it",
+      "over": "outline extends PAST the real edge onto something that is not this facet",
+      "ragged": "roughly right but jagged where the real edge is straight",
+      "cut": "outline CROSSES a real roof feature (ridge, valley, dormer) instead of stopping at it",
+      "unsure": "cannot tell from the render"
+    },
+    "severity": {
+      "minor": "estimated area impact under 5 pct",
+      "moderate": "5 to 20 pct",
+      "major": "over 20 pct"
+    },
+    "location": "compass direction of the affected edge, per the north arrow on the render (N, NE, E, SE, S, SW, W, NW, or 'all' / 'multiple')",
+    "note": "free text. Say what you SAW, not what the fix should be. A physical description travels to the next site; a suggested threshold does not."
+  },
+  "facets": [
+    {
+      "facet": 0,
+      "kind": "main",
+      "pitch_deg": 21.19,
+      "plan_ft2": 501.6,
+      "n_points": 1538098,
+      "quality": 1.3054,
+      "render": "facet-00.png",
+      "identity": "correct",
+      "boundary": "tight",
+      "severity": "minor",
+      "location": "multiple",
+      "note": "SW corner is a super thick solid pink blob. the main problem is that the pink line exetnds way past the facet going south and slightly north (onto facets 1, 7, 4, and 5). In ohter word, mask contains thin disconnected fragments remote from it: stray contour lines running off across the building enclosing nothing, confirmed as facet 0's (they turn cyan when another facet is selected). Reads as plane-vs-facet: assignment is by distance to an unbounded plane, so points far away that happen to lie within inlier distance join the facet. Single-ownership and disconnection guards do not catch thin remote slivers. Need boundary code \"fragmented\" (mask includes disconnected pieces remote from the main body), distinct from \"over\". Open question, do not act yet: does facet_area compute over the whole mask or the largest connected component only? If the whole mask, this inflates the deliverable."
+    },
+    {
+      "facet": 1,
+      "kind": "main",
+      "pitch_deg": 33.07,
+      "plan_ft2": 908.9,
+      "n_points": 1154335,
+      "quality": 2.2951,
+      "render": "facet-01.png",
+      "identity": "correct",
+      "boundary": "unsure",
+      "severity": "moderate",
+      "location": "W",
+      "note": "overall the facet captures the area, the only problem is on the west edge, where the boundary is super ragged and creeps inward, missing a bit of roof. the ridge along the south side extends the full length, so that can be used to see where the diagnosis went wrong. another problem is in the NE corner, where the boundary line extends out farther than it should. any facet boundary line should be enclosed, there is no reason for this extension."
+    },
+    {
+      "facet": 2,
+      "kind": "main",
+      "pitch_deg": 22.72,
+      "plan_ft2": 388.8,
+      "n_points": 693991,
+      "quality": 1.0069,
+      "render": "facet-02.png",
+      "identity": "correct",
+      "boundary": "tight",
+      "severity": "moderate",
+      "location": "N",
+      "note": "problems: same as facet 0, the boundary has weird lines trhat extend onto other facets, that do not enclsoe anything and are liekly on the same plane as the facet but are not part of the facet. additionally, the north corner of facet 2 creeps in and misses a bit of area. the straight linethat extends out the top follows the correct boundary, up until the intersection with the cyan line that is part of facet 0 boundary."
+    },
+    {
+      "facet": 3,
+      "kind": "main",
+      "pitch_deg": 34.01,
+      "plan_ft2": 508.1,
+      "n_points": 850268,
+      "quality": 1.8003,
+      "render": "facet-03.png",
+      "identity": "correct",
+      "boundary": "tight",
+      "severity": "minor",
+      "location": "",
+      "note": "the best boundaried facet yet. no major problems, just the NE and NW corners are a little eroded inwards so they miss a tiny bit  of area."
+    },
+    {
+      "facet": 4,
+      "kind": "main",
+      "pitch_deg": 20.99,
+      "plan_ft2": 313.6,
+      "n_points": 744303,
+      "quality": 2.948,
+      "render": "facet-04.png",
+      "identity": "unsure",
+      "boundary": "unsure",
+      "severity": "",
+      "location": "",
+      "note": "the png did not load well. it is very tiny and unviewable.",
+      "not_assessed": true,
+      "not_assessed_reason": "The pass-1 close-up render was unusable: the renderer set its axis limits from points.min()/max(), and mechanism M1a had inflated facet 4's point extent to 1.45x its visible size with strays 12.5 ft beyond the core, so the facet occupied a small corner of a mostly blank frame. An INSTRUMENT defect caused by the very mechanism under investigation. Facet 4 is a PASS-1 GAP and is assessed in pass 2."
+    },
+    {
+      "facet": 5,
+      "kind": "main",
+      "pitch_deg": 21.36,
+      "plan_ft2": 208.3,
+      "n_points": 669484,
+      "quality": 2.6648,
+      "render": "facet-05.png",
+      "identity": "correct",
+      "boundary": "tight",
+      "severity": "minor",
+      "location": "",
+      "note": "on the west boundary the facet is outlined well but there is a ragged curve cutting through the middl eof the facet near the west edge. also the chimney in the northeast corner is identified as part of the facet and it should not be. finally, the south intersection with facets 0 and extends farther than it should. it goes onto facets 0 and 2 as continuations of the same plane, but this should not count as part of the facet. also, these intersections do not line up with what facets 0 and 2 identified as their own boundary with facet 5, which they should line up."
+    },
+    {
+      "facet": 6,
+      "kind": "main",
+      "pitch_deg": 33.76,
+      "plan_ft2": 353.4,
+      "n_points": 403109,
+      "quality": 1.8218,
+      "render": "facet-06.png",
+      "identity": "correct",
+      "boundary": "ragged",
+      "severity": "moderate",
+      "location": "SW",
+      "note": "two main problems with this facet. part of facet 1 is identified as this facet, same problem as most other facets are having. from now on i will call this the line problem. however, the bigger problem with this facet is in the SW corbner, where the boundary is incredibly ragged. this is very liekly due to the cloud being bad there. however, this problem is fixable, and the fix should be using the westrmost limit of the ridge with facet 3 and the southmost limit of the ridge between facets 6 and 7. the facet also does well with identifiying the dormer.\n"
+    },
+    {
+      "facet": 7,
+      "kind": "main",
+      "pitch_deg": 33.52,
+      "plan_ft2": 407.9,
+      "n_points": 297583,
+      "quality": 2.0741,
+      "render": "facet-07.png",
+      "identity": "correct",
+      "boundary": "ragged",
+      "severity": "minor",
+      "location": "",
+      "note": "the line problem here. however, the actual facet is identified well, just has a ragged boundary."
+    },
+    {
+      "facet": 8,
+      "kind": "recovered",
+      "pitch_deg": 9.79,
+      "plan_ft2": 49.9,
+      "n_points": 101684,
+      "quality": 2.5989,
+      "render": "facet-08.png",
+      "identity": "merge",
+      "boundary": "unsure",
+      "severity": "moderate",
+      "location": "",
+      "note": "facet 8 is actuall half of a weird area of the roof that does not have shingles, and looks like it broke and then was fixed bvy laying some material over it. this likely led to an uneven capture from the drone. overall, this facet is a mess, it identifies parts of a dormer as part of facet."
+    },
+    {
+      "facet": 9,
+      "kind": "recovered",
+      "pitch_deg": 23.2,
+      "plan_ft2": 40,
+      "n_points": 81511,
+      "quality": 0.9523,
+      "render": "facet-09.png",
+      "identity": "merge",
+      "boundary": "unsure",
+      "severity": "moderate",
+      "location": "",
+      "note": "facet 9 is mostly made from the the west side of a gable. however, it also contains a random area of facet 9 and goes around the chimney a bit, which it shouldnt. overall, the boundary is super rugged."
+    },
+    {
+      "facet": 10,
+      "kind": "recovered",
+      "pitch_deg": 38.91,
+      "plan_ft2": 21.5,
+      "n_points": 27410,
+      "quality": 1.5869,
+      "render": "facet-10.png",
+      "identity": "merge",
+      "boundary": "unsure",
+      "severity": "minor",
+      "location": "",
+      "note": "facet 10 is identified correctly, howdever is extends along the bottom edge of a dormer. this facet should be triangular, but the souther point is eroded inward and misses some area."
+    },
+    {
+      "facet": 11,
+      "kind": "recovered",
+      "pitch_deg": 22.15,
+      "plan_ft2": 29.9,
+      "n_points": 77994,
+      "quality": 1.2258,
+      "render": "facet-11.png",
+      "identity": "correct",
+      "boundary": "short",
+      "severity": "moderate",
+      "location": "",
+      "note": "facet 11 is the west side of a dormer, and it is consistently short along the border. also, the boundary it identifies is very ragged. "
+    },
+    {
+      "facet": 12,
+      "kind": "recovered",
+      "pitch_deg": 22.67,
+      "plan_ft2": 14.4,
+      "n_points": 19906,
+      "quality": 0.8087,
+      "render": "facet-12.png",
+      "identity": "merge",
+      "boundary": "ragged",
+      "severity": "minor",
+      "location": "",
+      "note": "facet 12 is half of the eastside of the facet 11 dormer. it is split with another facet, which it shouldnt be split. something interestibng is that the ridge between the west and east sides of the dormer roof is correctly identified, so the boundary of each facet should be there, except that it is not, and facet 12 west boundary goes well over that ridgeline. finally, the south edge is very eroded and does not include a bit of area."
+    },
+    {
+      "facet": 13,
+      "kind": "recovered",
+      "pitch_deg": 35.14,
+      "plan_ft2": 18.3,
+      "n_points": 41761,
+      "quality": 0.8511,
+      "render": "facet-13.png",
+      "identity": "correct",
+      "boundary": "short",
+      "severity": "minor",
+      "location": "",
+      "note": "13 is the east side of a dormer. the west boundary follows the ridgeline mostly well, although it should follow it exactly. the east boundary is short of the actual dormer boundary. the whole boundary is very ragged."
+    },
+    {
+      "facet": 14,
+      "kind": "recovered",
+      "pitch_deg": 34.67,
+      "plan_ft2": 20.5,
+      "n_points": 33268,
+      "quality": 0.9849,
+      "render": "facet-14.png",
+      "identity": "correct",
+      "boundary": "tight",
+      "severity": "minor",
+      "location": "",
+      "note": "14 is the westside of a dormer. the boundary follows it well."
+    },
+    {
+      "facet": 15,
+      "kind": "recovered",
+      "pitch_deg": 35.16,
+      "plan_ft2": 16.9,
+      "n_points": 63633,
+      "quality": 0.6488,
+      "render": "facet-15.png",
+      "identity": "correct",
+      "boundary": "short",
+      "severity": "minor",
+      "location": "",
+      "note": "15 is the westside of a dormer. the east edge should ofllow the ridgeline, but it goes over a little bit. the west edge is very short of the actual edge."
+    },
+    {
+      "facet": 16,
+      "kind": "recovered",
+      "pitch_deg": 34.11,
+      "plan_ft2": 15.8,
+      "n_points": 45197,
+      "quality": 0.8896,
+      "render": "facet-16.png",
+      "identity": "",
+      "boundary": "",
+      "severity": "",
+      "location": "",
+      "note": "16 is the east side of a dormer. the north and east edges are short of where they should be. the south edge is very eroded inwards.",
+      "skipped_deliberately": true,
+      "skip_reason": "Emmett skipped this facet on purpose. NOT a UI capture failure: the blank identity and boundary are a deliberate non-answer, confirmed 2026-07-27."
+    },
+    {
+      "facet": 17,
+      "kind": "recovered",
+      "pitch_deg": 35.17,
+      "plan_ft2": 17.5,
+      "n_points": 52573,
+      "quality": 0.7419,
+      "render": "facet-17.png",
+      "identity": "correct",
+      "boundary": "short",
+      "severity": "minor",
+      "location": "",
+      "note": "17 is the west side fo a dormer. the east and north sides are good, but the west and south sides are short."
+    },
+    {
+      "facet": 18,
+      "kind": "recovered",
+      "pitch_deg": 33.97,
+      "plan_ft2": 14.4,
+      "n_points": 40884,
+      "quality": 0.6979,
+      "render": "facet-18.png",
+      "identity": "correct",
+      "boundary": "unsure",
+      "severity": "moderate",
+      "location": "",
+      "note": "18 is the east side fo a dormer. the westa nd north sides are good, the east side is short, and the south sides is very eroded and ragged."
+    },
+    {
+      "facet": 19,
+      "kind": "recovered",
+      "pitch_deg": 34.5,
+      "plan_ft2": 17.7,
+      "n_points": 54203,
+      "quality": 0.6553,
+      "render": "facet-19.png",
+      "identity": "correct",
+      "boundary": "short",
+      "severity": "minor",
+      "location": "",
+      "note": "19 is the west side fo a dormer. the west and south sides are short.\n"
+    },
+    {
+      "facet": 20,
+      "kind": "recovered",
+      "pitch_deg": 34.01,
+      "plan_ft2": 15,
+      "n_points": 34629,
+      "quality": 0.6002,
+      "render": "facet-20.png",
+      "identity": "correct",
+      "boundary": "unsure",
+      "severity": "moderate",
+      "location": "",
+      "note": "20 is th east side of a dormer. the boundary is very ragged, especially along the south side, it is missing a good amount of area."
+    },
+    {
+      "facet": 21,
+      "kind": "recovered",
+      "pitch_deg": 33.35,
+      "plan_ft2": 11.9,
+      "n_points": 19576,
+      "quality": 0.9465,
+      "render": "facet-21.png",
+      "identity": "correct",
+      "boundary": "unsure",
+      "severity": "moderate",
+      "location": "",
+      "note": "this is the soiuth side of a dormer. the boundary is very bad, it is ragged and does not cover the whole facet, especially along the west side. the coverage here is very bad too, it was an area that is hard to access with the drone."
+    },
+    {
+      "facet": 22,
+      "kind": "recovered",
+      "pitch_deg": 32.75,
+      "plan_ft2": 9.6,
+      "n_points": 19017,
+      "quality": 0.8168,
+      "render": "facet-22.png",
+      "identity": "merge",
+      "boundary": "unsure",
+      "severity": "moderate",
+      "location": "",
+      "note": "same as facet 21, but this is the north side of the dormer."
+    },
+    {
+      "facet": 23,
+      "kind": "recovered",
+      "pitch_deg": 8.49,
+      "plan_ft2": 16.2,
+      "n_points": 34880,
+      "quality": 1.5816,
+      "render": "facet-23.png",
+      "identity": "merge",
+      "boundary": "unsure",
+      "severity": "minor",
+      "location": "",
+      "note": "this is the other half of facet 8. it is short of the whole area, but it is confusing because the roof here is made from a different material."
+    },
+    {
+      "facet": 24,
+      "kind": "recovered",
+      "pitch_deg": 21.57,
+      "plan_ft2": 9.6,
+      "n_points": 13970,
+      "quality": 2.0455,
+      "render": "facet-24.png",
+      "identity": "merge",
+      "boundary": "short",
+      "severity": "minor",
+      "location": "",
+      "note": "the other half of facet 12. the boundary of short of where it should be everywhere."
+    },
+    {
+      "facet": 25,
+      "kind": "recovered",
+      "pitch_deg": 32.79,
+      "plan_ft2": 9.6,
+      "n_points": 9839,
+      "quality": 1.7211,
+      "render": "facet-25.png",
+      "identity": "merge",
+      "boundary": "unsure",
+      "severity": "minor",
+      "location": "",
+      "note": "north side of a dormer. very ragged, bad coverage."
+    },
+    {
+      "facet": 26,
+      "kind": "recovered",
+      "pitch_deg": 33.04,
+      "plan_ft2": 6.6,
+      "n_points": 8532,
+      "quality": 1.5408,
+      "render": "facet-26.png",
+      "identity": "correct",
+      "boundary": "unsure",
+      "severity": "minor",
+      "location": "",
+      "note": "other half of facet 25,. bad coevrage."
+    },
+    {
+      "facet": 27,
+      "kind": "recovered",
+      "pitch_deg": 33.26,
+      "plan_ft2": 5.2,
+      "n_points": 10345,
+      "quality": 0.8299,
+      "render": "facet-27.png",
+      "identity": "merge",
+      "boundary": "unsure",
+      "severity": "minor",
+      "location": "",
+      "note": "the other half of facet 22. bad coverage."
+    },
+    {
+      "facet": 28,
+      "kind": "recovered",
+      "pitch_deg": 33.23,
+      "plan_ft2": 2.8,
+      "n_points": 3970,
+      "quality": 1.104,
+      "render": "facet-28.png",
+      "identity": "merge",
+      "boundary": "unsure",
+      "severity": "minor",
+      "location": "",
+      "note": "the other half of facet 21. bad coverage"
+    }
+  ],
+  "missing_facets": [
+    {
+      "id": "MF1",
+      "where": "east elevation of the south wing (blob 0)",
+      "what": "lower tree-occluded roof section of different material",
+      "class": "DISCOVERED AND REJECTED, not undiscovered",
+      "detail": "Found by the recovery pass and rejected by the quality bar at 2.94820 against a 2.94800 bar. This is a DIFFERENT CLASS from the other two entries and must not be pooled with them: the pipeline saw this surface and declined it, it did not fail to look.",
+      "already_documented": "decisions/2026-07-27-blob0-confirmed-roof.md",
+      "source": "dictated, UI capture failed"
+    },
+    {
+      "id": "MF2",
+      "where": "east side and south side of the dormer whose WEST side is facet 9",
+      "what": "dormer roof planes",
+      "class": "NEVER DISCOVERED",
+      "detail": "Names TWO distinct surfaces (east and south) on one dormer. Recorded as one dictated entry because that is how it was dictated; counted by surface it is two.",
+      "source": "dictated, UI capture failed"
+    },
+    {
+      "id": "MF3",
+      "where": "south side of the dormer whose NORTH side is split between facets 25 and 26",
+      "what": "dormer roof plane",
+      "class": "NEVER DISCOVERED",
+      "detail": "The north side of this dormer being split across two facets is itself recorded in the per-facet verdicts; only the south side is missing entirely.",
+      "source": "dictated, UI capture failed"
+    }
+  ],
+  "intersection_lines": [
+    {
+      "id": 0,
+      "kind": "ridge",
+      "between": [
+        1,
+        3
+      ],
+      "length_ft": 53.4,
+      "verdict": "short",
+      "note": "short on west side by a tiny bit"
+    },
+    {
+      "id": 1,
+      "kind": "valley",
+      "between": [
+        0,
+        7
+      ],
+      "length_ft": 32.9,
+      "verdict": "",
+      "note": "does not exist. bisects facet 0, nothing exists her."
+    },
+    {
+      "id": 2,
+      "kind": "ridge",
+      "between": [
+        6,
+        7
+      ],
+      "length_ft": 20.5,
+      "verdict": "short",
+      "note": "should be about twice as long."
+    },
+    {
+      "id": 3,
+      "kind": "hip",
+      "between": [
+        0,
+        4
+      ],
+      "length_ft": 19,
+      "verdict": "",
+      "note": "does not exist."
+    },
+    {
+      "id": 4,
+      "kind": "ridge",
+      "between": [
+        0,
+        2
+      ],
+      "length_ft": 18.8,
+      "verdict": "short",
+      "note": "should be much longer"
+    },
+    {
+      "id": 5,
+      "kind": "hip",
+      "between": [
+        2,
+        4
+      ],
+      "length_ft": 18.6,
+      "verdict": "",
+      "note": "does not exist."
+    },
+    {
+      "id": 6,
+      "kind": "hip",
+      "between": [
+        1,
+        7
+      ],
+      "length_ft": 13.4,
+      "verdict": "",
+      "note": "does not exist."
+    },
+    {
+      "id": 7,
+      "kind": "hip",
+      "between": [
+        1,
+        6
+      ],
+      "length_ft": 12.5,
+      "verdict": "",
+      "note": "does not exist."
+    },
+    {
+      "id": 8,
+      "kind": "ridge",
+      "between": [
+        2,
+        6
+      ],
+      "length_ft": 10.9,
+      "verdict": "",
+      "note": "does not exist."
+    },
+    {
+      "id": 9,
+      "kind": "ridge",
+      "between": [
+        4,
+        5
+      ],
+      "length_ft": 10.8,
+      "verdict": "short",
+      "note": "should be about twice as long"
+    },
+    {
+      "id": 10,
+      "kind": "valley",
+      "between": [
+        0,
+        1
+      ],
+      "length_ft": 10.4,
+      "verdict": "short",
+      "note": ""
+    },
+    {
+      "id": 11,
+      "kind": "ridge",
+      "between": [
+        13,
+        14
+      ],
+      "length_ft": 9.4,
+      "verdict": "correct",
+      "note": ""
+    },
+    {
+      "id": 12,
+      "kind": "ridge",
+      "between": [
+        17,
+        18
+      ],
+      "length_ft": 9.4,
+      "verdict": "correct",
+      "note": ""
+    },
+    {
+      "id": 13,
+      "kind": "ridge",
+      "between": [
+        15,
+        16
+      ],
+      "length_ft": 9.4,
+      "verdict": "correct",
+      "note": ""
+    },
+    {
+      "id": 14,
+      "kind": "ridge",
+      "between": [
+        11,
+        12
+      ],
+      "length_ft": 8.5,
+      "verdict": "correct",
+      "note": ""
+    },
+    {
+      "id": 15,
+      "kind": "ridge",
+      "between": [
+        19,
+        20
+      ],
+      "length_ft": 6.5,
+      "verdict": "correct",
+      "note": ""
+    },
+    {
+      "id": 16,
+      "kind": "ridge",
+      "between": [
+        21,
+        22
+      ],
+      "length_ft": 6.4,
+      "verdict": "correct",
+      "note": ""
+    },
+    {
+      "id": 17,
+      "kind": "hip",
+      "between": [
+        9,
+        10
+      ],
+      "length_ft": 1.3,
+      "verdict": "unsure",
+      "note": "cant really see it"
+    }
+  ],
+  "missing_lines": [
+    {
+      "id": "ML-COUNT",
+      "level": "COUNT-LEVEL FINDING, not per-line",
+      "finding": "The building has substantially more real ridges, hips and valleys than the 18 lines generated. Too many to enumerate individually.",
+      "reframes": "This makes intersection lines a GENERATION problem, not a GRADING problem. The question is not whether the 18 lines are right but why so few were produced.",
+      "consequence_for_the_recorded_verdicts": "The 12 per-line verdicts captured in intersection_lines are therefore LOWER VALUE than expected. They are kept, and they are not to be led with: grading a sample of a generator that is missing most of its output measures the sample, not the generator.",
+      "source": "dictated, UI capture failed"
+    }
+  ],
+  "intersection_line_verdicts": {
+    "correct": "the line is where the real crease is, and typed right",
+    "mistyped": "right place, wrong type (a ridge called a valley, etc)",
+    "misplaced": "wrong place on the roof",
+    "spurious": "no real crease here",
+    "short": "stops before the real crease ends",
+    "long": "runs past where the real crease ends"
+  },
+  "unassigned_footprint": {
+    "segmentation_gap": {
+      "cu2": 33.6818,
+      "ft2": 382.8,
+      "colour": "pink",
+      "meaning": "real roof, enough points to test, NO facet claims it. A segmentation failure. This is the fringe finding."
+    },
+    "capture_gap": {
+      "cu2": 49.9017,
+      "ft2": 567.1,
+      "colour": "blue",
+      "meaning": "under 2 points per cell, or outside the eroded interior. Nothing could have been fitted here; only a reflight changes it."
+    },
+    "reconciliation": {
+      "note": "reconciles the render's magenta against the coverage report. They differ because they are computed against different bases, not because either is wrong.",
+      "render_layer_A_segmentation_gap": {
+        "definition": "interior AND testable AND not explained",
+        "cu2": 33.6818,
+        "ft2": 382.8,
+        "equals_coverage_unexplained": "this IS the 33.682 cu^2 that split_coverage reports as unexplained"
+      },
+      "render_layer_B_capture_gap": {
+        "definition": "everything else the old single layer covered: filled holes (under 2 points, untestable) plus the perimeter ring outside the eroded interior",
+        "cu2": 49.9017,
+        "ft2": 567.1,
+        "of_which_filled_holes_cu2": 44.9742,
+        "of_which_perimeter_ring_cu2": 4.9275
+      },
+      "old_single_layer": {
+        "definition": "filled footprint AND not explained, the first render",
+        "cu2": 83.5836,
+        "ft2": 949.9
+      },
+      "bases": {
+        "filled_footprint_cu2": 362.105,
+        "eroded_interior_cu2": 352.707,
+        "density_testable_cu2": 290.256,
+        "explained_cu2": 256.574,
+        "coverage_unexplained_cu2": 33.682
+      }
+    }
+  },
+  "completed_utc": "2026-07-27T19:46:31.635Z",
+  "completeness": {
+    "facets_total": 29,
+    "facets_answered": 28,
+    "facets_unanswered": [
+      16
+    ],
+    "lines_total": 18,
+    "lines_answered": 12
+  },
+  "capture_note": {
+    "what_happened": "The 'add a missing facet' and 'add a missing line' buttons in review.html did nothing. Cause: el() built elements inside a <div>, and the HTML parser DISCARDS <tr>/<td> outside table context, so el('<tr>...') returned null, appendChild(null) threw, and render() aborted. No message reached the reviewer; the lists simply stayed empty.",
+    "consequence": "missing_facets and missing_lines did NOT come through the same path as the per-facet verdicts. They were dictated afterwards and are marked source='dictated, UI capture failed' so a reader can weigh them accordingly.",
+    "fixed": "scripts/review_ui.py now builds elements through <template>, which parses table rows correctly, and el() throws instead of returning null. Both add buttons now verify that the on-screen row count matches the state array and alert the reviewer if it does not.",
+    "classification": "Same family as the four failures in decisions/2026-07-27-silent-failure-standing-rule.md: well-formed, plausible, silent, wrong."
+  },
+  "schema_note_for_pass_2": {
+    "problem": "The identity code `merge` is defined as 'this facet and another are ONE real plane split in two' (over-segmentation). Some rows used it in the OPPOSITE sense: 'this facet has taken in area that is not part of it' (absorption). Those are different mechanisms, M3 and M1b respectively, and one code cannot carry both.",
+    "change_for_pass_2": {
+      "merge": "UNCHANGED meaning: this facet and another are ONE real plane split in two (over-segmentation, mechanism M3)",
+      "absorbed": "NEW CODE: this facet has taken in area that is not part of it (foreign structure, chimney, dormer edge, neighbouring facet; mechanism M1b)"
+    },
+    "rows_flagged_not_reinterpreted": [
+      {
+        "facet": 8,
+        "recorded": "merge",
+        "note_describes": "BOTH senses: it is half of the 8+23 pair (merge) AND 'identifies parts of a dormer as part of facet' (absorbed)"
+      },
+      {
+        "facet": 9,
+        "recorded": "merge",
+        "note_describes": "ABSORBED only: 'contains a random area ... and goes around the chimney a bit'. No partner facet is named."
+      },
+      {
+        "facet": 10,
+        "recorded": "merge",
+        "note_describes": "ABSORBED only: 'extends along the bottom edge of a dormer'. No partner facet is named."
+      }
+    ],
+    "also_note": "Facets 21 and 26 are recorded `correct` while their partners 28 and 25 describe them as halves of a split pair. The pairs are recoverable from the notes but the code alone is not reliable. Not reinterpreted.",
+    "rule": "Emmett's verdicts are evidence and are not edited. This block records the ambiguity so a reader is not misled by the code."
+  },
+  "pass_1_gaps": [
+    {
+      "what": "facet 4 not assessed",
+      "why": "unusable render caused by M1a",
+      "resolution": "assessed in pass 2"
+    },
+    {
+      "what": "missing_facets and missing_lines not captured through the UI",
+      "why": "el('<tr>') returned null, render() aborted silently",
+      "resolution": "dictated afterwards, marked source; UI fixed for pass 2"
+    },
+    {
+      "what": "6 line rows carry unambiguous notes but no verdict",
+      "why": "validator checked note-without-verdict on facet rows only",
+      "resolution": "validator fixed; verdicts NOT inferred, left for pass 2"
+    }
+  ]
+}

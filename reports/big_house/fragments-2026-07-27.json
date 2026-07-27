@@ -1,0 +1,625 @@
+{
+  "task": "do facet point sets contain disconnected fragments remote from the main body? Measured from the canonical state, read only.",
+  "dataset": "big_house",
+  "date": "2026-07-27",
+  "status": "READ ONLY. Nothing fitted, changed or regenerated. canonical-2026-07-26-r2 unchanged.",
+  "method": {
+    "cell_cu": 0.012990381489840008,
+    "connectivity": "8 (corner touches count as attached, so the test is conservative)",
+    "extent_inflation": "max full extent / max core extent, in plan. 1.0 means the facet's points span exactly its main body; 2.0 means they span twice as far.",
+    "flag_threshold": 1.15
+  },
+  "cross_checks": [
+    {
+      "check": "every facet's point count matches the canonical record",
+      "passed": true
+    },
+    {
+      "check": "core is a subset of the facet (fraction <= 1)",
+      "passed": true
+    },
+    {
+      "check": "core extent never exceeds full extent",
+      "passed": true
+    }
+  ],
+  "n_facets": 29,
+  "n_flagged": 12,
+  "flagged": [
+    10,
+    2,
+    7,
+    0,
+    5,
+    8,
+    9,
+    4,
+    3,
+    6,
+    1,
+    20
+  ],
+  "rows": [
+    {
+      "facet": 0,
+      "kind": "main",
+      "n_points": 1538098,
+      "n_components": 1076,
+      "core_point_fraction": 0.982606,
+      "stray_points": 26753,
+      "full_extent_ft": [
+        42.8,
+        105.3
+      ],
+      "core_extent_ft": [
+        32.5,
+        50.5
+      ],
+      "extent_inflation": 2.086,
+      "farthest_stray_beyond_core_ft": 49.6,
+      "quality": 1.3054,
+      "pitch_deg": 21.19
+    },
+    {
+      "facet": 1,
+      "kind": "main",
+      "n_points": 1154335,
+      "n_components": 426,
+      "core_point_fraction": 0.995786,
+      "stray_points": 4864,
+      "full_extent_ft": [
+        67.5,
+        24.5
+      ],
+      "core_extent_ft": [
+        55.9,
+        21.5
+      ],
+      "extent_inflation": 1.208,
+      "farthest_stray_beyond_core_ft": 11.6,
+      "quality": 2.2951,
+      "pitch_deg": 33.07
+    },
+    {
+      "facet": 2,
+      "kind": "main",
+      "n_points": 693991,
+      "n_components": 634,
+      "core_point_fraction": 0.97226,
+      "stray_points": 19251,
+      "full_extent_ft": [
+        72.0,
+        107.9
+      ],
+      "core_extent_ft": [
+        24.6,
+        45.0
+      ],
+      "extent_inflation": 2.397,
+      "farthest_stray_beyond_core_ft": 46.8,
+      "quality": 1.0069,
+      "pitch_deg": 22.72
+    },
+    {
+      "facet": 3,
+      "kind": "main",
+      "n_points": 850268,
+      "n_components": 204,
+      "core_point_fraction": 0.99769,
+      "stray_points": 1964,
+      "full_extent_ft": [
+        78.8,
+        22.9
+      ],
+      "core_extent_ft": [
+        55.8,
+        20.2
+      ],
+      "extent_inflation": 1.414,
+      "farthest_stray_beyond_core_ft": 16.9,
+      "quality": 1.8003,
+      "pitch_deg": 34.01
+    },
+    {
+      "facet": 4,
+      "kind": "main",
+      "n_points": 744303,
+      "n_components": 76,
+      "core_point_fraction": 0.998542,
+      "stray_points": 1085,
+      "full_extent_ft": [
+        40.6,
+        33.7
+      ],
+      "core_extent_ft": [
+        28.1,
+        20.4
+      ],
+      "extent_inflation": 1.445,
+      "farthest_stray_beyond_core_ft": 12.5,
+      "quality": 2.948,
+      "pitch_deg": 20.99
+    },
+    {
+      "facet": 5,
+      "kind": "main",
+      "n_points": 669484,
+      "n_components": 151,
+      "core_point_fraction": 0.994255,
+      "stray_points": 3846,
+      "full_extent_ft": [
+        57.4,
+        35.0
+      ],
+      "core_extent_ft": [
+        29.8,
+        21.5
+      ],
+      "extent_inflation": 1.925,
+      "farthest_stray_beyond_core_ft": 23.1,
+      "quality": 2.6648,
+      "pitch_deg": 21.36
+    },
+    {
+      "facet": 6,
+      "kind": "main",
+      "n_points": 403109,
+      "n_components": 440,
+      "core_point_fraction": 0.975007,
+      "stray_points": 10075,
+      "full_extent_ft": [
+        19.0,
+        54.6
+      ],
+      "core_extent_ft": [
+        18.6,
+        40.5
+      ],
+      "extent_inflation": 1.348,
+      "farthest_stray_beyond_core_ft": 13.5,
+      "quality": 1.8218,
+      "pitch_deg": 33.76
+    },
+    {
+      "facet": 7,
+      "kind": "main",
+      "n_points": 297583,
+      "n_components": 366,
+      "core_point_fraction": 0.962363,
+      "stray_points": 11200,
+      "full_extent_ft": [
+        22.3,
+        98.7
+      ],
+      "core_extent_ft": [
+        20.3,
+        45.3
+      ],
+      "extent_inflation": 2.18,
+      "farthest_stray_beyond_core_ft": 53.4,
+      "quality": 2.0741,
+      "pitch_deg": 33.52
+    },
+    {
+      "facet": 8,
+      "kind": "recovered",
+      "n_points": 101684,
+      "n_components": 103,
+      "core_point_fraction": 0.661028,
+      "stray_points": 34468,
+      "full_extent_ft": [
+        15.8,
+        16.4
+      ],
+      "core_extent_ft": [
+        8.4,
+        8.9
+      ],
+      "extent_inflation": 1.847,
+      "farthest_stray_beyond_core_ft": 7.4,
+      "quality": 2.5989,
+      "pitch_deg": 9.79
+    },
+    {
+      "facet": 9,
+      "kind": "recovered",
+      "n_points": 81511,
+      "n_components": 87,
+      "core_point_fraction": 0.736122,
+      "stray_points": 21509,
+      "full_extent_ft": [
+        13.0,
+        16.7
+      ],
+      "core_extent_ft": [
+        4.6,
+        9.2
+      ],
+      "extent_inflation": 1.816,
+      "farthest_stray_beyond_core_ft": 8.4,
+      "quality": 0.9523,
+      "pitch_deg": 23.2
+    },
+    {
+      "facet": 10,
+      "kind": "recovered",
+      "n_points": 27410,
+      "n_components": 59,
+      "core_point_fraction": 0.717694,
+      "stray_points": 7738,
+      "full_extent_ft": [
+        18.2,
+        8.5
+      ],
+      "core_extent_ft": [
+        6.3,
+        6.3
+      ],
+      "extent_inflation": 2.902,
+      "farthest_stray_beyond_core_ft": 11.6,
+      "quality": 1.5869,
+      "pitch_deg": 38.91
+    },
+    {
+      "facet": 11,
+      "kind": "recovered",
+      "n_points": 77994,
+      "n_components": 5,
+      "core_point_fraction": 0.999846,
+      "stray_points": 12,
+      "full_extent_ft": [
+        4.7,
+        8.3
+      ],
+      "core_extent_ft": [
+        4.7,
+        8.1
+      ],
+      "extent_inflation": 1.021,
+      "farthest_stray_beyond_core_ft": 0.2,
+      "quality": 1.2258,
+      "pitch_deg": 22.15
+    },
+    {
+      "facet": 12,
+      "kind": "recovered",
+      "n_points": 19906,
+      "n_components": 14,
+      "core_point_fraction": 0.998593,
+      "stray_points": 28,
+      "full_extent_ft": [
+        3.1,
+        8.3
+      ],
+      "core_extent_ft": [
+        3.1,
+        8.3
+      ],
+      "extent_inflation": 1.0,
+      "farthest_stray_beyond_core_ft": 0.0,
+      "quality": 0.8087,
+      "pitch_deg": 22.67
+    },
+    {
+      "facet": 13,
+      "kind": "recovered",
+      "n_points": 41761,
+      "n_components": 4,
+      "core_point_fraction": 0.993726,
+      "stray_points": 262,
+      "full_extent_ft": [
+        2.9,
+        9.4
+      ],
+      "core_extent_ft": [
+        2.7,
+        9.3
+      ],
+      "extent_inflation": 1.014,
+      "farthest_stray_beyond_core_ft": 0.1,
+      "quality": 0.8511,
+      "pitch_deg": 35.14
+    },
+    {
+      "facet": 14,
+      "kind": "recovered",
+      "n_points": 33268,
+      "n_components": 6,
+      "core_point_fraction": 0.995401,
+      "stray_points": 153,
+      "full_extent_ft": [
+        2.9,
+        9.4
+      ],
+      "core_extent_ft": [
+        2.9,
+        9.4
+      ],
+      "extent_inflation": 1.0,
+      "farthest_stray_beyond_core_ft": 0.0,
+      "quality": 0.9849,
+      "pitch_deg": 34.67
+    },
+    {
+      "facet": 15,
+      "kind": "recovered",
+      "n_points": 63633,
+      "n_components": 3,
+      "core_point_fraction": 0.999937,
+      "stray_points": 4,
+      "full_extent_ft": [
+        2.7,
+        9.2
+      ],
+      "core_extent_ft": [
+        2.7,
+        9.2
+      ],
+      "extent_inflation": 1.0,
+      "farthest_stray_beyond_core_ft": 0.0,
+      "quality": 0.6488,
+      "pitch_deg": 35.16
+    },
+    {
+      "facet": 16,
+      "kind": "recovered",
+      "n_points": 45197,
+      "n_components": 2,
+      "core_point_fraction": 0.999956,
+      "stray_points": 2,
+      "full_extent_ft": [
+        2.8,
+        9.2
+      ],
+      "core_extent_ft": [
+        2.8,
+        9.2
+      ],
+      "extent_inflation": 1.0,
+      "farthest_stray_beyond_core_ft": 0.0,
+      "quality": 0.8896,
+      "pitch_deg": 34.11
+    },
+    {
+      "facet": 17,
+      "kind": "recovered",
+      "n_points": 52573,
+      "n_components": 10,
+      "core_point_fraction": 0.991935,
+      "stray_points": 424,
+      "full_extent_ft": [
+        2.6,
+        9.3
+      ],
+      "core_extent_ft": [
+        2.5,
+        9.3
+      ],
+      "extent_inflation": 1.009,
+      "farthest_stray_beyond_core_ft": 0.1,
+      "quality": 0.7419,
+      "pitch_deg": 35.17
+    },
+    {
+      "facet": 18,
+      "kind": "recovered",
+      "n_points": 40884,
+      "n_components": 7,
+      "core_point_fraction": 0.991366,
+      "stray_points": 353,
+      "full_extent_ft": [
+        2.3,
+        9.4
+      ],
+      "core_extent_ft": [
+        2.3,
+        8.6
+      ],
+      "extent_inflation": 1.092,
+      "farthest_stray_beyond_core_ft": 0.8,
+      "quality": 0.6979,
+      "pitch_deg": 33.97
+    },
+    {
+      "facet": 19,
+      "kind": "recovered",
+      "n_points": 54203,
+      "n_components": 6,
+      "core_point_fraction": 0.999613,
+      "stray_points": 21,
+      "full_extent_ft": [
+        2.5,
+        8.9
+      ],
+      "core_extent_ft": [
+        2.5,
+        8.9
+      ],
+      "extent_inflation": 1.0,
+      "farthest_stray_beyond_core_ft": 0.0,
+      "quality": 0.6553,
+      "pitch_deg": 34.5
+    },
+    {
+      "facet": 20,
+      "kind": "recovered",
+      "n_points": 34629,
+      "n_components": 10,
+      "core_point_fraction": 0.981027,
+      "stray_points": 657,
+      "full_extent_ft": [
+        2.9,
+        8.0
+      ],
+      "core_extent_ft": [
+        2.9,
+        6.7
+      ],
+      "extent_inflation": 1.199,
+      "farthest_stray_beyond_core_ft": 1.3,
+      "quality": 0.6002,
+      "pitch_deg": 34.01
+    },
+    {
+      "facet": 21,
+      "kind": "recovered",
+      "n_points": 19576,
+      "n_components": 6,
+      "core_point_fraction": 0.999642,
+      "stray_points": 7,
+      "full_extent_ft": [
+        6.7,
+        3.0
+      ],
+      "core_extent_ft": [
+        6.7,
+        2.8
+      ],
+      "extent_inflation": 1.0,
+      "farthest_stray_beyond_core_ft": 0.2,
+      "quality": 0.9465,
+      "pitch_deg": 33.35
+    },
+    {
+      "facet": 22,
+      "kind": "recovered",
+      "n_points": 19017,
+      "n_components": 2,
+      "core_point_fraction": 0.999947,
+      "stray_points": 1,
+      "full_extent_ft": [
+        6.7,
+        2.8
+      ],
+      "core_extent_ft": [
+        6.7,
+        2.8
+      ],
+      "extent_inflation": 1.0,
+      "farthest_stray_beyond_core_ft": 0.0,
+      "quality": 0.8168,
+      "pitch_deg": 32.75
+    },
+    {
+      "facet": 23,
+      "kind": "recovered",
+      "n_points": 34880,
+      "n_components": 1,
+      "core_point_fraction": 1.0,
+      "stray_points": 0,
+      "full_extent_ft": [
+        6.6,
+        5.8
+      ],
+      "core_extent_ft": [
+        6.6,
+        5.8
+      ],
+      "extent_inflation": 1.0,
+      "farthest_stray_beyond_core_ft": 0.0,
+      "quality": 1.5816,
+      "pitch_deg": 8.49
+    },
+    {
+      "facet": 24,
+      "kind": "recovered",
+      "n_points": 13970,
+      "n_components": 2,
+      "core_point_fraction": 0.999928,
+      "stray_points": 1,
+      "full_extent_ft": [
+        2.3,
+        7.1
+      ],
+      "core_extent_ft": [
+        2.3,
+        7.1
+      ],
+      "extent_inflation": 1.0,
+      "farthest_stray_beyond_core_ft": 0.0,
+      "quality": 2.0455,
+      "pitch_deg": 21.57
+    },
+    {
+      "facet": 25,
+      "kind": "recovered",
+      "n_points": 9839,
+      "n_components": 3,
+      "core_point_fraction": 0.999797,
+      "stray_points": 2,
+      "full_extent_ft": [
+        6.2,
+        3.0
+      ],
+      "core_extent_ft": [
+        6.2,
+        3.0
+      ],
+      "extent_inflation": 1.0,
+      "farthest_stray_beyond_core_ft": 0.0,
+      "quality": 1.7211,
+      "pitch_deg": 32.79
+    },
+    {
+      "facet": 26,
+      "kind": "recovered",
+      "n_points": 8532,
+      "n_components": 1,
+      "core_point_fraction": 1.0,
+      "stray_points": 0,
+      "full_extent_ft": [
+        4.5,
+        2.8
+      ],
+      "core_extent_ft": [
+        4.5,
+        2.8
+      ],
+      "extent_inflation": 1.0,
+      "farthest_stray_beyond_core_ft": 0.0,
+      "quality": 1.5408,
+      "pitch_deg": 33.04
+    },
+    {
+      "facet": 27,
+      "kind": "recovered",
+      "n_points": 10345,
+      "n_components": 1,
+      "core_point_fraction": 1.0,
+      "stray_points": 0,
+      "full_extent_ft": [
+        5.7,
+        2.6
+      ],
+      "core_extent_ft": [
+        5.7,
+        2.6
+      ],
+      "extent_inflation": 1.0,
+      "farthest_stray_beyond_core_ft": 0.0,
+      "quality": 0.8299,
+      "pitch_deg": 33.26
+    },
+    {
+      "facet": 28,
+      "kind": "recovered",
+      "n_points": 3970,
+      "n_components": 1,
+      "core_point_fraction": 1.0,
+      "stray_points": 0,
+      "full_extent_ft": [
+        2.8,
+        2.2
+      ],
+      "core_extent_ft": [
+        2.8,
+        2.2
+      ],
+      "extent_inflation": 1.0,
+      "farthest_stray_beyond_core_ft": 0.0,
+      "quality": 1.104,
+      "pitch_deg": 33.23
+    }
+  ],
+  "reading": "a facet whose extent_inflation is well above 1.0, with a core_point_fraction still near 1.0, is carrying a SMALL NUMBER of points a LONG WAY from the surface. That is the shape the visual review described: thin remote slivers that add almost no points but sit far from the facet."
+}
