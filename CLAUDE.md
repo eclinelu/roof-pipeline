@@ -20,37 +20,15 @@ The value of this project is the ANALYSIS half point cloud in, measurements out.
 - Be direct and concise. Never sycophantic. Flag problems directly.
 - Never use em dashes, in any response, in any context.
 
-## CRITICAL pair, do not autopilot
-Claude Code writes the analysis core; the gate is explanation, not authorship
-(decision 2026-07-12, amended 2026-07-18). For the analysis core (segmentation,
-geometry, measurement math, anything an interviewer would probe): explain the
-approach and the why in plain language, in heavily commented code and clear
-walkthroughs, so I can defend every stage in an interview. Then invite my
-questions and MOVE ON. Never quiz me, never ask me to explain the why back,
-and never refuse to proceed until I supply a reason. Understanding is my job;
-a clear explanation is yours.
+I do not type the analysis code anymore; Claude Code does. But I do not
+accept code I cannot explain.
 
-Boilerplate and glue ARE fine to write for me file paths, plotting, argument
-parsing, ODMDocker commands, environment setup, config files, visualization.
+Before any analysis code in roofkit/ is committed:
+1. Explain the approach and why, not just what the code does.
+2. Justify every parameter and threshold, including why it is or is not
+   scale-dependent.
 
-Default loop: explain the concept, build it, run it, invite questions, move
-on. Small steps, plain language on code, never a quiz.
-
-## Where the project record lives
-- `STATE.md` holds the current state (phase, blocker, last thing verified, next
-  action). It is OVERWRITTEN in place and must be true right now.
-- `decisions/` holds the decision log, ONE FILE PER ENTRY, named
-  `YYYY-MM-DD-short-slug.md`. It is APPEND ONLY: past entries are evidence and
-  are never edited. `decisions/README.md` is the index and carries the order
-  (several entries share a date, so filename sort does not recover it).
-- These were a single `DECISIONS.md` until 2026-07-26. The split copied every
-  entry verbatim; `python scripts/verify_decisions_split.py` proves it by
-  reassembling the original and diffing against the last committed version.
-- Use the `decision-log` skill to add entries. Opposite update rules, so do not
-  mix the two: state gets rewritten, entries never do.
-- Entries are WRITTEN as decisions happen, with no approval gate (2026-07-26).
-  The separate rule stands: never attribute a "Why" to me that I did not state;
-  mark your own reasoning as yours.
+Glue code (paths, plotting, argparse, viewers) needs no gate.
 
 ## Architecture the seam
 - `roofkitio.py` is the ONLY module that touches file formats. It reads a cloud
@@ -75,9 +53,8 @@ on. Small steps, plain language on code, never a quiz.
   tuned on one cloud will not transfer to a cloud at a different scale.
 - Segment only AFTER isolating ground and walls must be removed before roof
   segmentation, or RANSAC grabs the wallsground instead of the roof.
-- Always stop ODM at `odm_georeferencing` (`--end-with odm_georeferencing --skip-3dmodel`). That is the stage
-  that writes the georeferenced `.laz` this pipeline reads; it runs AFTER meshing/texturing in ODM's fixed
-  stage order, so `--skip-3dmodel` is required to actually skip the mesh, which this pipeline never uses.
+- Always stop ODM at `odm_filterpoints` (`--end-with odm_filterpoints`). The mesh
+  is expensive and this pipeline never uses it.
 
 ## Environment
 - Python 3.12 in a native Windows venv (`.venv`).
@@ -86,3 +63,16 @@ on. Small steps, plain language on code, never a quiz.
   `import roofkit` works from anywhere in the project.
 - ODM runs via Docker. ODM workspace is at `Codmdatasets` (separate from this
   repo). Point cloud files live there; this repo holds only code.
+
+## Decision logging
+
+Significant decisions and current project state live in DECISIONS.md. Read it
+at the start of a session. When a decision is made, or at the end of any
+session, use the decision-log skill.
+
+Standing rule on commits. At the end of every task, commit and push. Do not leave work uncommitted for me to do.
+
+- Any pre-registration entry is committed AND PUSHED before the run it predicts. A pre-registration that exists only locally is worth nothing, since a local commit can be rewritten. Verify with git branch -r --contains <hash> and report the result.
+- Any frozen artifact is committed before any comparison to ground truth.
+- Everything else: commit at the end of the task, one message naming what was done.
+- Report the hash and confirm the push succeeded. If you cannot push, say so loudly rather than leaving it silent.
