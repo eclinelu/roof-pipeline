@@ -1,5 +1,14 @@
 # Roof Measurement Pipeline
 
+> **PRECEDENCE. If this file and `decisions/` disagree, `decisions/` WINS and
+> this file is stale.** The decision log is append-only and dated; this file is
+> overwritten and can silently carry a rule the log has already reversed. That
+> is not hypothetical: on 2026-07-28 this file was found still instructing a
+> stop at `odm_filterpoints`, which the log had recorded as producing no point
+> cloud on two separate runs, and still naming `DECISIONS.md` as the live
+> record two days after it was split. When you find a disagreement, fix this
+> file in the same pass and say which layer you changed.
+
 ## What this project is
 A Python pipeline that turns drone imagery of a property into a 3D point cloud,
 then extracts real-world roof measurements from it. Primary deliverable total
@@ -53,8 +62,14 @@ Glue code (paths, plotting, argparse, viewers) needs no gate.
   tuned on one cloud will not transfer to a cloud at a different scale.
 - Segment only AFTER isolating ground and walls must be removed before roof
   segmentation, or RANSAC grabs the wallsground instead of the roof.
-- Always stop ODM at `odm_filterpoints` (`--end-with odm_filterpoints`). The mesh
-  is expensive and this pipeline never uses it.
+- Always stop ODM at `odm_georeferencing`
+  (`--end-with odm_georeferencing --skip-3dmodel`). That is the stage that writes
+  the georeferenced `.laz` this pipeline reads.
+  **Do NOT stop at `odm_filterpoints`.** It was tried twice and produced NO point
+  cloud both times, because the `.laz` is written by the later stage, not that
+  one. `odm_georeferencing` runs AFTER meshing and texturing in ODM's fixed stage
+  order, so `--skip-3dmodel` is required to actually skip the mesh, which this
+  pipeline never uses.
 
 ## Environment
 - Python 3.12 in a native Windows venv (`.venv`).
@@ -66,9 +81,20 @@ Glue code (paths, plotting, argparse, viewers) needs no gate.
 
 ## Decision logging
 
-Significant decisions and current project state live in DECISIONS.md. Read it
-at the start of a session. When a decision is made, or at the end of any
-session, use the decision-log skill.
+The record lives in TWO places with OPPOSITE update rules. Do not mix them.
+
+- `STATE.md` is the current state (phase, blocker, last thing verified, next
+  action). It is OVERWRITTEN in place and must be true right now.
+- `decisions/` is the decision log, ONE FILE PER ENTRY, named
+  `YYYY-MM-DD-short-slug.md`, APPEND ONLY, never edited. `decisions/README.md`
+  is the index and carries the order, because several entries share a date.
+
+These were a single `DECISIONS.md` until **2026-07-26**. That file is no longer
+the live record; it exists only as the pre-split baseline that
+`python scripts/verify_decisions_split.py` reassembles and diffs to prove no
+entry was altered by the split. Read `STATE.md` and `decisions/README.md` at the
+start of a session. When a decision is made, or at the end of any session, use
+the decision-log skill.
 
 Standing rule on commits. At the end of every task, commit and push. Do not leave work uncommitted for me to do.
 

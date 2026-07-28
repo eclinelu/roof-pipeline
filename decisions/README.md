@@ -4,6 +4,8 @@ _Append only. Newest at the top. Past entries are never edited. A reversal is a 
 
 ## Entries (newest first)
 
+- [2026-07-28: STANDING RULE R6: a finding ABOUT THE BUILDING must be rendered before it is adopted](2026-07-28-findings-about-the-building-must-be-rendered.md)
+- [2026-07-28: ADOPTED: exact bin pitch, and one declared lattice origin for every raster. Facet coverage moves 88.40 to 94.27 pct](2026-07-28-adopt-exact-pitch-and-declared-lattice-origin.md)
 - [2026-07-28: M1a moves the frozen pitch validation by 0.0121 deg against 0.81 deg of headroom. It is real, and it does not matter for the deliverable](2026-07-28-m1a-does-not-move-the-deliverable.md)
 - [2026-07-28: The published 88.40 pct facet coverage is substantially a GRID ARTIFACT. Coverage cannot be used as a cross-pass detector until this is settled](2026-07-28-published-coverage-is-a-grid-artifact.md)
 - [2026-07-28: CONSTRAINT DISCOVERED THE HARD WAY: raster-based connectivity has a THIRD parameter nobody chose, and it can move a facet by half](2026-07-28-raster-phase-is-an-unswept-parameter.md)

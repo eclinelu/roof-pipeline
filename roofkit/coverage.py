@@ -38,7 +38,45 @@ from roofkit.segment import (find_roof_planes, assign_to_planes,
 from roofkit.measure import tilt_degrees, project_to_plane, facet_area
 
 
-def plan_grid(points, cell, origin=None, exact_pitch=False):
+def lattice_origin(points, cell):
+    """THE DECLARED RASTER ORIGIN (adopted 2026-07-28).
+
+    Every raster in this pipeline anchors here: the global lattice of pitch
+    `cell` that passes through the origin of the LEVELED FRAME, snapped down to
+    the cell at or below the data.
+
+        xlo = floor(x.min() / cell) * cell
+
+    WHY THIS AND NOT `x.min()`. `x.min()` is a property of the DATA EXTENT: it
+    is wherever one extreme point happens to sit. Two runs over the same
+    building with slightly different point sets land on different grids, and
+    nothing anywhere records that a choice was made. That defect was measured on
+    2026-07-28: a sub-cell origin shift swung facet coverage by 5.20 percentage
+    points and one facet's connectivity membership by half
+    (decisions/2026-07-28-published-coverage-is-a-grid-artifact.md).
+
+    The lattice origin is a pure function of `cell`. Remove a million points and
+    the grid does not move; add a facet and it does not move. The floor() only
+    guarantees the origin sits at or below the data so nothing falls outside.
+
+    WHAT IT DOES NOT DO, stated so it is not oversold: it does not remove
+    discretisation sensitivity. It picks ONE phase and makes it declared,
+    reproducible and identical at every site, instead of accidental and
+    different every run. The residual sensitivity of the hole-filled and eroded
+    footprints (about 1.1 to 1.5 percent) is a property of `min_pts = 2` on a
+    sparse cloud and is unchanged by this.
+
+    TRANSFERABILITY, which is the point: bungalow and cove_house raster by the
+    same RULE. The lattice itself differs between sites because `cell` is
+    2.5 x that site's own median spacing, which is correct; what transfers is
+    that the origin is derived from the declared pitch rather than from whichever
+    point happens to be furthest south-west."""
+    p = np.asarray(points, float)
+    return np.array([np.floor(p[:, 0].min() / cell) * cell,
+                     np.floor(p[:, 1].min() / cell) * cell])
+
+
+def plan_grid(points, cell, origin=None, exact_pitch=True, anchor="lattice"):
     """Bin XY into square cells of side `cell`. Returns the count grid and
     the grid geometry so callers can map cells back to coordinates.
     `cell` is a LENGTH (scale-dependent): callers derive it from spacing.
@@ -61,10 +99,16 @@ def plan_grid(points, cell, origin=None, exact_pitch=False):
     the data on both axes, or points fall outside the raster."""
     x, y = points[:, 0], points[:, 1]
     xhi, yhi = x.max(), y.max()
-    if origin is None:
+    if origin is not None:
+        xlo, ylo = float(origin[0]), float(origin[1])
+    elif anchor == "lattice":
+        xlo, ylo = lattice_origin(points, cell)
+    elif anchor == "extent":
+        # THE PRE-2026-07-28 BEHAVIOUR, kept runnable so superseded numbers can
+        # be RECOMPUTED rather than merely quoted. Never use it for a real run.
         xlo, ylo = x.min(), y.min()
     else:
-        xlo, ylo = float(origin[0]), float(origin[1])
+        raise ValueError(f"anchor must be 'lattice' or 'extent', got {anchor!r}")
     nx = int((xhi - xlo) / cell) + 1
     ny = int((yhi - ylo) / cell) + 1
     # `exact_pitch` is a DIAGNOSTIC COUNTERFACTUAL and defaults to the
@@ -80,10 +124,13 @@ def plan_grid(points, cell, origin=None, exact_pitch=False):
     # as cell^2, which is the pitch of neither. Measured on big_house: the
     # drift reaches 0.487 x 0.731 cells at the far corner.
     #
-    # It is NOT flipped to True in production here. Doing so would change the
-    # published number, which is a decision to take deliberately and not as a
-    # side effect of a diagnostic (see
-    # decisions/2026-07-28-raster-phase-is-an-unswept-parameter.md).
+    # ADOPTED as the default 2026-07-28 after the counterfactual established
+    # causation: it removes 97 percent of the phase sensitivity (5.20 points
+    # down to 0.18) and is the only setting under which the three parts of the
+    # calculation agree with each other, since Hexp and the cell^2 area charge
+    # ALREADY assume bins of width `cell`. `exact_pitch=False` is kept runnable
+    # so superseded numbers can be recomputed rather than merely quoted.
+    # decisions/2026-07-28-published-coverage-is-a-grid-artifact.md
     rng = ([[xlo, xlo + nx * cell], [ylo, ylo + ny * cell]] if exact_pitch
            else [[xlo, xhi], [ylo, yhi]])
     H, _, _ = np.histogram2d(x, y, bins=[nx, ny], range=rng)
@@ -97,7 +144,7 @@ def cell_centers(cells, g):
 
 
 def coverage_masks(roof, facets, band, cell, min_pts=2, fill_holes=True,
-                   origin=None, exact_pitch=False):
+                   origin=None, exact_pitch=True, anchor="lattice"):
     """Split the plan grid into footprint / explained / residual masks.
 
     testable : a cell holding at least min_pts roof points. Only these can be
@@ -133,7 +180,8 @@ def coverage_masks(roof, facets, band, cell, min_pts=2, fill_holes=True,
 
     Returns (masks dict, grid dict, owner, dist). owner/dist come from
     assign_to_planes so the caller can pull a blob's unexplained points."""
-    Hall, g = plan_grid(roof, cell, origin=origin, exact_pitch=exact_pitch)
+    Hall, g = plan_grid(roof, cell, origin=origin, exact_pitch=exact_pitch,
+                        anchor=anchor)
     owner, dist = assign_to_planes(roof, facets, max_dist=np.inf)
     # count explained points per cell via histogram WEIGHTS (0/1), so we never
     # materialize the ~150 MB explained-points subset copy.
@@ -582,10 +630,21 @@ def area_accounting(facets, spacing, alpha_mult, cell, area_max_points=400_000,
     # Grid bounds WITHOUT stacking all facet points (that vstack was a ~9M-pt,
     # 200 MB temporary). Only OCCUPIED cells (holding at least one facet point)
     # can be covered, so we accumulate the occupancy grid facet by facet.
-    xlo = min(float(f["points"][:, 0].min()) for f in facets)
     xhi = max(float(f["points"][:, 0].max()) for f in facets)
-    ylo = min(float(f["points"][:, 1].min()) for f in facets)
     yhi = max(float(f["points"][:, 1].max()) for f in facets)
+    # THE DECLARED LATTICE ORIGIN (adopted 2026-07-28), same rule coverage_masks
+    # uses. This raster previously took min() over the FACET points, a second
+    # data-derived origin unrelated to the coverage grid's. Both are now
+    # multiples of `cell`, so the two rasters sit on ONE global lattice and are
+    # mutually aligned, which they were not before. See lattice_origin().
+    #
+    # This grid's BINS were already exactly `cell` wide (see rng2 below), so the
+    # plan_grid pitch defect never reached area accounting. Only the origin
+    # changes here.
+    xlo = float(np.floor(min(float(f["points"][:, 0].min())
+                             for f in facets) / cell) * cell)
+    ylo = float(np.floor(min(float(f["points"][:, 1].min())
+                             for f in facets) / cell) * cell)
     nx = int((xhi - xlo) / cell) + 1
     ny = int((yhi - ylo) / cell) + 1
     rng2 = [[xlo, xlo + nx * cell], [ylo, ylo + ny * cell]]
