@@ -1,0 +1,557 @@
+{
+  "task": "scorecard for the M1a pre-registration, P1 through P9",
+  "dataset": "big_house",
+  "date": "2026-07-28",
+  "source_sweep": "m1a-sweep-2026-07-28.json",
+  "status": "SCORING ONLY. No interpretation, no adoption. canonical-2026-07-26-r2 remains canonical.",
+  "criteria_disclosure": "these criteria were written while the 20-point sweep was running, with one grid point (scale 2.5, fraction 1.0) already seen. They are therefore not blind. The criteria for P4, P6, P7 and P9 are taken from the pre-registration's own wording rather than invented at scoring time.",
+  "summary": {
+    "P1": "UNSCOREABLE",
+    "P2": "HELD",
+    "P3": "FAILED",
+    "P4": "FAILED",
+    "P5": "UNSCOREABLE",
+    "P6": "HELD",
+    "P7": "FAILED",
+    "P8": "HELD",
+    "P9": "HELD"
+  },
+  "scorecard": [
+    {
+      "prediction": "P1",
+      "subject": "main-facet line errors largely resolve; dormer lines L11-L16 stay correct",
+      "verdict": "UNSCOREABLE",
+      "why": "line verdicts are a VISUAL REVIEW output. No review pass has been run on the filtered state, and under decisions/2026-07-27-review-loop-changes-blind-diff-and-free-text.md the reviewer grades blind, which is Emmett's eyes and not a computation. Nothing in this sweep bears on it either way.",
+      "what_would_score_it": "a pass-2 visual review of a state built at an adopted parameter value, with the diff toggle OFF until after grading"
+    },
+    {
+      "prediction": "P2",
+      "subject": "the control: the fix does what it claims, and facets 11-28 are not disturbed",
+      "verdict": "HELD",
+      "criterion": "the amendment's replacement assertions A1 (point-domain separation), A2 (independent component count), A3 (no-op tripwire) and A5 (conservation) all pass at every grid point. These replace the committed P2, which was a prediction and could not fail loudly.",
+      "evidence": {
+        "A1": {
+          "passed": true,
+          "n_failures": 0
+        },
+        "A2": {
+          "passed": true,
+          "n_failures": 0
+        },
+        "A3": {
+          "passed": true,
+          "n_failures": null
+        },
+        "A5": {
+          "passed": true,
+          "n_failures": 0
+        }
+      },
+      "indirect_effect": {
+        "recovered_counts_seen": [
+          20,
+          21
+        ],
+        "baseline": 21,
+        "note": "the INDIRECT half of the committed P2 (recovered facet IDENTITY, not just count) is only partly scoreable here: the sweep persisted recovered facet COUNTS, not their per-facet geometry. Counts are reported; identity is not. Stated as a shortfall of this run, not as a pass."
+      }
+    },
+    {
+      "prediction": "P3",
+      "subject": "main-facet quality improves, magnitude unknown and possibly small",
+      "verdict": "FAILED",
+      "criterion": "the pre-registration recorded this as a measurement, not an assumption, and stated that a negligible improvement is a legitimate outcome. It therefore fails only if quality gets WORSE. Quality is read through the bar, which is max() over the 8 main facets' trimmed RMS/spacing.",
+      "evidence": {
+        "baseline_bar": 2.948,
+        "bar_range": [
+          2.9429,
+          2.9662
+        ],
+        "grid_points_where_worse": [
+          {
+            "scale": 1.5,
+            "frac": 1.0,
+            "delta": 0.0182
+          }
+        ]
+      }
+    },
+    {
+      "prediction": "P4",
+      "subject": "the quality bar should DROP",
+      "verdict": "FAILED",
+      "criterion": "stated with a direction, so it holds only if the bar drops at EVERY grid point. A bar that rises anywhere is a failure of a directional prediction, not noise.",
+      "evidence": {
+        "baseline_bar": 2.948,
+        "n_grid_points": 20,
+        "n_dropped": 19,
+        "worst_rise": 0.0182,
+        "largest_drop": -0.0051
+      }
+    },
+    {
+      "prediction": "P5",
+      "subject": "blob 0 gets FURTHER from passing, not closer",
+      "verdict": "UNSCOREABLE",
+      "why": "blob 0 produced no candidate plane in the baseline or in the filtered runs, so there is no quality margin to compare.",
+      "evidence": {
+        "baseline": {
+          "area_cu2": 11.5703,
+          "best_candidate_quality": null,
+          "bar": 2.948,
+          "margin_to_bar": null,
+          "accepted": false,
+          "note": null,
+          "n_candidate": 180861
+        }
+      }
+    },
+    {
+      "prediction": "P6",
+      "subject": "facet coverage: a bounded quantity with an UNKNOWN direction",
+      "verdict": "HELD",
+      "criterion": "the amended P6 deliberately claims NO direction and records coverage as bounded with unknown sign. It therefore cannot be refuted by the coverage moving either way; it is scored HELD only in the weak sense that no direction was claimed and none was needed. Recorded as a claim that COST NOTHING TO MAKE, which is the honest reading.",
+      "evidence": {
+        "baseline_pct": 88.4,
+        "range_pct": [
+          87.96,
+          88.4
+        ],
+        "spread_pct": 0.44,
+        "note": "the two coupling channels the 2026-07-28 amendment required are reported per facet in the sweep rows as normal_change_deg / centroid_shift_normal_in / rotation_at_stray_radius_in"
+      }
+    },
+    {
+      "prediction": "P7",
+      "subject": "pitch will change on ALL 8 main facets; the prediction that matters most",
+      "verdict": "FAILED",
+      "criterion": "stated as WILL CHANGE on all 8, so it holds only if every main facet's pitch delta is non-zero at every grid point (reported to 4 dp, as the pre-registration requires). Note this scores the DIRECTIONLESS claim that pitch moves; it says nothing about whether the movement is large.",
+      "evidence": {
+        "fewest_facets_moved_at_any_grid_point": 1,
+        "n_main": 8,
+        "max_abs_pitch_delta_deg": 0.212,
+        "per_grid_max": [
+          {
+            "scale": 1.5,
+            "frac": 1.0,
+            "max_abs": 0.212
+          },
+          {
+            "scale": 1.5,
+            "frac": 0.01,
+            "max_abs": 0.0797
+          },
+          {
+            "scale": 1.5,
+            "frac": 0.001,
+            "max_abs": 0.0649
+          },
+          {
+            "scale": 1.5,
+            "frac": 0.0001,
+            "max_abs": 0.0284
+          },
+          {
+            "scale": 2.0,
+            "frac": 1.0,
+            "max_abs": 0.0867
+          },
+          {
+            "scale": 2.0,
+            "frac": 0.01,
+            "max_abs": 0.0072
+          },
+          {
+            "scale": 2.0,
+            "frac": 0.001,
+            "max_abs": 0.003
+          },
+          {
+            "scale": 2.0,
+            "frac": 0.0001,
+            "max_abs": 0.0028
+          },
+          {
+            "scale": 2.5,
+            "frac": 1.0,
+            "max_abs": 0.0141
+          },
+          {
+            "scale": 2.5,
+            "frac": 0.01,
+            "max_abs": 0.0057
+          },
+          {
+            "scale": 2.5,
+            "frac": 0.001,
+            "max_abs": 0.0029
+          },
+          {
+            "scale": 2.5,
+            "frac": 0.0001,
+            "max_abs": 0.0011
+          },
+          {
+            "scale": 3.5,
+            "frac": 1.0,
+            "max_abs": 0.0138
+          },
+          {
+            "scale": 3.5,
+            "frac": 0.01,
+            "max_abs": 0.0054
+          },
+          {
+            "scale": 3.5,
+            "frac": 0.001,
+            "max_abs": 0.0025
+          },
+          {
+            "scale": 3.5,
+            "frac": 0.0001,
+            "max_abs": 0.0006
+          },
+          {
+            "scale": 5.0,
+            "frac": 1.0,
+            "max_abs": 0.0137
+          },
+          {
+            "scale": 5.0,
+            "frac": 0.01,
+            "max_abs": 0.0053
+          },
+          {
+            "scale": 5.0,
+            "frac": 0.001,
+            "max_abs": 0.0019
+          },
+          {
+            "scale": 5.0,
+            "frac": 0.0001,
+            "max_abs": 0.0001
+          }
+        ]
+      },
+      "consequence_for_the_frozen_result": {
+        "note": "the pre-registration asks that this be checked rather than assumed: the frozen 2026-07-18 run used this same discover_facets path, so the pitch delta here also measures how much the frozen pitch numbers were computed on contaminated membership.",
+        "frozen_max_abs_error_deg": 2.19,
+        "frozen_pass_threshold_deg": 3.0,
+        "max_delta_from_this_fix_deg": 0.212
+      }
+    },
+    {
+      "prediction": "P8",
+      "subject": "the residual pool grows, bounded above by about 79,000 points",
+      "verdict": "HELD",
+      "criterion": "the pre-registered bound is on NEWLY UNEXPLAINED POINTS, not on points removed from membership. It holds if newly unexplained stays at or under 79,000 at every grid point.",
+      "evidence": {
+        "prereg_bound": 79000,
+        "newly_unexplained_range": [
+          40,
+          6662
+        ],
+        "total_removed_range": [
+          3134,
+          838168
+        ],
+        "realised_fraction_of_bound": [
+          0.0005,
+          0.0843
+        ]
+      },
+      "bound_provenance_warning": {
+        "issue": "the 79,000 figure was the sum of STRAY COUNTS in fragments-2026-07-27.json, which was measured on the canonical POST-TRIM facet points. The filter runs on PRE-TRIM membership, a strictly larger set. So the bound was derived from the wrong point set and does not bound what it was meant to bound, INDEPENDENTLY of whether the numbers happen to fall under it.",
+        "actual_removed_range": [
+          3134,
+          838168
+        ],
+        "reading": "if total removed exceeds 79,000 while newly unexplained stays under it, the arithmetic bound survives by accident and the reasoning behind it does not. Emmett's own standard applies: a prediction resting on a false premise scores as luck even when the direction is right."
+      }
+    },
+    {
+      "prediction": "P9",
+      "subject": "main count 8; recovered 21 plus or minus 3; total 29 plus or minus 3",
+      "verdict": "HELD",
+      "criterion": "both halves must hold at every grid point. A recovered count outside the band is pre-registered as a stop-and-look.",
+      "evidence": {
+        "main_range": [
+          8,
+          8
+        ],
+        "recovered_range": [
+          20,
+          21
+        ],
+        "total_range": [
+          28,
+          29
+        ],
+        "grid_points_outside_band": []
+      }
+    }
+  ],
+  "plateau": {
+    "n_distinct_answers": 16,
+    "n_grid_points": 20,
+    "largest_group": {
+      "n_grid_points": 3,
+      "grid_points": [
+        [
+          2.5,
+          0.0001
+        ],
+        [
+          3.5,
+          0.001
+        ],
+        [
+          5.0,
+          0.0001
+        ]
+      ],
+      "n_main": 8,
+      "n_recovered": 21,
+      "facet_coverage_pct": 88.38,
+      "quality_bar": 2.948
+    },
+    "all_groups": [
+      {
+        "n_grid_points": 3,
+        "grid_points": [
+          [
+            2.5,
+            0.0001
+          ],
+          [
+            3.5,
+            0.001
+          ],
+          [
+            5.0,
+            0.0001
+          ]
+        ],
+        "n_main": 8,
+        "n_recovered": 21,
+        "facet_coverage_pct": 88.38,
+        "quality_bar": 2.948
+      },
+      {
+        "n_grid_points": 2,
+        "grid_points": [
+          [
+            2.0,
+            0.001
+          ],
+          [
+            2.0,
+            0.0001
+          ]
+        ],
+        "n_main": 8,
+        "n_recovered": 21,
+        "facet_coverage_pct": 88.39,
+        "quality_bar": 2.948
+      },
+      {
+        "n_grid_points": 2,
+        "grid_points": [
+          [
+            2.5,
+            0.001
+          ],
+          [
+            5.0,
+            0.001
+          ]
+        ],
+        "n_main": 8,
+        "n_recovered": 21,
+        "facet_coverage_pct": 88.39,
+        "quality_bar": 2.948
+      },
+      {
+        "n_grid_points": 1,
+        "grid_points": [
+          [
+            1.5,
+            1.0
+          ]
+        ],
+        "n_main": 8,
+        "n_recovered": 21,
+        "facet_coverage_pct": 88.37,
+        "quality_bar": 2.966
+      },
+      {
+        "n_grid_points": 1,
+        "grid_points": [
+          [
+            1.5,
+            0.01
+          ]
+        ],
+        "n_main": 8,
+        "n_recovered": 21,
+        "facet_coverage_pct": 88.37,
+        "quality_bar": 2.943
+      },
+      {
+        "n_grid_points": 1,
+        "grid_points": [
+          [
+            1.5,
+            0.001
+          ]
+        ],
+        "n_main": 8,
+        "n_recovered": 21,
+        "facet_coverage_pct": 88.37,
+        "quality_bar": 2.946
+      },
+      {
+        "n_grid_points": 1,
+        "grid_points": [
+          [
+            1.5,
+            0.0001
+          ]
+        ],
+        "n_main": 8,
+        "n_recovered": 21,
+        "facet_coverage_pct": 88.39,
+        "quality_bar": 2.946
+      },
+      {
+        "n_grid_points": 1,
+        "grid_points": [
+          [
+            2.0,
+            1.0
+          ]
+        ],
+        "n_main": 8,
+        "n_recovered": 20,
+        "facet_coverage_pct": 87.96,
+        "quality_bar": 2.945
+      },
+      {
+        "n_grid_points": 1,
+        "grid_points": [
+          [
+            2.0,
+            0.01
+          ]
+        ],
+        "n_main": 8,
+        "n_recovered": 21,
+        "facet_coverage_pct": 88.38,
+        "quality_bar": 2.945
+      },
+      {
+        "n_grid_points": 1,
+        "grid_points": [
+          [
+            2.5,
+            1.0
+          ]
+        ],
+        "n_main": 8,
+        "n_recovered": 21,
+        "facet_coverage_pct": 88.39,
+        "quality_bar": 2.945
+      },
+      {
+        "n_grid_points": 1,
+        "grid_points": [
+          [
+            2.5,
+            0.01
+          ]
+        ],
+        "n_main": 8,
+        "n_recovered": 21,
+        "facet_coverage_pct": 88.37,
+        "quality_bar": 2.945
+      },
+      {
+        "n_grid_points": 1,
+        "grid_points": [
+          [
+            3.5,
+            1.0
+          ]
+        ],
+        "n_main": 8,
+        "n_recovered": 21,
+        "facet_coverage_pct": 88.37,
+        "quality_bar": 2.945
+      },
+      {
+        "n_grid_points": 1,
+        "grid_points": [
+          [
+            3.5,
+            0.01
+          ]
+        ],
+        "n_main": 8,
+        "n_recovered": 21,
+        "facet_coverage_pct": 88.4,
+        "quality_bar": 2.945
+      },
+      {
+        "n_grid_points": 1,
+        "grid_points": [
+          [
+            3.5,
+            0.0001
+          ]
+        ],
+        "n_main": 8,
+        "n_recovered": 21,
+        "facet_coverage_pct": 88.4,
+        "quality_bar": 2.948
+      },
+      {
+        "n_grid_points": 1,
+        "grid_points": [
+          [
+            5.0,
+            1.0
+          ]
+        ],
+        "n_main": 8,
+        "n_recovered": 21,
+        "facet_coverage_pct": 88.38,
+        "quality_bar": 2.945
+      },
+      {
+        "n_grid_points": 1,
+        "grid_points": [
+          [
+            5.0,
+            0.01
+          ]
+        ],
+        "n_main": 8,
+        "n_recovered": 21,
+        "facet_coverage_pct": 88.39,
+        "quality_bar": 2.945
+      }
+    ],
+    "count_area_disagreement_sets": [
+      []
+    ],
+    "phase_caveat": {
+      "worst_kept_fraction_spread": 0.47917716,
+      "worst_at": {
+        "scale_mult": 2.5,
+        "facet": 3
+      },
+      "worst_points": 407429,
+      "meaning": "the sweep varies the connectivity SCALE and the minimum COMPONENT FRACTION. It does not vary the raster's PHASE, which is a third degree of freedom nobody chose, swept or pre-registered. If phase moves the answer by more than the swept parameters do, a flat grid is not a plateau, it is a plateau in two of three dimensions."
+    }
+  }
+}

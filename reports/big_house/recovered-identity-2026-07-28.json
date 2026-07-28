@@ -1,0 +1,290 @@
+{
+  "task": "does the M1a filter disturb the RECOVERED facets? Identity, not count.",
+  "dataset": "big_house",
+  "date": "2026-07-28",
+  "config": {
+    "connectivity_scale_x_spacing": 2.5,
+    "min_component_fraction": 1.0
+  },
+  "status": "NOTHING ADOPTED. canonical-2026-07-26-r2 unchanged.",
+  "why": "the sweep persisted recovered facet counts only. The committed P2 is about identity: the same dormers found in the same places. A count cannot answer it.",
+  "baseline": "canonical-2026-07-26-r2, which sweep assertion A0 proved the filter-off path reproduces exactly",
+  "matching_rule": {
+    "rule": "nearest canonical recovered centroid in 3D",
+    "accept_radius_cu": 0.006495,
+    "accept_radius_ft": 0.022,
+    "note": "matches farther than the radius are reported UNMATCHED rather than forced into a pair"
+  },
+  "cross_checks": [
+    {
+      "check": "canonical recovered count read from the npz matches the count the canonical document records",
+      "passed": true,
+      "detail": {
+        "from_npz": 21,
+        "from_doc": 21
+      }
+    },
+    {
+      "check": "the run produced 8 main facets, so the state being compared is comparable and not collapsed",
+      "passed": true,
+      "detail": {
+        "n_main": 8
+      }
+    },
+    {
+      "check": "the acceptance radius actually rejected something OR every new facet sits well inside it; reported so that 'all matched' cannot pass vacuously when nothing is near anything",
+      "passed": true,
+      "detail": {
+        "accept_radius_ft": 0.022,
+        "n_rejected": 4,
+        "worst_accepted_distance_ft": 0.02
+      }
+    }
+  ],
+  "counts": {
+    "canonical_recovered": 21,
+    "run_recovered": 21,
+    "matched": 17,
+    "unmatched_new": 4,
+    "canonical_unclaimed": 4,
+    "canonical_claimed_twice": {}
+  },
+  "canonical_unclaimed_facets": [
+    8,
+    9,
+    10,
+    23
+  ],
+  "pairs": [
+    {
+      "new_index": 13,
+      "centroid_distance_ft": 0.006,
+      "n_points": 19363,
+      "pitch_deg": 33.2404,
+      "matched_canonical_facet": 21,
+      "n_points_canonical": 19576,
+      "pitch_deg_canonical": 33.353,
+      "pitch_delta_deg": -0.1126,
+      "point_count_ratio": 0.9891,
+      "azimuth_delta_deg": 0.0148
+    },
+    {
+      "new_index": 14,
+      "centroid_distance_ft": 0.02,
+      "n_points": 18928,
+      "pitch_deg": 32.696,
+      "matched_canonical_facet": 22,
+      "n_points_canonical": 19017,
+      "pitch_deg_canonical": 32.7529,
+      "pitch_delta_deg": -0.0569,
+      "point_count_ratio": 0.9953,
+      "azimuth_delta_deg": 0.007
+    },
+    {
+      "new_index": 20,
+      "centroid_distance_ft": 0.009,
+      "n_points": 4030,
+      "pitch_deg": 33.2638,
+      "matched_canonical_facet": 28,
+      "n_points_canonical": 3970,
+      "pitch_deg_canonical": 33.2342,
+      "pitch_delta_deg": 0.0296,
+      "point_count_ratio": 1.0151,
+      "azimuth_delta_deg": 0.0179
+    },
+    {
+      "new_index": 8,
+      "centroid_distance_ft": 0.014,
+      "n_points": 45651,
+      "pitch_deg": 34.077,
+      "matched_canonical_facet": 16,
+      "n_points_canonical": 45197,
+      "pitch_deg_canonical": 34.1054,
+      "pitch_delta_deg": -0.0284,
+      "point_count_ratio": 1.01,
+      "azimuth_delta_deg": 0.0211
+    },
+    {
+      "new_index": 17,
+      "centroid_distance_ft": 0.018,
+      "n_points": 9737,
+      "pitch_deg": 32.8105,
+      "matched_canonical_facet": 25,
+      "n_points_canonical": 9839,
+      "pitch_deg_canonical": 32.7878,
+      "pitch_delta_deg": 0.0227,
+      "point_count_ratio": 0.9896,
+      "azimuth_delta_deg": 0.0178
+    },
+    {
+      "new_index": 11,
+      "centroid_distance_ft": 0.004,
+      "n_points": 54418,
+      "pitch_deg": 34.5198,
+      "matched_canonical_facet": 19,
+      "n_points_canonical": 54203,
+      "pitch_deg_canonical": 34.4991,
+      "pitch_delta_deg": 0.0207,
+      "point_count_ratio": 1.004,
+      "azimuth_delta_deg": -0.0017
+    },
+    {
+      "new_index": 4,
+      "centroid_distance_ft": 0.016,
+      "n_points": 19934,
+      "pitch_deg": 22.6544,
+      "matched_canonical_facet": 12,
+      "n_points_canonical": 19906,
+      "pitch_deg_canonical": 22.67,
+      "pitch_delta_deg": -0.0156,
+      "point_count_ratio": 1.0014,
+      "azimuth_delta_deg": 0.0113
+    },
+    {
+      "new_index": 12,
+      "centroid_distance_ft": 0.009,
+      "n_points": 34436,
+      "pitch_deg": 34.0221,
+      "matched_canonical_facet": 20,
+      "n_points_canonical": 34629,
+      "pitch_deg_canonical": 34.0105,
+      "pitch_delta_deg": 0.0116,
+      "point_count_ratio": 0.9944,
+      "azimuth_delta_deg": -0.0017
+    },
+    {
+      "new_index": 19,
+      "centroid_distance_ft": 0.008,
+      "n_points": 10458,
+      "pitch_deg": 33.2478,
+      "matched_canonical_facet": 27,
+      "n_points_canonical": 10345,
+      "pitch_deg_canonical": 33.2582,
+      "pitch_delta_deg": -0.0104,
+      "point_count_ratio": 1.0109,
+      "azimuth_delta_deg": 0.0089
+    },
+    {
+      "new_index": 3,
+      "centroid_distance_ft": 0.003,
+      "n_points": 77882,
+      "pitch_deg": 22.1362,
+      "matched_canonical_facet": 11,
+      "n_points_canonical": 77994,
+      "pitch_deg_canonical": 22.146,
+      "pitch_delta_deg": -0.0098,
+      "point_count_ratio": 0.9986,
+      "azimuth_delta_deg": -0.0025
+    },
+    {
+      "new_index": 6,
+      "centroid_distance_ft": 0.004,
+      "n_points": 33353,
+      "pitch_deg": 34.6604,
+      "matched_canonical_facet": 14,
+      "n_points_canonical": 33268,
+      "pitch_deg_canonical": 34.667,
+      "pitch_delta_deg": -0.0066,
+      "point_count_ratio": 1.0026,
+      "azimuth_delta_deg": 0.0037
+    },
+    {
+      "new_index": 16,
+      "centroid_distance_ft": 0.005,
+      "n_points": 14050,
+      "pitch_deg": 21.5746,
+      "matched_canonical_facet": 24,
+      "n_points_canonical": 13970,
+      "pitch_deg_canonical": 21.5685,
+      "pitch_delta_deg": 0.0061,
+      "point_count_ratio": 1.0057,
+      "azimuth_delta_deg": 0.0066
+    },
+    {
+      "new_index": 10,
+      "centroid_distance_ft": 0.005,
+      "n_points": 40732,
+      "pitch_deg": 33.973,
+      "matched_canonical_facet": 18,
+      "n_points_canonical": 40884,
+      "pitch_deg_canonical": 33.9676,
+      "pitch_delta_deg": 0.0054,
+      "point_count_ratio": 0.9963,
+      "azimuth_delta_deg": -0.0003
+    },
+    {
+      "new_index": 5,
+      "centroid_distance_ft": 0.003,
+      "n_points": 41672,
+      "pitch_deg": 35.1388,
+      "matched_canonical_facet": 13,
+      "n_points_canonical": 41761,
+      "pitch_deg_canonical": 35.141,
+      "pitch_delta_deg": -0.0022,
+      "point_count_ratio": 0.9979,
+      "azimuth_delta_deg": -0.0068
+    },
+    {
+      "new_index": 7,
+      "centroid_distance_ft": 0.007,
+      "n_points": 63197,
+      "pitch_deg": 35.1545,
+      "matched_canonical_facet": 15,
+      "n_points_canonical": 63633,
+      "pitch_deg_canonical": 35.1565,
+      "pitch_delta_deg": -0.002,
+      "point_count_ratio": 0.9931,
+      "azimuth_delta_deg": -0.0008
+    },
+    {
+      "new_index": 18,
+      "centroid_distance_ft": 0.013,
+      "n_points": 8635,
+      "pitch_deg": 33.0372,
+      "matched_canonical_facet": 26,
+      "n_points_canonical": 8532,
+      "pitch_deg_canonical": 33.0358,
+      "pitch_delta_deg": 0.0014,
+      "point_count_ratio": 1.0121,
+      "azimuth_delta_deg": -0.0318
+    },
+    {
+      "new_index": 9,
+      "centroid_distance_ft": 0.005,
+      "n_points": 52724,
+      "pitch_deg": 35.1745,
+      "matched_canonical_facet": 17,
+      "n_points_canonical": 52573,
+      "pitch_deg_canonical": 35.1738,
+      "pitch_delta_deg": 0.0007,
+      "point_count_ratio": 1.0029,
+      "azimuth_delta_deg": -0.0002
+    }
+  ],
+  "unmatched_new": [
+    {
+      "new_index": 0,
+      "centroid_distance_ft": 0.305,
+      "n_points": 96044,
+      "pitch_deg": 10.1108
+    },
+    {
+      "new_index": 1,
+      "centroid_distance_ft": 0.045,
+      "n_points": 88105,
+      "pitch_deg": 23.4516
+    },
+    {
+      "new_index": 2,
+      "centroid_distance_ft": 0.066,
+      "n_points": 27501,
+      "pitch_deg": 38.9812
+    },
+    {
+      "new_index": 15,
+      "centroid_distance_ft": 0.022,
+      "n_points": 34303,
+      "pitch_deg": 8.4937
+    }
+  ]
+}

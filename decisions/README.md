@@ -4,6 +4,10 @@ _Append only. Newest at the top. Past entries are never edited. A reversal is a 
 
 ## Entries (newest first)
 
+- [2026-07-28: CONSTRAINT DISCOVERED THE HARD WAY: raster-based connectivity has a THIRD parameter nobody chose, and it can move a facet by half](2026-07-28-raster-phase-is-an-unswept-parameter.md)
+- [2026-07-28: M1a RESULT: no plateau. The pass STOPS, nothing is adopted, and four of nine predictions failed](2026-07-28-m1a-result-no-plateau.md)
+- [2026-07-28: AMENDMENT to the M1a pre-registration: the coupling has two channels, P2 gets a real assertion, and the sweep grid is finally written down](2026-07-28-m1a-preregistration-amendment.md)
+- [2026-07-27: CANDIDATE, NOT ADOPTED: facet boundaries should be straight lines, and a shared boundary should be ONE line](2026-07-27-candidate-boundary-regularization.md)
 - [2026-07-27: Two permanent changes to the review loop, from pass 2 onward: a blind diff, and free text instead of multiple choice](2026-07-27-review-loop-changes-blind-diff-and-free-text.md)
 - [2026-07-27: PRE-REGISTRATION for pass 1 fix, M1a: facet membership gets a connectivity constraint](2026-07-27-m1a-connectivity-preregistration.md)
 - [2026-07-27: Triage pass 1 result: seven mechanisms, and the pre-registration covered a quarter of them](2026-07-27-triage-pass-1-result.md)

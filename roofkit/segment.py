@@ -1,6 +1,7 @@
 import numpy as np
 import open3d as o3d
 from roofkit.measure import tilt_degrees
+from scipy.ndimage import label
 from scipy.spatial.transform import Rotation
 
 def clean_outliers(points, nb_neighbors=20, std_ratio=2.0):
@@ -305,6 +306,107 @@ def fit_plane_trimmed(points, trim_mult=3.0, max_iterations=10):
             break
         keep = new_keep
     return fit_plane_svd(points[keep]), keep
+
+
+def connected_core(xy, cell, min_frac=1.0, origin=None):
+    """THE M1a CONNECTIVITY FILTER. A facet keeps only the points connected,
+    in PLAN, to its main body.
+
+    Pre-registered 2026-07-27, amended 2026-07-28. See
+    decisions/2026-07-27-m1a-connectivity-preregistration.md.
+
+    WHY THIS EXISTS, in one sentence: a PLANE IS UNBOUNDED but a FACET IS A
+    BOUNDED PIECE OF ROOF, and membership computed as "distance to a plane"
+    conflates the two, so a point on the far side of the building joins a facet
+    whenever the infinite extension of that facet's plane happens to pass near
+    it. On a roof built from repeated slopes at the same pitch that is not a
+    coincidence, it is what the geometry of a house guarantees.
+
+    xy       : (N, 2) PLAN coordinates of one facet's candidate membership.
+               Plan, not 3D, because two roof surfaces stacked vertically
+               (a dormer above a main slope) are different facets and must not
+               be joined by proximity in Z.
+    cell     : the CONNECTIVITY SCALE, a LENGTH. Two points count as connected
+               when their plan cells touch, including at a corner. Callers pass
+               a multiple of median point spacing so the value transfers
+               between clouds of different scale (project rule: RANSAC-style
+               distance thresholds are scale-dependent, never constants).
+    min_frac : how large a component must be, as a FRACTION OF THE LARGEST
+               COMPONENT'S POINT COUNT, to be kept. 1.0 keeps only the largest
+               (the pre-registered definition of "main body"); smaller values
+               also keep substantial secondary components.
+
+    "MAIN BODY" IS LARGEST BY POINT COUNT, not by plan area. Pre-registered
+    choice: the plane fit weights points equally, so the component that
+    dominates the FIT is the one that should define what the facet is. The cost
+    if that is wrong is stated in the entry and is catastrophic rather than
+    subtle (on a facet whose true body is sparsely captured and which also has
+    a dense compact fragment elsewhere, this keeps the fragment and deletes the
+    body), which is why the caller reports whether largest-by-count and
+    largest-by-area are the same component.
+
+    Method: bin XY into square cells of side `cell`, mark occupied cells, and
+    take 8-connected components of that occupancy raster. 8-connectivity means
+    a fragment touching the body only at a corner still counts as attached, so
+    the filter is CONSERVATIVE: whatever it removes was disconnected under the
+    most forgiving reading. A radius graph over the points themselves would be
+    the textbook formulation and is not affordable here (a 1.5M-point facet at
+    this radius is hundreds of millions of edges); the raster is the same idea
+    at O(N).
+
+    Returns (keep, diag):
+      keep : (N,) bool, True for points in a kept component
+      diag : dict of what happened, for the sweep report and the assertions
+    """
+    xy = np.ascontiguousarray(xy, dtype=float)
+    # THE RASTER ORIGIN IS A NUISANCE PARAMETER. By default it is this point
+    # set's own minimum corner, which is wherever one extreme point happens to
+    # sit; a different origin moves every cell boundary and can split or join
+    # components. `origin` exists so a diagnostic can VARY it and measure how
+    # much that matters, which is not otherwise possible: translating the
+    # points does nothing, because the default origin translates with them.
+    # Production callers leave it None.
+    lo = xy.min(axis=0) if origin is None else np.asarray(origin, float)
+    i = np.floor((xy[:, 0] - lo[0]) / cell).astype(np.int64)
+    j = np.floor((xy[:, 1] - lo[1]) / cell).astype(np.int64)
+    i -= i.min()
+    j -= j.min()
+    occ = np.zeros((i.max() + 1, j.max() + 1), dtype=bool)
+    occ[i, j] = True
+    lab, n = label(occ, structure=np.ones((3, 3), dtype=bool))
+    per_point = lab[i, j]                      # component id per point, 1..n
+    sizes = np.bincount(per_point, minlength=n + 1)
+    sizes[0] = 0                               # background is never a component
+    big = int(np.argmax(sizes))                # largest BY POINT COUNT
+    keep_labels = np.flatnonzero(sizes >= min_frac * sizes[big])
+    keep = np.isin(per_point, keep_labels)
+
+    # --- the count-versus-area guard, pre-registered as a stop-and-look ------
+    # Largest by point count and largest by plan CELL count (area) need not be
+    # the same component. Where they disagree, the choice of definition decided
+    # what the facet is, and that is a result to read rather than absorb.
+    cell_counts = np.bincount(lab.ravel(), minlength=n + 1)
+    cell_counts[0] = 0
+    big_area = int(np.argmax(cell_counts))
+    order = np.sort(sizes[1:])[::-1] if n else np.array([0])
+
+    diag = dict(
+        n_components=int(n),
+        largest_by_count=big, largest_by_area=big_area,
+        count_area_agree=bool(big == big_area),
+        largest_points=int(sizes[big]),
+        largest_area_cells=int(cell_counts[big_area]),
+        second_over_largest=(float(order[1] / order[0]) if n > 1 else 0.0),
+        n_components_kept=int(len(keep_labels)),
+        n_points_in=int(len(xy)), n_points_kept=int(keep.sum()),
+        kept_fraction=float(keep.mean()),
+        # The origin actually used, so an independent checker can bin on the
+        # SAME grid. Without it a checker re-derives the origin from whatever
+        # subset it was handed, lands on a different phase, and reports a
+        # disagreement that is about alignment rather than about labelling.
+        origin=lo.copy(),
+    )
+    return keep, diag
 
 
 def assign_to_planes(points, facets, max_dist):

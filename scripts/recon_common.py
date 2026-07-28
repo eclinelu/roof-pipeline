@@ -7,12 +7,14 @@ import numpy as np
 import open3d as o3d
 from roofkit.stats import median_nn_spacing
 from roofkit.segment import (find_roof_planes, assign_to_planes,
-                             fit_plane_trimmed)
+                             fit_plane_trimmed, connected_core)
 from roofkit.measure import tilt_degrees
 
 
 def discover_facets(points, cfg, seed=0, probability=1.0, spacing=None,
-                    min_pitch=10.0, max_pitch=60.0):
+                    min_pitch=10.0, max_pitch=60.0,
+                    connect_mult=None, min_component_frac=1.0,
+                    plane_out=None):
     """Segment roof facets exactly as measure_roof.py does.
     Returns (facets, band, spacing_full): facets is a list of dicts
     with the trimmed core points, the robust normal, and the pitch;
@@ -31,7 +33,28 @@ def discover_facets(points, cfg, seed=0, probability=1.0, spacing=None,
     `spacing` lets a caller pass an already-computed median spacing. This is a
     pure speed shortcut for repeated probes over the SAME cloud: the value is
     a deterministic property of the points, so supplying it cannot change any
-    result. Leave it None in normal use."""
+    result. Leave it None in normal use.
+
+    `connect_mult` is the M1a CONNECTIVITY FILTER and is OPT IN. None (the
+    default) is the historical behaviour bit for bit: no filter runs and this
+    function is exactly what it was, so every existing artifact stays
+    reproducible. Set it to a multiple of median point spacing to require that
+    a facet's points be plan-connected to its main body before the plane is
+    refitted (pre-registered 2026-07-27, amended 2026-07-28). The filter runs
+    HERE, on the 8 main facets, and NOT inside recover_facets: one mechanism
+    per pass, and M1b is explicitly out of scope.
+
+    Note WHERE the filter sits, because it is what makes facet identity
+    comparable across a sweep: `find_roof_planes` has already run on the seeded
+    subsample by this point and the filter cannot touch it. The discovered
+    plane list is therefore IDENTICAL for every value of connect_mult, so facet
+    k means the same surface in every run and a facet-by-facet diff is exact
+    rather than a matching problem. `plane_out`, if given a list, receives the
+    raw discovery normals so a caller can assert that.
+
+    `min_component_frac` is how large a component must be to be kept, as a
+    fraction of the largest component's point count. 1.0 keeps only the main
+    body."""
     o3d.utility.random.seed(seed)  # RANSAC reproducibility (2026-07-13)
     rng = np.random.default_rng(seed)
     s_full = median_nn_spacing(points) if spacing is None else float(spacing)
@@ -47,6 +70,8 @@ def discover_facets(points, cfg, seed=0, probability=1.0, spacing=None,
                               min_pitch=min_pitch, max_pitch=max_pitch,
                               max_planes=cfg["max_planes"],
                               probability=probability)
+    if plane_out is not None:
+        plane_out.extend(np.asarray(p["normal"], float).copy() for p in planes)
     owner, dist = assign_to_planes(points, planes, max_dist=np.inf)
     facets = []
     for k in range(len(planes)):
@@ -59,8 +84,29 @@ def discover_facets(points, cfg, seed=0, probability=1.0, spacing=None,
         # Carried for standing rule R1; nothing numeric reads it.
         member_idx = np.flatnonzero(member)
         mine = points[member]
+
+        # --- M1a CONNECTIVITY FILTER, between membership and the refit -------
+        # Pre-registered position: "after membership is selected and before the
+        # plane is refitted". It matters that it is before: the whole claim is
+        # that strays contaminate the FIT, so removing them after fitting would
+        # tidy the point set and leave the defect in the normal.
+        fdiag = None
+        if connect_mult is not None:
+            keep_conn, fdiag = connected_core(mine[:, :2],
+                                              cell=connect_mult * s_full,
+                                              min_frac=min_component_frac)
+            # Indices of what the filter DELETED, kept so the sweep's
+            # independent assertions can measure the removed set directly
+            # rather than trusting the filter's own bookkeeping.
+            fdiag["removed_idx"] = member_idx[~keep_conn]
+            fdiag["kept_idx_premtrim"] = member_idx[keep_conn]
+            mine = mine[keep_conn]
+            member_idx = member_idx[keep_conn]
+            if len(mine) < 3:
+                continue
         normal, keep = fit_plane_trimmed(mine, trim_mult=cfg["trim_mult"])
         facets.append({"points": mine[keep], "normal": normal,
                        "pitch": tilt_degrees(normal),
-                       "idx": member_idx[keep]})
+                       "idx": member_idx[keep],
+                       "filter": fdiag})
     return facets, band, s_full
