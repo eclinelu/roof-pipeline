@@ -1,0 +1,490 @@
+{
+  "task": "is the PRODUCTION coverage/footprint chain sensitive to the arbitrary phase of its raster?",
+  "dataset": "big_house",
+  "date": "2026-07-28",
+  "status": "SIDE ARTIFACT ONLY. Nothing adopted, nothing fitted, no threshold or comparison changed. canonical-2026-07-26-r2 remains canonical; published facet coverage remains 88.40 pct.",
+  "why": "if the published number moves with an arbitrary grid alignment then coverage cannot function as a cross-pass detector, because a pass-to-pass change could be a re-alignment rather than a real improvement.",
+  "scalars": {
+    "cell_cu": 0.0129903815,
+    "spacing_cu": 0.0051961526,
+    "band_cu": 0.0658634941,
+    "n_facets": 29
+  },
+  "part_a_origin_audit": [
+    {
+      "stage": "plan_grid",
+      "where": "roofkit/coverage.py:41",
+      "origin": "x.min(), y.min() of the points handed in",
+      "kind": "DATA EXTENT, not chosen"
+    },
+    {
+      "stage": "coverage_masks / testable (Hall)",
+      "where": "coverage.py:96",
+      "origin": "plan_grid's origin",
+      "kind": "INHERITS"
+    },
+    {
+      "stage": "coverage_masks / explained (Hexp)",
+      "where": "coverage.py:101",
+      "origin": "g['xlo'], g['ylo']",
+      "kind": "INHERITS the origin but NOT the bin pitch, see part B"
+    },
+    {
+      "stage": "footprint, hole filling",
+      "where": "coverage.py:112",
+      "origin": "binary_fill_holes over the same raster",
+      "kind": "INHERITS, no origin of its own"
+    },
+    {
+      "stage": "interior, erosion",
+      "where": "coverage.py:113",
+      "origin": "binary_erosion over the same raster",
+      "kind": "INHERITS"
+    },
+    {
+      "stage": "residual_blobs",
+      "where": "coverage.py:254",
+      "origin": "labels the same raster",
+      "kind": "INHERITS"
+    },
+    {
+      "stage": "recover_facets, candidate cell selection",
+      "where": "coverage.py:370",
+      "origin": "(roof - g['xlo']) / g['cell']",
+      "kind": "INHERITS"
+    },
+    {
+      "stage": "area_accounting",
+      "where": "coverage.py:545",
+      "origin": "min over FACET points of x.min(), y.min()",
+      "kind": "A SECOND, DIFFERENT data-extent origin"
+    },
+    {
+      "stage": "connected_core (M1a filter)",
+      "where": "roofkit/segment.py",
+      "origin": "xy.min() per facet",
+      "kind": "A THIRD data-extent origin; opt-in and not in production"
+    }
+  ],
+  "part_b_bin_pitch_defect": {
+    "issue": "plan_grid asks histogram2d for nx bins over [xlo, xhi]; it does not ask for bins of width `cell`. Hexp is anchored over [xlo, xlo + nx*cell] and DOES have bins of width cell. The two histograms coverage_masks compares cell-for-cell are on grids of different pitch, and the mismatch accumulates with distance from the origin.",
+    "cell_cu": 0.0129903815,
+    "hall_bin_width_x": 0.0129875508,
+    "hall_bin_width_y": 0.0129868608,
+    "hexp_bin_width": 0.0129903815,
+    "hall_bin_pct_of_cell": [
+      99.9782,
+      99.9729
+    ],
+    "cumulative_drift_cells": [
+      0.4872,
+      0.7312
+    ],
+    "cumulative_drift_reading": "how far apart the two grids are, in CELLS, at the far corner of the building. Half a cell or more means testable and explained are being compared across a shift of half a cell there.",
+    "area_charged_per_cell_cu2": 0.00016875,
+    "actual_hall_cell_area_cu2": 0.0001686675,
+    "area_overstatement_pct": 0.0489,
+    "status": "MEASURED, NOT FIXED. Fixing it would change the published number and this is a side artifact."
+  },
+  "part_c": {
+    "offsets_as_fraction_of_cell": [
+      [
+        0.0,
+        0.0
+      ],
+      [
+        0.25,
+        0.0
+      ],
+      [
+        0.5,
+        0.0
+      ],
+      [
+        0.75,
+        0.0
+      ],
+      [
+        0.0,
+        0.5
+      ],
+      [
+        0.5,
+        0.5
+      ],
+      [
+        0.33,
+        0.66
+      ],
+      [
+        0.66,
+        0.33
+      ]
+    ],
+    "integer_offset": [
+      3.0,
+      2.0
+    ],
+    "rows": [
+      {
+        "facet_coverage_pct": 88.4,
+        "explained_cu2": 256.574,
+        "testable_cu2": 290.256,
+        "density_testable_pct": 82.29,
+        "footprint_raw_cu2": 299.654,
+        "footprint_filled_cu2": 362.105,
+        "footprint_eroded_cu2": 352.707,
+        "nx": 2236,
+        "ny": 2698,
+        "offset_cells": [
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "facet_coverage_pct": 89.28,
+        "explained_cu2": 258.746,
+        "testable_cu2": 289.813,
+        "density_testable_pct": 82.6,
+        "footprint_raw_cu2": 299.653,
+        "footprint_filled_cu2": 360.694,
+        "footprint_eroded_cu2": 350.854,
+        "nx": 2236,
+        "ny": 2698,
+        "offset_cells": [
+          0.25,
+          0.0
+        ]
+      },
+      {
+        "facet_coverage_pct": 87.22,
+        "explained_cu2": 252.819,
+        "testable_cu2": 289.873,
+        "density_testable_pct": 82.54,
+        "footprint_raw_cu2": 299.598,
+        "footprint_filled_cu2": 360.896,
+        "footprint_eroded_cu2": 351.171,
+        "nx": 2237,
+        "ny": 2698,
+        "offset_cells": [
+          0.5,
+          0.0
+        ]
+      },
+      {
+        "facet_coverage_pct": 87.72,
+        "explained_cu2": 254.694,
+        "testable_cu2": 290.356,
+        "density_testable_pct": 82.25,
+        "footprint_raw_cu2": 299.647,
+        "footprint_filled_cu2": 362.309,
+        "footprint_eroded_cu2": 353.019,
+        "nx": 2237,
+        "ny": 2698,
+        "offset_cells": [
+          0.75,
+          0.0
+        ]
+      },
+      {
+        "facet_coverage_pct": 89.83,
+        "explained_cu2": 259.443,
+        "testable_cu2": 288.827,
+        "density_testable_pct": 83.07,
+        "footprint_raw_cu2": 299.499,
+        "footprint_filled_cu2": 358.375,
+        "footprint_eroded_cu2": 347.703,
+        "nx": 2236,
+        "ny": 2698,
+        "offset_cells": [
+          0.0,
+          0.5
+        ]
+      },
+      {
+        "facet_coverage_pct": 88.08,
+        "explained_cu2": 254.183,
+        "testable_cu2": 288.594,
+        "density_testable_pct": 82.96,
+        "footprint_raw_cu2": 299.517,
+        "footprint_filled_cu2": 358.801,
+        "footprint_eroded_cu2": 347.878,
+        "nx": 2237,
+        "ny": 2698,
+        "offset_cells": [
+          0.5,
+          0.5
+        ]
+      },
+      {
+        "facet_coverage_pct": 92.42,
+        "explained_cu2": 267.924,
+        "testable_cu2": 289.912,
+        "density_testable_pct": 82.51,
+        "footprint_raw_cu2": 299.485,
+        "footprint_filled_cu2": 360.925,
+        "footprint_eroded_cu2": 351.352,
+        "nx": 2236,
+        "ny": 2698,
+        "offset_cells": [
+          0.33,
+          0.66
+        ]
+      },
+      {
+        "facet_coverage_pct": 88.2,
+        "explained_cu2": 254.812,
+        "testable_cu2": 288.9,
+        "density_testable_pct": 82.89,
+        "footprint_raw_cu2": 299.604,
+        "footprint_filled_cu2": 359.219,
+        "footprint_eroded_cu2": 348.515,
+        "nx": 2237,
+        "ny": 2698,
+        "offset_cells": [
+          0.66,
+          0.33
+        ]
+      }
+    ],
+    "integer_offset_row": {
+      "facet_coverage_pct": 88.39,
+      "explained_cu2": 256.552,
+      "testable_cu2": 290.253,
+      "density_testable_pct": 82.29,
+      "footprint_raw_cu2": 299.648,
+      "footprint_filled_cu2": 362.106,
+      "footprint_eroded_cu2": 352.711,
+      "nx": 2239,
+      "ny": 2700,
+      "offset_cells": [
+        3.0,
+        2.0
+      ]
+    },
+    "spread": {
+      "facet_coverage_pct": {
+        "min": 87.22,
+        "max": 92.42,
+        "spread": 5.2
+      },
+      "density_testable_pct": {
+        "min": 82.25,
+        "max": 83.07,
+        "spread": 0.82
+      },
+      "footprint_raw_cu2": {
+        "min": 299.485,
+        "max": 299.654,
+        "spread": 0.169
+      },
+      "footprint_filled_cu2": {
+        "min": 358.375,
+        "max": 362.309,
+        "spread": 3.934
+      },
+      "footprint_eroded_cu2": {
+        "min": 347.703,
+        "max": 353.019,
+        "spread": 5.316
+      }
+    }
+  },
+  "part_d_counterfactual": {
+    "question": "is the Part C spread really the Part B pitch defect wearing a phase costume?",
+    "method": "the identical sweep with exact_pitch=True, one flag, nothing else changed",
+    "spread_as_is": 5.2,
+    "spread_with_exact_pitch": 0.18,
+    "rows": [
+      {
+        "facet_coverage_pct": 94.33,
+        "explained_cu2": 273.967,
+        "testable_cu2": 290.433,
+        "density_testable_pct": 82.11,
+        "footprint_raw_cu2": 299.379,
+        "footprint_filled_cu2": 362.669,
+        "footprint_eroded_cu2": 353.722,
+        "nx": 2236,
+        "ny": 2698,
+        "offset_cells": [
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "facet_coverage_pct": 94.42,
+        "explained_cu2": 272.867,
+        "testable_cu2": 288.999,
+        "density_testable_pct": 82.8,
+        "footprint_raw_cu2": 299.403,
+        "footprint_filled_cu2": 359.433,
+        "footprint_eroded_cu2": 349.028,
+        "nx": 2236,
+        "ny": 2698,
+        "offset_cells": [
+          0.25,
+          0.0
+        ]
+      },
+      {
+        "facet_coverage_pct": 94.45,
+        "explained_cu2": 273.801,
+        "testable_cu2": 289.901,
+        "density_testable_pct": 82.34,
+        "footprint_raw_cu2": 299.427,
+        "footprint_filled_cu2": 361.606,
+        "footprint_eroded_cu2": 352.08,
+        "nx": 2237,
+        "ny": 2698,
+        "offset_cells": [
+          0.5,
+          0.0
+        ]
+      },
+      {
+        "facet_coverage_pct": 94.29,
+        "explained_cu2": 274.05,
+        "testable_cu2": 290.658,
+        "density_testable_pct": 82.05,
+        "footprint_raw_cu2": 299.39,
+        "footprint_filled_cu2": 362.986,
+        "footprint_eroded_cu2": 354.254,
+        "nx": 2237,
+        "ny": 2698,
+        "offset_cells": [
+          0.75,
+          0.0
+        ]
+      },
+      {
+        "facet_coverage_pct": 94.45,
+        "explained_cu2": 272.967,
+        "testable_cu2": 289.006,
+        "density_testable_pct": 82.88,
+        "footprint_raw_cu2": 299.512,
+        "footprint_filled_cu2": 359.227,
+        "footprint_eroded_cu2": 348.721,
+        "nx": 2236,
+        "ny": 2698,
+        "offset_cells": [
+          0.0,
+          0.5
+        ]
+      },
+      {
+        "facet_coverage_pct": 94.43,
+        "explained_cu2": 272.928,
+        "testable_cu2": 289.029,
+        "density_testable_pct": 82.83,
+        "footprint_raw_cu2": 299.455,
+        "footprint_filled_cu2": 359.364,
+        "footprint_eroded_cu2": 348.937,
+        "nx": 2237,
+        "ny": 2698,
+        "offset_cells": [
+          0.5,
+          0.5
+        ]
+      },
+      {
+        "facet_coverage_pct": 94.46,
+        "explained_cu2": 273.841,
+        "testable_cu2": 289.886,
+        "density_testable_pct": 82.52,
+        "footprint_raw_cu2": 299.501,
+        "footprint_filled_cu2": 360.889,
+        "footprint_eroded_cu2": 351.274,
+        "nx": 2236,
+        "ny": 2698,
+        "offset_cells": [
+          0.33,
+          0.66
+        ]
+      },
+      {
+        "facet_coverage_pct": 94.28,
+        "explained_cu2": 274.033,
+        "testable_cu2": 290.66,
+        "density_testable_pct": 82.08,
+        "footprint_raw_cu2": 299.485,
+        "footprint_filled_cu2": 362.948,
+        "footprint_eroded_cu2": 354.122,
+        "nx": 2237,
+        "ny": 2698,
+        "offset_cells": [
+          0.66,
+          0.33
+        ]
+      }
+    ],
+    "spread": {
+      "facet_coverage_pct": {
+        "min": 94.28,
+        "max": 94.46,
+        "spread": 0.18
+      },
+      "density_testable_pct": {
+        "min": 82.05,
+        "max": 82.88,
+        "spread": 0.83
+      },
+      "footprint_raw_cu2": {
+        "min": 299.379,
+        "max": 299.512,
+        "spread": 0.133
+      },
+      "footprint_filled_cu2": {
+        "min": 359.227,
+        "max": 362.986,
+        "spread": 3.759
+      },
+      "footprint_eroded_cu2": {
+        "min": 348.721,
+        "max": 354.254,
+        "spread": 5.533
+      }
+    }
+  },
+  "cross_checks": [
+    {
+      "check": "the ZERO offset reproduces the canonical document's own published facet coverage and raw footprint. If not, this probe is not measuring the production path.",
+      "passed": true,
+      "detail": {
+        "published_coverage_pct": 88.4,
+        "measured_coverage_pct": 88.4,
+        "published_raw_cu2": 299.654,
+        "measured_raw_cu2": 299.654
+      }
+    },
+    {
+      "check": "ANTI-NULL: at least one sub-cell offset changes at least one reported quantity. A spread of exactly zero means the probe translated the origin with the points again.",
+      "passed": true
+    },
+    {
+      "check": "an INTEGER cell offset leaves every quantity unchanged to float noise, because it is a relabelling and not a regridding",
+      "passed": false,
+      "detail": {
+        "facet_coverage_pct": [
+          88.4,
+          88.39
+        ],
+        "density_testable_pct": [
+          82.29,
+          82.29
+        ],
+        "footprint_raw_cu2": [
+          299.654,
+          299.648
+        ],
+        "footprint_filled_cu2": [
+          362.105,
+          362.106
+        ],
+        "footprint_eroded_cu2": [
+          352.707,
+          352.711
+        ]
+      }
+    }
+  ]
+}

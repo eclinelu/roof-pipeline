@@ -38,16 +38,55 @@ from roofkit.segment import (find_roof_planes, assign_to_planes,
 from roofkit.measure import tilt_degrees, project_to_plane, facet_area
 
 
-def plan_grid(points, cell):
+def plan_grid(points, cell, origin=None, exact_pitch=False):
     """Bin XY into square cells of side `cell`. Returns the count grid and
     the grid geometry so callers can map cells back to coordinates.
-    `cell` is a LENGTH (scale-dependent): callers derive it from spacing."""
+    `cell` is a LENGTH (scale-dependent): callers derive it from spacing.
+
+    `origin` is the raster's bottom-left corner. None (the default) is the
+    historical behaviour bit for bit: the corner is `x.min(), y.min()` of the
+    points handed in, i.e. wherever the extreme point of this particular cloud
+    happens to sit.
+
+    WHY THE ARGUMENT EXISTS AND WHAT IT IS NOT. It is not a tuning knob and no
+    production caller passes it. A data-derived origin is a NUISANCE PARAMETER:
+    it changes where every cell boundary falls, and nobody chose it. Its
+    influence cannot be measured from outside, because translating the points
+    translates the default origin with them and the binning comes out
+    identical; a first attempt to measure exactly this on the connectivity
+    filter reported a spread of precisely zero for that reason
+    (decisions/2026-07-28-raster-phase-is-an-unswept-parameter.md). An explicit
+    origin is the only way to vary the phase while leaving the code under test
+    otherwise untouched. Callers passing an origin must place it at or below
+    the data on both axes, or points fall outside the raster."""
     x, y = points[:, 0], points[:, 1]
-    xlo, xhi, ylo, yhi = x.min(), x.max(), y.min(), y.max()
+    xhi, yhi = x.max(), y.max()
+    if origin is None:
+        xlo, ylo = x.min(), y.min()
+    else:
+        xlo, ylo = float(origin[0]), float(origin[1])
     nx = int((xhi - xlo) / cell) + 1
     ny = int((yhi - ylo) / cell) + 1
-    H, _, _ = np.histogram2d(x, y, bins=[nx, ny],
-                             range=[[xlo, xhi], [ylo, yhi]])
+    # `exact_pitch` is a DIAGNOSTIC COUNTERFACTUAL and defaults to the
+    # historical behaviour. False asks histogram2d for nx bins spanning
+    # [xlo, xhi], so the actual bin width is span/nx, which is always slightly
+    # SMALLER than `cell`. True asks for bins spanning [xlo, xlo + nx*cell], so
+    # they are exactly `cell` wide.
+    #
+    # This matters because the sibling histogram in coverage_masks (Hexp, the
+    # explained counts) is already anchored the second way. The two grids that
+    # coverage_masks compares cell-for-cell therefore have different pitches
+    # and drift apart with distance from the origin, and every area is charged
+    # as cell^2, which is the pitch of neither. Measured on big_house: the
+    # drift reaches 0.487 x 0.731 cells at the far corner.
+    #
+    # It is NOT flipped to True in production here. Doing so would change the
+    # published number, which is a decision to take deliberately and not as a
+    # side effect of a diagnostic (see
+    # decisions/2026-07-28-raster-phase-is-an-unswept-parameter.md).
+    rng = ([[xlo, xlo + nx * cell], [ylo, ylo + ny * cell]] if exact_pitch
+           else [[xlo, xhi], [ylo, yhi]])
+    H, _, _ = np.histogram2d(x, y, bins=[nx, ny], range=rng)
     return H, dict(xlo=xlo, ylo=ylo, cell=cell, nx=nx, ny=ny)
 
 
@@ -57,7 +96,8 @@ def cell_centers(cells, g):
                             g["ylo"] + (cells[:, 1] + 0.5) * g["cell"]])
 
 
-def coverage_masks(roof, facets, band, cell, min_pts=2, fill_holes=True):
+def coverage_masks(roof, facets, band, cell, min_pts=2, fill_holes=True,
+                   origin=None, exact_pitch=False):
     """Split the plan grid into footprint / explained / residual masks.
 
     testable : a cell holding at least min_pts roof points. Only these can be
@@ -93,7 +133,7 @@ def coverage_masks(roof, facets, band, cell, min_pts=2, fill_holes=True):
 
     Returns (masks dict, grid dict, owner, dist). owner/dist come from
     assign_to_planes so the caller can pull a blob's unexplained points."""
-    Hall, g = plan_grid(roof, cell)
+    Hall, g = plan_grid(roof, cell, origin=origin, exact_pitch=exact_pitch)
     owner, dist = assign_to_planes(roof, facets, max_dist=np.inf)
     # count explained points per cell via histogram WEIGHTS (0/1), so we never
     # materialize the ~150 MB explained-points subset copy.
