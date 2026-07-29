@@ -1,0 +1,257 @@
+{
+  "task": "capture-quality metrics recomputed on the ADOPTED grid (lattice origin + exact_pitch)",
+  "date": "2026-07-29",
+  "status": "SIDE ARTIFACT ONLY. No adoption, no regeneration. canonical-2026-07-26-r2 stays canonical, 88.40 pct stays quotable, canonical-2026-07-28-grid stays UNADOPTED.",
+  "why": "density-testable is the CAPTURE metric and the case for an ultra rerun rests on it. It was last measured on the buggy grid, its denominator changed with the fix, and its numerator was never reported.",
+  "stated_expectation": "density-testable is a SINGLE-grid metric, unlike facet coverage which differenced two drifting grids, so it should move modestly. Recorded before the run; a move over 2 points was a stop-and-explain.",
+  "config": {
+    "anchor": "lattice",
+    "exact_pitch": true,
+    "cell_mult": 2.5,
+    "min_pts": 2,
+    "source_state": "canonical-2026-07-28-grid"
+  },
+  "cross_checks": [
+    {
+      "id": "A1",
+      "check": "the eroded footprint this run computes equals 349.64 cu^2 and NOT 352.707",
+      "passed": true,
+      "detail": {
+        "computed": 349.64,
+        "expected_new": 349.64,
+        "old_value": 352.707
+      }
+    },
+    {
+      "id": "A2",
+      "check": "the old 82.29 pct is NOT reproducible from the NEW path",
+      "passed": true,
+      "detail": {
+        "new_path_pct": 82.72,
+        "old_published_pct": 82.29
+      }
+    },
+    {
+      "id": "A3",
+      "check": "ANTI-NULL companion: the OLD path still DOES reproduce 82.29 pct, so A2 is a statement about the config and not about a broken script",
+      "passed": true,
+      "detail": {
+        "old_path_pct": 82.29,
+        "old_published_pct": 82.29
+      }
+    },
+    {
+      "id": "A4",
+      "check": "STATED EXPECTATION: density-testable is a single-grid metric and should move modestly, under about 2 points. Moving more is a stop-and-explain.",
+      "passed": true,
+      "detail": {
+        "old_pct": 82.29,
+        "new_pct": 82.72,
+        "move_points": 0.43
+      }
+    }
+  ],
+  "big_house_roof": {
+    "whole_roof": {
+      "region_cells": 2071939,
+      "region_cu2": 349.64,
+      "occupied_cells": 1941963,
+      "occupied_cu2": 327.706,
+      "testable_cells": 1713999,
+      "testable_cu2": 289.237,
+      "untestable_cells": 357940,
+      "untestable_cu2": 60.402,
+      "density_testable_pct": 82.72,
+      "cells_with_1_point": 227964,
+      "cells_with_0_points": 129976,
+      "points_per_occupied_cell": {
+        "mean": 4.662,
+        "median": 4.0,
+        "p10": 1.0,
+        "p25": 2.0,
+        "p90": 9.0
+      }
+    },
+    "blob0_only": {
+      "region_cells": 57743,
+      "region_cu2": 9.744,
+      "occupied_cells": 57743,
+      "occupied_cu2": 9.744,
+      "testable_cells": 57743,
+      "testable_cu2": 9.744,
+      "untestable_cells": 0,
+      "untestable_cu2": 0.0,
+      "density_testable_pct": 100.0,
+      "cells_with_1_point": 0,
+      "cells_with_0_points": 0,
+      "points_per_occupied_cell": {
+        "mean": 3.039,
+        "median": 3.0,
+        "p10": 2.0,
+        "p25": 2.0,
+        "p90": 5.0
+      }
+    },
+    "roof_excluding_blob0": {
+      "region_cells": 2014196,
+      "region_cu2": 339.896,
+      "occupied_cells": 1884220,
+      "occupied_cu2": 317.962,
+      "testable_cells": 1656256,
+      "testable_cu2": 279.493,
+      "untestable_cells": 357940,
+      "untestable_cu2": 60.402,
+      "density_testable_pct": 82.23,
+      "cells_with_1_point": 227964,
+      "cells_with_0_points": 129976,
+      "points_per_occupied_cell": {
+        "mean": 4.711,
+        "median": 4.0,
+        "p10": 1.0,
+        "p25": 2.0,
+        "p90": 9.0
+      }
+    },
+    "holes_whole_roof": {
+      "enclosed_holes": 111579,
+      "enclosed_hole_cells": 357940,
+      "median_hole_cells": 1,
+      "largest_hole_cells": 13901
+    },
+    "footprint_three_ways": {
+      "raw_cells_at_2_points": 1774462,
+      "raw_cu2": 299.44,
+      "holes_filled_cells": 357940,
+      "holes_filled_cu2": 60.402,
+      "filled_cells": 2132402,
+      "filled_cu2": 359.843,
+      "eroded_cells": 2071939,
+      "eroded_cu2": 349.64,
+      "erosion_cost_cells": 60463,
+      "erosion_cost_cu2": 10.203,
+      "erosion_cost_pct_of_filled": 2.84
+    },
+    "blob0_area_cu2": 9.7441,
+    "n_blobs": 8
+  },
+  "big_house_raw": {
+    "subject": "big_house (raw cloud, crop-free, adopted grid)",
+    "n_points": 21325293,
+    "spacing_cu": 0.005099,
+    "cell_cu": 0.012748,
+    "grid": {
+      "nx": 3134,
+      "ny": 4806
+    },
+    "metrics": {
+      "region_cells": 5267178,
+      "region_cu2": 855.916,
+      "occupied_cells": 4425233,
+      "occupied_cu2": 719.1,
+      "testable_cells": 3165820,
+      "testable_cu2": 514.446,
+      "untestable_cells": 2101358,
+      "untestable_cu2": 341.471,
+      "density_testable_pct": 60.1,
+      "cells_with_1_point": 1259413,
+      "cells_with_0_points": 841945,
+      "points_per_occupied_cell": {
+        "mean": 4.819,
+        "median": 3.0,
+        "p10": 1.0,
+        "p25": 1.0,
+        "p90": 11.0
+      }
+    },
+    "old_grid_metrics": {
+      "region_cells": 5218517,
+      "region_cu2": 848.009,
+      "occupied_cells": 4426038,
+      "occupied_cu2": 719.231,
+      "testable_cells": 3166437,
+      "testable_cu2": 514.546,
+      "untestable_cells": 2052080,
+      "untestable_cu2": 333.463,
+      "density_testable_pct": 60.68,
+      "cells_with_1_point": 1259601,
+      "cells_with_0_points": 792479,
+      "points_per_occupied_cell": {
+        "mean": 4.818,
+        "median": 3.0,
+        "p10": 1.0,
+        "p25": 1.0,
+        "p90": 11.0
+      }
+    },
+    "holes": {
+      "enclosed_holes": 198595,
+      "enclosed_hole_cells": 841945,
+      "median_hole_cells": 1,
+      "largest_hole_cells": 93466
+    }
+  },
+  "bungalow_raw": {
+    "subject": "bungalow (raw cloud, crop-free, adopted grid)",
+    "n_points": 19537267,
+    "spacing_cu": 0.005385,
+    "cell_cu": 0.013463,
+    "grid": {
+      "nx": 5703,
+      "ny": 5018
+    },
+    "metrics": {
+      "region_cells": 4092861,
+      "region_cu2": 741.831,
+      "occupied_cells": 3716286,
+      "occupied_cu2": 673.577,
+      "testable_cells": 2747777,
+      "testable_cu2": 498.035,
+      "untestable_cells": 1345084,
+      "untestable_cu2": 243.796,
+      "density_testable_pct": 67.14,
+      "cells_with_1_point": 968509,
+      "cells_with_0_points": 376575,
+      "points_per_occupied_cell": {
+        "mean": 5.257,
+        "median": 3.0,
+        "p10": 1.0,
+        "p25": 1.0,
+        "p90": 11.0
+      }
+    },
+    "holes": {
+      "enclosed_holes": 119042,
+      "enclosed_hole_cells": 376575,
+      "median_hole_cells": 1,
+      "largest_hole_cells": 80840
+    },
+    "old_grid_metrics": {
+      "region_cells": 4096698,
+      "region_cu2": 742.526,
+      "occupied_cells": 3716553,
+      "occupied_cu2": 673.625,
+      "testable_cells": 2748358,
+      "testable_cu2": 498.14,
+      "untestable_cells": 1348340,
+      "untestable_cu2": 244.387,
+      "density_testable_pct": 67.09,
+      "cells_with_1_point": 968195,
+      "cells_with_0_points": 380145,
+      "points_per_occupied_cell": {
+        "mean": 5.257,
+        "median": 3.0,
+        "p10": 1.0,
+        "p25": 1.0,
+        "p90": 11.0
+      }
+    }
+  },
+  "prior_published": {
+    "bungalow_raw_pct": 67.09,
+    "big_house_raw_pct": 60.68,
+    "big_house_roof_dt_pct": 82.29,
+    "big_house_one_point_cells": 249745,
+    "big_house_enclosed_holes": 111154,
+    "big_house_enclosed_hole_cells": 370079
+  }
+}
