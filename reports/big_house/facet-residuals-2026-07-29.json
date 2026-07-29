@@ -1,0 +1,435 @@
+{
+  "task": "signed plane residuals per main facet, in plane coordinates: does the shingle sawtooth show as stripes?",
+  "dataset": "big_house",
+  "date": "2026-07-29",
+  "status": "READ ONLY. No plane refitted, nothing adopted.",
+  "preregistration": "decisions/2026-07-29-preregistration-pitch-bias-mechanism.md",
+  "frame": {
+    "eave_axis": "normalise(n x Z), horizontal and in-plane; the cloud is leveled so Z is true vertical",
+    "slope_axis": "n x eave",
+    "residual": "(p - centroid) . n, signed, inches"
+  },
+  "image": {
+    "cell_in": 0.25,
+    "colour_clip_in": 0.3,
+    "window_in": 48.0,
+    "point_spacing_in": 0.2102,
+    "points_per_5in_exposure": 23.8
+  },
+  "rows": [
+    {
+      "facet": 0,
+      "n_points": 1538098,
+      "pitch_deg": 21.1883,
+      "residual_rms_in": 0.27784,
+      "residual_p1_in": -0.58032,
+      "residual_p99_in": 0.56085,
+      "extent_along_eave_in": 1260.72,
+      "extent_up_slope_in": 434.87,
+      "image_cells": [
+        192,
+        192
+      ]
+    },
+    {
+      "facet": 1,
+      "n_points": 1154335,
+      "pitch_deg": 33.0669,
+      "residual_rms_in": 0.48255,
+      "residual_p1_in": -0.99161,
+      "residual_p99_in": 0.98579,
+      "extent_along_eave_in": 809.45,
+      "extent_up_slope_in": 327.24,
+      "image_cells": [
+        192,
+        192
+      ]
+    },
+    {
+      "facet": 2,
+      "n_points": 693991,
+      "pitch_deg": 22.7224,
+      "residual_rms_in": 0.21339,
+      "residual_p1_in": -0.44824,
+      "residual_p99_in": 0.43616,
+      "extent_along_eave_in": 1503.16,
+      "extent_up_slope_in": 486.58,
+      "image_cells": [
+        192,
+        192
+      ]
+    },
+    {
+      "facet": 3,
+      "n_points": 850268,
+      "pitch_deg": 34.0059,
+      "residual_rms_in": 0.37843,
+      "residual_p1_in": -0.7635,
+      "residual_p99_in": 0.7924,
+      "extent_along_eave_in": 942.97,
+      "extent_up_slope_in": 327.44,
+      "image_cells": [
+        192,
+        192
+      ]
+    },
+    {
+      "facet": 4,
+      "n_points": 744303,
+      "pitch_deg": 20.9901,
+      "residual_rms_in": 0.62049,
+      "residual_p1_in": -1.08343,
+      "residual_p99_in": 1.39565,
+      "extent_along_eave_in": 441.4,
+      "extent_up_slope_in": 426.22,
+      "image_cells": [
+        192,
+        192
+      ]
+    },
+    {
+      "facet": 5,
+      "n_points": 669484,
+      "pitch_deg": 21.3571,
+      "residual_rms_in": 0.57854,
+      "residual_p1_in": -1.21914,
+      "residual_p99_in": 1.16667,
+      "extent_along_eave_in": 735.48,
+      "extent_up_slope_in": 374.6,
+      "image_cells": [
+        192,
+        192
+      ]
+    },
+    {
+      "facet": 6,
+      "n_points": 403109,
+      "pitch_deg": 33.7566,
+      "residual_rms_in": 0.38478,
+      "residual_p1_in": -0.79071,
+      "residual_p99_in": 0.78677,
+      "extent_along_eave_in": 655.54,
+      "extent_up_slope_in": 275.25,
+      "image_cells": [
+        192,
+        192
+      ]
+    },
+    {
+      "facet": 7,
+      "n_points": 297583,
+      "pitch_deg": 33.5153,
+      "residual_rms_in": 0.43673,
+      "residual_p1_in": -0.90888,
+      "residual_p99_in": 0.88038,
+      "extent_along_eave_in": 1178.34,
+      "extent_up_slope_in": 345.05,
+      "image_cells": [
+        192,
+        192
+      ]
+    }
+  ],
+  "cross_checks": [
+    {
+      "facet": 0,
+      "check": "eave axis is horizontal and lies in the plane",
+      "passed": true,
+      "detail": {
+        "eave_z": 0.0,
+        "eave_dot_n": -1.3877787807814457e-17
+      }
+    },
+    {
+      "facet": 0,
+      "check": "mean residual is zero (residuals are to the facet's own plane through its own centroid)",
+      "passed": true,
+      "detail": {
+        "mean_in": 3.1538619942921924e-08
+      }
+    },
+    {
+      "facet": 1,
+      "check": "eave axis is horizontal and lies in the plane",
+      "passed": true,
+      "detail": {
+        "eave_z": 0.0,
+        "eave_dot_n": 0.0
+      }
+    },
+    {
+      "facet": 1,
+      "check": "mean residual is zero (residuals are to the facet's own plane through its own centroid)",
+      "passed": false,
+      "detail": {
+        "mean_in": 4.273340959727251e-06
+      }
+    },
+    {
+      "facet": 2,
+      "check": "eave axis is horizontal and lies in the plane",
+      "passed": true,
+      "detail": {
+        "eave_z": 0.0,
+        "eave_dot_n": 0.0
+      }
+    },
+    {
+      "facet": 2,
+      "check": "mean residual is zero (residuals are to the facet's own plane through its own centroid)",
+      "passed": true,
+      "detail": {
+        "mean_in": -2.5253393459275946e-07
+      }
+    },
+    {
+      "facet": 3,
+      "check": "eave axis is horizontal and lies in the plane",
+      "passed": true,
+      "detail": {
+        "eave_z": 0.0,
+        "eave_dot_n": 0.0
+      }
+    },
+    {
+      "facet": 3,
+      "check": "mean residual is zero (residuals are to the facet's own plane through its own centroid)",
+      "passed": false,
+      "detail": {
+        "mean_in": 1.1560129743568453e-06
+      }
+    },
+    {
+      "facet": 4,
+      "check": "eave axis is horizontal and lies in the plane",
+      "passed": true,
+      "detail": {
+        "eave_z": 0.0,
+        "eave_dot_n": 0.0
+      }
+    },
+    {
+      "facet": 4,
+      "check": "mean residual is zero (residuals are to the facet's own plane through its own centroid)",
+      "passed": true,
+      "detail": {
+        "mean_in": -8.854024099830925e-07
+      }
+    },
+    {
+      "facet": 5,
+      "check": "eave axis is horizontal and lies in the plane",
+      "passed": true,
+      "detail": {
+        "eave_z": 0.0,
+        "eave_dot_n": 0.0
+      }
+    },
+    {
+      "facet": 5,
+      "check": "mean residual is zero (residuals are to the facet's own plane through its own centroid)",
+      "passed": true,
+      "detail": {
+        "mean_in": -4.563204138676239e-07
+      }
+    },
+    {
+      "facet": 6,
+      "check": "eave axis is horizontal and lies in the plane",
+      "passed": true,
+      "detail": {
+        "eave_z": 0.0,
+        "eave_dot_n": 0.0
+      }
+    },
+    {
+      "facet": 6,
+      "check": "mean residual is zero (residuals are to the facet's own plane through its own centroid)",
+      "passed": true,
+      "detail": {
+        "mean_in": 1.9895343895072104e-08
+      }
+    },
+    {
+      "facet": 7,
+      "check": "eave axis is horizontal and lies in the plane",
+      "passed": true,
+      "detail": {
+        "eave_z": 0.0,
+        "eave_dot_n": 1.734723475976807e-18
+      }
+    },
+    {
+      "facet": 7,
+      "check": "mean residual is zero (residuals are to the facet's own plane through its own centroid)",
+      "passed": true,
+      "detail": {
+        "mean_in": 4.090852241247532e-09
+      }
+    },
+    {
+      "facet": 0,
+      "check": "residual RMS is within 25 pct of quality x spacing recorded in the canonical file (the two use different trims, so they are not required to match exactly, only to agree in scale)",
+      "passed": true,
+      "detail": {
+        "rms_in": 0.27784,
+        "quality_x_spacing_in": 0.2744
+      }
+    },
+    {
+      "facet": 1,
+      "check": "residual RMS is within 25 pct of quality x spacing recorded in the canonical file (the two use different trims, so they are not required to match exactly, only to agree in scale)",
+      "passed": true,
+      "detail": {
+        "rms_in": 0.48255,
+        "quality_x_spacing_in": 0.48244
+      }
+    },
+    {
+      "facet": 2,
+      "check": "residual RMS is within 25 pct of quality x spacing recorded in the canonical file (the two use different trims, so they are not required to match exactly, only to agree in scale)",
+      "passed": true,
+      "detail": {
+        "rms_in": 0.21339,
+        "quality_x_spacing_in": 0.21166
+      }
+    },
+    {
+      "facet": 3,
+      "check": "residual RMS is within 25 pct of quality x spacing recorded in the canonical file (the two use different trims, so they are not required to match exactly, only to agree in scale)",
+      "passed": true,
+      "detail": {
+        "rms_in": 0.37843,
+        "quality_x_spacing_in": 0.37843
+      }
+    },
+    {
+      "facet": 4,
+      "check": "residual RMS is within 25 pct of quality x spacing recorded in the canonical file (the two use different trims, so they are not required to match exactly, only to agree in scale)",
+      "passed": true,
+      "detail": {
+        "rms_in": 0.62049,
+        "quality_x_spacing_in": 0.61969
+      }
+    },
+    {
+      "facet": 5,
+      "check": "residual RMS is within 25 pct of quality x spacing recorded in the canonical file (the two use different trims, so they are not required to match exactly, only to agree in scale)",
+      "passed": true,
+      "detail": {
+        "rms_in": 0.57854,
+        "quality_x_spacing_in": 0.56016
+      }
+    },
+    {
+      "facet": 6,
+      "check": "residual RMS is within 25 pct of quality x spacing recorded in the canonical file (the two use different trims, so they are not required to match exactly, only to agree in scale)",
+      "passed": true,
+      "detail": {
+        "rms_in": 0.38478,
+        "quality_x_spacing_in": 0.38295
+      }
+    },
+    {
+      "facet": 7,
+      "check": "residual RMS is within 25 pct of quality x spacing recorded in the canonical file (the two use different trims, so they are not required to match exactly, only to agree in scale)",
+      "passed": true,
+      "detail": {
+        "rms_in": 0.43673,
+        "quality_x_spacing_in": 0.43599
+      }
+    }
+  ],
+  "render": "facet-residuals-2026-07-29.png",
+  "spectrum": {
+    "method": "2D FFT of the Hann-windowed residual image; peak power in the pre-registered 4-7 in wavelength band against the median power in the 2.5-4 and 7-12 in flanks",
+    "band_in": [
+      4.0,
+      7.0
+    ],
+    "criterion": "a peak-over-background ratio near 1 is NO PEAK. The wavevector angle must also be near 0 deg from the slope axis, because shingle courses repeat along the slope.",
+    "rows": [
+      {
+        "facet": 0,
+        "peak_wavelength_in": 6.0,
+        "excess_over_trend": 8.01,
+        "excess_db": 9.04,
+        "naive_ratio_INVALID": 318.15,
+        "wavevector_angle_from_slope_deg": 0.0,
+        "approx_amplitude_in": 0.0335,
+        "window_sigma_in": 0.16233
+      },
+      {
+        "facet": 1,
+        "peak_wavelength_in": 5.206,
+        "excess_over_trend": 1.388,
+        "excess_db": 1.42,
+        "naive_ratio_INVALID": 22.89,
+        "wavevector_angle_from_slope_deg": 12.5,
+        "approx_amplitude_in": 0.02452,
+        "window_sigma_in": 0.3887
+      },
+      {
+        "facet": 2,
+        "peak_wavelength_in": 6.788,
+        "excess_over_trend": 1.15,
+        "excess_db": 0.61,
+        "naive_ratio_INVALID": 29.89,
+        "wavevector_angle_from_slope_deg": 45.0,
+        "approx_amplitude_in": 0.01413,
+        "window_sigma_in": 0.15096
+      },
+      {
+        "facet": 3,
+        "peak_wavelength_in": 6.146,
+        "excess_over_trend": 1.812,
+        "excess_db": 2.58,
+        "naive_ratio_INVALID": 26.23,
+        "wavevector_angle_from_slope_deg": 39.8,
+        "approx_amplitude_in": 0.01582,
+        "window_sigma_in": 0.25795
+      },
+      {
+        "facet": 4,
+        "peak_wavelength_in": 6.0,
+        "excess_over_trend": 4.032,
+        "excess_db": 6.06,
+        "naive_ratio_INVALID": 139.39,
+        "wavevector_angle_from_slope_deg": 0.0,
+        "approx_amplitude_in": 0.0329,
+        "window_sigma_in": 0.36844
+      },
+      {
+        "facet": 5,
+        "peak_wavelength_in": 5.333,
+        "excess_over_trend": 2.037,
+        "excess_db": 3.09,
+        "naive_ratio_INVALID": 49.95,
+        "wavevector_angle_from_slope_deg": 0.0,
+        "approx_amplitude_in": 0.02103,
+        "window_sigma_in": 0.41101
+      },
+      {
+        "facet": 6,
+        "peak_wavelength_in": 5.333,
+        "excess_over_trend": 3.265,
+        "excess_db": 5.14,
+        "naive_ratio_INVALID": 73.74,
+        "wavevector_angle_from_slope_deg": 0.0,
+        "approx_amplitude_in": 0.02407,
+        "window_sigma_in": 0.23744
+      },
+      {
+        "facet": 7,
+        "peak_wavelength_in": 6.0,
+        "excess_over_trend": 1.82,
+        "excess_db": 2.6,
+        "naive_ratio_INVALID": 25.64,
+        "wavevector_angle_from_slope_deg": 0.0,
+        "approx_amplitude_in": 0.01986,
+        "window_sigma_in": 0.35396
+      }
+    ],
+    "render": "facet-residuals-spectrum-2026-07-29.png"
+  }
+}

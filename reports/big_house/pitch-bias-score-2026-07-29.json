@@ -1,0 +1,199 @@
+{
+  "task": "score the pitch-bias pre-registration: 5b shape discriminator and 10 stripe predictions",
+  "dataset": "big_house",
+  "date": "2026-07-29",
+  "status": "SCORING ONLY. Nothing adopted. NO CORRECTION APPLIED to any pitch, on any facet, at any site.",
+  "preregistration": "decisions/2026-07-29-preregistration-pitch-bias-mechanism.md (pushed at 7a64185 before 5b ran)",
+  "scorecard": {
+    "10-1 stripes visible in the residual images": "FAILED. No stripes at 48 x 48 in windows with 0.25 in cells, a resolution that would show a 5 in course. The dominant structure is large-scale (10-40 in) and often diagonal.",
+    "10-2 spectral peak in the 4-7 in band": "AMBIGUOUS, and weaker than it first looked. See below.",
+    "10-3 stripe amplitude 0.12 to 0.24 in": "FAILED. Measured 0.014 to 0.034 in, 5 to 17 times smaller than a 3-6 mm butt would produce.",
+    "5b shape discriminator": "NEITHER SHAPE FITS"
+  },
+  "five_b": {
+    "shallow_cluster": {
+      "facets": [
+        0,
+        2,
+        4,
+        5
+      ],
+      "mean_truth_pitch_deg": 19.582,
+      "mean_offset_deg": 1.9818,
+      "offsets": [
+        2.188,
+        2.052,
+        1.66,
+        2.027
+      ]
+    },
+    "steep_cluster": {
+      "facets": [
+        1,
+        3,
+        6,
+        7
+      ],
+      "mean_truth_pitch_deg": 31.918,
+      "mean_offset_deg": 1.6687,
+      "offsets": [
+        1.067,
+        2.006,
+        2.087,
+        1.515
+      ]
+    },
+    "observed_ratio": 1.1876,
+    "predicted_ratio_constant": 1.0,
+    "predicted_ratio_stretch": 0.7037,
+    "scoring_bands": {
+      "stretch": [
+        0.6,
+        0.82
+      ],
+      "constant": [
+        0.9,
+        1.1
+      ]
+    },
+    "verdict": "NEITHER SHAPE FITS",
+    "scatter_after_removing_a_constant": {
+      "note": "MEASUREMENT ONLY. No correction is adopted.",
+      "mean_offset_deg": 1.8253,
+      "residual_sd_deg": 0.3824,
+      "residual_range_deg": [
+        -0.7583,
+        0.3628
+      ],
+      "per_facet": {
+        "0": 0.3628,
+        "1": -0.7583,
+        "2": 0.2268,
+        "3": 0.1807,
+        "4": -0.1653,
+        "5": 0.2018,
+        "6": 0.2618,
+        "7": -0.3103
+      }
+    },
+    "power_caveat": "the within-cluster spread is LARGE relative to the difference the test is trying to detect: the steep cluster's own offsets run 1.067 to 2.087 deg, a spread of 1.02 deg, while the two hypotheses differ by only 0.30 in the ratio. With four facets per cluster this test has little power, and that is a property of the data, not of the scoring."
+  },
+  "ten": {
+    "approx_amplitudes_in": [
+      0.0335,
+      0.02452,
+      0.01413,
+      0.01582,
+      0.0329,
+      0.02103,
+      0.02407,
+      0.01986
+    ],
+    "excess_over_trend_db": [
+      9.04,
+      1.42,
+      0.61,
+      2.58,
+      6.06,
+      3.09,
+      5.14,
+      2.6
+    ],
+    "wavevector_angles_from_slope_deg": [
+      0.0,
+      12.5,
+      45.0,
+      39.8,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "amplitude_prediction_in": [
+      0.12,
+      0.24
+    ],
+    "note": "the naive peak/background ratio first computed here was INVALID against a red spectrum and reported values up to 318 where the detrended excess is 9 dB. The invalid figure is retained in the residual artifact as naive_ratio_INVALID so the correction is auditable."
+  },
+  "rows": [
+    {
+      "facet": 0,
+      "truth_deg": 19.0,
+      "pipeline_deg": 21.188,
+      "offset_deg": 2.188,
+      "committed_error_deg": 2.19,
+      "cluster": "shallow"
+    },
+    {
+      "facet": 1,
+      "truth_deg": 32.0,
+      "pipeline_deg": 33.067,
+      "offset_deg": 1.067,
+      "committed_error_deg": 1.07,
+      "cluster": "steep"
+    },
+    {
+      "facet": 2,
+      "truth_deg": 20.67,
+      "pipeline_deg": 22.722,
+      "offset_deg": 2.052,
+      "committed_error_deg": 2.06,
+      "cluster": "shallow"
+    },
+    {
+      "facet": 3,
+      "truth_deg": 32.0,
+      "pipeline_deg": 34.006,
+      "offset_deg": 2.006,
+      "committed_error_deg": 2.01,
+      "cluster": "steep"
+    },
+    {
+      "facet": 4,
+      "truth_deg": 19.33,
+      "pipeline_deg": 20.99,
+      "offset_deg": 1.66,
+      "committed_error_deg": 1.66,
+      "cluster": "shallow"
+    },
+    {
+      "facet": 5,
+      "truth_deg": 19.33,
+      "pipeline_deg": 21.357,
+      "offset_deg": 2.027,
+      "committed_error_deg": 2.02,
+      "cluster": "shallow"
+    },
+    {
+      "facet": 6,
+      "truth_deg": 31.67,
+      "pipeline_deg": 33.757,
+      "offset_deg": 2.087,
+      "committed_error_deg": 2.09,
+      "cluster": "steep"
+    },
+    {
+      "facet": 7,
+      "truth_deg": 32.0,
+      "pipeline_deg": 33.515,
+      "offset_deg": 1.515,
+      "committed_error_deg": 1.52,
+      "cluster": "steep"
+    }
+  ],
+  "cross_checks": [
+    {
+      "check": "recomputed offsets reproduce the committed error_deg",
+      "passed": true
+    },
+    {
+      "check": "ANTI-NULL: the two clusters are genuinely separated in pitch. If they were not, the ratio would be 1.00 by construction and would prove nothing.",
+      "passed": true,
+      "detail": {
+        "shallow_mean_pitch": 19.58,
+        "steep_mean_pitch": 31.92,
+        "separation_deg": 12.34
+      }
+    }
+  ]
+}

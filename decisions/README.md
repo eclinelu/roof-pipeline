@@ -4,6 +4,7 @@ _Append only. Newest at the top. Past entries are never edited. A reversal is a 
 
 ## Entries (newest first)
 
+- [2026-07-29: RESULT: the shingle-sawtooth hypothesis is REFUTED on the image. The 1.83 deg bias is not what we thought](2026-07-29-pitch-bias-sawtooth-refuted.md)
 - [2026-07-29: PRE-REGISTRATION: what causes the 1.83 deg systematic pitch bias, and how it will be scored](2026-07-29-preregistration-pitch-bias-mechanism.md)
 - [2026-07-29: M1a is MEASURED AND DEPRIORITIZED. Not a known limit, and the distinction is the point](2026-07-29-m1a-measured-and-deprioritized.md)
 - [2026-07-29: The 6 points of coverage are INTERIOR SPECKLE, not a boundary rim. The old grid was failing to explain roof it was sitting on](2026-07-29-coverage-flips-are-interior-speckle-not-rim.md)
