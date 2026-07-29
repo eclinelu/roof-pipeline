@@ -1,0 +1,356 @@
+{
+  "task": "how much AREA does M1a actually put at risk? The open limit left by the pitch audit.",
+  "dataset": "big_house",
+  "date": "2026-07-29",
+  "status": "SIDE ARTIFACT ONLY. Nothing adopted. canonical-2026-07-26-r2 unchanged.",
+  "setting": {
+    "connectivity_scale_x_spacing": 2.5,
+    "min_component_frac": 1.0,
+    "connectivity_cell_cu": 0.01299038,
+    "alpha": "alpha_mult x the FACET's own median nn spacing, so removed area and facet area are on the same footing"
+  },
+  "argument_under_test": "the alpha shape rejects triangles bridging large gaps, so a remote sliver contributes only its own local area rather than dragging a spanning triangle into the facet. If so, the summed alpha area of the removed components BOUNDS M1a's area exposure.",
+  "totals": {
+    "n_removed": 151449,
+    "removed_alpha_area_ft2": 80.572,
+    "main_facet_alpha_area_ft2": 3572.84,
+    "removed_pct_of_main_facet_area": 2.2551,
+    "frozen_reported_total_ft2": 3559.0,
+    "removed_pct_of_frozen_total": 2.2639
+  },
+  "cross_checks": [
+    {
+      "check": "removed + kept equals the pre-filter membership on every facet",
+      "passed": true
+    },
+    {
+      "check": "total removed reproduces the M1a sweep's own figure at the same grid point, written by different code",
+      "passed": true,
+      "detail": {
+        "this_probe": 151449,
+        "sweep": 151449
+      }
+    },
+    {
+      "check": "summed per-component alpha area never exceeds the alpha area of the whole removed set, because splitting into components can only drop bridging triangles, never add them",
+      "passed": true,
+      "detail": [
+        {
+          "facet": 0,
+          "summed": 41.0406,
+          "whole": 41.5001
+        },
+        {
+          "facet": 1,
+          "summed": 1.285,
+          "whole": 1.4441
+        },
+        {
+          "facet": 2,
+          "summed": 19.735,
+          "whole": 20.2784
+        },
+        {
+          "facet": 3,
+          "summed": 0.6399,
+          "whole": 0.6981
+        },
+        {
+          "facet": 4,
+          "summed": 0.592,
+          "whole": 0.6043
+        },
+        {
+          "facet": 5,
+          "summed": 1.9421,
+          "whole": 1.9826
+        },
+        {
+          "facet": 6,
+          "summed": 6.5968,
+          "whole": 6.9366
+        },
+        {
+          "facet": 7,
+          "summed": 8.7408,
+          "whole": 9.3962
+        }
+      ]
+    }
+  ],
+  "rows": [
+    {
+      "facet": 0,
+      "n_removed": 69021,
+      "n_removed_components": 290,
+      "removed_alpha_area_ft2": 41.0406,
+      "removed_as_one_set_alpha_area_ft2": 41.5001,
+      "facet_alpha_area_ft2": 493.483,
+      "removed_pct_of_facet_area": 8.3165,
+      "n_degenerate_components": 185,
+      "points_in_degenerate_components": 225,
+      "largest_components": [
+        {
+          "n_points": 42120,
+          "area_ft2": 22.1487
+        },
+        {
+          "n_points": 10315,
+          "area_ft2": 7.0478
+        },
+        {
+          "n_points": 6874,
+          "area_ft2": 6.5456
+        },
+        {
+          "n_points": 2032,
+          "area_ft2": 1.1995
+        },
+        {
+          "n_points": 605,
+          "area_ft2": 0.5626
+        }
+      ],
+      "conservation_ok": true
+    },
+    {
+      "facet": 1,
+      "n_removed": 2700,
+      "n_removed_components": 144,
+      "removed_alpha_area_ft2": 1.285,
+      "removed_as_one_set_alpha_area_ft2": 1.4441,
+      "facet_alpha_area_ft2": 789.156,
+      "removed_pct_of_facet_area": 0.1628,
+      "n_degenerate_components": 102,
+      "points_in_degenerate_components": 119,
+      "largest_components": [
+        {
+          "n_points": 1340,
+          "area_ft2": 0.4455
+        },
+        {
+          "n_points": 575,
+          "area_ft2": 0.3061
+        },
+        {
+          "n_points": 64,
+          "area_ft2": 0.0885
+        },
+        {
+          "n_points": 68,
+          "area_ft2": 0.0777
+        },
+        {
+          "n_points": 85,
+          "area_ft2": 0.0387
+        }
+      ],
+      "conservation_ok": true
+    },
+    {
+      "facet": 2,
+      "n_removed": 42371,
+      "n_removed_components": 338,
+      "removed_alpha_area_ft2": 19.735,
+      "removed_as_one_set_alpha_area_ft2": 20.2784,
+      "facet_alpha_area_ft2": 351.037,
+      "removed_pct_of_facet_area": 5.6219,
+      "n_degenerate_components": 201,
+      "points_in_degenerate_components": 237,
+      "largest_components": [
+        {
+          "n_points": 12591,
+          "area_ft2": 6.2149
+        },
+        {
+          "n_points": 8068,
+          "area_ft2": 5.2097
+        },
+        {
+          "n_points": 10888,
+          "area_ft2": 1.5951
+        },
+        {
+          "n_points": 1960,
+          "area_ft2": 1.1097
+        },
+        {
+          "n_points": 754,
+          "area_ft2": 0.498
+        }
+      ],
+      "conservation_ok": true
+    },
+    {
+      "facet": 3,
+      "n_removed": 772,
+      "n_removed_components": 79,
+      "removed_alpha_area_ft2": 0.6399,
+      "removed_as_one_set_alpha_area_ft2": 0.6981,
+      "facet_alpha_area_ft2": 605.657,
+      "removed_pct_of_facet_area": 0.1057,
+      "n_degenerate_components": 52,
+      "points_in_degenerate_components": 62,
+      "largest_components": [
+        {
+          "n_points": 147,
+          "area_ft2": 0.1946
+        },
+        {
+          "n_points": 265,
+          "area_ft2": 0.1632
+        },
+        {
+          "n_points": 54,
+          "area_ft2": 0.0721
+        },
+        {
+          "n_points": 29,
+          "area_ft2": 0.0445
+        },
+        {
+          "n_points": 26,
+          "area_ft2": 0.0323
+        }
+      ],
+      "conservation_ok": true
+    },
+    {
+      "facet": 4,
+      "n_removed": 1694,
+      "n_removed_components": 43,
+      "removed_alpha_area_ft2": 0.592,
+      "removed_as_one_set_alpha_area_ft2": 0.6043,
+      "facet_alpha_area_ft2": 326.731,
+      "removed_pct_of_facet_area": 0.1812,
+      "n_degenerate_components": 23,
+      "points_in_degenerate_components": 25,
+      "largest_components": [
+        {
+          "n_points": 1458,
+          "area_ft2": 0.4717
+        },
+        {
+          "n_points": 38,
+          "area_ft2": 0.0363
+        },
+        {
+          "n_points": 34,
+          "area_ft2": 0.028
+        },
+        {
+          "n_points": 28,
+          "area_ft2": 0.0117
+        },
+        {
+          "n_points": 20,
+          "area_ft2": 0.0099
+        }
+      ],
+      "conservation_ok": true
+    },
+    {
+      "facet": 5,
+      "n_removed": 6611,
+      "n_removed_components": 124,
+      "removed_alpha_area_ft2": 1.9421,
+      "removed_as_one_set_alpha_area_ft2": 1.9826,
+      "facet_alpha_area_ft2": 211.104,
+      "removed_pct_of_facet_area": 0.92,
+      "n_degenerate_components": 79,
+      "points_in_degenerate_components": 100,
+      "largest_components": [
+        {
+          "n_points": 4245,
+          "area_ft2": 0.629
+        },
+        {
+          "n_points": 1086,
+          "area_ft2": 0.6121
+        },
+        {
+          "n_points": 168,
+          "area_ft2": 0.1348
+        },
+        {
+          "n_points": 215,
+          "area_ft2": 0.1019
+        },
+        {
+          "n_points": 103,
+          "area_ft2": 0.0891
+        }
+      ],
+      "conservation_ok": true
+    },
+    {
+      "facet": 6,
+      "n_removed": 13855,
+      "n_removed_components": 203,
+      "removed_alpha_area_ft2": 6.5968,
+      "removed_as_one_set_alpha_area_ft2": 6.9366,
+      "facet_alpha_area_ft2": 379.211,
+      "removed_pct_of_facet_area": 1.7396,
+      "n_degenerate_components": 118,
+      "points_in_degenerate_components": 143,
+      "largest_components": [
+        {
+          "n_points": 9593,
+          "area_ft2": 1.9244
+        },
+        {
+          "n_points": 1523,
+          "area_ft2": 1.3967
+        },
+        {
+          "n_points": 573,
+          "area_ft2": 0.7203
+        },
+        {
+          "n_points": 171,
+          "area_ft2": 0.391
+        },
+        {
+          "n_points": 161,
+          "area_ft2": 0.3706
+        }
+      ],
+      "conservation_ok": true
+    },
+    {
+      "facet": 7,
+      "n_removed": 14425,
+      "n_removed_components": 165,
+      "removed_alpha_area_ft2": 8.7408,
+      "removed_as_one_set_alpha_area_ft2": 9.3962,
+      "facet_alpha_area_ft2": 416.457,
+      "removed_pct_of_facet_area": 2.0988,
+      "n_degenerate_components": 123,
+      "points_in_degenerate_components": 145,
+      "largest_components": [
+        {
+          "n_points": 4743,
+          "area_ft2": 2.5042
+        },
+        {
+          "n_points": 3660,
+          "area_ft2": 2.4022
+        },
+        {
+          "n_points": 1443,
+          "area_ft2": 1.2847
+        },
+        {
+          "n_points": 2662,
+          "area_ft2": 0.9247
+        },
+        {
+          "n_points": 111,
+          "area_ft2": 0.3442
+        }
+      ],
+      "conservation_ok": true
+    }
+  ],
+  "render": "m1a-area-exposure-2026-07-29.png"
+}

@@ -4,6 +4,9 @@ _Append only. Newest at the top. Past entries are never edited. A reversal is a 
 
 ## Entries (newest first)
 
+- [2026-07-29: PRE-REGISTRATION: what causes the 1.83 deg systematic pitch bias, and how it will be scored](2026-07-29-preregistration-pitch-bias-mechanism.md)
+- [2026-07-29: M1a is MEASURED AND DEPRIORITIZED. Not a known limit, and the distinction is the point](2026-07-29-m1a-measured-and-deprioritized.md)
+- [2026-07-29: The 6 points of coverage are INTERIOR SPECKLE, not a boundary rim. The old grid was failing to explain roof it was sitting on](2026-07-29-coverage-flips-are-interior-speckle-not-rim.md)
 - [2026-07-28: STANDING RULE R6: a finding ABOUT THE BUILDING must be rendered before it is adopted](2026-07-28-findings-about-the-building-must-be-rendered.md)
 - [2026-07-28: ADOPTED: exact bin pitch, and one declared lattice origin for every raster. Facet coverage moves 88.40 to 94.27 pct](2026-07-28-adopt-exact-pitch-and-declared-lattice-origin.md)
 - [2026-07-28: M1a moves the frozen pitch validation by 0.0121 deg against 0.81 deg of headroom. It is real, and it does not matter for the deliverable](2026-07-28-m1a-does-not-move-the-deliverable.md)

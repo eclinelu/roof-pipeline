@@ -1,0 +1,273 @@
+{
+  "task": "where do the cells that change hands under the grid fix actually sit? Rim or facet interior?",
+  "dataset": "big_house",
+  "date": "2026-07-29",
+  "status": "READ ONLY on canonical-2026-07-26-r2. Facet state held FIXED, so this isolates the GRID change; regeneration also re-runs recovery and moves the facet set, which is a separate effect.",
+  "rule": "standing rule R6 (2026-07-28): a finding about the BUILDING must be rendered before it is adopted",
+  "method": {
+    "comparison": "world coordinates, not cell indices: the two rasters have different origins and pitches, so cell (i,j) in one is not cell (i,j) in the other",
+    "rim_depth": "distance transform of the OTHER configuration's explained mask AFTER binary_fill_holes, per standing rule R3. Unfilled, the transform measures distance to the nearest one-point capture hole (silent failure 2).",
+    "cell_cu": 0.01299038,
+    "cell_in": 0.526
+  },
+  "coverage": {
+    "old_pct": 88.4,
+    "new_pct": 94.27,
+    "half_cell_phase_pct": 94.45
+  },
+  "grid_fix": {
+    "n_gained": 69047,
+    "n_lost": 1989,
+    "n_region": 1572803,
+    "gained_depth_histogram_cells": {
+      "<=1 cell (rim)": 1015,
+      "1-2 cells": 611,
+      "2-4 cells": 1049,
+      ">4 cells (interior)": 66372
+    },
+    "median_gained_depth_cells": 104.809,
+    "max_gained_depth_cells": 439.915,
+    "max_gained_depth_ft": 19.265
+  },
+  "half_cell_phase": {
+    "n_gained": 2553,
+    "n_lost": 2824,
+    "n_region": 1535021,
+    "gained_depth_histogram_cells": {
+      "<=1 cell (rim)": 508,
+      "1-2 cells": 99,
+      "2-4 cells": 178,
+      ">4 cells (interior)": 1768
+    },
+    "median_gained_depth_cells": 10.198,
+    "max_gained_depth_cells": 337.095
+  },
+  "drift_signature": {
+    "along_x": [
+      {
+        "bin": 0,
+        "cells_from_origin": 93,
+        "region_cells": 1058,
+        "gained_cells": 36,
+        "gained_per_1000_region": 34.03
+      },
+      {
+        "bin": 1,
+        "cells_from_origin": 279,
+        "region_cells": 55501,
+        "gained_cells": 5149,
+        "gained_per_1000_region": 92.77
+      },
+      {
+        "bin": 2,
+        "cells_from_origin": 466,
+        "region_cells": 135812,
+        "gained_cells": 9536,
+        "gained_per_1000_region": 70.21
+      },
+      {
+        "bin": 3,
+        "cells_from_origin": 652,
+        "region_cells": 161304,
+        "gained_cells": 7640,
+        "gained_per_1000_region": 47.36
+      },
+      {
+        "bin": 4,
+        "cells_from_origin": 838,
+        "region_cells": 119285,
+        "gained_cells": 9534,
+        "gained_per_1000_region": 79.93
+      },
+      {
+        "bin": 5,
+        "cells_from_origin": 1025,
+        "region_cells": 219355,
+        "gained_cells": 9329,
+        "gained_per_1000_region": 42.53
+      },
+      {
+        "bin": 6,
+        "cells_from_origin": 1211,
+        "region_cells": 291500,
+        "gained_cells": 6124,
+        "gained_per_1000_region": 21.01
+      },
+      {
+        "bin": 7,
+        "cells_from_origin": 1398,
+        "region_cells": 287461,
+        "gained_cells": 9493,
+        "gained_per_1000_region": 33.02
+      },
+      {
+        "bin": 8,
+        "cells_from_origin": 1584,
+        "region_cells": 210787,
+        "gained_cells": 8195,
+        "gained_per_1000_region": 38.88
+      },
+      {
+        "bin": 9,
+        "cells_from_origin": 1770,
+        "region_cells": 90003,
+        "gained_cells": 3880,
+        "gained_per_1000_region": 43.11
+      },
+      {
+        "bin": 10,
+        "cells_from_origin": 1957,
+        "region_cells": 712,
+        "gained_cells": 128,
+        "gained_per_1000_region": 179.78
+      },
+      {
+        "bin": 11,
+        "cells_from_origin": 2143,
+        "region_cells": 25,
+        "gained_cells": 3,
+        "gained_per_1000_region": 120.0
+      }
+    ],
+    "along_y": [
+      {
+        "bin": 0,
+        "cells_from_origin": 112,
+        "region_cells": 31355,
+        "gained_cells": 1978,
+        "gained_per_1000_region": 63.08
+      },
+      {
+        "bin": 1,
+        "cells_from_origin": 337,
+        "region_cells": 87471,
+        "gained_cells": 6056,
+        "gained_per_1000_region": 69.23
+      },
+      {
+        "bin": 2,
+        "cells_from_origin": 562,
+        "region_cells": 210790,
+        "gained_cells": 12313,
+        "gained_per_1000_region": 58.41
+      },
+      {
+        "bin": 3,
+        "cells_from_origin": 786,
+        "region_cells": 250894,
+        "gained_cells": 12408,
+        "gained_per_1000_region": 49.46
+      },
+      {
+        "bin": 4,
+        "cells_from_origin": 1011,
+        "region_cells": 236244,
+        "gained_cells": 12006,
+        "gained_per_1000_region": 50.82
+      },
+      {
+        "bin": 5,
+        "cells_from_origin": 1236,
+        "region_cells": 177466,
+        "gained_cells": 8587,
+        "gained_per_1000_region": 48.39
+      },
+      {
+        "bin": 6,
+        "cells_from_origin": 1461,
+        "region_cells": 133776,
+        "gained_cells": 4789,
+        "gained_per_1000_region": 35.8
+      },
+      {
+        "bin": 7,
+        "cells_from_origin": 1686,
+        "region_cells": 137442,
+        "gained_cells": 3250,
+        "gained_per_1000_region": 23.65
+      },
+      {
+        "bin": 8,
+        "cells_from_origin": 1911,
+        "region_cells": 132902,
+        "gained_cells": 1508,
+        "gained_per_1000_region": 11.35
+      },
+      {
+        "bin": 9,
+        "cells_from_origin": 2135,
+        "region_cells": 125874,
+        "gained_cells": 3273,
+        "gained_per_1000_region": 26.0
+      },
+      {
+        "bin": 10,
+        "cells_from_origin": 2360,
+        "region_cells": 48589,
+        "gained_cells": 2879,
+        "gained_per_1000_region": 59.25
+      },
+      {
+        "bin": 11,
+        "cells_from_origin": 2585,
+        "region_cells": 0,
+        "gained_cells": 0,
+        "gained_per_1000_region": null
+      }
+    ],
+    "predicted_drift_cells_at_far_corner": [
+      0.487,
+      0.731
+    ],
+    "prediction": "if the pitch mismatch acts through ACCUMULATED DRIFT, gained-cell density rises with distance from the origin, and rises MORE along y (0.731 cells of drift) than along x (0.487)",
+    "observed": {
+      "along_x": {
+        "n_bins": 12,
+        "n_rising_steps": 6,
+        "first": 34.03,
+        "last": 120.0,
+        "monotone_rising": false,
+        "net_rising": true
+      },
+      "along_y": {
+        "n_bins": 11,
+        "n_rising_steps": 4,
+        "first": 63.08,
+        "last": 59.25,
+        "monotone_rising": false,
+        "net_rising": false
+      }
+    },
+    "verdict": "NOT CONFIRMED",
+    "reading": "the profiles are NON-MONOTONE in both axes, so the accumulated-drift story is not supported by the spatial distribution. HOWEVER this test is CONFOUNDED and is weak evidence either way: gained cells are cells near the min_pts=2 threshold, and how many of those exist varies enormously with per-facet capture density, which itself varies across the building. A clean version would control for local point density. Mechanism attribution therefore rests on the COUNTERFACTUAL (pitch fix alone moves coverage +5.93 points, origin fix alone +1.11), not on this profile."
+  },
+  "cross_checks": [
+    {
+      "check": "the superseded configuration reproduces the committed 88.40 pct before any flip is counted",
+      "passed": true,
+      "detail": {
+        "committed": 88.4,
+        "recomputed": 88.4
+      }
+    },
+    {
+      "check": "this script's own region construction (interior & testable, explained within it) reproduces split_coverage exactly on the same grid, for both configurations",
+      "passed": true,
+      "detail": {
+        "mine_new": 94.272,
+        "split_new": 94.27,
+        "mine_old": 88.396,
+        "split_old": 88.4
+      }
+    },
+    {
+      "check": "ANTI-NULL: both comparisons produce a non-empty flip set. An empty set would mean the world-coordinate lookup silently collapsed to identity.",
+      "passed": true,
+      "detail": {
+        "grid_fix_flips": 71036,
+        "phase_flips": 5377
+      }
+    }
+  ],
+  "render": "coverage-flips-2026-07-29.png"
+}
