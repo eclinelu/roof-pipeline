@@ -4,6 +4,8 @@ _Append only. Newest at the top. Past entries are never edited. A reversal is a 
 
 ## Entries (newest first)
 
+- [2026-07-29: TEMPLATE CHANGE: every pre-registered prediction carries a POWER CHECK alongside its direction](2026-07-29-power-check-required-in-preregistrations.md)
+- [2026-07-29: The shingle sawtooth is ACCEPTED, UNTESTED as the explanation for the 1.83 deg pitch bias, and recorded as a KNOWN LIMIT under 3e](2026-07-29-sawtooth-accepted-untested-known-limit.md)
 - [2026-07-29: RESULT: the shingle-sawtooth hypothesis is REFUTED on the image. The 1.83 deg bias is not what we thought](2026-07-29-pitch-bias-sawtooth-refuted.md)
 - [2026-07-29: PRE-REGISTRATION: what causes the 1.83 deg systematic pitch bias, and how it will be scored](2026-07-29-preregistration-pitch-bias-mechanism.md)
 - [2026-07-29: M1a is MEASURED AND DEPRIORITIZED. Not a known limit, and the distinction is the point](2026-07-29-m1a-measured-and-deprioritized.md)

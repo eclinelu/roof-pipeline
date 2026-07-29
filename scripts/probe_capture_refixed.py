@@ -54,7 +54,8 @@ from datetime import date
 from pathlib import Path
 
 import numpy as np
-from scipy.ndimage import binary_fill_holes, binary_erosion, label
+from scipy.ndimage import (binary_fill_holes, binary_erosion, binary_closing,
+                           label)
 
 sys.path.insert(0, str(Path(__file__).parent))
 from canonical import load_canonical, scalar                       # noqa: E402
@@ -118,6 +119,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("dataset")
     ap.add_argument("--bungalow", default=None)
+    ap.add_argument("--roof-only", action="store_true")
     ap.add_argument("--stamp", default=str(date.today()))
     args = ap.parse_args()
     out = REPO / "reports"
@@ -173,6 +175,22 @@ def main():
                     move_points=round(move, 3))))
 
     # ---------------- the split: blob 0 vs the rest -----------------------
+    #
+    # THE CIRCULARITY THAT HAD TO BE DESIGNED OUT, stated because the first
+    # version of this probe walked into it and reported 100.0 pct.
+    #
+    # A residual blob is DEFINED as `interior & testable & ~explained`. So blob
+    # 0's own cells are TESTABLE BY CONSTRUCTION, and asking what fraction of
+    # them is testable can only ever return 100 pct. That is a tautology, not a
+    # measurement, and it is exactly the wrong answer to the question being
+    # asked, which is whether the tree-occluded patch of roof is CAPTURE-poor.
+    #
+    # The fix: measure over blob 0's SPATIAL REGION, which must include the
+    # untestable cells sitting among and between its testable ones. Built by a
+    # morphological CLOSING of the blob's cell set (dilate then erode, so gaps
+    # up to the structuring size are absorbed) followed by hole filling. The
+    # number of cells the closing ADDS is reported, because that is the part
+    # that was previously invisible and it is where any capture shortfall lives.
     interior = masks["interior"]
     foot_region = interior & masks["footprint"]
     blobs = cov.residual_blobs(masks["residual"], g, 0.15)
@@ -180,17 +198,49 @@ def main():
     if blobs:
         c0 = blobs[0]["cells"]
         b0[c0[:, 0], c0[:, 1]] = True
-    b0_region = b0 & foot_region
-    rest_region = foot_region & ~b0
+    b0_cells_only = b0 & foot_region
+    st = np.ones((3, 3), dtype=bool)
+    b0_region = binary_fill_holes(binary_closing(b0, structure=st,
+                                                 iterations=3)) & foot_region
+    rest_region = foot_region & ~b0_region
+    added = int(b0_region.sum() - b0_cells_only.sum())
 
     bh = dict(
         whole_roof=cell_metrics(Hall, foot_region, cell),
-        blob0_only=cell_metrics(Hall, b0_region, cell),
-        roof_excluding_blob0=cell_metrics(Hall, rest_region, cell),
+        blob0_cells_only_CIRCULAR=dict(
+            warning="TAUTOLOGY, retained only so the correction is auditable. "
+                    "Residual blob cells are testable by construction, so this "
+                    "reads 100 pct whatever the capture is like.",
+            **cell_metrics(Hall, b0_cells_only, cell)),
+        blob0_region=dict(
+            definition="morphological closing (3x3, 3 iterations) of blob 0's "
+                       "cells, then hole-filled, intersected with the eroded "
+                       "footprint. Includes the UNTESTABLE cells among and "
+                       "between blob 0's testable ones, which is the whole "
+                       "point.",
+            cells_added_by_closing=added,
+            **cell_metrics(Hall, b0_region, cell)),
+        roof_excluding_blob0_region=cell_metrics(Hall, rest_region, cell),
         holes_whole_roof=hole_stats(Hall >= MIN_PTS),
+        holes_blob0_region=hole_stats((Hall >= MIN_PTS) & b0_region),
         footprint_three_ways=foot3,
         blob0_area_cu2=(round(float(blobs[0]["area_cu2"]), 4) if blobs else None),
         n_blobs=len(blobs))
+
+    # ANTI-CIRCULARITY ASSERTION: the region must contain a non-zero number of
+    # NON-testable cells, or it is still the tautology wearing a new name.
+    n_untest_b0 = bh["blob0_region"]["untestable_cells"]
+    checks.append(dict(
+        id="A5",
+        check="ANTI-CIRCULARITY: blob 0's REGION contains a non-zero number of "
+              "NON-testable cells. If it does not, the region is still the "
+              "residual-cell tautology and its percentage is meaningless.",
+        passed=bool(n_untest_b0 > 0),
+        detail=dict(region_cells=bh["blob0_region"]["region_cells"],
+                    untestable_cells=n_untest_b0,
+                    cells_added_by_closing=added,
+                    circular_version_pct=bh["blob0_cells_only_CIRCULAR"]
+                                           ["density_testable_pct"])))
 
     print(f"    eroded footprint {foot3['eroded_cu2']} cu^2 "
           f"(old {OLD_ERODED})")
@@ -206,7 +256,7 @@ def main():
 
     # ---------------- bungalow, raw cloud, same config --------------------
     bung = None
-    if args.bungalow:
+    if args.bungalow and not args.roof_only:
         bcfg = load_config(args.bungalow)
         cloud = Path(bcfg["cloud_path"])
         print(f"  bungalow: reading {cloud.name} (crop-free, raw) ...",
@@ -237,7 +287,7 @@ def main():
     # big_house RAW cloud too, since the site-to-site comparison was raw vs raw
     bh_raw = None
     cloud = Path(cfg["cloud_path"])
-    if cloud.exists():
+    if cloud.exists() and not args.roof_only:
         print(f"  big_house: reading {cloud.name} (raw, for the raw-vs-raw "
               f"comparison) ...", flush=True)
         rpts = load_xyz(str(cloud))
@@ -292,7 +342,9 @@ def main():
     p = out / f"capture-refixed-{args.stamp}.json"
     p.write_text(json.dumps(docout, indent=2, default=float))
 
-    w, b0m, rst = bh["whole_roof"], bh["blob0_only"], bh["roof_excluding_blob0"]
+    w = bh["whole_roof"]
+    b0m = bh["blob0_region"]
+    rst = bh["roof_excluding_blob0_region"]
     print(f"\n  BIG_HOUSE ROOF, adopted grid")
     print(f"    density-testable  {w['testable_cu2']} / {w['region_cu2']} cu^2 "
           f"= {w['density_testable_pct']} pct")
@@ -303,12 +355,20 @@ def main():
           f"(was 111,154 / 370,079)")
     print(f"    p10 pts/occ cell  {w['points_per_occupied_cell']['p10']}   "
           f"(was 1.0)")
-    print(f"\n    BLOB 0 ONLY   {b0m['testable_cu2']} / {b0m['region_cu2']} "
-          f"cu^2 = {b0m['density_testable_pct']} pct, "
-          f"one-point cells {b0m['cells_with_1_point']:,}, p10 "
-          f"{b0m['points_per_occupied_cell']['p10'] if b0m['points_per_occupied_cell'] else None}")
-    print(f"    EXCLUDING B0  {rst['testable_cu2']} / {rst['region_cu2']} "
-          f"cu^2 = {rst['density_testable_pct']} pct, "
+    print(f"\n    BLOB 0 REGION (closed + filled, the NON-circular version)")
+    print(f"      density-testable  {b0m['testable_cu2']} / "
+          f"{b0m['region_cu2']} cu^2 = {b0m['density_testable_pct']} pct")
+    print(f"      one-point cells   {b0m['cells_with_1_point']:,}")
+    pp = b0m['points_per_occupied_cell']
+    print(f"      p10 pts/occ cell  {pp['p10'] if pp else None}")
+    print(f"      added by closing  {b0m['cells_added_by_closing']:,} cells")
+    print(f"      enclosed holes    "
+          f"{bh['holes_blob0_region']['enclosed_holes']:,} in "
+          f"{bh['holes_blob0_region']['enclosed_hole_cells']:,} cells")
+    print(f"      CIRCULAR version read "
+          f"{bh['blob0_cells_only_CIRCULAR']['density_testable_pct']} pct")
+    print(f"\n    ROOF EXCLUDING THE BLOB 0 REGION  {rst['testable_cu2']} / "
+          f"{rst['region_cu2']} cu^2 = {rst['density_testable_pct']} pct, "
           f"one-point cells {rst['cells_with_1_point']:,}, p10 "
           f"{rst['points_per_occupied_cell']['p10']}")
     print()

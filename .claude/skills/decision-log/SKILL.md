@@ -97,6 +97,20 @@ One entry per file in `decisions/`, using this exact template. The `###` heading
 
 Not every field applies to every entry. Omit rather than pad. But "Why" and "Rejected" are close to mandatory: an entry without them is a note, not a decision.
 
+## PRE-REGISTRATION entries: two extra required fields
+
+An entry of kind PRE-REGISTRATION carries everything above plus two fields that are NOT optional. Both were added after real failures.
+
+**Literal values.** Every swept parameter needs its actual value list written in the entry, and every derived threshold needs either its value or the exact expression that computes it from the input. If a value genuinely cannot be fixed in advance because it depends on a property of the INPUT, say so explicitly and name the input property and the rule that turns it into a value.
+
+> Why: the M1a pre-registration (`2026-07-27-m1a-connectivity-preregistration.md`) fixed both parameter NAMES, their transferable FORM, the reported quantities and the stop rule, and never recorded the five values or the four values. It read as complete because it was specific about everything except the numbers. **A freeze that names a parameter without fixing its value is not frozen on that axis.** The test is whether a third party could execute the document without making a numeric choice.
+
+**POWER CHECK.** For each prediction, alongside its DIRECTION, state what would have to be true for the test to be able to SEPARATE its hypotheses at all: the spread of the data against the size of the effect, and the number of independent samples. Do this arithmetic BEFORE the run, not after.
+
+> Why: `2026-07-29-preregistration-pitch-bias-mechanism.md` pre-registered a discriminator whose two hypotheses differed by 0.30 in a ratio, against a within-cluster spread of 1.02 deg on four facets per cluster. **It could not have separated them whatever the answer came out to be.** It duly returned "neither shape fits", which looks like a result and means nothing. A test that cannot distinguish its own hypotheses produces a confident-looking verdict carrying no information, and pre-registering it makes the empty verdict harder to dismiss rather than easier.
+
+This is the same family as the silent-failure standing rule (`2026-07-27-silent-failure-standing-rule.md`), one level up. That rule asks whether a diagnostic could notice it was measuring the wrong thing. The power check asks whether a test could notice which of its own hypotheses is true. Both fail silently and both fail in the reassuring direction.
+
 ## Evidence over assertion
 
 The "Evidence" field exists because this project has already been burned by a confidently written, wrong lesson: the documentation asserted that ODM should stop at odm_filterpoints, which produced no point cloud on two separate runs, because the .laz is actually written by a later stage. The claim was never checked against the ODM log.
