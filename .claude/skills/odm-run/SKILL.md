@@ -30,7 +30,7 @@ Run these before starting. They cost seconds and can save an hour of wasted comp
 ## The command
 
 ```powershell
-docker run -ti --rm -v C:/odm/datasets:/datasets opendronemap/odm --project-path /datasets <project_name> --end-with odm_georeferencing --skip-3dmodel --pc-quality high --feature-quality high
+docker run -ti --rm -v C:/odm/datasets:/datasets opendronemap/odm --project-path /datasets <project_name> --end-with odm_georeferencing --skip-3dmodel --pc-quality ultra --feature-quality high
 ```
 
 | Flag | Why it is there |
@@ -42,7 +42,8 @@ docker run -ti --rm -v C:/odm/datasets:/datasets opendronemap/odm --project-path
 | `<project_name>` | Folder name only, not a full path. ODM expects `/datasets/<project_name>/images/` to exist. |
 | `--end-with odm_georeferencing` | ALWAYS use this. See below. |
 | `--skip-3dmodel` | ALWAYS use this too. See below. |
-| `--pc-quality high` | Controls point cloud density. The flag that matters most for this project. |
+| `--pc-quality ultra` | Controls point cloud density. The flag that matters most for this project, and the ONLY one this project varies. Default since 2026-07-30. |
+| `--feature-quality high` | Affects matching, not final density. Left at `high` deliberately. Do not change it to make a density problem go away; that is what `--pc-quality` is for. |
 
 ## Stop at odm_georeferencing, and skip the 3D model
 
@@ -79,22 +80,26 @@ This is the file `roofkit/io.py` reads. Verify it exists and is non-trivial in s
 
 `--pc-quality` is the lever worth pulling. It controls point cloud density directly, and density determines whether RANSAC has enough points on a roof facet to fit a plane cleanly. A sparse roof is the single most common cause of downstream segmentation failure in this project.
 
+**`--pc-quality ultra` is the DEFAULT as of 2026-07-30.** It was previously `high`, with `ultra` reserved as an escalation. That ordering is reversed: capture quality was found to be permanent and per-site, big_house and bungalow both measured capture-sparse, and no analysis change can add points that were never reconstructed. Paying the runtime once at reconstruction is cheaper than discovering the shortfall downstream and re-flying.
+
 | Setting | Effect | When |
 |---|---|---|
-| `--pc-quality high` | Good density, reasonable runtime | Default. Start here. |
-| `--pc-quality ultra` | Denser cloud, roughly double the runtime | Only if `high` produced a roof too sparse to segment. Escalate, do not start here. |
+| `--pc-quality ultra` | Denser cloud, roughly double the runtime | **Default. Start here.** |
+| `--pc-quality high` | Lower density, faster | Only to reproduce a pre-2026-07-30 cloud. Never for new work. |
 
-`--feature-quality` affects matching, not final density. `high` is sufficient; `ultra` roughly doubles runtime for marginal gain on this use case.
+**Change ONE thing.** `--pc-quality` is the only ODM flag this project varies. `--feature-quality` affects matching rather than final density and stays at `high`; `--min-num-features` and everything else stay at their ODM defaults. A run that changes two flags cannot attribute what moved to either of them, and this project's whole method is attributing a change to its cause.
+
+**A density comparison is only valid between clouds built at the same `--pc-quality`.** Any density, coverage or capture figure computed on a pre-2026-07-30 `high` cloud is not comparable to one computed after. Say which setting produced a cloud whenever you quote a number derived from it.
 
 ## Runtime expectations
 
-Rough, and CPU/RAM dependent. Use these to tell "still working" from "hung":
+Rough, and CPU/RAM dependent. Use these to tell "still working" from "hung". The figures below were gathered at `--pc-quality high`; **at the `ultra` default, expect roughly double**:
 
-| Images | Expect |
-|---|---|
-| ~30 | 15 to 30 minutes |
-| ~100 | 45 to 90 minutes |
-| ~230 | 1 to 3 hours |
+| Images | Expect at `high` | Expect at `ultra` |
+|---|---|---|
+| ~30 | 15 to 30 minutes | 30 to 60 minutes |
+| ~100 | 45 to 90 minutes | 1.5 to 3 hours |
+| ~230 | 1 to 3 hours | 2 to 6 hours |
 
 If it appears stuck, check whether it is in the dense reconstruction stage. That stage is genuinely slow and prints little.
 
