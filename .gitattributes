@@ -1,4 +1,4 @@
-# Line endings for the decision log.
+# Line endings for the decision log and the frozen artifacts.
 #
 # core.autocrlf is true on this machine, so by default git checks text files
 # out with CRLF while storing them with LF. That is harmless for code, but it
@@ -12,3 +12,30 @@
 # comparison stays byte-for-byte meaningful.
 STATE.md            text eol=lf
 decisions/**.md     text eol=lf
+
+# ---------------------------------------------------------------------------
+# THE FROZEN ARTIFACTS (added 2026-07-30)
+#
+# Measured before this block was written, with `git ls-files --eol`:
+# 55 files under reports/ were stored LF in the blob but sat CRLF in the working
+# tree, both canonical states among them. Unpinned, their bytes depend on the
+# checkout, so "this artifact is frozen" was true of its CONTENT but not of its
+# BYTES, and any future byte-level comparison across two machines would differ
+# for a reason that has nothing to do with the measurement.
+#
+# WHY `text eol=lf` HERE AND NOT `-text`, which is the stronger-sounding pin.
+# `-text` means "never convert", so it would freeze the CURRENT CRLF working
+# copies and, on the next renormalize or fresh checkout, rewrite all 55 frozen
+# artifacts' blobs from LF to CRLF. Identical content, different blob hash, on
+# files whose whole purpose is to never change. `text eol=lf` reaches the same
+# end state (byte-identical on every platform, no false positive on a fresh
+# clone) while leaving every existing blob exactly as committed. The goal is
+# byte-stability, and here the gentler attribute is the one that delivers it.
+#
+# The .npz index arrays need no such argument: git already detects them as
+# binary (`i/-text w/-text`), so `-text` below is a written-down statement of
+# what is already true, and costs nothing.
+reports/**/*.json   text eol=lf
+reports/**/*.md     text eol=lf
+reports/**/*.npz    -text
+reports/**/*.png    -text
