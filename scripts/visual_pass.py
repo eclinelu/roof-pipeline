@@ -388,6 +388,66 @@ def classify(row):
     return "tangled"
 
 
+def frac(x):
+    """Overlap fraction at full precision.
+
+    17 decimal places is past what a float64 in [0,1] can carry, so a value
+    printed as 1.00000000000000000 is EXACTLY 1.0 and not 0.9999999999999999
+    rounded for display. That distinction is the whole reason the fractions are
+    printed wide: "the same points" and "almost the same points" are different
+    findings, and a %.4f table cannot tell them apart.
+    """
+    return f"{float(x):.17f}"
+
+
+def is_exact_one(p):
+    return p["frac_old"] == 1.0 and p["frac_new"] == 1.0
+
+
+def overlap_table(rows):
+    """The correspondence table, sorted so the weakest overlaps read first.
+
+    Sorted ascending by the WEAKER of the two directions, because a pairing is
+    only as solid as its worse side: a new facet that swallowed its predecessor
+    whole still scores 1.0 on the old side while having gained a lot of points
+    the old facet never owned. Anything that is not exactly 1.0000 both ways
+    therefore appears above everything that is.
+
+    Display only. This reads the rows correspond() already built and changes
+    nothing about how they were built.
+    """
+    pairs = [dict(p, case=r["case"]) for r in rows for p in r["pairs"]]
+    pairs.sort(key=lambda p: (min(p["frac_old"], p["frac_new"]),
+                              max(p["frac_old"], p["frac_new"]), p["old"]))
+
+    w = 19
+    lines = [
+        "",
+        "correspondence overlap, all pairs, weakest first",
+        "  fraction of old = shared / points owned by the OLD facet",
+        "  fraction of new = shared / points owned by the NEW facet",
+        "",
+        f"  {'old':>4}  {'new':>4}  {'shared pts':>11}  "
+        f"{'fraction of old':>{w}}  {'fraction of new':>{w}}  exact",
+        f"  {'-'*4}  {'-'*4}  {'-'*11}  {'-'*w}  {'-'*w}  -----",
+    ]
+    for p in pairs:
+        lines.append(
+            f"  {p['old']:>4}  {p['new']:>4}  {p['shared']:>11,}  "
+            f"{frac(p['frac_old']):>{w}}  {frac(p['frac_new']):>{w}}  "
+            f"{'yes' if is_exact_one(p) else 'NO':>5}"
+        )
+
+    n_exact = sum(1 for p in pairs if is_exact_one(p))
+    lines += [
+        "",
+        f"  {n_exact} of {len(pairs)} pairs are EXACTLY 1.0 in both directions "
+        f"(same points, no gain, no loss).",
+        f"  {len(pairs) - n_exact} of {len(pairs)} are not.",
+    ]
+    return "\n".join(lines)
+
+
 CASE_NOTE = {
     "1-to-1": "one old facet, one new facet",
     "merge": "several old facets became one new facet",
@@ -641,9 +701,21 @@ def render_html(ctx):
                                'difference above is annotation, layout or labelling, not '
                                'geometry. Nothing moved.</div>')
 
+        # the same numbers the terminal table prints, at the same precision
+        if row["pairs"]:
+            hdr_ov = "".join(
+                f'<span class="hov{"" if is_exact_one(p) else " notone"}">'
+                f'{p["old"]}&rarr;{p["new"]} &nbsp;of old {frac(p["frac_old"])} '
+                f'&nbsp;of new {frac(p["frac_new"])}'
+                f'{"" if is_exact_one(p) else " &nbsp;NOT 1.0"}</span>'
+                for p in row["pairs"])
+        else:
+            hdr_ov = '<span class="hov notone">no shared points with any facet</span>'
+
         parts.append(f"""
 <section class="row {case}" id="{row['row_id']}">
   <h2>{case.upper()} &nbsp; old {row['old'] or '&mdash;'} &rarr; new {row['new'] or '&mdash;'}</h2>
+  <div class="hovwrap">{hdr_ov}</div>
   <div class="casenote">{CASE_NOTE[case]}</div>
   {diff_html(row['diff'])}
   {verdict_of_diff}
@@ -704,6 +776,10 @@ def render_html(ctx):
  section.row.merge,section.row.split,section.row.tangled{{background:#241f14}}
  h2{{font-size:16px;margin:0 0 4px}}
  .casenote{{color:#aaa;font-size:13px;margin-bottom:8px}}
+ .hovwrap{{margin:2px 0 6px;display:flex;flex-wrap:wrap;gap:6px}}
+ .hov{{font-family:ui-monospace,monospace;font-size:11.5px;padding:2px 8px;
+   border-radius:3px;background:#12331d;color:#9ff0b5;white-space:nowrap}}
+ .hov.notone{{background:#3a2a12;color:#ffcf8f;font-weight:700}}
  .diff{{font-size:13px;padding:6px 10px;border-radius:3px;margin:6px 0;font-family:ui-monospace,monospace}}
  .diff.same{{background:#12331d}} .diff.changed{{background:#33291a}} .diff.na{{background:#222;color:#999}}
  .caveatfire{{background:#1d2b3a;border-left:4px solid #4d90d9;padding:6px 10px;
@@ -1076,6 +1152,8 @@ def main():
           + ", ".join(f"{v} {k}" for k, v in sorted(cases.items())))
     print(f"  {len(ctx['lines'])} line rows")
     print(f"  {len(ctx['rows']) + len(ctx['lines'])} verdicts required, all free text")
+    print(overlap_table(ctx["rows"]))
+    print()
     for label, p in (("OLD", ctx["old_prov"]), ("NEW", ctx["new_prov"])):
         print(f"  {label} renders: "
               + (f"commit {p['short']} ({p['date']})" if p["known"]

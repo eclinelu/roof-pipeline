@@ -120,6 +120,56 @@ def test_every_case_has_a_layout_note(case):
     assert case in vp.CASE_NOTE
 
 
+def test_frac_distinguishes_exactly_one_from_nearly_one():
+    # The point of printing wide: "the same points" and "almost the same points"
+    # are different findings, and %.4f cannot tell them apart.
+    assert vp.frac(1.0) == "1.00000000000000000"
+    nearly = 1.0 - 2 ** -53
+    assert vp.frac(nearly) != vp.frac(1.0)
+    assert round(nearly, 4) == 1.0  # a 4-decimal table would have called it 1.0
+
+
+def test_overlap_table_sorts_weakest_first_and_counts_exact_pairs():
+    rows = [
+        {"case": "1-to-1", "pairs": [{"old": 0, "new": 0, "shared": 10,
+                                      "frac_old": 1.0, "frac_new": 1.0}]},
+        {"case": "1-to-1", "pairs": [{"old": 1, "new": 1, "shared": 5,
+                                      "frac_old": 0.5, "frac_new": 0.9}]},
+        # scores 1.0 on the old side but gained points: the weaker side rules
+        {"case": "1-to-1", "pairs": [{"old": 2, "new": 2, "shared": 8,
+                                      "frac_old": 1.0, "frac_new": 0.8}]},
+    ]
+    out = vp.overlap_table(rows)
+    # data rows are the ones carrying the exact-match column
+    order = [ln.split()[0] for ln in out.splitlines()
+             if ln.rstrip().endswith(("yes", "NO"))]
+    assert order == ["1", "2", "0"]
+    assert "1 of 3 pairs are EXACTLY 1.0 in both directions" in out
+    assert "2 of 3 are not" in out
+
+
+def test_overlap_table_is_display_only():
+    # It must not mutate the rows it reads.
+    old = {0: s((0, 100)), 1: s((100, 200))}
+    new = {0: s((0, 100)), 1: s((100, 190))}
+    rows = vp.correspond(old, new)
+    before = json.dumps(rows, sort_keys=True, default=str)
+    vp.overlap_table(rows)
+    assert json.dumps(rows, sort_keys=True, default=str) == before
+
+
+def test_real_pass_has_exactly_eight_bit_identical_pairs():
+    # The 8 main facets are untouched by the grid fix; the 21 recovered ones
+    # all moved. If that ratio ever changes, this is the alarm.
+    old = vp.load_artifact("big_house", "2026-07-26-r2")
+    new = vp.load_artifact("big_house", "2026-07-30-grid-adopted")
+    rows = vp.correspond(old["sets"], new["sets"])
+    pairs = [p for r in rows for p in r["pairs"]]
+    exact = [p for p in pairs if vp.is_exact_one(p)]
+    assert len(pairs) == 29
+    assert sorted(p["old"] for p in exact) == list(range(8))
+
+
 def test_guard_refuses_artifact_and_review_directories():
     repo = vp.REPO
     for bad in [repo / "reports" / "big_house" / "x.html",
