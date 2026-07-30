@@ -1,0 +1,270 @@
+{
+  "task": "evidence package for adopting exact_pitch and the declared lattice raster origin",
+  "dataset": "big_house",
+  "date": "2026-07-30",
+  "status": "READ ONLY on canonical-2026-07-26-r2. No facet state written.",
+  "provenance": "the bin-pitch defect and the unchosen origin were found while auditing the raster behaviour of a connectivity filter that was REJECTED for lack of a plateau. They were not found while looking for a way to raise coverage. The audit was ordered before the next mechanism pass, on the grounds that a phase-dependent coverage number cannot serve as a cross-pass detector.",
+  "scalars": {
+    "cell_cu": 0.0129903815,
+    "band_cu": 0.0658634941,
+    "lattice_origin": [
+      553181.2362290128,
+      4543204.255586407
+    ],
+    "extent_origin": [
+      553181.2486443484,
+      4543204.261764267
+    ]
+  },
+  "configurations": {
+    "old_extent_loose_PUBLISHED": {
+      "facet_coverage_pct": 88.4,
+      "density_testable_pct": 82.29,
+      "footprint_raw_cu2": 299.654,
+      "footprint_filled_cu2": 362.105,
+      "footprint_eroded_cu2": 352.707,
+      "nx": 2236,
+      "ny": 2698,
+      "xlo": 553181.2486443484,
+      "ylo": 4543204.261764267
+    },
+    "pitch_fix_only": {
+      "facet_coverage_pct": 94.33,
+      "density_testable_pct": 82.11,
+      "footprint_raw_cu2": 299.379,
+      "footprint_filled_cu2": 362.669,
+      "footprint_eroded_cu2": 353.722,
+      "nx": 2236,
+      "ny": 2698,
+      "xlo": 553181.2486443484,
+      "ylo": 4543204.261764267
+    },
+    "origin_fix_only": {
+      "facet_coverage_pct": 89.51,
+      "density_testable_pct": 82.83,
+      "footprint_raw_cu2": 299.512,
+      "footprint_filled_cu2": 359.441,
+      "footprint_eroded_cu2": 348.987,
+      "nx": 2237,
+      "ny": 2698,
+      "xlo": 553181.2362290128,
+      "ylo": 4543204.255586407
+    },
+    "adopted_lattice_exact": {
+      "facet_coverage_pct": 94.27,
+      "density_testable_pct": 82.72,
+      "footprint_raw_cu2": 299.44,
+      "footprint_filled_cu2": 359.843,
+      "footprint_eroded_cu2": 349.64,
+      "nx": 2237,
+      "ny": 2698,
+      "xlo": 553181.2362290128,
+      "ylo": 4543204.255586407
+    }
+  },
+  "decomposition": {
+    "published_coverage_pct": 88.4,
+    "pitch_fix_only_pct": 94.33,
+    "origin_fix_only_pct": 89.51,
+    "adopted_pct": 94.27,
+    "delta_pitch_fix": 5.93,
+    "delta_origin_fix": 1.11,
+    "delta_combined": 5.87,
+    "note": "the two deltas do not add. They act on the same marginal cells, so the combined effect is slightly less than the sum."
+  },
+  "new_stability_claim": {
+    "what": "spread of each reported quantity over eight sub-cell raster phase offsets, under the ADOPTED configuration",
+    "spread": {
+      "facet_coverage_pct": {
+        "min": 94.27,
+        "max": 94.45,
+        "spread": 0.18
+      },
+      "density_testable_pct": {
+        "min": 82.17,
+        "max": 83.13,
+        "spread": 0.96
+      },
+      "footprint_raw_cu2": {
+        "min": 299.4,
+        "max": 299.521,
+        "spread": 0.121
+      },
+      "footprint_filled_cu2": {
+        "min": 357.982,
+        "max": 362.386,
+        "spread": 4.404
+      },
+      "footprint_eroded_cu2": {
+        "min": 347.093,
+        "max": 353.293,
+        "spread": 6.2
+      }
+    },
+    "rows": [
+      {
+        "facet_coverage_pct": 94.27,
+        "density_testable_pct": 82.72,
+        "footprint_raw_cu2": 299.44,
+        "footprint_filled_cu2": 359.843,
+        "footprint_eroded_cu2": 349.64,
+        "nx": 2237,
+        "ny": 2698,
+        "xlo": 553181.2362290128,
+        "ylo": 4543204.255586407,
+        "offset_cells": [
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "facet_coverage_pct": 94.43,
+        "density_testable_pct": 82.61,
+        "footprint_raw_cu2": 299.521,
+        "footprint_filled_cu2": 360.505,
+        "footprint_eroded_cu2": 350.723,
+        "nx": 2237,
+        "ny": 2698,
+        "xlo": 553181.2329814174,
+        "ylo": 4543204.255586407,
+        "offset_cells": [
+          0.25,
+          0.0
+        ]
+      },
+      {
+        "facet_coverage_pct": 94.35,
+        "density_testable_pct": 82.68,
+        "footprint_raw_cu2": 299.506,
+        "footprint_filled_cu2": 360.16,
+        "footprint_eroded_cu2": 350.205,
+        "nx": 2237,
+        "ny": 2698,
+        "xlo": 553181.229733822,
+        "ylo": 4543204.255586407,
+        "offset_cells": [
+          0.5,
+          0.0
+        ]
+      },
+      {
+        "facet_coverage_pct": 94.45,
+        "density_testable_pct": 82.29,
+        "footprint_raw_cu2": 299.451,
+        "footprint_filled_cu2": 361.853,
+        "footprint_eroded_cu2": 352.401,
+        "nx": 2238,
+        "ny": 2698,
+        "xlo": 553181.2264862268,
+        "ylo": 4543204.255586407,
+        "offset_cells": [
+          0.75,
+          0.0
+        ]
+      },
+      {
+        "facet_coverage_pct": 94.44,
+        "density_testable_pct": 82.17,
+        "footprint_raw_cu2": 299.4,
+        "footprint_filled_cu2": 362.386,
+        "footprint_eroded_cu2": 353.293,
+        "nx": 2237,
+        "ny": 2699,
+        "xlo": 553181.2362290128,
+        "ylo": 4543204.249091216,
+        "offset_cells": [
+          0.0,
+          0.5
+        ]
+      },
+      {
+        "facet_coverage_pct": 94.45,
+        "density_testable_pct": 83.13,
+        "footprint_raw_cu2": 299.422,
+        "footprint_filled_cu2": 357.982,
+        "footprint_eroded_cu2": 347.093,
+        "nx": 2237,
+        "ny": 2699,
+        "xlo": 553181.229733822,
+        "ylo": 4543204.249091216,
+        "offset_cells": [
+          0.5,
+          0.5
+        ]
+      },
+      {
+        "facet_coverage_pct": 94.43,
+        "density_testable_pct": 82.35,
+        "footprint_raw_cu2": 299.448,
+        "footprint_filled_cu2": 361.576,
+        "footprint_eroded_cu2": 351.959,
+        "nx": 2237,
+        "ny": 2699,
+        "xlo": 553181.231942187,
+        "ylo": 4543204.247012755,
+        "offset_cells": [
+          0.33,
+          0.66
+        ]
+      },
+      {
+        "facet_coverage_pct": 94.43,
+        "density_testable_pct": 82.25,
+        "footprint_raw_cu2": 299.416,
+        "footprint_filled_cu2": 362.003,
+        "footprint_eroded_cu2": 352.691,
+        "nx": 2238,
+        "ny": 2699,
+        "xlo": 553181.227655361,
+        "ylo": 4543204.2512995815,
+        "offset_cells": [
+          0.66,
+          0.33
+        ]
+      }
+    ],
+    "reading": "facet coverage is the quantity the pitch fix stabilises. The footprint residue is NOT fixed by either change: it is discretisation sensitivity from min_pts=2 on a cloud with 249,745 one-point cells, and it is a permanent property of the measure, not a defect."
+  },
+  "cross_checks": [
+    {
+      "check": "the SUPERSEDED configuration still reproduces the committed canonical numbers exactly, so superseded numbers can be recomputed rather than merely quoted",
+      "passed": true,
+      "detail": {
+        "published_coverage": 88.4,
+        "recomputed_coverage": 88.4,
+        "published_raw_cu2": 299.654,
+        "recomputed_raw_cu2": 299.654
+      }
+    },
+    {
+      "check": "ANTI-NULL: the perturbation actually moves x.min()/y.min() by a SUB-CELL amount. If it moved by whole cells only, the invariance test would be vacuous (silent failures 7 and 8).",
+      "passed": true,
+      "detail": {
+        "min_moved_cu": [
+          0.21555823076050729,
+          2.358475740067661
+        ],
+        "min_moved_cells": [
+          16.593679787548883,
+          181.55554106800201
+        ],
+        "sub_cell_fraction": [
+          0.40632021245111716,
+          0.4444589319979855
+        ]
+      }
+    },
+    {
+      "check": "under anchor='lattice', deleting the extreme points leaves the cell PARTITION unchanged up to an integer relabelling",
+      "passed": true
+    },
+    {
+      "check": "under anchor='extent', the SAME perturbation CHANGES the partition. Without this the result above could be vacuous.",
+      "passed": true,
+      "detail": {
+        "extent_partition_changed": true,
+        "n_points_differing": 1258549
+      }
+    }
+  ]
+}

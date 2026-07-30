@@ -182,7 +182,8 @@ def main():
 
     print("  computing masks ...", flush=True)
     old_m, old_g, _, _ = masks_for(points, facets, band, cell,
-                                   anchor="extent", exact_pitch=False)
+                                   anchor="extent", exact_pitch=False,
+                                   allow_superseded=True)
     new_m, new_g, owner, dist = masks_for(points, facets, band, cell,
                                           anchor="lattice", exact_pitch=True)
     half = cov.lattice_origin(points, cell) - np.array([0.5 * cell, 0.5 * cell])

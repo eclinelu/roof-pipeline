@@ -1,0 +1,701 @@
+{
+  "review_of": "canonical-2026-07-30-grid-adopted",
+  "dataset": "big_house",
+  "date": "2026-07-30-grid-adopted",
+  "reviewer": "Emmett",
+  "schema_version": 2,
+  "site_role": "DEVELOPMENT site. See decisions/2026-07-27-development-vs-validation-split.md. No accuracy claim comes from this site. Visual review may establish THAT something is wrong and WHAT it is physically; it may never set a parameter value.",
+  "renders": "reports/big_house/review/2026-07-30-grid-adopted",
+  "top_level_observations": [
+    {
+      "observation": "Most facets are IDENTIFIED correctly. The errors are in LINE PLACEMENT, and they are NOT systematic.",
+      "by": "Emmett",
+      "from_": "overview pass, before the per-facet pass",
+      "why_it_matters": "non-systematic placement error points at the segmentation boundary rather than at a global parameter, and it rules out a whole class of fixes before anyone proposes one: no single threshold, offset or erosion width can correct an error that is not consistent."
+    }
+  ],
+  "instructions": {
+    "identity": {
+      "correct": "this facet corresponds to one real roof plane",
+      "merge": "this facet and another are ONE real plane split in two",
+      "split": "this facet is TWO real planes fitted as one",
+      "spurious": "no real roof plane here at all",
+      "unsure": "cannot tell from the render"
+    },
+    "boundary": {
+      "tight": "outline follows the real roof edge",
+      "short": "outline stops INSIDE the real roof edge; roof continues past it",
+      "over": "outline extends PAST the real edge onto something that is not this facet",
+      "ragged": "roughly right but jagged where the real edge is straight",
+      "cut": "outline CROSSES a real roof feature (ridge, valley, dormer) instead of stopping at it",
+      "unsure": "cannot tell from the render"
+    },
+    "severity": {
+      "minor": "estimated area impact under 5 pct",
+      "moderate": "5 to 20 pct",
+      "major": "over 20 pct"
+    },
+    "location": "compass direction of the affected edge, per the north arrow on the render (N, NE, E, SE, S, SW, W, NW, or 'all' / 'multiple')",
+    "note": "free text. Say what you SAW, not what the fix should be. A physical description travels to the next site; a suggested threshold does not."
+  },
+  "facets": [
+    {
+      "facet": 0,
+      "kind": "main",
+      "pitch_deg": 21.19,
+      "plan_ft2": 501.2,
+      "n_points": 1538098,
+      "quality": 1.3054,
+      "render": "facet-00.png",
+      "identity": "",
+      "boundary": "",
+      "severity": "",
+      "location": "",
+      "note": ""
+    },
+    {
+      "facet": 1,
+      "kind": "main",
+      "pitch_deg": 33.07,
+      "plan_ft2": 909.4,
+      "n_points": 1154335,
+      "quality": 2.2951,
+      "render": "facet-01.png",
+      "identity": "",
+      "boundary": "",
+      "severity": "",
+      "location": "",
+      "note": ""
+    },
+    {
+      "facet": 2,
+      "kind": "main",
+      "pitch_deg": 22.72,
+      "plan_ft2": 390.6,
+      "n_points": 693991,
+      "quality": 1.0069,
+      "render": "facet-02.png",
+      "identity": "",
+      "boundary": "",
+      "severity": "",
+      "location": "",
+      "note": ""
+    },
+    {
+      "facet": 3,
+      "kind": "main",
+      "pitch_deg": 34.01,
+      "plan_ft2": 508.1,
+      "n_points": 850268,
+      "quality": 1.8003,
+      "render": "facet-03.png",
+      "identity": "",
+      "boundary": "",
+      "severity": "",
+      "location": "",
+      "note": ""
+    },
+    {
+      "facet": 4,
+      "kind": "main",
+      "pitch_deg": 20.99,
+      "plan_ft2": 313.5,
+      "n_points": 744303,
+      "quality": 2.948,
+      "render": "facet-04.png",
+      "identity": "",
+      "boundary": "",
+      "severity": "",
+      "location": "",
+      "note": ""
+    },
+    {
+      "facet": 5,
+      "kind": "main",
+      "pitch_deg": 21.36,
+      "plan_ft2": 208.2,
+      "n_points": 669484,
+      "quality": 2.6648,
+      "render": "facet-05.png",
+      "identity": "",
+      "boundary": "",
+      "severity": "",
+      "location": "",
+      "note": ""
+    },
+    {
+      "facet": 6,
+      "kind": "main",
+      "pitch_deg": 33.76,
+      "plan_ft2": 353.7,
+      "n_points": 403109,
+      "quality": 1.8218,
+      "render": "facet-06.png",
+      "identity": "",
+      "boundary": "",
+      "severity": "",
+      "location": "",
+      "note": ""
+    },
+    {
+      "facet": 7,
+      "kind": "main",
+      "pitch_deg": 33.52,
+      "plan_ft2": 407.9,
+      "n_points": 297583,
+      "quality": 2.0741,
+      "render": "facet-07.png",
+      "identity": "",
+      "boundary": "",
+      "severity": "",
+      "location": "",
+      "note": ""
+    },
+    {
+      "facet": 8,
+      "kind": "recovered",
+      "pitch_deg": 10.01,
+      "plan_ft2": 46.5,
+      "n_points": 96959,
+      "quality": 2.7682,
+      "render": "facet-08.png",
+      "identity": "",
+      "boundary": "",
+      "severity": "",
+      "location": "",
+      "note": ""
+    },
+    {
+      "facet": 9,
+      "kind": "recovered",
+      "pitch_deg": 23.42,
+      "plan_ft2": 41.2,
+      "n_points": 87383,
+      "quality": 0.8655,
+      "render": "facet-09.png",
+      "identity": "",
+      "boundary": "",
+      "severity": "",
+      "location": "",
+      "note": ""
+    },
+    {
+      "facet": 10,
+      "kind": "recovered",
+      "pitch_deg": 39.6,
+      "plan_ft2": 20.9,
+      "n_points": 28941,
+      "quality": 1.1163,
+      "render": "facet-10.png",
+      "identity": "",
+      "boundary": "",
+      "severity": "",
+      "location": "",
+      "note": ""
+    },
+    {
+      "facet": 11,
+      "kind": "recovered",
+      "pitch_deg": 22.15,
+      "plan_ft2": 29.7,
+      "n_points": 78846,
+      "quality": 1.2253,
+      "render": "facet-11.png",
+      "identity": "",
+      "boundary": "",
+      "severity": "",
+      "location": "",
+      "note": ""
+    },
+    {
+      "facet": 12,
+      "kind": "recovered",
+      "pitch_deg": 22.69,
+      "plan_ft2": 14.7,
+      "n_points": 21139,
+      "quality": 0.8061,
+      "render": "facet-12.png",
+      "identity": "",
+      "boundary": "",
+      "severity": "",
+      "location": "",
+      "note": ""
+    },
+    {
+      "facet": 13,
+      "kind": "recovered",
+      "pitch_deg": 35.16,
+      "plan_ft2": 18.4,
+      "n_points": 42813,
+      "quality": 0.858,
+      "render": "facet-13.png",
+      "identity": "",
+      "boundary": "",
+      "severity": "",
+      "location": "",
+      "note": ""
+    },
+    {
+      "facet": 14,
+      "kind": "recovered",
+      "pitch_deg": 34.68,
+      "plan_ft2": 20.5,
+      "n_points": 34227,
+      "quality": 0.9842,
+      "render": "facet-14.png",
+      "identity": "",
+      "boundary": "",
+      "severity": "",
+      "location": "",
+      "note": ""
+    },
+    {
+      "facet": 15,
+      "kind": "recovered",
+      "pitch_deg": 35.15,
+      "plan_ft2": 16.9,
+      "n_points": 64005,
+      "quality": 0.6511,
+      "render": "facet-15.png",
+      "identity": "",
+      "boundary": "",
+      "severity": "",
+      "location": "",
+      "note": ""
+    },
+    {
+      "facet": 16,
+      "kind": "recovered",
+      "pitch_deg": 34.12,
+      "plan_ft2": 15.8,
+      "n_points": 45599,
+      "quality": 0.8909,
+      "render": "facet-16.png",
+      "identity": "",
+      "boundary": "",
+      "severity": "",
+      "location": "",
+      "note": ""
+    },
+    {
+      "facet": 17,
+      "kind": "recovered",
+      "pitch_deg": 35.18,
+      "plan_ft2": 17.7,
+      "n_points": 53355,
+      "quality": 0.7413,
+      "render": "facet-17.png",
+      "identity": "",
+      "boundary": "",
+      "severity": "",
+      "location": "",
+      "note": ""
+    },
+    {
+      "facet": 18,
+      "kind": "recovered",
+      "pitch_deg": 33.98,
+      "plan_ft2": 13.5,
+      "n_points": 40023,
+      "quality": 0.6947,
+      "render": "facet-18.png",
+      "identity": "",
+      "boundary": "",
+      "severity": "",
+      "location": "",
+      "note": ""
+    },
+    {
+      "facet": 19,
+      "kind": "recovered",
+      "pitch_deg": 34.52,
+      "plan_ft2": 17.7,
+      "n_points": 54854,
+      "quality": 0.6687,
+      "render": "facet-19.png",
+      "identity": "",
+      "boundary": "",
+      "severity": "",
+      "location": "",
+      "note": ""
+    },
+    {
+      "facet": 20,
+      "kind": "recovered",
+      "pitch_deg": 34.01,
+      "plan_ft2": 14.4,
+      "n_points": 34311,
+      "quality": 0.5993,
+      "render": "facet-20.png",
+      "identity": "",
+      "boundary": "",
+      "severity": "",
+      "location": "",
+      "note": ""
+    },
+    {
+      "facet": 21,
+      "kind": "recovered",
+      "pitch_deg": 33.35,
+      "plan_ft2": 12.0,
+      "n_points": 19901,
+      "quality": 0.9556,
+      "render": "facet-21.png",
+      "identity": "",
+      "boundary": "",
+      "severity": "",
+      "location": "",
+      "note": ""
+    },
+    {
+      "facet": 22,
+      "kind": "recovered",
+      "pitch_deg": 32.74,
+      "plan_ft2": 9.7,
+      "n_points": 19098,
+      "quality": 0.8251,
+      "render": "facet-22.png",
+      "identity": "",
+      "boundary": "",
+      "severity": "",
+      "location": "",
+      "note": ""
+    },
+    {
+      "facet": 23,
+      "kind": "recovered",
+      "pitch_deg": 8.49,
+      "plan_ft2": 16.2,
+      "n_points": 35493,
+      "quality": 1.5843,
+      "render": "facet-23.png",
+      "identity": "",
+      "boundary": "",
+      "severity": "",
+      "location": "",
+      "note": ""
+    },
+    {
+      "facet": 24,
+      "kind": "recovered",
+      "pitch_deg": 21.6,
+      "plan_ft2": 9.6,
+      "n_points": 14799,
+      "quality": 2.0425,
+      "render": "facet-24.png",
+      "identity": "",
+      "boundary": "",
+      "severity": "",
+      "location": "",
+      "note": ""
+    },
+    {
+      "facet": 25,
+      "kind": "recovered",
+      "pitch_deg": 32.79,
+      "plan_ft2": 8.7,
+      "n_points": 9836,
+      "quality": 1.7271,
+      "render": "facet-25.png",
+      "identity": "",
+      "boundary": "",
+      "severity": "",
+      "location": "",
+      "note": ""
+    },
+    {
+      "facet": 26,
+      "kind": "recovered",
+      "pitch_deg": 33.01,
+      "plan_ft2": 6.8,
+      "n_points": 8995,
+      "quality": 1.5007,
+      "render": "facet-26.png",
+      "identity": "",
+      "boundary": "",
+      "severity": "",
+      "location": "",
+      "note": ""
+    },
+    {
+      "facet": 27,
+      "kind": "recovered",
+      "pitch_deg": 33.24,
+      "plan_ft2": 5.2,
+      "n_points": 10531,
+      "quality": 0.8452,
+      "render": "facet-27.png",
+      "identity": "",
+      "boundary": "",
+      "severity": "",
+      "location": "",
+      "note": ""
+    },
+    {
+      "facet": 28,
+      "kind": "recovered",
+      "pitch_deg": 33.12,
+      "plan_ft2": 2.7,
+      "n_points": 3948,
+      "quality": 1.1677,
+      "render": "facet-28.png",
+      "identity": "",
+      "boundary": "",
+      "severity": "",
+      "location": "",
+      "note": ""
+    }
+  ],
+  "missing_facets": [],
+  "intersection_lines": [
+    {
+      "id": 0,
+      "kind": "ridge",
+      "between": [
+        1,
+        3
+      ],
+      "length_ft": 53.4,
+      "verdict": "",
+      "note": ""
+    },
+    {
+      "id": 1,
+      "kind": "valley",
+      "between": [
+        0,
+        7
+      ],
+      "length_ft": 32.9,
+      "verdict": "",
+      "note": ""
+    },
+    {
+      "id": 2,
+      "kind": "ridge",
+      "between": [
+        6,
+        7
+      ],
+      "length_ft": 20.5,
+      "verdict": "",
+      "note": ""
+    },
+    {
+      "id": 3,
+      "kind": "hip",
+      "between": [
+        0,
+        4
+      ],
+      "length_ft": 19.0,
+      "verdict": "",
+      "note": ""
+    },
+    {
+      "id": 4,
+      "kind": "ridge",
+      "between": [
+        0,
+        2
+      ],
+      "length_ft": 18.8,
+      "verdict": "",
+      "note": ""
+    },
+    {
+      "id": 5,
+      "kind": "hip",
+      "between": [
+        2,
+        4
+      ],
+      "length_ft": 18.6,
+      "verdict": "",
+      "note": ""
+    },
+    {
+      "id": 6,
+      "kind": "ridge",
+      "between": [
+        4,
+        5
+      ],
+      "length_ft": 17.4,
+      "verdict": "",
+      "note": ""
+    },
+    {
+      "id": 7,
+      "kind": "hip",
+      "between": [
+        1,
+        7
+      ],
+      "length_ft": 13.3,
+      "verdict": "",
+      "note": ""
+    },
+    {
+      "id": 8,
+      "kind": "ridge",
+      "between": [
+        2,
+        6
+      ],
+      "length_ft": 10.9,
+      "verdict": "",
+      "note": ""
+    },
+    {
+      "id": 9,
+      "kind": "hip",
+      "between": [
+        1,
+        6
+      ],
+      "length_ft": 10.5,
+      "verdict": "",
+      "note": ""
+    },
+    {
+      "id": 10,
+      "kind": "valley",
+      "between": [
+        0,
+        1
+      ],
+      "length_ft": 10.4,
+      "verdict": "",
+      "note": ""
+    },
+    {
+      "id": 11,
+      "kind": "ridge",
+      "between": [
+        17,
+        18
+      ],
+      "length_ft": 9.5,
+      "verdict": "",
+      "note": ""
+    },
+    {
+      "id": 12,
+      "kind": "ridge",
+      "between": [
+        15,
+        16
+      ],
+      "length_ft": 9.4,
+      "verdict": "",
+      "note": ""
+    },
+    {
+      "id": 13,
+      "kind": "ridge",
+      "between": [
+        13,
+        14
+      ],
+      "length_ft": 9.4,
+      "verdict": "",
+      "note": ""
+    },
+    {
+      "id": 14,
+      "kind": "ridge",
+      "between": [
+        11,
+        12
+      ],
+      "length_ft": 8.4,
+      "verdict": "",
+      "note": ""
+    },
+    {
+      "id": 15,
+      "kind": "ridge",
+      "between": [
+        19,
+        20
+      ],
+      "length_ft": 6.4,
+      "verdict": "",
+      "note": ""
+    },
+    {
+      "id": 16,
+      "kind": "ridge",
+      "between": [
+        21,
+        22
+      ],
+      "length_ft": 6.3,
+      "verdict": "",
+      "note": ""
+    },
+    {
+      "id": 17,
+      "kind": "hip",
+      "between": [
+        9,
+        10
+      ],
+      "length_ft": 1.2,
+      "verdict": "",
+      "note": ""
+    }
+  ],
+  "missing_lines": [],
+  "intersection_line_verdicts": {
+    "correct": "the line is where the real crease is, and typed right",
+    "mistyped": "right place, wrong type (a ridge called a valley, etc)",
+    "misplaced": "wrong place on the roof",
+    "spurious": "no real crease here",
+    "short": "stops before the real crease ends",
+    "long": "runs past where the real crease ends"
+  },
+  "unassigned_footprint": {
+    "segmentation_gap": {
+      "cu2": 16.6195,
+      "ft2": 188.9,
+      "colour": "pink",
+      "meaning": "real roof, enough points to test, NO facet claims it. A segmentation failure. This is the fringe finding."
+    },
+    "capture_gap": {
+      "cu2": 62.8314,
+      "ft2": 714.1,
+      "colour": "blue",
+      "meaning": "under 2 points per cell, or outside the eroded interior. Nothing could have been fitted here; only a reflight changes it."
+    },
+    "reconciliation": {
+      "note": "reconciles the render's magenta against the coverage report. They differ because they are computed against different bases, not because either is wrong.",
+      "render_layer_A_segmentation_gap": {
+        "definition": "interior AND testable AND not explained",
+        "cu2": 16.6195,
+        "ft2": 188.9,
+        "equals_coverage_unexplained": "this IS the 33.682 cu^2 that split_coverage reports as unexplained"
+      },
+      "render_layer_B_capture_gap": {
+        "definition": "everything else the old single layer covered: filled holes (under 2 points, untestable) plus the perimeter ring outside the eroded interior",
+        "cu2": 62.8314,
+        "ft2": 714.1,
+        "of_which_filled_holes_cu2": 60.4024,
+        "of_which_perimeter_ring_cu2": 2.429
+      },
+      "old_single_layer": {
+        "definition": "filled footprint AND not explained, the first render",
+        "cu2": 79.4509,
+        "ft2": 902.9
+      },
+      "bases": {
+        "filled_footprint_cu2": 362.105,
+        "eroded_interior_cu2": 352.707,
+        "density_testable_cu2": 290.256,
+        "explained_cu2": 256.574,
+        "coverage_unexplained_cu2": 33.682
+      }
+    }
+  }
+}

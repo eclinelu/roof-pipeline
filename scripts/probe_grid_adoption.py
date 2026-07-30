@@ -108,9 +108,16 @@ def main():
 
     # ---- 1 + 2: decomposition -------------------------------------------
     configs = {
-        "old_extent_loose_PUBLISHED": dict(anchor="extent", exact_pitch=False),
-        "pitch_fix_only": dict(anchor="extent", exact_pitch=True),
-        "origin_fix_only": dict(anchor="lattice", exact_pitch=False),
+        # allow_superseded=True on the three non-adopted configurations: they
+        # exist precisely to recompute superseded numbers, which the 2026-07-30
+        # guard in coverage_masks otherwise refuses. The adopted config below
+        # does NOT set it, so it stays guarded.
+        "old_extent_loose_PUBLISHED": dict(anchor="extent", exact_pitch=False,
+                                           allow_superseded=True),
+        "pitch_fix_only": dict(anchor="extent", exact_pitch=True,
+                               allow_superseded=True),
+        "origin_fix_only": dict(anchor="lattice", exact_pitch=False,
+                                allow_superseded=True),
         "adopted_lattice_exact": dict(anchor="lattice", exact_pitch=True),
     }
     table = {k: readout(points, facets, band, cell, **v)

@@ -138,7 +138,11 @@ ORIGIN_AUDIT = [
 def measure(points, facets, band, cell, origin, exact_pitch=False):
     masks, g, _, _ = cov.coverage_masks(points, facets, band, cell,
                                         origin=origin,
-                                        exact_pitch=exact_pitch)
+                                        exact_pitch=exact_pitch,
+                                        # this probe's whole subject is the
+                                        # pre-fix phase behaviour, so it opts
+                                        # past the 2026-07-30 guard by design
+                                        allow_superseded=True)
     split = cov.split_coverage(masks, cell)
     foot = cov.footprint_three_ways(masks, cell)
     return dict(

@@ -4,6 +4,8 @@ _Append only. Newest at the top. Past entries are never edited. A reversal is a 
 
 ## Entries (newest first)
 
+- [2026-07-30: CONSTRAINT DISCOVERED: the published per-facet areas do not recompute today, on facets that are provably identical. Reported, not fixed](2026-07-30-published-areas-do-not-recompute.md)
+- [2026-07-30: RESULT: the grid adoption is EXECUTED and ADOPTED. Five of five predictions PASS, and the run reproduces the 2026-07-28 artifact bit for bit](2026-07-30-grid-adoption-executed-and-scored.md)
 - [2026-07-30: PRE-REGISTRATION: executing the approved grid adoption, and the five values that decide whether it worked](2026-07-30-preregistration-grid-adoption-execution.md)
 - [2026-07-29: TEMPLATE CHANGE: every pre-registered prediction carries a POWER CHECK alongside its direction](2026-07-29-power-check-required-in-preregistrations.md)
 - [2026-07-29: The shingle sawtooth is ACCEPTED, UNTESTED as the explanation for the 1.83 deg pitch bias, and recorded as a KNOWN LIMIT under 3e](2026-07-29-sawtooth-accepted-untested-known-limit.md)

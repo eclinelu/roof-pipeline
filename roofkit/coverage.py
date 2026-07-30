@@ -144,7 +144,8 @@ def cell_centers(cells, g):
 
 
 def coverage_masks(roof, facets, band, cell, min_pts=2, fill_holes=True,
-                   origin=None, exact_pitch=True, anchor="lattice"):
+                   origin=None, exact_pitch=True, anchor="lattice",
+                   allow_superseded=False):
     """Split the plan grid into footprint / explained / residual masks.
 
     testable : a cell holding at least min_pts roof points. Only these can be
@@ -191,6 +192,73 @@ def coverage_masks(roof, facets, band, cell, min_pts=2, fill_holes=True,
                                 range=[[g["xlo"], g["xlo"] + g["nx"] * cell],
                                        [g["ylo"], g["ylo"] + g["ny"] * cell]],
                                 weights=w)
+    # --- THE SHARED-LATTICE ASSERTION (adopted 2026-07-30) -----------------
+    # Hall and Hexp are compared CELL FOR CELL below, and every area is charged
+    # as cell^2. That is only meaningful if the two rasters are the same raster.
+    # Before 2026-07-28 they were not: plan_grid asked for nx bins spanning
+    # [xlo, xhi], so its bins were 99.978 percent of `cell`, while Hexp's were
+    # exactly `cell`. The two drifted apart by 0.487 x 0.731 CELLS at the far
+    # corner and the published coverage was substantially an artifact of it.
+    #
+    # The fix is now the default, so this asserts the fix is actually in force
+    # rather than trusting the defaults, which is the whole point of standing
+    # rule R4.
+    # `allow_superseded` is the ONLY way past the first two checks, and it
+    # exists because "supersede, never overwrite" is only a real property if a
+    # superseded number can still be RECOMPUTED rather than merely quoted.
+    # Four probes legitimately run the old configuration for exactly that, one
+    # of them an anti-null that must show the OLD path still reproduces 82.29.
+    # Making the guard opt-out rather than absolute keeps those runnable while
+    # still making it impossible for a PRODUCTION path to reach the defective
+    # grid silently, which is the failure that actually happened.
+    if not allow_superseded:
+        if not exact_pitch:
+            raise AssertionError(
+                "coverage_masks: exact_pitch=False. Hall's bins are span/nx "
+                "wide and Hexp's are exactly `cell` wide, so the two rasters "
+                "this function compares cell-for-cell have different pitches. "
+                "This is the 2026-07-28 grid defect. A probe recomputing a "
+                "superseded number must say so with allow_superseded=True.")
+        if origin is None and anchor != "lattice":
+            raise AssertionError(
+                f"coverage_masks: anchor={anchor!r}, so the origin is an "
+                f"arbitrary sub-cell offset of the data rather than a declared "
+                f"lattice point. Adopted 2026-07-28: every raster anchors to "
+                f"floor(min/cell)*cell.")
+        if origin is None and anchor == "lattice":
+            want = lattice_origin(roof, cell)
+            if (g["xlo"], g["ylo"]) != (want[0], want[1]):
+                raise AssertionError(
+                    f"coverage_masks: grid origin ({g['xlo']!r}, "
+                    f"{g['ylo']!r}) is not the declared lattice origin "
+                    f"({want[0]!r}, {want[1]!r}) derived from the same global "
+                    f"min by floor(min/cell)*cell.")
+        # THE INDEPENDENT CHECK (R4): the assertions above are read off the
+        # ARGUMENTS, so they would all pass if the rasters were misaligned for
+        # a reason nobody anticipated. This one is not: it is a property of the
+        # DATA that must hold for any pair of aligned rasters and must break
+        # for a misaligned pair. Every explained point is also an `all` point,
+        # so cell by cell Hexp can never exceed Hall. If the two grids drifted
+        # apart, some cell is credited with explained points Hall never counted
+        # there. Both are sums of 0/1 doubles, so this is integer-exact.
+        #
+        # It sits inside the `not allow_superseded` branch, and that placement
+        # is the point rather than a convenience. MEASURED 2026-07-30 on
+        # big_house: under the superseded configuration it fires on 707,650
+        # cells, which is this defect's first direct count rather than an
+        # inference from coverage moving. A probe recomputing a superseded
+        # number is deliberately reproducing the misalignment, so the invariant
+        # SHOULD be violated there, and enforcing it would make the old number
+        # unrecomputable, which is the property "supersede, never overwrite"
+        # depends on.
+        if not (Hexp <= Hall).all():
+            bad = int((Hexp > Hall).sum())
+            raise AssertionError(
+                f"coverage_masks: Hexp exceeds Hall in {bad:,} cells. "
+                f"Explained points are a subset of all points, so this is "
+                f"impossible on a single shared raster. The grids are not "
+                f"aligned.")
+
     testable = Hall >= min_pts
     # fill_holes=False reproduces the PRE-2026-07-26 base, in which the mask was
     # eroded with its holes still in it. It exists so the coverage change can be

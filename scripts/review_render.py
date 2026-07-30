@@ -392,6 +392,10 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("dataset")
     ap.add_argument("--stamp", default=str(date.today()))
+    # Which canonical state to draw. Defaults to the long-standing one so
+    # every existing invocation is unchanged; passed explicitly when a new
+    # state is being rendered as the baseline for a later comparison.
+    ap.add_argument("--canonical", default=CANONICAL_STAMP)
     args = ap.parse_args()
     name = Path(args.dataset).name
     out = REPO / "reports" / name / "review" / args.stamp
@@ -399,7 +403,7 @@ def main():
     rev_dir = REPO / "reviews" / name
     rev_dir.mkdir(parents=True, exist_ok=True)
 
-    doc, points, facets, cfg = load_canonical(args.dataset, CANONICAL_STAMP)
+    doc, points, facets, cfg = load_canonical(args.dataset, args.canonical)
     spacing = scalar(doc, "spacing_cu")
     band = scalar(doc, "band_cu")
     cell = scalar(doc, "cell_cu")
@@ -601,7 +605,7 @@ def main():
     ]
     ax.legend(handles=handles, loc="upper left", fontsize=11, framealpha=0.85,
               facecolor="#111111", edgecolor="#666666", labelcolor="white")
-    ax.set_title(f"{name}: canonical-{CANONICAL_STAMP}, {len(facets)} facets "
+    ax.set_title(f"{name}: canonical-{args.canonical}, {len(facets)} facets "
                  f"on the cloud's own colour   ({args.stamp})\n"
                  f"DEVELOPMENT SITE. Side artifact, nothing adopted.",
                  fontsize=14)
@@ -644,7 +648,7 @@ def main():
     # wrong place. Under one field that is recorded as "correct" and the
     # boundary error disappears from the record entirely.
     tmpl = dict(
-        review_of=f"canonical-{CANONICAL_STAMP}",
+        review_of=f"canonical-{args.canonical}",
         dataset=name, date=args.stamp, reviewer="Emmett",
         schema_version=2,
         site_role=("DEVELOPMENT site. See "

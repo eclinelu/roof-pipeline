@@ -1,0 +1,267 @@
+{
+  "task": "score the five predictions of the 2026-07-30 grid-adoption pre-registration",
+  "preregistration": "decisions/2026-07-30-preregistration-grid-adoption-execution.md",
+  "dataset": "big_house",
+  "date": "2026-07-30",
+  "scored_artifact": "canonical-2026-07-30-grid-adopted",
+  "reference_artifact": "canonical-2026-07-26-r2",
+  "summary": {
+    "n_pass": 5,
+    "n_fail": 0,
+    "verdicts": {
+      "P1": "PASS",
+      "P2": "PASS",
+      "P3": "PASS",
+      "P4": "PASS",
+      "P5": "PASS"
+    }
+  },
+  "predictions": [
+    {
+      "prediction": "P1",
+      "claim": "the 8 main facets are bit-identical to canonical-2026-07-26-r2: same sorted index sets, same plane coefficients, same centroids, at full stored precision",
+      "verdict": "PASS",
+      "detail": {
+        "all_match": true,
+        "combined_hash": "e1df986ea6ac840be520663b398e9d6edd8d392a8dcc8a27dcd06a60eea64824",
+        "prior_combined_hash": "e1df986ea6ac840be520663b398e9d6edd8d392a8dcc8a27dcd06a60eea64824",
+        "matches_preregistered_prior": true,
+        "per_facet": [
+          {
+            "facet": 0,
+            "hash": "fd8f7154e3bdd07010e5d9c288399a711221602d63325d0225ffb1bbe7fde781",
+            "reference": "fd8f7154e3bdd07010e5d9c288399a711221602d63325d0225ffb1bbe7fde781",
+            "match": true,
+            "n_points": 1538098
+          },
+          {
+            "facet": 1,
+            "hash": "b4748236d8e74982d4080338c546bc8594fc189f3bc39fa8bc49181855de24e9",
+            "reference": "b4748236d8e74982d4080338c546bc8594fc189f3bc39fa8bc49181855de24e9",
+            "match": true,
+            "n_points": 1154335
+          },
+          {
+            "facet": 2,
+            "hash": "1d049ef0d2e5d4731f5ab4733902a8ebc71e609747295f7d0e3b32635dad9e7f",
+            "reference": "1d049ef0d2e5d4731f5ab4733902a8ebc71e609747295f7d0e3b32635dad9e7f",
+            "match": true,
+            "n_points": 693991
+          },
+          {
+            "facet": 3,
+            "hash": "4a61c6e75f792132333e069f1248f17ec7cc83ec9f3819b33dc63879a1457868",
+            "reference": "4a61c6e75f792132333e069f1248f17ec7cc83ec9f3819b33dc63879a1457868",
+            "match": true,
+            "n_points": 850268
+          },
+          {
+            "facet": 4,
+            "hash": "ae5544f618df79219b94e170c3efa2abbf9648f7b3a69a5cc611089adf05e8b2",
+            "reference": "ae5544f618df79219b94e170c3efa2abbf9648f7b3a69a5cc611089adf05e8b2",
+            "match": true,
+            "n_points": 744303
+          },
+          {
+            "facet": 5,
+            "hash": "6c2d8f96201f023618d7a44a03034dba44bb0c2e6e438e6229bd6c708ac5d28e",
+            "reference": "6c2d8f96201f023618d7a44a03034dba44bb0c2e6e438e6229bd6c708ac5d28e",
+            "match": true,
+            "n_points": 669484
+          },
+          {
+            "facet": 6,
+            "hash": "c1d38070a3008dc7b0a1af15632d211ec1e6325fbb03176729a29f6c7cc13d51",
+            "reference": "c1d38070a3008dc7b0a1af15632d211ec1e6325fbb03176729a29f6c7cc13d51",
+            "match": true,
+            "n_points": 403109
+          },
+          {
+            "facet": 7,
+            "hash": "b03c8da052c6b819d50784e1d895ba99290e7f53bb2563ed9b7f006be8c90105",
+            "reference": "b03c8da052c6b819d50784e1d895ba99290e7f53bb2563ed9b7f006be8c90105",
+            "match": true,
+            "n_points": 297583
+          }
+        ]
+      },
+      "area_cross_check": {
+        "status": "REPORTED, NOT PART OF THE VERDICT",
+        "what": "a check on the AREA FUNCTION, not independent confirmation of bit-identity: identical indices and coefficients necessarily give identical areas",
+        "n_within_0_1_ft2": 1,
+        "n_facets": 8,
+        "areas": [
+          {
+            "facet": 0,
+            "area_cu2": 44.2111,
+            "area_ft2": 502.45,
+            "stored_2026_07_18_ft2": 487.4,
+            "delta_ft2": 15.051
+          },
+          {
+            "facet": 1,
+            "area_cu2": 69.5843,
+            "area_ft2": 790.81,
+            "stored_2026_07_18_ft2": 776.2,
+            "delta_ft2": 14.613
+          },
+          {
+            "facet": 2,
+            "area_cu2": 31.4518,
+            "area_ft2": 357.44,
+            "stored_2026_07_18_ft2": 349.7,
+            "delta_ft2": 7.744
+          },
+          {
+            "facet": 3,
+            "area_cu2": 53.3372,
+            "area_ft2": 606.17,
+            "stored_2026_07_18_ft2": 602.9,
+            "delta_ft2": 3.268
+          },
+          {
+            "facet": 4,
+            "area_cu2": 28.7883,
+            "area_ft2": 327.17,
+            "stored_2026_07_18_ft2": 326.5,
+            "delta_ft2": 0.674
+          },
+          {
+            "facet": 5,
+            "area_cu2": 18.728,
+            "area_ft2": 212.84,
+            "stored_2026_07_18_ft2": 211.7,
+            "delta_ft2": 1.141
+          },
+          {
+            "facet": 6,
+            "area_cu2": 33.7272,
+            "area_ft2": 383.3,
+            "stored_2026_07_18_ft2": 383.1,
+            "delta_ft2": 0.203
+          },
+          {
+            "facet": 7,
+            "area_cu2": 37.1138,
+            "area_ft2": 421.79,
+            "stored_2026_07_18_ft2": 421.8,
+            "delta_ft2": -0.008
+          }
+        ]
+      }
+    },
+    {
+      "prediction": "P2",
+      "claim": "the published deliverable stays 3559.3 ft^2 over 8 main facets",
+      "verdict": "PASS",
+      "detail": {
+        "total_area_ft2": 3559.3,
+        "n_facet_rows": 8,
+        "sum_of_rows": 3559.3,
+        "expected": 3559.3
+      }
+    },
+    {
+      "prediction": "P3",
+      "claim": "coverage on the fixed grid reproduces 94.25 pct",
+      "verdict": "PASS",
+      "detail": {
+        "pct": 94.25,
+        "explained_cu2": 272.618,
+        "testable_cu2": 289.237,
+        "expected": {
+          "pct": 94.25,
+          "explained_cu2": 272.618,
+          "testable_cu2": 289.237
+        }
+      }
+    },
+    {
+      "prediction": "P4",
+      "claim": "phase spread across the grid-origin sweep <= 0.18 points",
+      "verdict": "PASS",
+      "detail": {
+        "spread": 0.18,
+        "threshold": 0.18,
+        "source": "grid-adoption-2026-07-30.json"
+      }
+    },
+    {
+      "prediction": "P5",
+      "claim": "recovered facets stay 21 and stay OUT of the deliverable total",
+      "verdict": "PASS",
+      "detail": {
+        "n_recovered": 21,
+        "expected_n_recovered": 21,
+        "total_area_ft2": 3559.3,
+        "n_facet_rows": 8
+      },
+      "note": "404.9 ft^2, named in the task as the recovered-facet area, does not appear anywhere in this repo and is NOT what P5 is scored on. No area total has ever been computed from the 29-facet state."
+    }
+  ],
+  "assertions": [
+    {
+      "id": "S0",
+      "check": "the scorer is reading the NEW artifact, not the reference: the two states must differ somewhere",
+      "passed": true,
+      "why": "ANTI-NULL. If a path bug made both loads return the same file, every prediction would pass trivially and the pass would be meaningless.",
+      "detail": {
+        "new": 94.25,
+        "reference": 88.4
+      }
+    },
+    {
+      "id": "S1",
+      "check": "both states index the SAME source cloud",
+      "passed": true,
+      "why": "indices into a different cloud would select different geometry and the hash comparison would be meaningless",
+      "detail": {
+        "sha": "1e04669c7f9b079d"
+      }
+    },
+    {
+      "id": "S2",
+      "check": "the run recorded its own in-run main-facet hash check as passing",
+      "passed": true,
+      "why": "the scorer recomputes the hashes independently; this confirms the RUN also checked them and would have aborted before writing",
+      "detail": "e1df986ea6ac840be520663b398e9d6edd8d392a8dcc8a27dcd06a60eea64824"
+    },
+    {
+      "id": "S3",
+      "check": "the new artifact did not overwrite either frozen state",
+      "passed": true,
+      "why": "adoption must supersede, never overwrite",
+      "detail": {
+        "new": "2026-07-30-grid-adopted",
+        "reference": "2026-07-26-r2"
+      }
+    },
+    {
+      "id": "S4",
+      "check": "the single-ownership assertion ran and passed in the new run",
+      "passed": true,
+      "why": "permanent, every run: no point may be owned by two facets"
+    }
+  ],
+  "assertions_all_passed": true,
+  "carried_forward": {
+    "footprint_residue_NOT_fixed": {
+      "filled_spread_cu2": 4.4,
+      "eroded_spread_cu2": 6.2,
+      "cause": "min_pts=2 discretisation, not a grid artifact",
+      "rule": "must be carried on ANY footprint claim"
+    },
+    "capture_on_fixed_grid": {
+      "density_testable_pct": 82.72,
+      "testable_cu2": 289.237,
+      "footprint_eroded_cu2": 349.64,
+      "one_point_cells": 227964,
+      "p10_points_per_occupied_cell": 1.0
+    },
+    "pitch_bias": {
+      "deg": 1.83,
+      "status": "ACCEPTED, UNTESTED. Known limit under 3e.",
+      "rule": "stated attached to ANY pitch number, never in an appendix. NO correction is applied to any pitch on any facet anywhere in this pass."
+    }
+  }
+}

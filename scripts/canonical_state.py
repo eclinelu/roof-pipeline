@@ -114,6 +114,22 @@ def cloud_sha(points):
         np.ascontiguousarray(points, dtype=np.float64).tobytes()).hexdigest()
 
 
+def main_facet_hash(idx, rec):
+    """A facet's identity as one exact digest: its point set and its plane.
+
+    The index array is SORTED first so the digest is a property of WHICH points
+    the facet owns, not of the order RANSAC happened to return them in. Both
+    the plane and the centroid go in as their stored hex forms, which are exact
+    round-trippable doubles, so two facets collide here only if they are the
+    same 64-bit numbers rather than the same rounded printout."""
+    h = hashlib.sha256()
+    h.update(np.ascontiguousarray(np.sort(np.asarray(idx, dtype=np.int64)),
+                                  dtype=np.int64).tobytes())
+    h.update("|".join(rec["plane_abcd_hex"]).encode())
+    h.update("|".join(rec["centroid_hex"]).encode())
+    return h.hexdigest()
+
+
 def plane_of(points, normal):
     """The facet's plane as (a, b, c, d) with a unit normal, where the plane is
     a*x + b*y + c*z + d = 0 and d = -(normal . centroid).
@@ -163,6 +179,9 @@ def main():
     # different floor would do; normal runs derive it from the cloud and never
     # pass this.
     ap.add_argument("--min-points", type=int, default=None)
+    # Abort unless this run's MAIN facets are bit-identical to the named
+    # earlier stamp. Used when a change is claimed not to touch main discovery.
+    ap.add_argument("--assert-main-hashes", default=None, metavar="STAMP")
     args = ap.parse_args()
     min_points_override = args.min_points
     cfg = load_config(args.dataset)
@@ -247,14 +266,71 @@ def main():
     # arithmetic over fixed points: no fitting, no randomness.
     masks_post, g_post, _, _ = cov.coverage_masks(points, allf, band, cell)
 
+    rows = [facet_record(k, f, "main" if k < len(facets) else "recovered",
+                         s_full) for k, f in enumerate(allf)]
+
+    # --- THE MAIN-FACET REGRESSION ASSERTION (opt in, 2026-07-30) ----------
+    # Runs BEFORE anything is written, so a run that disturbed the frozen main
+    # facets leaves no artifact behind to be mistaken for a good one.
+    #
+    # Compares this run's MAIN facets against a named earlier state at full
+    # stored precision: the sorted int64 index array, the plane coefficients
+    # and the centroid, all as exact bit patterns rather than rounded decimals.
+    # Pitch and area are deliberately NOT part of the hash. They are FUNCTIONS
+    # of the indices and the plane, so including them would add no information
+    # while making the check fail for a reason (a changed area formula) that
+    # has nothing to do with facet identity.
+    #
+    # Off by default and keyed by an explicit stamp, because hard-coding one
+    # dataset's hashes into a general script would make it a big_house script.
+    main_hash_report = None
+    if args.assert_main_hashes:
+        ref_stamp = args.assert_main_hashes
+        ref_doc = json.loads((out / f"canonical-{ref_stamp}.json").read_text())
+        ref_npz = np.load(out / f"canonical-{ref_stamp}.npz")
+        ref_main = [r for r in ref_doc["facets"] if r["kind"] == "main"]
+        mism = []
+        pairs = []
+        if len(ref_main) != len(facets):
+            mism.append(f"main facet COUNT {len(facets)} vs "
+                        f"{len(ref_main)} in {ref_stamp}")
+        for k in range(min(len(ref_main), len(facets))):
+            got = main_facet_hash(allf[k]["idx"], rows[k])
+            want = main_facet_hash(ref_npz[f"facet_{k}"], ref_main[k])
+            pairs.append(dict(facet=k, hash=got, reference=want,
+                              match=bool(got == want)))
+            if got != want:
+                mism.append(f"facet {k}: {got[:16]} != {want[:16]} "
+                            f"(n_points {len(allf[k]['idx']):,} vs "
+                            f"{ref_main[k]['n_points']:,})")
+        combined = hashlib.sha256(
+            "".join(p["hash"] for p in pairs).encode()).hexdigest()
+        ref_combined = hashlib.sha256(
+            "".join(p["reference"] for p in pairs).encode()).hexdigest()
+        if mism:
+            print(f"\n  MAIN-FACET HASH CHECK FAILED against {ref_stamp}, "
+                  f"NOTHING WRITTEN:")
+            for m in mism:
+                print("   ", m)
+            sys.exit(3)
+        print(f"  main-facet hash check PASSED against {ref_stamp}: all "
+              f"{len(pairs)} main facets bit-identical")
+        print(f"    combined {combined}")
+        main_hash_report = dict(
+            reference_stamp=ref_stamp, n_main=len(pairs), all_match=True,
+            combined_hash=combined, reference_combined_hash=ref_combined,
+            per_facet=pairs,
+            what="sha256(sorted int64 index array || plane_abcd_hex || "
+                 "centroid_hex), compared at full stored precision",
+            why="pitch and area are functions of these, so hashing them too "
+                "would add no information and could fail for reasons "
+                "unrelated to facet identity")
+
     # --- write ------------------------------------------------------------
     npz = out / f"canonical-{args.stamp}.npz"
     np.savez_compressed(
         npz, **{f"facet_{k}": np.asarray(f["idx"], dtype=np.int64)
                 for k, f in enumerate(allf)})
-
-    rows = [facet_record(k, f, "main" if k < len(facets) else "recovered",
-                         s_full) for k, f in enumerate(allf)]
     doc = dict(
         task="canonical facet state under probability=1.0 + size floor (R1)",
         dataset=Path(args.dataset).name, date=args.stamp,
@@ -343,6 +419,7 @@ def main():
         filled_holes=cov.filled_hole_report(masks_post, cell),
         # B3: the two metrics the old single coverage number was conflating.
         coverage=cov.split_coverage(masks_post, cell),
+        main_facet_hash_check=main_hash_report,
         single_ownership_check=dict(
             ran=True, passed=True,
             what="no point index appears in two facets' index arrays",

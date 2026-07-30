@@ -149,7 +149,8 @@ def main():
     split_new = cov.split_coverage(masks, cell)
     dt_new = split_new["density_testable_fraction"]["pct"]
     masks_old, _, _, _ = cov.coverage_masks(points, facets, band, cell,
-                                            anchor="extent", exact_pitch=False)
+                                            anchor="extent", exact_pitch=False,
+                                            allow_superseded=True)
     dt_old = cov.split_coverage(masks_old, cell)["density_testable_fraction"]["pct"]
     checks.append(dict(
         id="A2",
