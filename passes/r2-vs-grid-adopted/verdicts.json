@@ -25,6 +25,7 @@
  "n_facet_rows": 29,
  "n_line_rows": 18,
  "entries": {
+  "facet-row-0:verdict": "o",
   "facet-row-0:compare": "",
   "facet-row-1:compare": "",
   "facet-row-2:compare": "",
@@ -74,7 +75,6 @@
   "line-row-17:compare": ""
  },
  "refused": {
-  "facet-row-0:verdict": "empty",
   "facet-row-1:verdict": "empty",
   "facet-row-2:verdict": "empty",
   "facet-row-3:verdict": "empty",

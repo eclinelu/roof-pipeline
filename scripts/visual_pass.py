@@ -1148,9 +1148,13 @@ def serve(ctx, port):
 
     with S(("127.0.0.1", port), H) as srv:
         url = f"http://127.0.0.1:{srv.server_address[1]}/{rel}"
-        print(f"\n  open: {url}")
-        print(f"  verdicts stream to: {os.path.relpath(vpath, REPO)}")
-        print("  ctrl-c to stop\n")
+        # Flush explicitly. Python block-buffers stdout when it is not attached
+        # to a terminal, so a backgrounded or piped run prints the URL nowhere
+        # until the process exits -- which, for a server, is never. It looks
+        # exactly like a hang.
+        print(f"\n  open: {url}", flush=True)
+        print(f"  verdicts stream to: {os.path.relpath(vpath, REPO)}", flush=True)
+        print("  ctrl-c to stop\n", flush=True)
         try:
             webbrowser.open(url)
         except Exception:
