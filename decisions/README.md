@@ -4,6 +4,7 @@ _Append only. Newest at the top. Past entries are never edited. A reversal is a 
 
 ## Entries (newest first)
 
+- [2026-07-30: CORRECTION: big_house was reconstructed at `pc_quality=medium`, not `high`, and the 67.14 / 60.10 capture comparison is confounded by that](2026-07-30-correction-big-house-was-medium-not-high.md)
 - [2026-07-30: `--pc-quality ultra` becomes the ODM default, both held-out sites are rebuilt on it, and a defect that vanishes on a denser cloud is DENSITY-DEPENDENT rather than fixed](2026-07-30-ultra-becomes-the-odm-default.md)
 - [2026-07-30: CONSTRAINT DISCOVERED: the published per-facet areas do not recompute today, on facets that are provably identical. Reported, not fixed](2026-07-30-published-areas-do-not-recompute.md)
 - [2026-07-30: RESULT: the grid adoption is EXECUTED and ADOPTED. Five of five predictions PASS, and the run reproduces the 2026-07-28 artifact bit for bit](2026-07-30-grid-adoption-executed-and-scored.md)
