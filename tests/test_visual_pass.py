@@ -170,6 +170,92 @@ def test_real_pass_has_exactly_eight_bit_identical_pairs():
     assert sorted(p["old"] for p in exact) == list(range(8))
 
 
+def test_content_bbox_finds_the_ink_and_reports_the_gain(tmp_path):
+    from PIL import Image
+    import numpy as np
+    a = np.full((200, 400, 3), 255, np.uint8)
+    a[20:60, 100:300] = 0                     # 200x40 of ink in a 400x200 frame
+    p = tmp_path / "t.png"
+    Image.fromarray(a).save(p)
+    bb = vp.content_bbox(p, pad=0)
+    assert (bb["x0"], bb["y0"], bb["w"], bb["h"]) == (100, 20, 200, 40)
+    assert bb["used_pct"] == pytest.approx(10.0)
+    assert bb["gain"] == pytest.approx(10.0)
+
+
+def test_content_bbox_is_a_no_op_on_a_full_frame(tmp_path):
+    from PIL import Image
+    import numpy as np
+    a = np.zeros((100, 100, 3), np.uint8)
+    p = tmp_path / "full.png"
+    Image.fromarray(a).save(p)
+    bb = vp.content_bbox(p, pad=0)
+    assert bb["gain"] == pytest.approx(1.0)
+
+
+def test_crop_css_maps_the_content_rect_onto_the_pane():
+    # The browser math, checked in Python: with a pane C px wide, the content
+    # rectangle must land at (0,0) and exactly fill the pane.
+    bb = {"x0": 721, "y0": 25, "w": 1093, "h": 440, "img_w": 1950, "img_h": 1650}
+    C = 700.0
+    img_w_px = C * (100.0 * bb["img_w"] / bb["w"]) / 100.0
+    scale = img_w_px / bb["img_w"]
+    box_h = C * bb["h"] / bb["w"]                       # from aspect-ratio w/h
+    left_px = C * (-100.0 * bb["x0"] / bb["w"]) / 100.0
+    top_px = box_h * (-100.0 * bb["y0"] / bb["h"]) / 100.0
+    assert left_px == pytest.approx(-bb["x0"] * scale)  # content x0 lands at 0
+    assert top_px == pytest.approx(-bb["y0"] * scale)   # content y0 lands at 0
+    assert bb["w"] * scale == pytest.approx(C)          # and fills the pane
+    assert bb["h"] * scale == pytest.approx(box_h)
+
+
+def test_facet_4_is_the_render_outlier_and_the_crop_recovers_it():
+    # The reason cropping exists. If review_render.py is ever fixed, facet 4's
+    # frame usage rises and this test failing is the signal to drop the crop.
+    d = vp.REPO / "reports/big_house/review/2026-07-30-grid-adopted"
+    used = {i: vp.content_bbox(d / f"facet-{i:02d}.png")["used_pct"] for i in range(29)}
+    assert min(used, key=used.get) == 4
+    assert used[4] < 20.0
+    assert sorted(used.values())[1] > 40.0          # nothing else is close
+    assert vp.content_bbox(d / "facet-04.png")["gain"] > 5.0
+
+
+def test_crop_can_be_turned_off():
+    pane = {"idx": 4, "facet": {},
+            "img": vp.REPO / "reports/big_house/review/2026-07-30-grid-adopted/facet-04.png"}
+    out_dir = vp.REPO / "passes" / "a-vs-b"
+    assert "cropbox" in vp.pane_html(pane, "NEW", out_dir, crop=True)
+    assert "cropbox" not in vp.pane_html(pane, "NEW", out_dir, crop=False)
+    # either way the full render stays one click away
+    for c in (True, False):
+        assert "facet-04.png\" target=\"_blank\"" in vp.pane_html(pane, "NEW", out_dir, crop=c)
+
+
+def test_a_cropped_pane_always_says_it_is_cropped():
+    # A review instrument that silently alters what you see is worse than one
+    # that shows you a bad frame.
+    pane = {"idx": 4, "facet": {},
+            "img": vp.REPO / "reports/big_house/review/2026-07-30-grid-adopted/facet-04.png"}
+    out = vp.pane_html(pane, "NEW", vp.REPO / "passes" / "a-vs-b", crop=True)
+    assert "cropbox" in out and "cropnote" in out and "cropped" in out
+
+
+def test_header_collapses_but_keeps_the_standing_caveats():
+    ctx = _mini_ctx()
+    out = vp.render_html(ctx)
+    assert 'id="detail" class="hidden"' in out      # collapsed by default
+    assert 'id="toggle"' in out and 'id="terse"' in out
+    # the three standing notices must survive collapsing, in full
+    for must in ("PIXEL DIFF CAVEAT", "THIS PASS IS NOT BLIND", "STANDING RULE 7",
+                 "PANES ARE CROPPED TO THEIR CONTENT"):
+        assert must in out
+    # and their headlines must be visible while collapsed
+    terse = out.split('id="terse"')[1].split("</div>")[0]
+    assert "NOT BLIND" in terse and "rule 7" in terse
+    # completeness status is never hidden behind the toggle
+    assert out.index('id="status"') < out.index('id="detail"')
+
+
 def test_guard_refuses_artifact_and_review_directories():
     repo = vp.REPO
     for bad in [repo / "reports" / "big_house" / "x.html",
@@ -194,10 +280,8 @@ def test_preset_strings_are_refused_as_bare_verdicts():
         assert good.strip().lower() not in vp.PRESET_STRINGS
 
 
-def test_html_renders_all_five_layout_cases():
-    # Drives render_html over a context holding every case, so a template break
-    # in the merge/split/new/vanished branches fails here rather than silently
-    # producing a page with an empty pane where a finding should be.
+def _mini_ctx():
+    """A context covering every layout case, for driving render_html."""
     def pane(idx):
         return {"idx": idx, "img": None, "facet": {"kind": "recovered", "pitch_deg": 12.0,
                                                    "n_points": 1000,
@@ -224,6 +308,15 @@ def test_html_renders_all_five_layout_cases():
                    "old": {"id": 1, "kind": "hip", "between": [2, 4], "length_ft": 3.0},
                    "new": None}],
     }
+    return ctx
+
+
+def test_html_renders_all_five_layout_cases():
+    # Drives render_html over a context holding every case, so a template break
+    # in the merge/split/new/vanished branches fails here rather than silently
+    # producing a page with an empty pane where a finding should be.
+    ctx = _mini_ctx()
+    rows = ctx["rows"]
     out = vp.render_html(ctx)
     assert "no predecessor" in out and "no successor" in out
     assert "THIS IS A FINDING" in out

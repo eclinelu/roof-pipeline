@@ -137,6 +137,53 @@ in the output. An undated render set compared against a dated one produces a
 diff nobody can attribute later, and the honest failure mode is to print
 "provenance unknown" rather than to let the row imply the diff is trustworthy.
 
+## Panes must be legible, and any correction must be declared
+
+A render is evidence only to the extent it can be seen. Renders are produced by
+a different tool with its own layout logic, and that logic fails on outliers:
+one facet in the first pass drew its content into **15 percent of its frame**
+while every other facet used 47 to 98 percent, because a fixed figure size with
+an equal aspect ratio cannot present an elongated facet, and out-of-view labels
+drawn at whole-scene coordinates shrank the axes further.
+
+So the harness does not trust the frame it is given:
+
+- **Measure how much of each render actually holds content.** An outlier is a
+  finding about the render, reported as a number, not something the grader is
+  left to squint at.
+- **Correct it at display time**, by scaling the pane to the region that holds
+  content. Never by regenerating the image, and never by editing render code
+  from inside a pass. Render code is out of scope and is routinely in use by
+  another run.
+- **Every corrected pane says it was corrected**, with the factor, and the
+  untouched original stays one click away. A review instrument that silently
+  alters what you see is worse than one that shows you a bad frame, because the
+  grader can compensate for a bad frame and cannot compensate for a change
+  nobody told them about.
+- **The correction is display-only and must be switchable off**, so a disputed
+  pane can always be checked against the raw render.
+
+The underlying render defect is still a defect. Record it so it can be fixed at
+the source later; do not let the display fix quietly close the issue.
+
+## The record must be present without dominating
+
+Standing notices — the pixel-diff caveat, the non-blind property, rule 7, any
+display correction in force — must appear in the harness output. Appearing is
+not the same as occupying the screen. Three full-width banners pinned above
+every row is how a caveat becomes wallpaper that nobody reads and that costs
+real estate the actual evidence needs.
+
+The requirement is therefore two-sided:
+
+- Collapsed by default to a single compact line that still names each notice, so
+  nothing is hidden and nothing is lost.
+- Expandable on demand to the full text, with the choice remembered.
+- **The completeness status is never collapsed.** It is live state, not a
+  standing notice, and the grader needs it visible at all times.
+
+A caveat is meant to be read once and remembered, not shouted on every scroll.
+
 ## Verdicts
 
 **Free text only.** No multiple choice, no dropdown, no preset codes, no
@@ -210,6 +257,9 @@ rather than warning:
 - An empty verdict, or a verdict matching a known preset string, is refused.
 - The verdict count matches the facet count in the artifact.
 - Writing into an artifact directory fails.
+- Any display correction is reversible and reports its own magnitude, so a pane
+  that was silently mangled and a pane that was legitimately rescaled cannot
+  look the same.
 
 See the silent-failure register for why every diagnostic carries an assertion
 independent of its own result.

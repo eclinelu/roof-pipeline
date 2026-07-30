@@ -466,6 +466,57 @@ def sha256(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
+_BBOX_CACHE = {}
+
+
+def content_bbox(path, pad=10):
+    """Where the ink actually is in a render, so the pane can crop to it.
+
+    WHY THIS EXISTS. review_render.py draws every per-facet close-up into a
+    fixed figsize=(13, 11) with ax.set_aspect("equal"), and two things then
+    compound:
+
+      1. An elongated facet cannot fill a fixed-aspect frame. Facet 4's data is
+         2.50:1 against a 1.18:1 figure, which caps it at ~45 percent of the
+         frame before anything else goes wrong.
+      2. The close-up zooms into a small part of the overview, but the line and
+         facet labels are placed at OVERVIEW data coordinates and matplotlib
+         does not clip text to the axes. Labels far outside xlim/ylim still
+         render, and fig.tight_layout() then reserves margin for them, shrinking
+         the axes uniformly. Facet 4 is the tightest zoom, so it strays most.
+
+    Measured: facet 4 uses 14.8 percent of its frame. Every other facet uses 47
+    to 98 percent. A standalone repro of both mechanisms reproduces the collapse
+    (45 percent from aspect alone, dropping to 28 percent and below once
+    out-of-view labels are added).
+
+    The real fix is in review_render.py -- size the figure to the facet's
+    aspect, and clip or drop labels outside the view. That file is off limits
+    here: a run is using it right now, and this harness never touches render
+    code. So the pass crops for DISPLAY only. No PNG is read-modified-written;
+    this reads pixels and returns a rectangle, and the browser does the rest.
+    Every cropped pane says so in its header and still links to the full image.
+    """
+    key = (str(path), pad)
+    if key in _BBOX_CACHE:
+        return _BBOX_CACHE[key]
+    a = np.asarray(Image.open(path).convert("RGB"))
+    ink = (a < 250).any(axis=-1)          # the figure background is white
+    ys, xs = np.where(ink)
+    if len(xs) == 0:
+        out = None
+    else:
+        H, W = ink.shape
+        x0 = max(0, int(xs.min()) - pad); x1 = min(W - 1, int(xs.max()) + pad)
+        y0 = max(0, int(ys.min()) - pad); y1 = min(H - 1, int(ys.max()) + pad)
+        cw, ch = x1 - x0 + 1, y1 - y0 + 1
+        out = {"x0": x0, "y0": y0, "w": cw, "h": ch, "img_w": W, "img_h": H,
+               "used_pct": 100.0 * cw * ch / (W * H),
+               "gain": (W * H) / float(cw * ch)}
+    _BBOX_CACHE[key] = out
+    return out
+
+
 def pixel_diff(a, b):
     """Compare two render files. Never writes an image."""
     if not (a and b and Path(a).exists() and Path(b).exists()):
@@ -534,7 +585,7 @@ def line_rows(old_review, new_review, facet_map):
 # assembly
 # --------------------------------------------------------------------------
 
-def build(dataset, old_stamp, new_stamp, out_dir=None):
+def build(dataset, old_stamp, new_stamp, out_dir=None, crop=True):
     old = load_artifact(dataset, old_stamp)
     new = load_artifact(dataset, new_stamp)
     old_dir, old_review = find_render_dir(dataset, old_stamp)
@@ -587,7 +638,7 @@ def build(dataset, old_stamp, new_stamp, out_dir=None):
         "old_prov": render_provenance(old_dir),
         "new_prov": render_provenance(new_dir),
         "rows": rows, "lines": lines,
-        "out_dir": out_dir,
+        "out_dir": out_dir, "crop": crop,
     }
 
     # Assertion 4: verdict slots must cover every facet in each artifact.
@@ -640,7 +691,7 @@ def diff_html(d):
             f'mean |delta| {d["mean_abs_delta"]:.2f}</div>')
 
 
-def pane_html(pane, side, out_dir):
+def pane_html(pane, side, out_dir, crop=True):
     f = pane["facet"]
     src = img_src(pane["img"], out_dir)
     bits = []
@@ -656,9 +707,27 @@ def pane_html(pane, side, out_dir):
     if src is None:
         return (f'<div class="pane missing"><div class="panehead">{side} facet '
                 f'{pane["idx"]}</div><div class="nopane">render file not found</div></div>')
+
+    bb = content_bbox(pane["img"]) if crop else None
+    if bb and bb["gain"] >= 1.15:
+        # Scale the image so the ink rectangle exactly fills the pane. left is a
+        # percentage of the box width and top of its height, hence the two
+        # different denominators.
+        note = (f'<span class="cropnote">cropped &times;{bb["gain"]:.1f} '
+                f'&mdash; the render put its content in {bb["used_pct"]:.0f}% of '
+                f'the frame</span>')
+        img = (f'<div class="cropbox" style="aspect-ratio:{bb["w"]}/{bb["h"]}">'
+               f'<img src="{src}" loading="lazy" style="'
+               f'width:{100.0 * bb["img_w"] / bb["w"]:.4f}%;'
+               f'left:{-100.0 * bb["x0"] / bb["w"]:.4f}%;'
+               f'top:{-100.0 * bb["y0"] / bb["h"]:.4f}%"></div>')
+    else:
+        note = ""
+        img = f'<img src="{src}" loading="lazy">'
     return (f'<div class="pane"><div class="panehead">{side} facet {pane["idx"]}'
-            f'<span class="pmeta">{meta}</span></div>'
-            f'<a href="{src}" target="_blank"><img src="{src}" loading="lazy"></a></div>')
+            f'<span class="pmeta">{meta}</span></div>{note}'
+            f'<a href="{src}" target="_blank" title="open the full uncropped render">'
+            f'{img}</a></div>')
 
 
 def empty_pane_html(text):
@@ -673,9 +742,10 @@ def render_html(ctx):
 
     for row in ctx["rows"]:
         case = row["case"]
-        left = ("".join(pane_html(p, "OLD", out_dir) for p in row["old_panes"])
+        crop = ctx.get("crop", True)
+        left = ("".join(pane_html(p, "OLD", out_dir, crop) for p in row["old_panes"])
                 or empty_pane_html("no predecessor<br>this facet is new"))
-        right = ("".join(pane_html(p, "NEW", out_dir) for p in row["new_panes"])
+        right = ("".join(pane_html(p, "NEW", out_dir, crop) for p in row["new_panes"])
                  or empty_pane_html("no successor<br>this facet vanished"))
 
         ov = "".join(
@@ -756,10 +826,20 @@ def render_html(ctx):
 <style>
  body{{font:15px/1.5 system-ui,sans-serif;margin:0;background:#111;color:#eee}}
  header{{position:sticky;top:0;background:#181818;border-bottom:2px solid #444;
-   padding:12px 20px;z-index:20}}
- h1{{margin:0 0 6px;font-size:19px}}
- .sub{{color:#aaa;font-size:13px}}
- .banner{{margin:8px 0;padding:8px 12px;border-radius:4px;font-size:13px}}
+   padding:7px 16px;z-index:20}}
+ .hdrtop{{display:flex;align-items:center;gap:12px;flex-wrap:wrap}}
+ h1{{margin:0;font-size:14px;font-weight:700;white-space:nowrap}}
+ h1 .sub{{font-weight:400}}
+ #toggle{{margin-left:auto;background:#2a2a2a;color:#ddd;border:1px solid #555;
+   border-radius:4px;padding:3px 10px;font:12px system-ui,sans-serif;cursor:pointer}}
+ #toggle:hover{{background:#383838}}
+ .terse{{font-size:11.5px;color:#8f8f8f;font-family:ui-monospace,monospace;
+   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+ .terse b{{color:#c8a44a}}
+ #detail{{margin-top:8px}}
+ #detail.hidden{{display:none}}
+ .sub{{color:#aaa;font-size:12.5px}}
+ .banner{{margin:6px 0;padding:7px 11px;border-radius:4px;font-size:12.5px}}
  .caveat{{background:#3a2f00;border-left:4px solid #d9a400}}
  .blind{{background:#2a2a3a;border-left:4px solid #7a7ad9}}
  .rule7{{background:#33202a;border-left:4px solid #c0506e}}
@@ -796,6 +876,10 @@ def render_html(ctx):
  .panehead{{background:#1e1e1e;padding:5px 9px;font-size:12px;font-weight:600}}
  .pmeta{{float:right;font-weight:400;color:#9a9a9a}}
  .pane img{{width:100%;display:block}}
+ .cropbox{{position:relative;overflow:hidden;width:100%}}
+ .cropbox img{{position:absolute;max-width:none;display:block}}
+ .cropnote{{display:block;background:#22282e;color:#8fb8d9;font-size:11px;
+   padding:2px 9px;border-bottom:1px solid #2e3742}}
  .nopane{{padding:38px 12px;text-align:center;color:#bbb;font-style:italic}}
  .linebody{{padding:14px;font-size:14px}}
  .vblock{{display:flex;gap:14px;margin-top:10px}}
@@ -810,27 +894,39 @@ def render_html(ctx):
  .hint{{font-size:11px;color:#888;margin-top:2px}}
 </style>
 <header>
- <h1>visual pass &mdash; {html.escape(ctx['name'])}
-   <span class="sub">{html.escape(ctx['dataset'])}</span></h1>
- <div class="sub">OLD <code>{html.escape(old['stamp'])}</code>
-   ({html.escape(str(os.path.relpath(ctx['old_dir'], REPO)))}) &nbsp;&rarr;&nbsp;
-   NEW <code>{html.escape(new['stamp'])}</code>
-   ({html.escape(str(os.path.relpath(ctx['new_dir'], REPO)))})</div>
- {prov_html(ctx['old_prov'], 'OLD')}
- {prov_html(ctx['new_prov'], 'NEW')}
- <div class="banner caveat"><b>PIXEL DIFF CAVEAT.</b> Two renders can differ in pixels
-   while the geometry is identical &mdash; axis limits, colour scaling, annotation and
-   label placement, font metrics and library versions all move pixels without moving a
-   point. <b>A changed flag means look closer, not something moved.</b> The overlap
-   fractions are computed from point index sets and are the ones that settle it.</div>
- <div class="banner blind"><b>THIS PASS IS NOT BLIND.</b> The old render is visible while
-   the new one is graded, and which is which is labelled. Recorded as a property of this
-   record.</div>
- <div class="banner rule7"><b>STANDING RULE 7.</b> Visual review can establish THAT
-   something is wrong and WHAT it is physically. It can never set a parameter value.
-   Describe what you saw, not what the fix should be.</div>
- <div><span id="status" class="incomplete">checking&hellip;</span></div>
+ <div class="hdrtop">
+  <h1>{html.escape(ctx['name'])}
+    <span class="sub">{html.escape(ctx['dataset'])}</span></h1>
+  <span id="status" class="incomplete">checking&hellip;</span>
+  <button id="toggle" type="button">details</button>
+ </div>
+ <div class="terse" id="terse"><b>NOT BLIND</b> &middot; pixel diff can change without
+   geometry changing &middot; <b>rule 7:</b> no parameter values &middot;
+   {html.escape(old['stamp'])} &rarr; {html.escape(new['stamp'])}</div>
  <div id="missing"></div>
+ <div id="detail" class="hidden">
+  <div class="sub">OLD <code>{html.escape(old['stamp'])}</code>
+    ({html.escape(str(os.path.relpath(ctx['old_dir'], REPO)))}) &nbsp;&rarr;&nbsp;
+    NEW <code>{html.escape(new['stamp'])}</code>
+    ({html.escape(str(os.path.relpath(ctx['new_dir'], REPO)))})</div>
+  {prov_html(ctx['old_prov'], 'OLD')}
+  {prov_html(ctx['new_prov'], 'NEW')}
+  <div class="banner caveat"><b>PIXEL DIFF CAVEAT.</b> Two renders can differ in pixels
+    while the geometry is identical &mdash; axis limits, colour scaling, annotation and
+    label placement, font metrics and library versions all move pixels without moving a
+    point. <b>A changed flag means look closer, not something moved.</b> The overlap
+    fractions are computed from point index sets and are the ones that settle it.</div>
+  <div class="banner blind"><b>THIS PASS IS NOT BLIND.</b> The old render is visible while
+    the new one is graded, and which is which is labelled. Recorded as a property of this
+    record.</div>
+  <div class="banner rule7"><b>STANDING RULE 7.</b> Visual review can establish THAT
+    something is wrong and WHAT it is physically. It can never set a parameter value.
+    Describe what you saw, not what the fix should be.</div>
+  <div class="banner caveat"><b>PANES ARE CROPPED TO THEIR CONTENT.</b> Some renders place
+    their content in a small part of a mostly blank frame, so each pane is scaled to the
+    rectangle that actually holds ink. Cropped panes say so and give the factor. Nothing
+    inside the image is altered, and clicking any pane opens the full uncropped PNG.</div>
+ </div>
 </header>
 <main>{''.join(parts)}</main>
 <script>
@@ -917,6 +1013,24 @@ fetch("__load__").then(r => r.ok ? r.json() : null).then(s => {{
 document.addEventListener("input", e => {{
   if(e.target.tagName === "TEXTAREA"){{ refresh(); save(); }}
 }});
+
+// The header carries standing caveats that must be present, but present is not
+// the same as shouting: three fixed banners ate the top of every scroll. They
+// collapse to one terse line and expand on demand, and the choice sticks.
+const HKEY = KEY + ":hdr";
+const detail = document.getElementById("detail");
+const terse = document.getElementById("terse");
+const toggle = document.getElementById("toggle");
+function setHdr(open){{
+  detail.classList.toggle("hidden", !open);
+  terse.style.display = open ? "none" : "";
+  toggle.textContent = open ? "hide details" : "details";
+  try {{ localStorage.setItem(HKEY, open ? "1" : "0"); }} catch(e) {{}}
+}}
+toggle.addEventListener("click", () => setHdr(detail.classList.contains("hidden")));
+let hopen = false;
+try {{ hopen = localStorage.getItem(HKEY) === "1"; }} catch(e) {{}}
+setHdr(hopen);
 </script>
 """
 
@@ -1121,6 +1235,9 @@ def main():
     ap.add_argument("--new", help="newer artifact stamp, e.g. 2026-07-30-grid-adopted")
     ap.add_argument("--out", help="output directory (default passes/<old>-vs-<new>)")
     ap.add_argument("--port", type=int, default=8777)
+    ap.add_argument("--no-crop", action="store_true",
+                    help="show each render in its full frame instead of cropping the "
+                         "pane to the rectangle that holds content")
     ap.add_argument("--no-serve", action="store_true",
                     help="build the HTML and exit; verdicts then buffer in the browser "
                          "instead of streaming to disk")
@@ -1142,7 +1259,7 @@ def main():
     print("anti-null assertions:")
     selftest(args.dataset, args.new)
 
-    ctx = build(args.dataset, args.old, args.new, args.out)
+    ctx = build(args.dataset, args.old, args.new, args.out, crop=not args.no_crop)
 
     cases = {}
     for r in ctx["rows"]:
