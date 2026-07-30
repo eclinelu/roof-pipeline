@@ -25,11 +25,15 @@
  "n_facet_rows": 29,
  "n_line_rows": 18,
  "entries": {
-  "facet-row-0:verdict": "o",
+  "facet-row-0:verdict": "overlap is the same and both images appear identical. no new comments.",
   "facet-row-0:compare": "",
+  "facet-row-1:verdict": "overlap is the same and both images appear identical. no new comments.",
   "facet-row-1:compare": "",
+  "facet-row-2:verdict": "overlap is the same and both images appear identical. no new comments.",
   "facet-row-2:compare": "",
+  "facet-row-3:verdict": "overlap is the same and both images appear identical. no new comments.",
   "facet-row-3:compare": "",
+  "facet-row-4:verdict": "this still is not fixed. i cannot make out anything to grade. i think part of the problem is you are inclusing all the line segments, even though",
   "facet-row-4:compare": "",
   "facet-row-5:compare": "",
   "facet-row-6:compare": "",
@@ -75,10 +79,6 @@
   "line-row-17:compare": ""
  },
  "refused": {
-  "facet-row-1:verdict": "empty",
-  "facet-row-2:verdict": "empty",
-  "facet-row-3:verdict": "empty",
-  "facet-row-4:verdict": "empty",
   "facet-row-5:verdict": "empty",
   "facet-row-6:verdict": "empty",
   "facet-row-7:verdict": "empty",

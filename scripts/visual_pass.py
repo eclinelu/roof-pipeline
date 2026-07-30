@@ -20,11 +20,14 @@ WHAT IT TOUCHES
     reads   reports/<dataset>/review/*/facet-NN.png       the renders themselves
     writes  passes/<old>-vs-<new>/pass.html
     writes  passes/<old>-vs-<new>/verdicts.json
+    writes  passes/<old>-vs-<new>/crops/<side>-facet-NN.png   cropped copies
 
-It never generates or modifies a PNG and never imports render code. The renders
-are evidence produced by a different run, frequently by a run still in progress
+It never MODIFIES a render and never imports render code. The renders are
+evidence produced by a different run, frequently by a run still in progress
 somewhere else, and a review harness that can rewrite its own inputs is not a
-review harness. `guard_write_path` below turns that from a promise into a check.
+review harness. The crops are NEW files under passes/; see write_crop for why
+they are not written in place. `guard_write_path` turns that from a promise
+into a check.
 
 WHY CORRESPONDENCE IS COMPUTED AND NOT ASSUMED
     Facet 12 in the old artifact is not facet 12 in the new one. Indices are
@@ -466,59 +469,12 @@ def sha256(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
-_BBOX_CACHE = {}
-
-
-def content_bbox(path, pad=10):
-    """Where the ink actually is in a render, so the pane can crop to it.
-
-    WHY THIS EXISTS. review_render.py draws every per-facet close-up into a
-    fixed figsize=(13, 11) with ax.set_aspect("equal"), and two things then
-    compound:
-
-      1. An elongated facet cannot fill a fixed-aspect frame. Facet 4's data is
-         2.50:1 against a 1.18:1 figure, which caps it at ~45 percent of the
-         frame before anything else goes wrong.
-      2. The close-up zooms into a small part of the overview, but the line and
-         facet labels are placed at OVERVIEW data coordinates and matplotlib
-         does not clip text to the axes. Labels far outside xlim/ylim still
-         render, and fig.tight_layout() then reserves margin for them, shrinking
-         the axes uniformly. Facet 4 is the tightest zoom, so it strays most.
-
-    Measured: facet 4 uses 14.8 percent of its frame. Every other facet uses 47
-    to 98 percent. A standalone repro of both mechanisms reproduces the collapse
-    (45 percent from aspect alone, dropping to 28 percent and below once
-    out-of-view labels are added).
-
-    The real fix is in review_render.py -- size the figure to the facet's
-    aspect, and clip or drop labels outside the view. That file is off limits
-    here: a run is using it right now, and this harness never touches render
-    code. So the pass crops for DISPLAY only. No PNG is read-modified-written;
-    this reads pixels and returns a rectangle, and the browser does the rest.
-    Every cropped pane says so in its header and still links to the full image.
-    """
-    key = (str(path), pad)
-    if key in _BBOX_CACHE:
-        return _BBOX_CACHE[key]
-    a = np.asarray(Image.open(path).convert("RGB"))
-    ink = (a < 250).any(axis=-1)          # the figure background is white
-    ys, xs = np.where(ink)
-    if len(xs) == 0:
-        out = None
-    else:
-        H, W = ink.shape
-        x0 = max(0, int(xs.min()) - pad); x1 = min(W - 1, int(xs.max()) + pad)
-        y0 = max(0, int(ys.min()) - pad); y1 = min(H - 1, int(ys.max()) + pad)
-        cw, ch = x1 - x0 + 1, y1 - y0 + 1
-        out = {"x0": x0, "y0": y0, "w": cw, "h": ch, "img_w": W, "img_h": H,
-               "used_pct": 100.0 * cw * ch / (W * H),
-               "gain": (W * H) / float(cw * ch)}
-    _BBOX_CACHE[key] = out
-    return out
-
-
 def pixel_diff(a, b):
-    """Compare two render files. Never writes an image."""
+    """Compare two render files. Never writes an image.
+
+    Always given the ORIGINALS, never the crops: comparing crops would let a
+    change in the crop rectangle masquerade as a change in geometry.
+    """
     if not (a and b and Path(a).exists() and Path(b).exists()):
         return None
     ha, hb = sha256(a), sha256(b)
@@ -539,6 +495,107 @@ def pixel_diff(a, b):
         mean_abs_delta=float(d.mean()),
     )
     return out
+
+
+_ROI_CACHE = {}
+
+
+def roi_bbox(path, pad=0.08):
+    """The rectangle holding the facet's actual drawing, excluding strays.
+
+    WHY THIS EXISTS, and what the earlier version of it got wrong.
+
+    review_render.py draws each per-facet close-up by zooming the WHOLE overview
+    to one facet's extent, but the line and facet labels are placed at OVERVIEW
+    data coordinates and matplotlib does not clip text to the axes. Labels
+    belonging to lines nowhere near this facet still get drawn, far outside
+    xlim/ylim, and fig.tight_layout() then tries to make room for all of them.
+    When it cannot, it collapses the axes box instead. Facet 4 is the worst
+    case: its axes box ends up roughly 320 px wide inside a 1950 px frame, so
+    its roof is drawn at 213x240 px while facet 0 gets 916x1543 and facet 10
+    gets 1513x979.
+
+    The first attempt at this cropped to the union of ALL ink, which is exactly
+    the wrong rectangle: the strays are ink, so the union still spans most of
+    the frame and the crop barely helped. Facet 4 measured "15.9 percent of the
+    frame used" under that rule when its real drawing is 1.7 percent of it.
+
+    An earlier note here blamed a fixed figure size fighting set_aspect("equal").
+    That was wrong. It came from a bounding box contaminated by the title text
+    and the strays. Facet 4's points span 12.09 x 10.02 cloud units, an aspect
+    of 1.21, which is unremarkable, and its extent is SMALLER than facet 0's.
+    Aspect has nothing to do with it; the strays have everything to do with it.
+
+    So the region of interest is the LARGEST connected ink component -- the
+    drawn panel -- padded, then unioned with any component that overlaps that
+    padded box, which keeps the labels genuinely sitting on this facet while
+    dropping the ones scattered across empty space.
+
+    A CROP CANNOT ADD DETAIL THE RENDER NEVER DREW. Facet 4 holds 213x240 real
+    pixels of roof; enlarging that to a 700 px pane is a 2x upscale and will
+    look soft. The only real fix is in review_render.py -- clip or drop
+    out-of-view labels, or drop tight_layout -- and that file is off limits
+    while another run is using it.
+    """
+    key = (str(path), pad)
+    if key in _ROI_CACHE:
+        return _ROI_CACHE[key]
+    from scipy import ndimage
+    a = np.asarray(Image.open(path).convert("RGB"))
+    H, W = a.shape[:2]
+    ink = (a < 250).any(axis=-1)          # the figure background is white
+    lab, n = ndimage.label(ink)
+    if n == 0:
+        _ROI_CACHE[key] = None
+        return None
+    sizes = ndimage.sum(ink, lab, range(1, n + 1))
+    boxes = ndimage.find_objects(lab)
+    k = int(np.argmax(sizes))
+    sl = boxes[k]
+    y0, y1, x0, x1 = sl[0].start, sl[0].stop, sl[1].start, sl[1].stop
+    # Panel plus a margin, and nothing else. An earlier version also unioned in
+    # any ink component overlapping the padded box, meaning to keep labels
+    # sitting on the facet. It kept the strays instead: they sit just outside
+    # the panel, each one drags the box out far enough to touch the next, and
+    # facet 4's crop came back with the label chain and a chopped title still
+    # attached. Labels the render drew ON the facet are inside the panel box
+    # already, so the union bought nothing and cost the whole fix.
+    px, py = int(round(pad * (x1 - x0))), int(round(pad * (y1 - y0)))
+    X0, X1, Y0, Y1 = x0 - px, x1 + px, y0 - py, y1 + py
+    X0, Y0 = max(0, X0), max(0, Y0)
+    X1, Y1 = min(W, X1), min(H, Y1)
+    out = {"x0": X0, "y0": Y0, "x1": X1, "y1": Y1,
+           "w": X1 - X0, "h": Y1 - Y0, "img_w": W, "img_h": H,
+           "panel_w": x1 - x0, "panel_h": y1 - y0,
+           "used_pct": 100.0 * (X1 - X0) * (Y1 - Y0) / (W * H),
+           "gain": (W * H) / float((X1 - X0) * (Y1 - Y0))}
+    _ROI_CACHE[key] = out
+    return out
+
+
+def write_crop(src, dst):
+    """Write a cropped copy of a render into the pass output directory.
+
+    This is the one place the harness creates an image, and it was added on
+    request so the crop can be inspected as a file rather than only as a CSS
+    transform in a browser.
+
+    THE SOURCE IS NEVER TOUCHED. The crop is a NEW file under passes/, and the
+    guard refuses any destination outside it. Overwriting the render in place
+    was asked for and is deliberately not done: those PNGs are committed
+    evidence, the pass header states which commit produced them, and rewriting
+    them would make that provenance line false while colliding with whatever
+    run is currently rendering. The original stays one click away from every
+    pane.
+    """
+    roi = roi_bbox(src)
+    if roi is None or roi["gain"] < 1.15:
+        return None
+    guard_write_path(dst)
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    with Image.open(src) as im:
+        im.crop((roi["x0"], roi["y0"], roi["x1"], roi["y1"])).save(dst)
+    return roi
 
 
 # --------------------------------------------------------------------------
@@ -622,6 +679,8 @@ def build(dataset, old_stamp, new_stamp, out_dir=None, crop=True):
             "img": render_path(new_dir, new_rd, j),
             "facet": new["facets"].get(j, {}),
         } for j in row["new"]]
+        # The pixel diff always compares the ORIGINALS. Comparing crops would
+        # let a change in the crop rectangle masquerade as a change in geometry.
         row["diff"] = (pixel_diff(row["old_panes"][0]["img"], row["new_panes"][0]["img"])
                        if row["case"] == "1-to-1" else None)
 
@@ -649,6 +708,25 @@ def build(dataset, old_stamp, new_stamp, out_dir=None, crop=True):
             f"ANTI-NULL FAIL: rows cover {covered_old} old / {covered_new} new facets, "
             f"artifacts declare {len(old['meta']['facets'])} / {len(new['meta']['facets'])}"
         )
+
+    # Crops are written as real files so they can be opened and inspected, not
+    # only viewed through a CSS transform. They go under passes/, never over the
+    # source render; see write_crop.
+    if crop:
+        n_crop = 0
+        for row in rows:
+            for side, panes in (("old", row["old_panes"]), ("new", row["new_panes"])):
+                for pane in panes:
+                    if pane["img"] is None:
+                        continue
+                    dst = out_dir / "crops" / f"{side}-facet-{pane['idx']:02d}.png"
+                    got = write_crop(pane["img"], dst)
+                    if got:
+                        pane["crop"], pane["roi"] = dst, got
+                        n_crop += 1
+        ctx["n_crops"] = n_crop
+    else:
+        ctx["n_crops"] = 0
 
     html_path = guard_write_path(out_dir / "pass.html")
     html_path.write_text(render_html(ctx), encoding="utf-8")
@@ -708,19 +786,16 @@ def pane_html(pane, side, out_dir, crop=True):
         return (f'<div class="pane missing"><div class="panehead">{side} facet '
                 f'{pane["idx"]}</div><div class="nopane">render file not found</div></div>')
 
-    bb = content_bbox(pane["img"]) if crop else None
-    if bb and bb["gain"] >= 1.15:
-        # Scale the image so the ink rectangle exactly fills the pane. left is a
-        # percentage of the box width and top of its height, hence the two
-        # different denominators.
-        note = (f'<span class="cropnote">cropped &times;{bb["gain"]:.1f} '
-                f'&mdash; the render put its content in {bb["used_pct"]:.0f}% of '
-                f'the frame</span>')
-        img = (f'<div class="cropbox" style="aspect-ratio:{bb["w"]}/{bb["h"]}">'
-               f'<img src="{src}" loading="lazy" style="'
-               f'width:{100.0 * bb["img_w"] / bb["w"]:.4f}%;'
-               f'left:{-100.0 * bb["x0"] / bb["w"]:.4f}%;'
-               f'top:{-100.0 * bb["y0"] / bb["h"]:.4f}%"></div>')
+    roi = pane.get("roi") if crop else None
+    csrc = img_src(pane.get("crop"), out_dir) if crop and pane.get("crop") else None
+    if csrc and roi:
+        soft = ("" if roi["panel_w"] >= 700 else
+                f' &middot; only {roi["panel_w"]}&times;{roi["panel_h"]} real pixels of '
+                f'panel were drawn, so it enlarges soft')
+        note = (f'<span class="cropnote">cropped &times;{roi["gain"]:.1f} &mdash; the '
+                f'render drew into {roi["used_pct"]:.1f}% of its frame{soft}. '
+                f'Click for the untouched original.</span>')
+        img = f'<img src="{csrc}" loading="lazy">'
     else:
         note = ""
         img = f'<img src="{src}" loading="lazy">'
@@ -1280,6 +1355,10 @@ def main():
               + (f"commit {p['short']} ({p['date']})" if p["known"]
                  else f"PROVENANCE UNKNOWN - {p['why']}"))
     print(f"  html: {os.path.relpath(ctx['html_path'], REPO)}")
+    if ctx.get("n_crops"):
+        print(f"  crops: {ctx['n_crops']} written to "
+              f"{os.path.relpath(ctx['out_dir'] / 'crops', REPO)} "
+              f"(new files; no source render was modified)")
 
     if args.no_serve:
         print("\n  --no-serve: open the file directly. Verdicts will buffer in the "

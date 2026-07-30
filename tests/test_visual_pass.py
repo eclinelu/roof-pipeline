@@ -170,74 +170,126 @@ def test_real_pass_has_exactly_eight_bit_identical_pairs():
     assert sorted(p["old"] for p in exact) == list(range(8))
 
 
-def test_content_bbox_finds_the_ink_and_reports_the_gain(tmp_path):
+def test_roi_is_the_drawn_panel_not_the_union_of_all_ink(tmp_path):
+    # THE bug this replaced: cropping to the union of all ink keeps the strays,
+    # because strays are ink. The ROI must be the largest connected component.
     from PIL import Image
     import numpy as np
-    a = np.full((200, 400, 3), 255, np.uint8)
-    a[20:60, 100:300] = 0                     # 200x40 of ink in a 400x200 frame
+    a = np.full((400, 400, 3), 255, np.uint8)
+    a[100:300, 120:280] = 0          # the drawn panel, 160x200
+    a[20:30, 10:40] = 0              # a stray label far away
+    a[370:380, 350:390] = 0          # and another
     p = tmp_path / "t.png"
     Image.fromarray(a).save(p)
-    bb = vp.content_bbox(p, pad=0)
-    assert (bb["x0"], bb["y0"], bb["w"], bb["h"]) == (100, 20, 200, 40)
-    assert bb["used_pct"] == pytest.approx(10.0)
-    assert bb["gain"] == pytest.approx(10.0)
+    r = vp.roi_bbox(p, pad=0.0)
+    assert (r["x0"], r["y0"], r["w"], r["h"]) == (120, 100, 160, 200)
+    assert r["panel_w"] == 160 and r["panel_h"] == 200
+    # the union of ALL ink would have spanned nearly the whole frame
+    ink = (np.asarray(Image.open(p).convert("RGB")) < 250).any(-1)
+    ys, xs = np.where(ink)
+    union_area = (xs.max() - xs.min() + 1) * (ys.max() - ys.min() + 1)
+    assert union_area > 4 * (r["w"] * r["h"])
 
 
-def test_content_bbox_is_a_no_op_on_a_full_frame(tmp_path):
+def test_roi_ignores_strays_entirely(tmp_path):
+    # The box must be panel-plus-padding and nothing else, whether or not a
+    # stray sits nearby. The first attempt unioned in any overlapping component,
+    # so each stray reached the next and the whole label chain came along.
     from PIL import Image
     import numpy as np
-    a = np.zeros((100, 100, 3), np.uint8)
+
+    def box(with_strays):
+        a = np.full((400, 400, 3), 255, np.uint8)
+        a[100:300, 120:280] = 0                  # the panel
+        if with_strays:
+            a[305:315, 130:170] = 0              # just below it
+            a[320:330, 140:180] = 0              # and reaching further
+            a[340:350, 150:190] = 0
+        p = tmp_path / f"t{int(with_strays)}.png"
+        Image.fromarray(a).save(p)
+        r = vp.roi_bbox(p, pad=0.08)
+        return (r["x0"], r["y0"], r["x1"], r["y1"])
+
+    assert box(True) == box(False)               # strays change nothing
+    # panel spans x 120..280 (w 160, pad 13) and y 100..300 (h 200, pad 16)
+    assert box(False) == (107, 84, 293, 316)
+
+
+def test_roi_is_a_no_op_on_a_full_frame(tmp_path):
+    from PIL import Image
+    import numpy as np
     p = tmp_path / "full.png"
-    Image.fromarray(a).save(p)
-    bb = vp.content_bbox(p, pad=0)
-    assert bb["gain"] == pytest.approx(1.0)
+    Image.fromarray(np.zeros((100, 100, 3), np.uint8)).save(p)
+    assert vp.roi_bbox(p, pad=0.0)["gain"] == pytest.approx(1.0)
 
 
-def test_crop_css_maps_the_content_rect_onto_the_pane():
-    # The browser math, checked in Python: with a pane C px wide, the content
-    # rectangle must land at (0,0) and exactly fill the pane.
-    bb = {"x0": 721, "y0": 25, "w": 1093, "h": 440, "img_w": 1950, "img_h": 1650}
-    C = 700.0
-    img_w_px = C * (100.0 * bb["img_w"] / bb["w"]) / 100.0
-    scale = img_w_px / bb["img_w"]
-    box_h = C * bb["h"] / bb["w"]                       # from aspect-ratio w/h
-    left_px = C * (-100.0 * bb["x0"] / bb["w"]) / 100.0
-    top_px = box_h * (-100.0 * bb["y0"] / bb["h"]) / 100.0
-    assert left_px == pytest.approx(-bb["x0"] * scale)  # content x0 lands at 0
-    assert top_px == pytest.approx(-bb["y0"] * scale)   # content y0 lands at 0
-    assert bb["w"] * scale == pytest.approx(C)          # and fills the pane
-    assert bb["h"] * scale == pytest.approx(box_h)
+def test_write_crop_never_touches_the_source(tmp_path):
+    src = vp.REPO / "reports/big_house/review/2026-07-30-grid-adopted/facet-04.png"
+    before = vp.sha256(src)
+    dst = vp.REPO / "passes" / "tmp-selftest" / "crops" / "c.png"
+    try:
+        roi = vp.write_crop(src, dst)
+        assert roi is not None and dst.exists()
+        assert vp.sha256(src) == before          # source byte-identical
+        from PIL import Image
+        with Image.open(dst) as im:
+            assert (im.width, im.height) == (roi["w"], roi["h"])
+        assert im.width < 600                     # actually cropped
+    finally:
+        if dst.exists():
+            dst.unlink()
+        for d in (dst.parent, dst.parent.parent):
+            if d.exists() and not any(d.iterdir()):
+                d.rmdir()
 
 
-def test_facet_4_is_the_render_outlier_and_the_crop_recovers_it():
+def test_write_crop_refuses_to_write_next_to_the_renders():
+    src = vp.REPO / "reports/big_house/review/2026-07-30-grid-adopted/facet-04.png"
+    for bad in (src,                                              # in place
+                src.parent / "facet-04-cropped.png",              # beside it
+                vp.REPO / "reports/big_house/facet-04.png",
+                vp.REPO / "reviews/big_house/facet-04.png"):
+        with pytest.raises(SystemExit):
+            vp.write_crop(src, bad)
+
+
+def test_facet_4_is_the_render_outlier_and_the_roi_recovers_it():
     # The reason cropping exists. If review_render.py is ever fixed, facet 4's
-    # frame usage rises and this test failing is the signal to drop the crop.
+    # panel grows and this test failing is the signal to revisit the crop.
     d = vp.REPO / "reports/big_house/review/2026-07-30-grid-adopted"
-    used = {i: vp.content_bbox(d / f"facet-{i:02d}.png")["used_pct"] for i in range(29)}
-    assert min(used, key=used.get) == 4
-    assert used[4] < 20.0
-    assert sorted(used.values())[1] > 40.0          # nothing else is close
-    assert vp.content_bbox(d / "facet-04.png")["gain"] > 5.0
+    roi = {i: vp.roi_bbox(d / f"facet-{i:02d}.png") for i in range(29)}
+    panel_px = {i: r["panel_w"] * r["panel_h"] for i, r in roi.items()}
+    assert min(panel_px, key=panel_px.get) == 4
+    assert roi[4]["panel_w"] < 300 and roi[4]["panel_h"] < 300
+    assert sorted(panel_px.values())[1] > 8 * panel_px[4]   # nothing is close
+    assert roi[4]["gain"] > 20.0
+
+
+def test_a_cropped_pane_says_so_and_admits_when_it_will_look_soft():
+    src = vp.REPO / "reports/big_house/review/2026-07-30-grid-adopted/facet-04.png"
+    roi = vp.roi_bbox(src)
+    pane = {"idx": 4, "facet": {}, "img": src,
+            "crop": vp.REPO / "passes" / "a-vs-b" / "crops" / "new-facet-04.png",
+            "roi": roi}
+    out = vp.pane_html(pane, "NEW", vp.REPO / "passes" / "a-vs-b", crop=True)
+    assert "cropnote" in out and "cropped" in out
+    assert "enlarges soft" in out              # 247px panel, honest about it
+    assert "untouched original" in out
+    # the href must point at the ORIGINAL render; only the <img> is the crop
+    href = out.split('href="')[1].split('"')[0]
+    imgsrc = out.split('<img src="')[1].split('"')[0]
+    assert href.endswith("review/2026-07-30-grid-adopted/facet-04.png")
+    assert imgsrc.endswith("crops/new-facet-04.png")
 
 
 def test_crop_can_be_turned_off():
-    pane = {"idx": 4, "facet": {},
-            "img": vp.REPO / "reports/big_house/review/2026-07-30-grid-adopted/facet-04.png"}
+    src = vp.REPO / "reports/big_house/review/2026-07-30-grid-adopted/facet-04.png"
+    pane = {"idx": 4, "facet": {}, "img": src,
+            "crop": vp.REPO / "passes" / "a-vs-b" / "crops" / "new-facet-04.png",
+            "roi": vp.roi_bbox(src)}
     out_dir = vp.REPO / "passes" / "a-vs-b"
-    assert "cropbox" in vp.pane_html(pane, "NEW", out_dir, crop=True)
-    assert "cropbox" not in vp.pane_html(pane, "NEW", out_dir, crop=False)
-    # either way the full render stays one click away
-    for c in (True, False):
-        assert "facet-04.png\" target=\"_blank\"" in vp.pane_html(pane, "NEW", out_dir, crop=c)
-
-
-def test_a_cropped_pane_always_says_it_is_cropped():
-    # A review instrument that silently alters what you see is worse than one
-    # that shows you a bad frame.
-    pane = {"idx": 4, "facet": {},
-            "img": vp.REPO / "reports/big_house/review/2026-07-30-grid-adopted/facet-04.png"}
-    out = vp.pane_html(pane, "NEW", vp.REPO / "passes" / "a-vs-b", crop=True)
-    assert "cropbox" in out and "cropnote" in out and "cropped" in out
+    assert "cropnote" in vp.pane_html(pane, "NEW", out_dir, crop=True)
+    assert "cropnote" not in vp.pane_html(pane, "NEW", out_dir, crop=False)
 
 
 def test_header_collapses_but_keeps_the_standing_caveats():

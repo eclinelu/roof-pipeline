@@ -139,32 +139,58 @@ diff nobody can attribute later, and the honest failure mode is to print
 
 ## Panes must be legible, and any correction must be declared
 
-A render is evidence only to the extent it can be seen. Renders are produced by
-a different tool with its own layout logic, and that logic fails on outliers:
-one facet in the first pass drew its content into **15 percent of its frame**
-while every other facet used 47 to 98 percent, because a fixed figure size with
-an equal aspect ratio cannot present an elongated facet, and out-of-view labels
-drawn at whole-scene coordinates shrank the axes further.
+A render is evidence only to the extent it can be seen. Renders come from a
+different tool with its own layout logic, and that logic fails on outliers. In
+the first pass one facet's roof was drawn at **213 by 240 pixels inside a 1950
+by 1650 frame** while a comparable facet got 916 by 1543, because the close-up
+zooms to one facet while the scene's labels are placed at whole-scene
+coordinates, unclipped, and the layout pass then collapses the drawing area
+trying to make room for labels that are nowhere near the facet.
 
 So the harness does not trust the frame it is given:
 
-- **Measure how much of each render actually holds content.** An outlier is a
-  finding about the render, reported as a number, not something the grader is
+- **Measure how much of each render actually holds the drawing.** An outlier is
+  a finding about the render, reported as a number, not something the grader is
   left to squint at.
-- **Correct it at display time**, by scaling the pane to the region that holds
-  content. Never by regenerating the image, and never by editing render code
-  from inside a pass. Render code is out of scope and is routinely in use by
-  another run.
+- **Crop to the DRAWN PANEL, not to the ink.** This is the trap, and it was
+  walked into once: cropping to everything non-blank keeps the strays, because
+  strays are ink. The correct region is the largest connected drawn area plus a
+  margin. Do not extend it to reach nearby marks either — each stray reaches the
+  next, and the chain pulls the crop back to the whole frame.
 - **Every corrected pane says it was corrected**, with the factor, and the
   untouched original stays one click away. A review instrument that silently
   alters what you see is worse than one that shows you a bad frame, because the
   grader can compensate for a bad frame and cannot compensate for a change
   nobody told them about.
-- **The correction is display-only and must be switchable off**, so a disputed
-  pane can always be checked against the raw render.
+- **The correction must be switchable off**, so a disputed pane can always be
+  checked against the raw render.
+- **A crop cannot add detail the render never drew.** When the drawn panel is
+  smaller than the pane it will fill, say so on the pane. Enlarging 213 pixels
+  to 700 is a real answer to "make it visible" and not an answer at all to "make
+  it sharp", and the record must not blur the two.
+
+If crops are written as files so they can be opened and inspected, they are
+**new files in the pass's own output directory**. Never over the source render:
+those are committed evidence, the pass states which commit produced them, and
+rewriting them makes that provenance line false while colliding with whatever
+run is rendering right now.
 
 The underlying render defect is still a defect. Record it so it can be fixed at
 the source later; do not let the display fix quietly close the issue.
+
+### Diagnose the render before blaming the layout
+
+The first diagnosis of the case above was wrong, and wrong in an instructive
+way. It measured a bounding box over all non-blank pixels, found an extreme
+aspect ratio, and concluded that a fixed figure size was fighting an equal-aspect
+constraint. The bounding box was contaminated by title text and by the very
+strays that were the actual problem; the facet's real aspect was unremarkable,
+and its extent was smaller than facets that rendered fine.
+
+The rule that follows: when measuring what a render did, **separate the drawn
+content from the annotation before computing anything**. A statistic over "all
+non-white pixels" is a statistic over the bug and the subject mixed together,
+and it will confidently support the wrong mechanism.
 
 ## The record must be present without dominating
 
