@@ -258,15 +258,25 @@ def render_provenance(path):
     """Which commit produced this render set, or an honest admission that we
     cannot tell. An undated render set compared against a dated one produces a
     diff nobody can attribute later, so the failure mode here is to say so
-    rather than let the row imply the diff is trustworthy."""
-    rel = os.path.relpath(path, REPO)
+    rather than let the row imply the diff is trustworthy.
+
+    TRACK THE RENDER FILES, NOT THE DIRECTORY. Asking git about the folder was
+    wrong the moment the pass started writing its own page and crops into it:
+    the newest commit touching the folder became the PASS's commit, and the
+    header then reported that the NEW renders were produced by a commit that had
+    only added a review page beside them. Provenance answered with the wrong
+    commit is worse than provenance refused, because it looks authoritative.
+    The claim is "these PNGs came from that commit", so the pathspec is the PNGs.
+    """
+    rel = os.path.relpath(path, REPO).replace("\\", "/")
+    spec = [f"{rel}/facet-*.png", f"{rel}/overview.png"]
     try:
         out = subprocess.run(
-            ["git", "log", "-1", "--format=%H%x1f%ad%x1f%s", "--date=short", "--", rel],
+            ["git", "log", "-1", "--format=%H%x1f%ad%x1f%s", "--date=short", "--", *spec],
             cwd=REPO, capture_output=True, text=True, timeout=30,
         )
         dirty = subprocess.run(
-            ["git", "status", "--porcelain", "--", rel],
+            ["git", "status", "--porcelain", "--", *spec],
             cwd=REPO, capture_output=True, text=True, timeout=30,
         )
     except (OSError, subprocess.SubprocessError):
@@ -695,6 +705,13 @@ def build(dataset, old_stamp, new_stamp, out_dir=None, crop=True,
 
     lines = line_rows(old_review, new_review, facet_map)
 
+    def overview_pane(d):
+        p = d / "overview.png"
+        return {"idx": "overview", "img": p if p.exists() else None, "facet": {}}
+
+    ov_old, ov_new = overview_pane(old_dir), overview_pane(new_dir)
+    ov_diff = pixel_diff(ov_old["img"], ov_new["img"])
+
     name = f"{old['short']}-vs-{new['short']}"
     out_dir = guard_write_path(Path(out_dir) if out_dir else REPO / "passes" / name,
                                allow_artifact_dir)
@@ -708,6 +725,7 @@ def build(dataset, old_stamp, new_stamp, out_dir=None, crop=True,
         "new_prov": render_provenance(new_dir),
         "rows": rows, "lines": lines,
         "out_dir": out_dir, "crop": crop,
+        "overview_old": ov_old, "overview_new": ov_new, "overview_diff": ov_diff,
     }
 
     # Assertion 4: verdict slots must cover every facet in each artifact.
@@ -724,12 +742,16 @@ def build(dataset, old_stamp, new_stamp, out_dir=None, crop=True,
     # source render; see write_crop.
     if crop:
         n_crop = 0
-        for row in rows:
-            for side, panes in (("old", row["old_panes"]), ("new", row["new_panes"])):
+        groups = [(r["old_panes"], r["new_panes"]) for r in rows]
+        groups.append(([ov_old], [ov_new]))
+        for op, np_ in groups:
+            for side, panes in (("old", op), ("new", np_)):
                 for pane in panes:
                     if pane["img"] is None:
                         continue
-                    dst = out_dir / "crops" / f"{side}-facet-{pane['idx']:02d}.png"
+                    name = (f"{side}-overview.png" if pane["idx"] == "overview"
+                            else f"{side}-facet-{pane['idx']:02d}.png")
+                    dst = out_dir / "crops" / name
                     got = write_crop(pane["img"], dst, allow_artifact_dir)
                     if got:
                         pane["crop"], pane["roi"] = dst, got
@@ -882,6 +904,31 @@ def render_html(ctx):
   {verdict_block(row['row_id'], 'facet')}
 </section>""")
 
+    # The line section opens with the two overviews side by side. A crease is a
+    # property of the WHOLE roof, not of one facet, so grading eighteen lines
+    # off per-facet close-ups means holding the layout in your head. The
+    # overview is the reference frame the line rows are read against, and it
+    # belongs at the top of the section rather than in another window.
+    #
+    # It is a REFERENCE, not a graded row: no verdict field, and it does not
+    # enter the completeness count. Adding a verdict here would change the row
+    # count and the record schema, which was not asked for.
+    if ctx.get("overview_old") or ctx.get("overview_new"):
+        def ovpane(pane, side):
+            if pane is None or pane.get("img") is None:
+                return empty_pane_html(f"no {side} overview render")
+            return pane_html(pane, side, out_dir, ctx.get("crop", True))
+        parts.append(f"""
+<section class="row overview" id="overview-row">
+  <h2>OVERVIEW &nbsp; the whole roof, old against new</h2>
+  <div class="casenote">Reference for the {len(ctx['lines'])} line rows below. A crease is a
+    property of the whole roof, so read the layout here first, then grade each line in its
+    own row. This panel is not graded and is not counted toward completeness.</div>
+  {diff_html(ctx.get('overview_diff'))}
+  <div class="panes"><div class="side">{ovpane(ctx.get('overview_old'), 'OLD')}</div>
+    <div class="side">{ovpane(ctx.get('overview_new'), 'NEW')}</div></div>
+</section>""")
+
     for row in ctx["lines"]:
         o, n = row["old"], row["new"]
         def ldesc(ln, tag):
@@ -1003,8 +1050,8 @@ def render_html(ctx):
    padding:2px 9px;border-bottom:1px solid #2e3742}}
  .nopane{{padding:38px 12px;text-align:center;color:#bbb;font-style:italic}}
  .linebody{{padding:14px;font-size:14px}}
- .vblock{{display:flex;gap:14px;margin-top:10px}}
- .vfield{{flex:1}}
+ .vblock{{margin-top:10px}}
+ .vfield{{width:100%}}
  .vfield label{{display:block;font-size:12px;color:#bbb;margin-bottom:3px;font-weight:600}}
  textarea{{width:100%;box-sizing:border-box;min-height:76px;background:#0d0d0d;color:#eee;
    border:1px solid #444;border-radius:3px;padding:7px;font:14px/1.45 system-ui,sans-serif;
@@ -1070,7 +1117,7 @@ function why(v){{
 function state(){{
   const s = {{}};
   for(const id of ROWS){{
-    for(const k of ["verdict","compare"]){{
+    for(const k of ["verdict"]){{
       const el = document.getElementById(id+":"+k);
       if(el) s[id+":"+k] = el.value;
     }}
@@ -1148,7 +1195,7 @@ document.addEventListener("input", e => {{
 function buildRecord(){{
   const entries = {{}}, refused = {{}};
   for(const id of ROWS){{
-    for(const k of ["verdict","compare"]){{
+    for(const k of ["verdict"]){{
       const el = document.getElementById(id+":"+k);
       if(!el) continue;
       const v = el.value;
@@ -1205,8 +1252,18 @@ setHdr(hopen);
 
 
 def verdict_block(row_id, kind):
-    what = ("what this render shows about the roof"
-            if kind == "facet" else "what this crease looks like")
+    """One field. Not two.
+
+    There used to be a separate COMPARISON NOTE beside the verdict, on the
+    reasoning that "what this shows" and "how it differs from the old one" are
+    different observations. In practice they are not separable: the whole point
+    of a side-by-side pass is that comparing the two images IS the judgement, so
+    splitting it asked the grader to say the same thing twice and they correctly
+    refused. The first completed pass filled 47 verdicts and 1 comparison note.
+    A field that goes unused 46 times out of 47 is not optional, it is wrong.
+    """
+    what = ("what this row shows about the roof, old against new"
+            if kind == "facet" else "what this crease looks like, old against new")
     return f"""
 <div class="vblock">
   <div class="vfield">
@@ -1214,13 +1271,6 @@ def verdict_block(row_id, kind):
     <textarea id="{row_id}:verdict" placeholder=""></textarea>
     <div class="rej" id="{row_id}:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="{row_id}:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="{row_id}:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>"""
 

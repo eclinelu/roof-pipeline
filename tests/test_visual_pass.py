@@ -424,7 +424,7 @@ def test_html_renders_all_five_layout_cases():
         assert f'class="row {case}"' in out
     # every row gets both fields, and neither is a dropdown
     assert out.count(":verdict") >= 2 * (len(rows) + 2)
-    assert out.count(":compare") >= 2 * (len(rows) + 2)
+    assert ":compare" not in out          # one field, not two
     assert "<select" not in out and "datalist" not in out
     # PROVENANCE UNKNOWN must be stated, not implied
     assert "PROVENANCE UNKNOWN" in out
@@ -458,3 +458,51 @@ def test_main_facets_have_identical_index_sets_but_renders_differ():
         vp.REPO / "reports/big_house/review/2026-07-30-grid-adopted/facet-04.png")
     assert d["hash_equal"] is False
     assert d["changed_px"] > 0
+
+
+def test_there_is_exactly_one_verdict_field_per_row():
+    # The comparison note is gone. Comparing the two images IS the verdict, and
+    # the first completed pass proved it: 47 verdicts filled, 1 comparison note.
+    out = vp.render_html(_mini_ctx())
+    assert ":compare" not in out
+    assert "COMPARISON NOTE" not in out
+    assert out.count("VERDICT &mdash;") == 8      # 6 facet rows + 2 line rows
+    assert "old against new" in out               # the verdict asks for the comparison
+
+
+def test_line_section_opens_with_an_overview_comparison():
+    ctx = _mini_ctx()
+    d = vp.REPO / "reports/big_house/review/2026-07-30-grid-adopted"
+    ctx["overview_old"] = {"idx": "overview", "img": d / "overview.png", "facet": {}}
+    ctx["overview_new"] = {"idx": "overview", "img": d / "overview.png", "facet": {}}
+    ctx["overview_diff"] = None
+    out = vp.render_html(ctx)
+    assert 'id="overview-row"' in out
+    # it must sit AFTER the last facet row and BEFORE the first line row
+    assert out.index('id="facet-row-5"') < out.index('id="overview-row"')
+    assert out.index('id="overview-row"') < out.index('id="line-row-0"')
+    # and it is a reference, not a graded row
+    ov = out.split('id="overview-row"')[1].split("</section>")[0]
+    assert ":verdict" not in ov
+    assert "not counted toward completeness" in ov
+
+
+def test_overview_is_absent_when_there_is_no_overview_render():
+    ctx = _mini_ctx()
+    out = vp.render_html(ctx)
+    assert 'id="overview-row"' not in out
+
+
+def test_provenance_tracks_the_pngs_not_the_directory():
+    # Writing the pass INTO the render folder made the folder's newest commit
+    # the pass's own, and the header then credited the wrong commit for the
+    # renders. The pathspec must be the PNGs.
+    import inspect
+    src = inspect.getsource(vp.render_provenance)
+    assert "facet-*.png" in src and "overview.png" in src
+    d = vp.REPO / "reports/big_house/review/2026-07-30-grid-adopted"
+    prov = vp.render_provenance(d)
+    if prov["known"]:
+        # the renders were committed by the grid-adoption commit, not by any
+        # later commit that merely added a review page beside them
+        assert prov["short"] == "7811b3bce38a", prov

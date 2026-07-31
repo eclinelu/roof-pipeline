@@ -137,6 +137,41 @@ in the output. An undated render set compared against a dated one produces a
 diff nobody can attribute later, and the honest failure mode is to print
 "provenance unknown" rather than to let the row imply the diff is trustworthy.
 
+**Ask about the render files, never about the folder they sit in.** The moment
+the pass writes anything into that folder — its own page, its crops — the
+folder's newest commit becomes the pass's own, and the header will report that
+the renders were produced by a commit that merely dropped a review page beside
+them. The claim being made is "these images came from that commit", so the query
+must name the images. Provenance answered with the wrong commit is worse than
+provenance refused, because it looks authoritative.
+
+## Where the page goes
+
+Default: the pass's own output directory, well away from artifacts.
+
+The page may be placed **in the render folder** when the reviewer wants to open
+it with a double click, which is a reasonable thing to want. If so:
+
+- It is an **explicit opt-in flag**, never a default and never implied. The
+  write guard keeps refusing artifact directories for every other caller.
+- **Say what it overwrites** before doing it, and confirm afterwards that the
+  source renders are byte-identical.
+- **Check every relative path resolves from that directory.** The new panes
+  become siblings, the old panes sit one directory up, the crops sit in a
+  subfolder. A wrong relative path yields a page of dead images that looks like
+  a rendering bug.
+- **Re-check provenance**, per the rule directly above. This is the change that
+  breaks it.
+
+Two more things that cost a round trip each and should not cost another:
+
+- **Say which tree the file is in.** Work in a worktree means the familiar path
+  in the main checkout still holds the old page. "It didn't change" usually
+  means the right file was written and the wrong one opened.
+- **Verdicts do not follow the page.** Browser storage is keyed per URL, so
+  moving the page to a new location presents the grader with a blank slate.
+  Say so rather than letting them discover it at row 1.
+
 ## Panes must be legible, and any correction must be declared
 
 A render is evidence only to the extent it can be seen. Renders come from a
@@ -210,7 +245,36 @@ The requirement is therefore two-sided:
 
 A caveat is meant to be read once and remembered, not shouted on every scroll.
 
+## What the page must contain, in order
+
+Build this on the first run. Every item below is here because it was missed once
+and had to be added after the grader hit it.
+
+1. **A compact header.** Title, completeness status, a save control, a details
+   toggle. Standing notices collapsed to one line. See the section on not
+   dominating.
+2. **One row per correspondence group**, each carrying its overlap fractions in
+   the row header, the byte-hash and pixel-diff summary, the panes, and one
+   verdict field.
+3. **An overview comparison, old against new, at the head of the line section.**
+   A crease is a property of the whole roof, not of one facet. Grading eighteen
+   lines off per-facet close-ups forces the grader to hold the roof layout in
+   their head, and they should not have to. This panel is a REFERENCE: no
+   verdict field, and it does not count toward completeness.
+4. **One row per line**, paired through the computed facet correspondence.
+
 ## Verdicts
+
+**One field per row. Not two.**
+
+There is no separate comparison note. It was tried, on the reasoning that "what
+this shows" and "how it differs from the old one" are different observations.
+They are not separable here: the entire point of a side-by-side pass is that
+comparing the two images IS the judgement, so a second field asks the grader to
+say the same thing twice. The first completed pass filled **47 verdicts and 1
+comparison note**. A field that goes unused 46 times out of 47 is not optional,
+it is wrong. Ask the verdict as "what this row shows, old against new" and the
+comparison arrives inside it.
 
 **Free text only.** No multiple choice, no dropdown, no preset codes, no
 pass/fail field, no autocomplete from prior verdicts, no suggested wording.
@@ -227,15 +291,20 @@ nobody had a word for yet.
 
 Further requirements:
 
-- **A comparison note is a SEPARATE field from the verdict.** The verdict
-  describes what the new render shows. The comparison note describes how it
-  differs from the old one. Collapsing them produces entries where nobody can
-  later tell whether "the west edge is short" was observed in the new artifact
-  or inherited from the old.
-- **Verdicts persist to disk as they are entered**, not on a save action at the
-  end. A pass over thirty facets is a long sitting, and a record that only
-  exists in a browser tab is a record one crash away from being re-done from
-  memory.
+- **Verdicts must reach disk, and the page must not depend on a server to get
+  them there.** A pass over thirty facets is a long sitting, and a record that
+  exists only in a browser tab is one crash away from being redone from memory.
+  Autosave to browser storage continuously, and give the page a **save button
+  that writes the record itself** so it works opened as a plain file. A
+  background server is not a dependency the grader should carry: in practice
+  they get reaped, and every restart is friction between the grader and the
+  work.
+- **The downloaded record and the served record must be the same record.** Same
+  fields, same refusals. If opening the file produces a thinner record than
+  running a server, the convenient path silently becomes the second-class one.
+- **A partial record must announce itself** — named as partial, listing the rows
+  with no accepted verdict. A partial pass that saves under the same name as a
+  finished one is how "never looked at" gets read as "nothing to report".
 
 ## Blindness
 
@@ -246,10 +315,18 @@ State this as a property of the record. It is a known, accepted limitation of
 this instrument, recorded so that nobody later reads the pass as blind evidence.
 No further discussion is needed and no correction is available.
 
+## Where the finished record goes
+
+A completed pass record belongs with the project's other review records, named
+by artifact pair like the pass itself: `pass-<old>-vs-<new>.json` beside the
+single-artifact reviews. Not left in a downloads folder, and not left only in
+the pass's scratch output directory.
+
 ## Completeness
 
 The harness refuses to report a pass complete while any facet row or any line
-row lacks a verdict, and it lists exactly what is missing.
+row lacks a verdict, and it lists exactly what is missing. The overview
+reference panel is not a row and is not counted.
 
 Partial passes are legitimate — a pass can be interrupted. What is not
 legitimate is a partial pass that reports as finished, because the ungraded rows

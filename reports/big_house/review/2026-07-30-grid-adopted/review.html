@@ -65,8 +65,8 @@
    padding:2px 9px;border-bottom:1px solid #2e3742}
  .nopane{padding:38px 12px;text-align:center;color:#bbb;font-style:italic}
  .linebody{padding:14px;font-size:14px}
- .vblock{display:flex;gap:14px;margin-top:10px}
- .vfield{flex:1}
+ .vblock{margin-top:10px}
+ .vfield{width:100%}
  .vfield label{display:block;font-size:12px;color:#bbb;margin-bottom:3px;font-weight:600}
  textarea{width:100%;box-sizing:border-box;min-height:76px;background:#0d0d0d;color:#eee;
    border:1px solid #444;border-radius:3px;padding:7px;font:14px/1.45 system-ui,sans-serif;
@@ -126,17 +126,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="facet-row-0:verdict">VERDICT &mdash; what this render shows about the roof (free text, required)</label>
+    <label for="facet-row-0:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
     <textarea id="facet-row-0:verdict" placeholder=""></textarea>
     <div class="rej" id="facet-row-0:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="facet-row-0:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="facet-row-0:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -153,17 +146,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="facet-row-1:verdict">VERDICT &mdash; what this render shows about the roof (free text, required)</label>
+    <label for="facet-row-1:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
     <textarea id="facet-row-1:verdict" placeholder=""></textarea>
     <div class="rej" id="facet-row-1:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="facet-row-1:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="facet-row-1:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -180,17 +166,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="facet-row-2:verdict">VERDICT &mdash; what this render shows about the roof (free text, required)</label>
+    <label for="facet-row-2:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
     <textarea id="facet-row-2:verdict" placeholder=""></textarea>
     <div class="rej" id="facet-row-2:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="facet-row-2:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="facet-row-2:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -207,17 +186,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="facet-row-3:verdict">VERDICT &mdash; what this render shows about the roof (free text, required)</label>
+    <label for="facet-row-3:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
     <textarea id="facet-row-3:verdict" placeholder=""></textarea>
     <div class="rej" id="facet-row-3:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="facet-row-3:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="facet-row-3:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -234,17 +206,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="facet-row-4:verdict">VERDICT &mdash; what this render shows about the roof (free text, required)</label>
+    <label for="facet-row-4:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
     <textarea id="facet-row-4:verdict" placeholder=""></textarea>
     <div class="rej" id="facet-row-4:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="facet-row-4:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="facet-row-4:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -261,17 +226,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="facet-row-5:verdict">VERDICT &mdash; what this render shows about the roof (free text, required)</label>
+    <label for="facet-row-5:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
     <textarea id="facet-row-5:verdict" placeholder=""></textarea>
     <div class="rej" id="facet-row-5:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="facet-row-5:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="facet-row-5:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -288,17 +246,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="facet-row-6:verdict">VERDICT &mdash; what this render shows about the roof (free text, required)</label>
+    <label for="facet-row-6:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
     <textarea id="facet-row-6:verdict" placeholder=""></textarea>
     <div class="rej" id="facet-row-6:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="facet-row-6:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="facet-row-6:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -315,17 +266,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="facet-row-7:verdict">VERDICT &mdash; what this render shows about the roof (free text, required)</label>
+    <label for="facet-row-7:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
     <textarea id="facet-row-7:verdict" placeholder=""></textarea>
     <div class="rej" id="facet-row-7:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="facet-row-7:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="facet-row-7:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -342,17 +286,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="facet-row-8:verdict">VERDICT &mdash; what this render shows about the roof (free text, required)</label>
+    <label for="facet-row-8:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
     <textarea id="facet-row-8:verdict" placeholder=""></textarea>
     <div class="rej" id="facet-row-8:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="facet-row-8:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="facet-row-8:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -369,17 +306,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="facet-row-9:verdict">VERDICT &mdash; what this render shows about the roof (free text, required)</label>
+    <label for="facet-row-9:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
     <textarea id="facet-row-9:verdict" placeholder=""></textarea>
     <div class="rej" id="facet-row-9:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="facet-row-9:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="facet-row-9:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -396,17 +326,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="facet-row-10:verdict">VERDICT &mdash; what this render shows about the roof (free text, required)</label>
+    <label for="facet-row-10:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
     <textarea id="facet-row-10:verdict" placeholder=""></textarea>
     <div class="rej" id="facet-row-10:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="facet-row-10:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="facet-row-10:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -423,17 +346,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="facet-row-11:verdict">VERDICT &mdash; what this render shows about the roof (free text, required)</label>
+    <label for="facet-row-11:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
     <textarea id="facet-row-11:verdict" placeholder=""></textarea>
     <div class="rej" id="facet-row-11:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="facet-row-11:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="facet-row-11:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -450,17 +366,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="facet-row-12:verdict">VERDICT &mdash; what this render shows about the roof (free text, required)</label>
+    <label for="facet-row-12:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
     <textarea id="facet-row-12:verdict" placeholder=""></textarea>
     <div class="rej" id="facet-row-12:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="facet-row-12:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="facet-row-12:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -477,17 +386,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="facet-row-13:verdict">VERDICT &mdash; what this render shows about the roof (free text, required)</label>
+    <label for="facet-row-13:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
     <textarea id="facet-row-13:verdict" placeholder=""></textarea>
     <div class="rej" id="facet-row-13:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="facet-row-13:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="facet-row-13:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -504,17 +406,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="facet-row-14:verdict">VERDICT &mdash; what this render shows about the roof (free text, required)</label>
+    <label for="facet-row-14:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
     <textarea id="facet-row-14:verdict" placeholder=""></textarea>
     <div class="rej" id="facet-row-14:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="facet-row-14:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="facet-row-14:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -531,17 +426,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="facet-row-15:verdict">VERDICT &mdash; what this render shows about the roof (free text, required)</label>
+    <label for="facet-row-15:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
     <textarea id="facet-row-15:verdict" placeholder=""></textarea>
     <div class="rej" id="facet-row-15:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="facet-row-15:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="facet-row-15:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -558,17 +446,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="facet-row-16:verdict">VERDICT &mdash; what this render shows about the roof (free text, required)</label>
+    <label for="facet-row-16:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
     <textarea id="facet-row-16:verdict" placeholder=""></textarea>
     <div class="rej" id="facet-row-16:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="facet-row-16:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="facet-row-16:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -585,17 +466,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="facet-row-17:verdict">VERDICT &mdash; what this render shows about the roof (free text, required)</label>
+    <label for="facet-row-17:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
     <textarea id="facet-row-17:verdict" placeholder=""></textarea>
     <div class="rej" id="facet-row-17:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="facet-row-17:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="facet-row-17:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -612,17 +486,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="facet-row-18:verdict">VERDICT &mdash; what this render shows about the roof (free text, required)</label>
+    <label for="facet-row-18:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
     <textarea id="facet-row-18:verdict" placeholder=""></textarea>
     <div class="rej" id="facet-row-18:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="facet-row-18:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="facet-row-18:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -639,17 +506,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="facet-row-19:verdict">VERDICT &mdash; what this render shows about the roof (free text, required)</label>
+    <label for="facet-row-19:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
     <textarea id="facet-row-19:verdict" placeholder=""></textarea>
     <div class="rej" id="facet-row-19:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="facet-row-19:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="facet-row-19:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -666,17 +526,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="facet-row-20:verdict">VERDICT &mdash; what this render shows about the roof (free text, required)</label>
+    <label for="facet-row-20:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
     <textarea id="facet-row-20:verdict" placeholder=""></textarea>
     <div class="rej" id="facet-row-20:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="facet-row-20:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="facet-row-20:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -693,17 +546,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="facet-row-21:verdict">VERDICT &mdash; what this render shows about the roof (free text, required)</label>
+    <label for="facet-row-21:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
     <textarea id="facet-row-21:verdict" placeholder=""></textarea>
     <div class="rej" id="facet-row-21:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="facet-row-21:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="facet-row-21:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -720,17 +566,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="facet-row-22:verdict">VERDICT &mdash; what this render shows about the roof (free text, required)</label>
+    <label for="facet-row-22:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
     <textarea id="facet-row-22:verdict" placeholder=""></textarea>
     <div class="rej" id="facet-row-22:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="facet-row-22:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="facet-row-22:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -747,17 +586,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="facet-row-23:verdict">VERDICT &mdash; what this render shows about the roof (free text, required)</label>
+    <label for="facet-row-23:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
     <textarea id="facet-row-23:verdict" placeholder=""></textarea>
     <div class="rej" id="facet-row-23:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="facet-row-23:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="facet-row-23:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -774,17 +606,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="facet-row-24:verdict">VERDICT &mdash; what this render shows about the roof (free text, required)</label>
+    <label for="facet-row-24:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
     <textarea id="facet-row-24:verdict" placeholder=""></textarea>
     <div class="rej" id="facet-row-24:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="facet-row-24:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="facet-row-24:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -801,17 +626,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="facet-row-25:verdict">VERDICT &mdash; what this render shows about the roof (free text, required)</label>
+    <label for="facet-row-25:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
     <textarea id="facet-row-25:verdict" placeholder=""></textarea>
     <div class="rej" id="facet-row-25:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="facet-row-25:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="facet-row-25:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -828,17 +646,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="facet-row-26:verdict">VERDICT &mdash; what this render shows about the roof (free text, required)</label>
+    <label for="facet-row-26:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
     <textarea id="facet-row-26:verdict" placeholder=""></textarea>
     <div class="rej" id="facet-row-26:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="facet-row-26:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="facet-row-26:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -855,17 +666,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="facet-row-27:verdict">VERDICT &mdash; what this render shows about the roof (free text, required)</label>
+    <label for="facet-row-27:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
     <textarea id="facet-row-27:verdict" placeholder=""></textarea>
     <div class="rej" id="facet-row-27:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="facet-row-27:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="facet-row-27:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -882,19 +686,21 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="facet-row-28:verdict">VERDICT &mdash; what this render shows about the roof (free text, required)</label>
+    <label for="facet-row-28:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
     <textarea id="facet-row-28:verdict" placeholder=""></textarea>
     <div class="rej" id="facet-row-28:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
   </div>
-  <div class="vfield">
-    <label for="facet-row-28:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="facet-row-28:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
-  </div>
 </div>
+</section>
+<section class="row overview" id="overview-row">
+  <h2>OVERVIEW &nbsp; the whole roof, old against new</h2>
+  <div class="casenote">Reference for the 18 line rows below. A crease is a
+    property of the whole roof, so read the layout here first, then grade each line in its
+    own row. This panel is not graded and is not counted toward completeness.</div>
+  <div class="diff changed"><b>hash: DIFFERENT</b> (18febdb05287 &rarr; b97e3f4cd0da) &nbsp; 1,343,010 of 7,425,000 pixels differ (18.09%), max channel delta 255, mean |delta| 9.29</div>
+  <div class="panes"><div class="side"><div class="pane"><div class="panehead">OLD facet overview<span class="pmeta"></span></div><span class="cropnote">cropped &times;2.1 &mdash; the render drew into 46.8% of its frame. Click for the untouched original.</span><a href="../2026-07-27/overview.png" target="_blank" title="open the full uncropped render"><img src="crops/old-overview.png" loading="lazy"></a></div></div>
+    <div class="side"><div class="pane"><div class="panehead">NEW facet overview<span class="pmeta"></span></div><span class="cropnote">cropped &times;2.1 &mdash; the render drew into 46.6% of its frame. Click for the untouched original.</span><a href="overview.png" target="_blank" title="open the full uncropped render"><img src="crops/new-overview.png" loading="lazy"></a></div></div></div>
 </section>
 <section class="row line 1-to-1" id="line-row-0">
   <h2>LINE &nbsp; 1-TO-1 &nbsp;
@@ -906,17 +712,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="line-row-0:verdict">VERDICT &mdash; what this crease looks like (free text, required)</label>
+    <label for="line-row-0:verdict">VERDICT &mdash; what this crease looks like, old against new (free text, required)</label>
     <textarea id="line-row-0:verdict" placeholder=""></textarea>
     <div class="rej" id="line-row-0:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="line-row-0:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="line-row-0:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -930,17 +729,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="line-row-1:verdict">VERDICT &mdash; what this crease looks like (free text, required)</label>
+    <label for="line-row-1:verdict">VERDICT &mdash; what this crease looks like, old against new (free text, required)</label>
     <textarea id="line-row-1:verdict" placeholder=""></textarea>
     <div class="rej" id="line-row-1:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="line-row-1:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="line-row-1:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -954,17 +746,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="line-row-2:verdict">VERDICT &mdash; what this crease looks like (free text, required)</label>
+    <label for="line-row-2:verdict">VERDICT &mdash; what this crease looks like, old against new (free text, required)</label>
     <textarea id="line-row-2:verdict" placeholder=""></textarea>
     <div class="rej" id="line-row-2:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="line-row-2:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="line-row-2:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -978,17 +763,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="line-row-3:verdict">VERDICT &mdash; what this crease looks like (free text, required)</label>
+    <label for="line-row-3:verdict">VERDICT &mdash; what this crease looks like, old against new (free text, required)</label>
     <textarea id="line-row-3:verdict" placeholder=""></textarea>
     <div class="rej" id="line-row-3:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="line-row-3:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="line-row-3:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -1002,17 +780,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="line-row-4:verdict">VERDICT &mdash; what this crease looks like (free text, required)</label>
+    <label for="line-row-4:verdict">VERDICT &mdash; what this crease looks like, old against new (free text, required)</label>
     <textarea id="line-row-4:verdict" placeholder=""></textarea>
     <div class="rej" id="line-row-4:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="line-row-4:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="line-row-4:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -1026,17 +797,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="line-row-5:verdict">VERDICT &mdash; what this crease looks like (free text, required)</label>
+    <label for="line-row-5:verdict">VERDICT &mdash; what this crease looks like, old against new (free text, required)</label>
     <textarea id="line-row-5:verdict" placeholder=""></textarea>
     <div class="rej" id="line-row-5:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="line-row-5:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="line-row-5:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -1050,17 +814,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="line-row-6:verdict">VERDICT &mdash; what this crease looks like (free text, required)</label>
+    <label for="line-row-6:verdict">VERDICT &mdash; what this crease looks like, old against new (free text, required)</label>
     <textarea id="line-row-6:verdict" placeholder=""></textarea>
     <div class="rej" id="line-row-6:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="line-row-6:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="line-row-6:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -1074,17 +831,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="line-row-7:verdict">VERDICT &mdash; what this crease looks like (free text, required)</label>
+    <label for="line-row-7:verdict">VERDICT &mdash; what this crease looks like, old against new (free text, required)</label>
     <textarea id="line-row-7:verdict" placeholder=""></textarea>
     <div class="rej" id="line-row-7:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="line-row-7:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="line-row-7:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -1098,17 +848,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="line-row-8:verdict">VERDICT &mdash; what this crease looks like (free text, required)</label>
+    <label for="line-row-8:verdict">VERDICT &mdash; what this crease looks like, old against new (free text, required)</label>
     <textarea id="line-row-8:verdict" placeholder=""></textarea>
     <div class="rej" id="line-row-8:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="line-row-8:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="line-row-8:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -1122,17 +865,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="line-row-9:verdict">VERDICT &mdash; what this crease looks like (free text, required)</label>
+    <label for="line-row-9:verdict">VERDICT &mdash; what this crease looks like, old against new (free text, required)</label>
     <textarea id="line-row-9:verdict" placeholder=""></textarea>
     <div class="rej" id="line-row-9:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="line-row-9:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="line-row-9:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -1146,17 +882,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="line-row-10:verdict">VERDICT &mdash; what this crease looks like (free text, required)</label>
+    <label for="line-row-10:verdict">VERDICT &mdash; what this crease looks like, old against new (free text, required)</label>
     <textarea id="line-row-10:verdict" placeholder=""></textarea>
     <div class="rej" id="line-row-10:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="line-row-10:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="line-row-10:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -1170,17 +899,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="line-row-11:verdict">VERDICT &mdash; what this crease looks like (free text, required)</label>
+    <label for="line-row-11:verdict">VERDICT &mdash; what this crease looks like, old against new (free text, required)</label>
     <textarea id="line-row-11:verdict" placeholder=""></textarea>
     <div class="rej" id="line-row-11:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="line-row-11:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="line-row-11:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -1194,17 +916,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="line-row-12:verdict">VERDICT &mdash; what this crease looks like (free text, required)</label>
+    <label for="line-row-12:verdict">VERDICT &mdash; what this crease looks like, old against new (free text, required)</label>
     <textarea id="line-row-12:verdict" placeholder=""></textarea>
     <div class="rej" id="line-row-12:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="line-row-12:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="line-row-12:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -1218,17 +933,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="line-row-13:verdict">VERDICT &mdash; what this crease looks like (free text, required)</label>
+    <label for="line-row-13:verdict">VERDICT &mdash; what this crease looks like, old against new (free text, required)</label>
     <textarea id="line-row-13:verdict" placeholder=""></textarea>
     <div class="rej" id="line-row-13:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="line-row-13:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="line-row-13:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -1242,17 +950,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="line-row-14:verdict">VERDICT &mdash; what this crease looks like (free text, required)</label>
+    <label for="line-row-14:verdict">VERDICT &mdash; what this crease looks like, old against new (free text, required)</label>
     <textarea id="line-row-14:verdict" placeholder=""></textarea>
     <div class="rej" id="line-row-14:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="line-row-14:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="line-row-14:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -1266,17 +967,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="line-row-15:verdict">VERDICT &mdash; what this crease looks like (free text, required)</label>
+    <label for="line-row-15:verdict">VERDICT &mdash; what this crease looks like, old against new (free text, required)</label>
     <textarea id="line-row-15:verdict" placeholder=""></textarea>
     <div class="rej" id="line-row-15:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="line-row-15:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="line-row-15:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -1290,17 +984,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="line-row-16:verdict">VERDICT &mdash; what this crease looks like (free text, required)</label>
+    <label for="line-row-16:verdict">VERDICT &mdash; what this crease looks like, old against new (free text, required)</label>
     <textarea id="line-row-16:verdict" placeholder=""></textarea>
     <div class="rej" id="line-row-16:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="line-row-16:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="line-row-16:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section>
@@ -1314,17 +1001,10 @@
   
 <div class="vblock">
   <div class="vfield">
-    <label for="line-row-17:verdict">VERDICT &mdash; what this crease looks like (free text, required)</label>
+    <label for="line-row-17:verdict">VERDICT &mdash; what this crease looks like, old against new (free text, required)</label>
     <textarea id="line-row-17:verdict" placeholder=""></textarea>
     <div class="rej" id="line-row-17:rej"></div>
     <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-  <div class="vfield">
-    <label for="line-row-17:compare">COMPARISON NOTE &mdash; how the new differs from the old
-      (free text, separate field)</label>
-    <textarea id="line-row-17:compare" placeholder=""></textarea>
-    <div class="hint">Kept separate so nobody later has to guess which artifact an
-      observation came from.</div>
   </div>
 </div>
 </section></main>
@@ -1802,7 +1482,7 @@ function why(v){
 function state(){
   const s = {};
   for(const id of ROWS){
-    for(const k of ["verdict","compare"]){
+    for(const k of ["verdict"]){
       const el = document.getElementById(id+":"+k);
       if(el) s[id+":"+k] = el.value;
     }
@@ -1880,7 +1560,7 @@ document.addEventListener("input", e => {
 function buildRecord(){
   const entries = {}, refused = {};
   for(const id of ROWS){
-    for(const k of ["verdict","compare"]){
+    for(const k of ["verdict"]){
       const el = document.getElementById(id+":"+k);
       if(!el) continue;
       const v = el.value;
