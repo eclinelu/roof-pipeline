@@ -7,6 +7,7 @@
 # drive all five through synthetic index sets, where the right answer is known
 # by construction rather than by inspection.
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -306,6 +307,53 @@ def test_header_collapses_but_keeps_the_standing_caveats():
     assert "NOT BLIND" in terse and "rule 7" in terse
     # completeness status is never hidden behind the toggle
     assert out.index('id="status"') < out.index('id="detail"')
+
+
+def test_download_button_exists_and_carries_a_self_standing_record():
+    # The file:// route has no server, so the page itself must be able to emit
+    # the same record the served path writes. Anything missing here silently
+    # produces a second-class record that looks fine until someone reads it.
+    ctx = _mini_ctx()
+    out = vp.render_html(ctx)
+    assert 'id="save"' in out and "function buildRecord" in out
+    meta = json.loads(re.search(r"const META = (\{.*?\n\});", out, re.S).group(1))
+    for k in ("pass", "dataset", "old_artifact", "new_artifact", "blind",
+              "blind_note", "verdict_format", "old_render_commit",
+              "new_render_commit", "n_facet_rows", "n_line_rows"):
+        assert k in meta, k
+    assert meta["blind"] is False          # never silently becomes blind evidence
+
+
+def test_downloaded_record_cannot_launder_a_refused_verdict():
+    # Opening the file must not be a way around the empty/preset refusal.
+    out = vp.render_html(_mini_ctx())
+    body = out.split("function buildRecord")[1].split("document.getElementById(\"save\")")[0]
+    assert "why(v)" in body and "refused[" in body
+    assert "entries[id" in body
+    # a refused verdict is diverted, never also written into entries
+    assert body.index("refused[") < body.index("entries[id")
+
+
+def test_into_review_is_explicit_and_never_the_default():
+    bad = vp.REPO / "reports/big_house/review/2026-07-30-grid-adopted/review.html"
+    with pytest.raises(SystemExit):
+        vp.guard_write_path(bad)                       # default still refuses
+    assert vp.guard_write_path(bad, allow_artifact_dir=True) == bad.resolve()
+
+
+def test_paths_in_the_review_folder_build_all_resolve():
+    # Placed in the render folder, NEW panes are siblings and OLD panes sit one
+    # directory up. A broken relative path here means a page full of dead images.
+    d = vp.REPO / "reports/big_house/review/2026-07-30-grid-adopted"
+    page = d / "review.html"
+    if not page.exists():
+        pytest.skip("review-folder build not present")
+    p = page.read_text(encoding="utf-8")
+    refs = (re.findall(r'<img src="([^"]+)"', p)
+            + re.findall(r'<a href="([^"]+)" target', p))
+    assert refs
+    missing = [r for r in refs if not (d / r).exists()]
+    assert missing == [], missing
 
 
 def test_guard_refuses_artifact_and_review_directories():

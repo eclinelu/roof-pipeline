@@ -125,8 +125,14 @@ PRESET_STRINGS = {
 # guards
 # --------------------------------------------------------------------------
 
-def guard_write_path(path):
+def guard_write_path(path, allow_artifact_dir=False):
     """Refuse to write anywhere that holds artifacts or existing review records.
+
+    `allow_artifact_dir=True` is an EXPLICIT, per-run opt-in (--into-review). It
+    exists because the reviewer asked for the page to live in the render folder
+    so it can be opened with a double click. It is never the default, it prints
+    what it is about to overwrite, and the refusal remains the behaviour every
+    other caller gets. An accident cannot reach it; only a flag can.
 
     Assertion 5. The read-only contract is worth nothing if it is only stated
     in a docstring, so every write in this file goes through here first. A
@@ -136,6 +142,8 @@ def guard_write_path(path):
     happening right now in another checkout.
     """
     path = Path(path).resolve()
+    if allow_artifact_dir:
+        return path
     parts = [p.lower() for p in path.parts]
     for bad in ("reports", "reviews"):
         if bad in parts:
@@ -573,7 +581,7 @@ def roi_bbox(path, pad=0.08):
     return out
 
 
-def write_crop(src, dst):
+def write_crop(src, dst, allow_artifact_dir=False):
     """Write a cropped copy of a render into the pass output directory.
 
     This is the one place the harness creates an image, and it was added on
@@ -591,7 +599,7 @@ def write_crop(src, dst):
     roi = roi_bbox(src)
     if roi is None or roi["gain"] < 1.15:
         return None
-    guard_write_path(dst)
+    guard_write_path(dst, allow_artifact_dir)
     dst.parent.mkdir(parents=True, exist_ok=True)
     with Image.open(src) as im:
         im.crop((roi["x0"], roi["y0"], roi["x1"], roi["y1"])).save(dst)
@@ -642,7 +650,8 @@ def line_rows(old_review, new_review, facet_map):
 # assembly
 # --------------------------------------------------------------------------
 
-def build(dataset, old_stamp, new_stamp, out_dir=None, crop=True):
+def build(dataset, old_stamp, new_stamp, out_dir=None, crop=True,
+          html_name="pass.html", allow_artifact_dir=False):
     old = load_artifact(dataset, old_stamp)
     new = load_artifact(dataset, new_stamp)
     old_dir, old_review = find_render_dir(dataset, old_stamp)
@@ -687,7 +696,8 @@ def build(dataset, old_stamp, new_stamp, out_dir=None, crop=True):
     lines = line_rows(old_review, new_review, facet_map)
 
     name = f"{old['short']}-vs-{new['short']}"
-    out_dir = guard_write_path(Path(out_dir) if out_dir else REPO / "passes" / name)
+    out_dir = guard_write_path(Path(out_dir) if out_dir else REPO / "passes" / name,
+                               allow_artifact_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
     ctx = {
@@ -720,7 +730,7 @@ def build(dataset, old_stamp, new_stamp, out_dir=None, crop=True):
                     if pane["img"] is None:
                         continue
                     dst = out_dir / "crops" / f"{side}-facet-{pane['idx']:02d}.png"
-                    got = write_crop(pane["img"], dst)
+                    got = write_crop(pane["img"], dst, allow_artifact_dir)
                     if got:
                         pane["crop"], pane["roi"] = dst, got
                         n_crop += 1
@@ -728,10 +738,11 @@ def build(dataset, old_stamp, new_stamp, out_dir=None, crop=True):
     else:
         ctx["n_crops"] = 0
 
-    html_path = guard_write_path(out_dir / "pass.html")
+    html_path = guard_write_path(out_dir / html_name, allow_artifact_dir)
     html_path.write_text(render_html(ctx), encoding="utf-8")
     ctx["html_path"] = html_path
-    ctx["verdicts_path"] = guard_write_path(out_dir / "verdicts.json")
+    ctx["verdicts_path"] = guard_write_path(out_dir / "verdicts.json",
+                                            allow_artifact_dir)
     return ctx
 
 
@@ -894,6 +905,36 @@ def render_html(ctx):
     n_line_rows = len(ctx["lines"])
     row_ids = json.dumps([r["row_id"] for r in ctx["rows"]] + [r["row_id"] for r in ctx["lines"]])
     presets = json.dumps(sorted(PRESET_STRINGS))
+    # Everything the downloaded JSON needs to stand on its own. It carries the
+    # same fields the served path writes, so a file:// pass and a served pass
+    # produce the same record and neither is second class.
+    meta_json = json.dumps({
+        "pass": ctx["name"],
+        "dataset": ctx["dataset"],
+        "old_artifact": old["stamp"],
+        "new_artifact": new["stamp"],
+        "old_renders": os.path.relpath(ctx["old_dir"], REPO).replace("\\", "/"),
+        "new_renders": os.path.relpath(ctx["new_dir"], REPO).replace("\\", "/"),
+        "old_render_commit": ctx["old_prov"],
+        "new_render_commit": ctx["new_prov"],
+        "blind": False,
+        "blind_note": "side by side; the grader saw the old render and knew "
+                      "which was which. Not blind evidence.",
+        "verdict_format": "free text only; no codes, no presets, no pass/fail",
+        "panes_cropped": bool(ctx.get("n_crops")),
+        "crop_note": "panes are scaled to the drawn panel of each render; the "
+                     "originals are unmodified and linked from every pane",
+        "n_facet_rows": len(ctx["rows"]),
+        "n_line_rows": len(ctx["lines"]),
+        "row_facets": {r["row_id"]: {"old": r["old"], "new": r["new"], "case": r["case"]}
+                       for r in ctx["rows"]},
+        "row_lines": {r["row_id"]: {
+            "case": r["case"],
+            "kind": (r["new"] or r["old"]).get("kind"),
+            "between": (r["new"] or r["old"]).get("between"),
+            "length_ft": (r["new"] or r["old"]).get("length_ft"),
+        } for r in ctx["lines"]},
+    }, indent=1)
 
     return f"""<!doctype html>
 <meta charset="utf-8">
@@ -905,9 +946,14 @@ def render_html(ctx):
  .hdrtop{{display:flex;align-items:center;gap:12px;flex-wrap:wrap}}
  h1{{margin:0;font-size:14px;font-weight:700;white-space:nowrap}}
  h1 .sub{{font-weight:400}}
- #toggle{{margin-left:auto;background:#2a2a2a;color:#ddd;border:1px solid #555;
+ #toggle{{background:#2a2a2a;color:#ddd;border:1px solid #555;
    border-radius:4px;padding:3px 10px;font:12px system-ui,sans-serif;cursor:pointer}}
  #toggle:hover{{background:#383838}}
+ #save{{margin-left:auto;background:#1d4b2a;color:#d6f5df;border:1px solid #3f8f52;
+   border-radius:4px;padding:3px 12px;font:12px system-ui,sans-serif;cursor:pointer;
+   font-weight:600}}
+ #save:hover{{background:#276437}}
+ #save.partial{{background:#4a3a12;color:#f5e2b0;border-color:#a8862c}}
  .terse{{font-size:11.5px;color:#8f8f8f;font-family:ui-monospace,monospace;
    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
  .terse b{{color:#c8a44a}}
@@ -973,6 +1019,7 @@ def render_html(ctx):
   <h1>{html.escape(ctx['name'])}
     <span class="sub">{html.escape(ctx['dataset'])}</span></h1>
   <span id="status" class="incomplete">checking&hellip;</span>
+  <button id="save" type="button">save verdicts JSON</button>
   <button id="toggle" type="button">details</button>
  </div>
  <div class="terse" id="terse"><b>NOT BLIND</b> &middot; pixel diff can change without
@@ -1009,6 +1056,7 @@ const ROWS = {row_ids};
 const PRESETS = new Set({presets});
 const KEY = "visualpass:{html.escape(ctx['name'])}";
 const N_FACET_ROWS = {n_facet_rows}, N_LINE_ROWS = {n_line_rows};
+const META = {meta_json};
 let served = false, saveTimer = null;
 
 function why(v){{
@@ -1042,6 +1090,9 @@ function refresh(){{
     if(r) missing.push(id.replace("facet-row-","facet row ").replace("line-row-","line row ")
                         + (r==="empty" ? "" : " ("+r.split(".")[0]+")"));
   }}
+  const sv = document.getElementById("save");
+  sv.classList.toggle("partial", missing.length > 0);
+  sv.textContent = missing.length ? "save PARTIAL verdicts JSON" : "save verdicts JSON";
   const st = document.getElementById("status");
   if(missing.length===0){{
     st.className = "complete";
@@ -1087,6 +1138,49 @@ fetch("__load__").then(r => r.ok ? r.json() : null).then(s => {{
 
 document.addEventListener("input", e => {{
   if(e.target.tagName === "TEXTAREA"){{ refresh(); save(); }}
+}});
+
+// Build the record and hand it to the browser as a download. This is the whole
+// point of the file:// route: no server, no terminal, one button at the end.
+// Empty and bare-preset verdicts are separated out here exactly as the served
+// path separates them, so opening the file cannot launder a refused verdict
+// into an accepted one.
+function buildRecord(){{
+  const entries = {{}}, refused = {{}};
+  for(const id of ROWS){{
+    for(const k of ["verdict","compare"]){{
+      const el = document.getElementById(id+":"+k);
+      if(!el) continue;
+      const v = el.value;
+      if(k === "verdict"){{
+        const r = why(v);
+        if(r){{ refused[id+":"+k] = r; continue; }}
+      }}
+      entries[id+":"+k] = v;
+    }}
+  }}
+  const missing = ROWS.filter(id => why(document.getElementById(id+":verdict").value));
+  return Object.assign({{}}, META, {{
+    saved_at: new Date().toISOString(),
+    complete: missing.length === 0,
+    rows_without_accepted_verdict: missing,
+    entries: entries,
+    refused: refused,
+  }});
+}}
+
+document.getElementById("save").addEventListener("click", () => {{
+  const rec = buildRecord();
+  if(!rec.complete && !confirm(
+      rec.rows_without_accepted_verdict.length + " of " + ROWS.length +
+      " rows have no accepted verdict. Save this partial record anyway?")) return;
+  const name = "verdicts-" + META.pass + (rec.complete ? "" : "-PARTIAL") + ".json";
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(rec, null, 1)],
+                                        {{type:"application/json"}}));
+  a.download = name;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 5000);
 }});
 
 // The header carries standing caveats that must be present, but present is not
@@ -1314,6 +1408,11 @@ def main():
     ap.add_argument("--new", help="newer artifact stamp, e.g. 2026-07-30-grid-adopted")
     ap.add_argument("--out", help="output directory (default passes/<old>-vs-<new>)")
     ap.add_argument("--port", type=int, default=8777)
+    ap.add_argument("--html-name", default="pass.html",
+                    help="filename for the page (default pass.html)")
+    ap.add_argument("--into-review", action="store_true",
+                    help="allow writing into the render/artifact directory. Off by "
+                         "default and never implied; it overwrites committed files")
     ap.add_argument("--no-crop", action="store_true",
                     help="show each render in its full frame instead of cropping the "
                          "pane to the rectangle that holds content")
@@ -1338,7 +1437,9 @@ def main():
     print("anti-null assertions:")
     selftest(args.dataset, args.new)
 
-    ctx = build(args.dataset, args.old, args.new, args.out, crop=not args.no_crop)
+    ctx = build(args.dataset, args.old, args.new, args.out,
+                crop=not args.no_crop, html_name=args.html_name,
+                allow_artifact_dir=args.into_review)
 
     cases = {}
     for r in ctx["rows"]:
