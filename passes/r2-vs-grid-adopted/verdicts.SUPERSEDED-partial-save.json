@@ -1,4 +1,7 @@
 {
+ "SUPERSEDED": true,
+ "authoritative_pass_record": "reviews/big_house/pass-r2-vs-grid-adopted.json",
+ "superseded_note": "NOT the pass result. This is an abandoned mid-session partial save: 5 of 47 verdicts graded, 42 listed under 'refused' as empty, and the facet-row-4 verdict truncated mid-sentence. It was renamed off the name 'verdicts.json' because it collided with the real record. The completed pass, all 47 verdicts, complete=true, refused={}, lives in reviews/big_house/pass-r2-vs-grid-adopted.json. The per-facet overlap fractions live in reviews/big_house/pass-r2-vs-grid-adopted.overlap.json. Kept for provenance, never to be read as the result.",
  "pass": "r2-vs-grid-adopted",
  "dataset": "big_house",
  "old_artifact": "2026-07-26-r2",
