@@ -114,6 +114,11 @@ SOFT = ["[WARNING]"]
 
 CONTROL = "Initializing ODM"
 
+# POSITIVE evidence that the run reached the end. `--end-with
+# odm_georeferencing` means this stage completing IS the run completing; it is
+# also the stage that writes the .laz this pipeline reads.
+DONE = ["Finished odm_georeferencing stage"]
+
 NOISY = re.compile(r"\berrors?\b", re.I)
 
 MEM_WARN_PCT = 85.0
@@ -121,7 +126,8 @@ MEM_WARN_PCT = 85.0
 HEALTHY_CAVEAT = ("HEALTHY means NO KNOWN FAILURE SIGNATURE WAS FOUND. It is "
                   "not a statement that the run is correct.")
 
-EXIT = {"HEALTHY": 0, "DEGRADED": 1, "FAILED": 2, "UNKNOWN": 3}
+EXIT = {"HEALTHY": 0, "DEGRADED": 1, "FAILED": 2, "UNKNOWN": 3,
+        "INTERRUPTED": 4}
 
 
 def scan(text):
@@ -152,7 +158,8 @@ def scan(text):
         verdict = "HEALTHY"
     return dict(verdict=verdict, control_found=control, n_lines=len(lines),
                 hard=hits["hard"], tiling=hits["tiling"], soft=hits["soft"],
-                noisy_error_word_lines=noisy)
+                noisy_error_word_lines=noisy,
+                completed=any(d in text for d in DONE))
 
 
 def _to_gb(v, unit):
@@ -200,6 +207,34 @@ def container_memory():
         rows.append(dict(name=name, usage=usage.strip(), mem_pct=pct.strip(),
                          cpu_pct=cpu.strip(), used_gb=used_gb, cap_gb=cap_gb))
     return dict(available=True, containers=rows)
+
+
+def completion_evidence(logpath, expect_cloud):
+    """Two INDEPENDENT positive checks that the run actually finished.
+
+    One is textual (ODM said it finished the stage), one is on the filesystem
+    (the artifact that stage writes exists and is non-trivial). Both must hold.
+    A log line without a file means ODM claimed something it did not deliver; a
+    file without the log line means a stale artifact from an earlier run.
+    """
+    why = []
+    p = Path(logpath)
+    said = False
+    if p.exists():
+        text = p.read_text(encoding="utf-8", errors="replace")
+        said = any(d in text for d in DONE)
+    why.append(f"log says {DONE[0]!r}: {said}")
+
+    if not expect_cloud:
+        why.append("no --expect-cloud given, so the filesystem check is SKIPPED "
+                   "and completion rests on the log line alone")
+        return said, why
+    cp = Path(expect_cloud)
+    exists = cp.exists()
+    size = cp.stat().st_size if exists else 0
+    big = size > 1_000_000
+    why.append(f"cloud {cp}: exists={exists} bytes={size:,} (>1MB: {big})")
+    return (said and big), why
 
 
 def halt(container, why):
@@ -346,6 +381,38 @@ def self_test():
         ok = ok and good
         print(f"    {'PASS' if good else 'FAIL'}  mem {used}/{cap} GiB "
               f"({100.0 * used / cap:.1f}%) warn={got} (want {want})")
+    # THE 2026-07-30 DEFECT, reproduced. The supervisor printed
+    # "no ODM container running; the run has ended. Final verdict HEALTHY."
+    # and exited 0 for a run stopped by hand that produced no cloud. A killed
+    # run must never be able to exit with a success code.
+    import tempfile
+    td = Path(tempfile.mkdtemp())
+    killed = td / "killed.txt"
+    killed.write_text(base + "[INFO] Running openmvs stage\n"
+                             "Estimated depth-maps 39 (16.7%)\n")
+    finished = td / "finished.txt"
+    finished.write_text(base + "[INFO] Finished odm_georeferencing stage\n")
+    cloud = td / "model.laz"
+    cloud.write_bytes(b"\0" * 2_000_000)
+    missing = td / "nope.laz"
+    comp_cases = [
+        ("killed run, no cloud", killed, cloud, False),
+        ("killed run, log only", killed, None, False),
+        ("finished, cloud present", finished, cloud, True),
+        ("finished, cloud MISSING", finished, missing, False),
+        ("finished, log only", finished, None, True),
+    ]
+    for name, lp, cp, want in comp_cases:
+        got, _ = completion_evidence(lp, str(cp) if cp else None)
+        good = (got == want)
+        ok = ok and good
+        print(f"    {'PASS' if good else 'FAIL'}  completion: {name:26s} -> "
+              f"{got} (want {want})")
+    # And the exit code that carries it must not be a success code.
+    good = EXIT["INTERRUPTED"] != 0
+    ok = ok and good
+    print(f"    {'PASS' if good else 'FAIL'}  INTERRUPTED exit code is "
+          f"{EXIT['INTERRUPTED']} (want non-zero)")
     print(f"  SELF-TEST {'PASSED' if ok else 'FAILED'}")
     return ok
 
@@ -359,6 +426,9 @@ def main():
     ap.add_argument("--interval", type=float, default=60.0)
     ap.add_argument("--mem-warn-pct", type=float, default=MEM_WARN_PCT)
     ap.add_argument("--state", default=None)
+    ap.add_argument("--expect-cloud", default=None,
+                    help="path the finished run must have written; used as the "
+                         "filesystem half of the completion check")
     args = ap.parse_args()
 
     if args.self_test:
@@ -393,9 +463,24 @@ def main():
                   "halted, but the first pass has already failed)")
         c = find_odm_container()
         if not c:
-            print(f"[{datetime.now():%H:%M:%S}] no ODM container running; "
-                  f"the run has ended. Final verdict {verdict}.")
-            sys.exit(EXIT[verdict])
+            # THE CONTAINER VANISHING IS NOT EVIDENCE OF SUCCESS. It is equally
+            # consistent with finishing, being killed by hand, and crashing hard
+            # enough to take the container with it. Absence of a failure
+            # signature must never be promoted to "completed"; that is the
+            # null-reads-as-success shape this monitor exists to prevent. So
+            # require POSITIVE completion evidence, and say INTERRUPTED when
+            # there is none.
+            ok, why = completion_evidence(args.logfile, args.expect_cloud)
+            now = datetime.now().strftime("%H:%M:%S")
+            print(f"[{now}] no ODM container running.")
+            for line in why:
+                print(f"    {line}")
+            if ok:
+                print(f"[{now}] RUN COMPLETED. Final verdict {verdict}.")
+                sys.exit(EXIT[verdict])
+            print(f"[{now}] VERDICT INTERRUPTED: the container is gone but the "
+                  f"run did NOT reach the end. No cloud should be assumed.")
+            sys.exit(EXIT["INTERRUPTED"])
         print(f"  ... next check in {args.interval:g}s\n", flush=True)
         time.sleep(args.interval)
 
