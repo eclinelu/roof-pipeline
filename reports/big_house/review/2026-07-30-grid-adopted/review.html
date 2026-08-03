@@ -1,1615 +1,431 @@
 <!doctype html>
-<meta charset="utf-8">
-<title>visual pass r2-vs-grid-adopted</title>
+<html lang="en"><head><meta charset="utf-8">
+<title>big_house visual review 2026-07-30-grid-adopted</title>
 <style>
- body{font:15px/1.5 system-ui,sans-serif;margin:0;background:#111;color:#eee}
- header{position:sticky;top:0;background:#181818;border-bottom:2px solid #444;
-   padding:7px 16px;z-index:20}
- .hdrtop{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
- h1{margin:0;font-size:14px;font-weight:700;white-space:nowrap}
- h1 .sub{font-weight:400}
- #toggle{background:#2a2a2a;color:#ddd;border:1px solid #555;
-   border-radius:4px;padding:3px 10px;font:12px system-ui,sans-serif;cursor:pointer}
- #toggle:hover{background:#383838}
- #save{margin-left:auto;background:#1d4b2a;color:#d6f5df;border:1px solid #3f8f52;
-   border-radius:4px;padding:3px 12px;font:12px system-ui,sans-serif;cursor:pointer;
-   font-weight:600}
- #save:hover{background:#276437}
- #save.partial{background:#4a3a12;color:#f5e2b0;border-color:#a8862c}
- .terse{font-size:11.5px;color:#8f8f8f;font-family:ui-monospace,monospace;
-   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
- .terse b{color:#c8a44a}
- #detail{margin-top:8px}
- #detail.hidden{display:none}
- .sub{color:#aaa;font-size:12.5px}
- .banner{margin:6px 0;padding:7px 11px;border-radius:4px;font-size:12.5px}
- .caveat{background:#3a2f00;border-left:4px solid #d9a400}
- .blind{background:#2a2a3a;border-left:4px solid #7a7ad9}
- .rule7{background:#33202a;border-left:4px solid #c0506e}
- .prov{font-size:13px;padding:5px 10px;border-radius:3px;margin:4px 0}
- .prov.ok{background:#16261a;border-left:4px solid #3f8f52}
- .prov.unknown{background:#3a1a1a;border-left:4px solid #c04040;font-weight:600}
- #status{font-weight:700;padding:6px 12px;border-radius:4px;display:inline-block}
- #status.incomplete{background:#4a2020;color:#ffb0b0}
- #status.complete{background:#12331d;color:#9ff0b5}
- #missing{font-size:12px;color:#f0a0a0;max-height:70px;overflow:auto;margin-top:4px}
- section.row{border-top:1px solid #333;padding:20px;margin:0}
- section.row.vanished{background:#2a1414}
- section.row.new{background:#14202a}
- section.row.merge,section.row.split,section.row.tangled{background:#241f14}
- h2{font-size:16px;margin:0 0 4px}
- .casenote{color:#aaa;font-size:13px;margin-bottom:8px}
- .hovwrap{margin:2px 0 6px;display:flex;flex-wrap:wrap;gap:6px}
- .hov{font-family:ui-monospace,monospace;font-size:11.5px;padding:2px 8px;
-   border-radius:3px;background:#12331d;color:#9ff0b5;white-space:nowrap}
- .hov.notone{background:#3a2a12;color:#ffcf8f;font-weight:700}
- .diff{font-size:13px;padding:6px 10px;border-radius:3px;margin:6px 0;font-family:ui-monospace,monospace}
- .diff.same{background:#12331d} .diff.changed{background:#33291a} .diff.na{background:#222;color:#999}
- .caveatfire{background:#1d2b3a;border-left:4px solid #4d90d9;padding:6px 10px;
-   font-size:13px;margin:6px 0;border-radius:3px}
- table.ov{border-collapse:collapse;font-size:12px;margin:8px 0;font-family:ui-monospace,monospace}
- table.ov th,table.ov td{border:1px solid #383838;padding:2px 9px;text-align:right}
- table.ov th{background:#222;color:#bbb}
- table.ov tr.leak td{color:#999;border-top:2px solid #666}
- .leaknote{font-size:12px;color:#999;max-width:820px}
- .panes{display:flex;gap:14px;margin:12px 0}
- .side{flex:1;min-width:0;display:flex;flex-direction:column;gap:10px}
- .pane{border:1px solid #333;border-radius:4px;overflow:hidden;background:#0b0b0b}
- .pane.empty{border-style:dashed;border-color:#777}
- .panehead{background:#1e1e1e;padding:5px 9px;font-size:12px;font-weight:600}
- .pmeta{float:right;font-weight:400;color:#9a9a9a}
- .pane img{width:100%;display:block}
- .cropbox{position:relative;overflow:hidden;width:100%}
- .cropbox img{position:absolute;max-width:none;display:block}
- .cropnote{display:block;background:#22282e;color:#8fb8d9;font-size:11px;
-   padding:2px 9px;border-bottom:1px solid #2e3742}
- .nopane{padding:38px 12px;text-align:center;color:#bbb;font-style:italic}
- .linebody{padding:14px;font-size:14px}
- .vblock{margin-top:10px}
- .vfield{width:100%}
- .vfield label{display:block;font-size:12px;color:#bbb;margin-bottom:3px;font-weight:600}
- textarea{width:100%;box-sizing:border-box;min-height:76px;background:#0d0d0d;color:#eee;
-   border:1px solid #444;border-radius:3px;padding:7px;font:14px/1.45 system-ui,sans-serif;
-   resize:vertical}
- textarea.filled{border-color:#3f8f52}
- textarea.rejected{border-color:#c04040}
- .rej{color:#ff9a9a;font-size:12px;min-height:16px;margin-top:2px}
- .hint{font-size:11px;color:#888;margin-top:2px}
-</style>
+  :root{
+    --bg:#14171c; --panel:#1c2027; --line:#2c323c; --ink:#e8ecf2;
+    --dim:#98a2b3; --accent:#00e5ff; --on:#1d6fa5; --warn:#ff2d95;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:14px/1.45 ui-sans-serif,system-ui,"Segoe UI",Roboto,sans-serif}
+  header{display:flex;align-items:center;gap:14px;padding:8px 14px;
+         background:var(--panel);border-bottom:1px solid var(--line);
+         position:sticky;top:0;z-index:30}
+  header h1{font-size:15px;margin:0;font-weight:650}
+  .grow{flex:1}
+  .bar{height:5px;background:var(--line);border-radius:3px;width:220px;
+       overflow:hidden}
+  .bar > div{height:100%;background:var(--accent);width:0}
+  main{display:grid;grid-template-columns:1fr 420px;gap:0;
+       height:calc(100vh - 47px)}
+  #stage{overflow:auto;background:#0c0e11;display:flex;align-items:flex-start;
+         justify-content:center;padding:10px}
+  #stage img.big{max-width:100%;height:auto;display:block}
+  aside{overflow-y:auto;padding:14px 16px 60px;background:var(--panel);
+        border-left:1px solid var(--line)}
+  h2{font-size:16px;margin:0 0 2px}
+  .sub{color:var(--dim);font-size:12px;margin-bottom:12px}
+  fieldset{border:1px solid var(--line);border-radius:8px;margin:0 0 12px;
+           padding:9px 11px 11px}
+  legend{color:var(--dim);font-size:11px;letter-spacing:.09em;
+         text-transform:uppercase;padding:0 5px}
+  .opts{display:flex;flex-wrap:wrap;gap:6px}
+  /* Every option, including `unsure`, uses this one rule. There is
+     deliberately no variant that makes any answer look preferable. */
+  button.opt{background:#232935;color:var(--ink);border:1px solid var(--line);
+             border-radius:7px;padding:7px 10px;cursor:pointer;font-size:13px;
+             font-family:inherit;display:flex;align-items:center;gap:6px}
+  button.opt:hover{border-color:var(--accent)}
+  button.opt.on{background:var(--on);border-color:var(--accent);font-weight:650}
+  button.opt kbd{background:#0e1116;border:1px solid var(--line);
+                 border-radius:4px;padding:0 5px;font-size:11px;color:var(--dim)}
+  button.opt.on kbd{color:#dff3ff;border-color:#4aa8d8}
+  textarea{width:100%;min-height:78px;background:#0e1116;color:var(--ink);
+           border:1px solid var(--line);border-radius:7px;padding:8px;
+           font:13px/1.4 inherit;resize:vertical}
+  .inset{border:1px solid var(--line);border-radius:7px;overflow:hidden;
+         margin-bottom:12px;cursor:zoom-in}
+  .inset img{width:100%;display:block}
+  .stats{font:12px/1.5 ui-monospace,Menlo,Consolas,monospace;color:var(--dim);
+         background:#0e1116;border:1px solid var(--line);border-radius:7px;
+         padding:8px;margin-bottom:12px}
+  .hidden{display:none}
+  .ghost{background:transparent;color:var(--dim);border:1px solid var(--line);
+         border-radius:7px;padding:6px 10px;cursor:pointer;font:inherit;
+         font-size:12px}
+  .ghost:hover{color:var(--ink);border-color:var(--accent)}
+  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  td,th{border-bottom:1px solid var(--line);padding:6px 5px;text-align:left;
+        vertical-align:top}
+  th{color:var(--dim);font-weight:600;font-size:11px;text-transform:uppercase;
+     letter-spacing:.07em}
+  .pill{display:inline-block;border-radius:20px;padding:1px 9px;font-size:11px;
+        border:1px solid var(--line);color:var(--dim)}
+  .pill.done{background:#14402a;border-color:#2f7d52;color:#8fe0b0}
+  .pill.todo{background:#3a2030;border-color:#7d3060;color:var(--warn)}
+  #big{position:fixed;inset:0;background:#000d;z-index:60;display:none;
+       align-items:center;justify-content:center;cursor:zoom-out;padding:20px}
+  #big img{max-width:100%;max-height:100%}
+  .keyhelp{font-size:11.5px;color:var(--dim);line-height:1.7}
+  .keyhelp kbd{background:#0e1116;border:1px solid var(--line);border-radius:4px;
+               padding:0 5px}
+  a.dl{display:inline-block;background:var(--on);color:#fff;text-decoration:none;
+       padding:10px 16px;border-radius:8px;font-weight:650;border:1px solid var(--accent)}
+  .note{color:var(--dim);font-size:12px;margin:10px 0}
+  .warnbox{border:1px solid #7d3060;background:#2a1320;border-radius:8px;
+           padding:10px 12px;margin-bottom:12px;font-size:12.5px}
+</style></head><body>
+
 <header>
- <div class="hdrtop">
-  <h1>r2-vs-grid-adopted
-    <span class="sub">big_house</span></h1>
-  <span id="status" class="incomplete">checking&hellip;</span>
-  <button id="save" type="button">save verdicts JSON</button>
-  <button id="toggle" type="button">details</button>
- </div>
- <div class="terse" id="terse"><b>NOT BLIND</b> &middot; pixel diff can change without
-   geometry changing &middot; <b>rule 7:</b> no parameter values &middot;
-   2026-07-26-r2 &rarr; 2026-07-30-grid-adopted</div>
- <div id="missing"></div>
- <div id="detail" class="hidden">
-  <div class="sub">OLD <code>2026-07-26-r2</code>
-    (reports\big_house\review\2026-07-27) &nbsp;&rarr;&nbsp;
-    NEW <code>2026-07-30-grid-adopted</code>
-    (reports\big_house\review\2026-07-30-grid-adopted)</div>
-  <div class="prov ok"><b>OLD renders</b> produced by commit <code>2b2870419fc1</code> (2026-07-27) &mdash; Pass 1 review, triage, and M1a pre-registration</div>
-  <div class="prov ok"><b>NEW renders</b> produced by commit <code>7811b3bce38a</code> (2026-07-30) &mdash; ADOPTED: the grid fix is executed and scored. 5/5 predictions PASS, canonical moves to 2026-07-30-grid-adopted</div>
-  <div class="banner caveat"><b>PIXEL DIFF CAVEAT.</b> Two renders can differ in pixels
-    while the geometry is identical &mdash; axis limits, colour scaling, annotation and
-    label placement, font metrics and library versions all move pixels without moving a
-    point. <b>A changed flag means look closer, not something moved.</b> The overlap
-    fractions are computed from point index sets and are the ones that settle it.</div>
-  <div class="banner blind"><b>THIS PASS IS NOT BLIND.</b> The old render is visible while
-    the new one is graded, and which is which is labelled. Recorded as a property of this
-    record.</div>
-  <div class="banner rule7"><b>STANDING RULE 7.</b> Visual review can establish THAT
-    something is wrong and WHAT it is physically. It can never set a parameter value.
-    Describe what you saw, not what the fix should be.</div>
-  <div class="banner caveat"><b>PANES ARE CROPPED TO THEIR CONTENT.</b> Some renders place
-    their content in a small part of a mostly blank frame, so each pane is scaled to the
-    rectangle that actually holds ink. Cropped panes say so and give the factor. Nothing
-    inside the image is altered, and clicking any pane opens the full uncropped PNG.</div>
- </div>
+  <h1>big_house &middot; visual review &middot; 2026-07-30-grid-adopted</h1>
+  <span class="pill" id="where"></span>
+  <div class="bar"><div id="prog"></div></div>
+  <span class="grow"></span>
+  <button class="ghost" id="tglStats">show pitch / area (#)</button>
+  <button class="ghost" id="prev">&larr; prev</button>
+  <button class="ghost" id="next">next &rarr;</button>
 </header>
+
 <main>
-<section class="row 1-to-1" id="facet-row-0">
-  <h2>1-TO-1 &nbsp; old [0] &rarr; new [0]</h2>
-  <div class="hovwrap"><span class="hov">0&rarr;0 &nbsp;of old 1.00000000000000000 &nbsp;of new 1.00000000000000000</span></div>
-  <div class="casenote">one old facet, one new facet</div>
-  <div class="diff changed"><b>hash: DIFFERENT</b> (47fe10ef0ca3 &rarr; d31d929ae5d3) &nbsp; 129,532 of 3,217,500 pixels differ (4.03%), max channel delta 255, mean |delta| 1.83</div>
-  <div class="caveatfire">Overlap is 1.0000 in both directions: these two facets own <b>exactly the same points</b>. The pixel difference above is annotation, layout or labelling, not geometry. Nothing moved.</div>
-  <table class="ov"><tr><th>old</th><th>new</th><th>shared pts</th>
-    <th>fraction of old</th><th>fraction of new</th></tr><tr><td>old 0</td><td>new 0</td><td>1,538,098</td><td>1.0000</td><td>1.0000</td></tr></table>
-  
-  <div class="panes"><div class="side"><div class="pane"><div class="panehead">OLD facet 0<span class="pmeta">main &nbsp;|&nbsp; pitch 21.19&deg; &nbsp;|&nbsp; 1,538,098 pts &nbsp;|&nbsp; q 1.3054</span></div><span class="cropnote">cropped &times;1.8 &mdash; the render drew into 54.5% of its frame. Click for the untouched original.</span><a href="../2026-07-27/facet-00.png" target="_blank" title="open the full uncropped render"><img src="crops/old-facet-00.png" loading="lazy"></a></div></div><div class="side"><div class="pane"><div class="panehead">NEW facet 0<span class="pmeta">main &nbsp;|&nbsp; pitch 21.19&deg; &nbsp;|&nbsp; 1,538,098 pts &nbsp;|&nbsp; q 1.3054</span></div><span class="cropnote">cropped &times;1.8 &mdash; the render drew into 54.5% of its frame. Click for the untouched original.</span><a href="facet-00.png" target="_blank" title="open the full uncropped render"><img src="crops/new-facet-00.png" loading="lazy"></a></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="facet-row-0:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
-    <textarea id="facet-row-0:verdict" placeholder=""></textarea>
-    <div class="rej" id="facet-row-0:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row 1-to-1" id="facet-row-1">
-  <h2>1-TO-1 &nbsp; old [1] &rarr; new [1]</h2>
-  <div class="hovwrap"><span class="hov">1&rarr;1 &nbsp;of old 1.00000000000000000 &nbsp;of new 1.00000000000000000</span></div>
-  <div class="casenote">one old facet, one new facet</div>
-  <div class="diff changed"><b>hash: DIFFERENT</b> (99bf7a5a553f &rarr; 2e98e1fb71c5) &nbsp; 279,270 of 3,217,500 pixels differ (8.68%), max channel delta 255, mean |delta| 3.49</div>
-  <div class="caveatfire">Overlap is 1.0000 in both directions: these two facets own <b>exactly the same points</b>. The pixel difference above is annotation, layout or labelling, not geometry. Nothing moved.</div>
-  <table class="ov"><tr><th>old</th><th>new</th><th>shared pts</th>
-    <th>fraction of old</th><th>fraction of new</th></tr><tr><td>old 1</td><td>new 1</td><td>1,154,335</td><td>1.0000</td><td>1.0000</td></tr></table>
-  
-  <div class="panes"><div class="side"><div class="pane"><div class="panehead">OLD facet 1<span class="pmeta">main &nbsp;|&nbsp; pitch 33.07&deg; &nbsp;|&nbsp; 1,154,335 pts &nbsp;|&nbsp; q 2.2951</span></div><span class="cropnote">cropped &times;1.3 &mdash; the render drew into 76.1% of its frame. Click for the untouched original.</span><a href="../2026-07-27/facet-01.png" target="_blank" title="open the full uncropped render"><img src="crops/old-facet-01.png" loading="lazy"></a></div></div><div class="side"><div class="pane"><div class="panehead">NEW facet 1<span class="pmeta">main &nbsp;|&nbsp; pitch 33.07&deg; &nbsp;|&nbsp; 1,154,335 pts &nbsp;|&nbsp; q 2.2951</span></div><span class="cropnote">cropped &times;1.3 &mdash; the render drew into 76.1% of its frame. Click for the untouched original.</span><a href="facet-01.png" target="_blank" title="open the full uncropped render"><img src="crops/new-facet-01.png" loading="lazy"></a></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="facet-row-1:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
-    <textarea id="facet-row-1:verdict" placeholder=""></textarea>
-    <div class="rej" id="facet-row-1:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row 1-to-1" id="facet-row-2">
-  <h2>1-TO-1 &nbsp; old [2] &rarr; new [2]</h2>
-  <div class="hovwrap"><span class="hov">2&rarr;2 &nbsp;of old 1.00000000000000000 &nbsp;of new 1.00000000000000000</span></div>
-  <div class="casenote">one old facet, one new facet</div>
-  <div class="diff changed"><b>hash: DIFFERENT</b> (d2036219bc76 &rarr; 8ef333549d03) &nbsp; 130,149 of 3,217,500 pixels differ (4.05%), max channel delta 255, mean |delta| 1.76</div>
-  <div class="caveatfire">Overlap is 1.0000 in both directions: these two facets own <b>exactly the same points</b>. The pixel difference above is annotation, layout or labelling, not geometry. Nothing moved.</div>
-  <table class="ov"><tr><th>old</th><th>new</th><th>shared pts</th>
-    <th>fraction of old</th><th>fraction of new</th></tr><tr><td>old 2</td><td>new 2</td><td>693,991</td><td>1.0000</td><td>1.0000</td></tr></table>
-  
-  <div class="panes"><div class="side"><div class="pane"><div class="panehead">OLD facet 2<span class="pmeta">main &nbsp;|&nbsp; pitch 22.72&deg; &nbsp;|&nbsp; 693,991 pts &nbsp;|&nbsp; q 1.0069</span></div><span class="cropnote">cropped &times;1.4 &mdash; the render drew into 70.9% of its frame. Click for the untouched original.</span><a href="../2026-07-27/facet-02.png" target="_blank" title="open the full uncropped render"><img src="crops/old-facet-02.png" loading="lazy"></a></div></div><div class="side"><div class="pane"><div class="panehead">NEW facet 2<span class="pmeta">main &nbsp;|&nbsp; pitch 22.72&deg; &nbsp;|&nbsp; 693,991 pts &nbsp;|&nbsp; q 1.0069</span></div><span class="cropnote">cropped &times;1.4 &mdash; the render drew into 70.9% of its frame. Click for the untouched original.</span><a href="facet-02.png" target="_blank" title="open the full uncropped render"><img src="crops/new-facet-02.png" loading="lazy"></a></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="facet-row-2:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
-    <textarea id="facet-row-2:verdict" placeholder=""></textarea>
-    <div class="rej" id="facet-row-2:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row 1-to-1" id="facet-row-3">
-  <h2>1-TO-1 &nbsp; old [3] &rarr; new [3]</h2>
-  <div class="hovwrap"><span class="hov">3&rarr;3 &nbsp;of old 1.00000000000000000 &nbsp;of new 1.00000000000000000</span></div>
-  <div class="casenote">one old facet, one new facet</div>
-  <div class="diff changed"><b>hash: DIFFERENT</b> (d45d8153e2b7 &rarr; a0090d78f064) &nbsp; 255,160 of 3,217,500 pixels differ (7.93%), max channel delta 255, mean |delta| 2.93</div>
-  <div class="caveatfire">Overlap is 1.0000 in both directions: these two facets own <b>exactly the same points</b>. The pixel difference above is annotation, layout or labelling, not geometry. Nothing moved.</div>
-  <table class="ov"><tr><th>old</th><th>new</th><th>shared pts</th>
-    <th>fraction of old</th><th>fraction of new</th></tr><tr><td>old 3</td><td>new 3</td><td>850,268</td><td>1.0000</td><td>1.0000</td></tr></table>
-  
-  <div class="panes"><div class="side"><div class="pane"><div class="panehead">OLD facet 3<span class="pmeta">main &nbsp;|&nbsp; pitch 34.01&deg; &nbsp;|&nbsp; 850,268 pts &nbsp;|&nbsp; q 1.8003</span></div><span class="cropnote">cropped &times;1.4 &mdash; the render drew into 69.2% of its frame. Click for the untouched original.</span><a href="../2026-07-27/facet-03.png" target="_blank" title="open the full uncropped render"><img src="crops/old-facet-03.png" loading="lazy"></a></div></div><div class="side"><div class="pane"><div class="panehead">NEW facet 3<span class="pmeta">main &nbsp;|&nbsp; pitch 34.01&deg; &nbsp;|&nbsp; 850,268 pts &nbsp;|&nbsp; q 1.8003</span></div><span class="cropnote">cropped &times;1.4 &mdash; the render drew into 69.2% of its frame. Click for the untouched original.</span><a href="facet-03.png" target="_blank" title="open the full uncropped render"><img src="crops/new-facet-03.png" loading="lazy"></a></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="facet-row-3:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
-    <textarea id="facet-row-3:verdict" placeholder=""></textarea>
-    <div class="rej" id="facet-row-3:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row 1-to-1" id="facet-row-4">
-  <h2>1-TO-1 &nbsp; old [4] &rarr; new [4]</h2>
-  <div class="hovwrap"><span class="hov">4&rarr;4 &nbsp;of old 1.00000000000000000 &nbsp;of new 1.00000000000000000</span></div>
-  <div class="casenote">one old facet, one new facet</div>
-  <div class="diff changed"><b>hash: DIFFERENT</b> (4cf598a2b086 &rarr; 6623baf6e668) &nbsp; 27,974 of 3,217,500 pixels differ (0.87%), max channel delta 255, mean |delta| 0.72</div>
-  <div class="caveatfire">Overlap is 1.0000 in both directions: these two facets own <b>exactly the same points</b>. The pixel difference above is annotation, layout or labelling, not geometry. Nothing moved.</div>
-  <table class="ov"><tr><th>old</th><th>new</th><th>shared pts</th>
-    <th>fraction of old</th><th>fraction of new</th></tr><tr><td>old 4</td><td>new 4</td><td>744,303</td><td>1.0000</td><td>1.0000</td></tr></table>
-  
-  <div class="panes"><div class="side"><div class="pane"><div class="panehead">OLD facet 4<span class="pmeta">main &nbsp;|&nbsp; pitch 20.99&deg; &nbsp;|&nbsp; 744,303 pts &nbsp;|&nbsp; q 2.9480</span></div><span class="cropnote">cropped &times;46.7 &mdash; the render drew into 2.1% of its frame &middot; only 214&times;240 real pixels of panel were drawn, so it enlarges soft. Click for the untouched original.</span><a href="../2026-07-27/facet-04.png" target="_blank" title="open the full uncropped render"><img src="crops/old-facet-04.png" loading="lazy"></a></div></div><div class="side"><div class="pane"><div class="panehead">NEW facet 4<span class="pmeta">main &nbsp;|&nbsp; pitch 20.99&deg; &nbsp;|&nbsp; 744,303 pts &nbsp;|&nbsp; q 2.9480</span></div><span class="cropnote">cropped &times;46.9 &mdash; the render drew into 2.1% of its frame &middot; only 213&times;240 real pixels of panel were drawn, so it enlarges soft. Click for the untouched original.</span><a href="facet-04.png" target="_blank" title="open the full uncropped render"><img src="crops/new-facet-04.png" loading="lazy"></a></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="facet-row-4:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
-    <textarea id="facet-row-4:verdict" placeholder=""></textarea>
-    <div class="rej" id="facet-row-4:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row 1-to-1" id="facet-row-5">
-  <h2>1-TO-1 &nbsp; old [5] &rarr; new [5]</h2>
-  <div class="hovwrap"><span class="hov">5&rarr;5 &nbsp;of old 1.00000000000000000 &nbsp;of new 1.00000000000000000</span></div>
-  <div class="casenote">one old facet, one new facet</div>
-  <div class="diff changed"><b>hash: DIFFERENT</b> (14c6952acbcd &rarr; c3474ba40d74) &nbsp; 102,357 of 3,217,500 pixels differ (3.18%), max channel delta 255, mean |delta| 1.29</div>
-  <div class="caveatfire">Overlap is 1.0000 in both directions: these two facets own <b>exactly the same points</b>. The pixel difference above is annotation, layout or labelling, not geometry. Nothing moved.</div>
-  <table class="ov"><tr><th>old</th><th>new</th><th>shared pts</th>
-    <th>fraction of old</th><th>fraction of new</th></tr><tr><td>old 5</td><td>new 5</td><td>669,484</td><td>1.0000</td><td>1.0000</td></tr></table>
-  
-  <div class="panes"><div class="side"><div class="pane"><div class="panehead">OLD facet 5<span class="pmeta">main &nbsp;|&nbsp; pitch 21.36&deg; &nbsp;|&nbsp; 669,484 pts &nbsp;|&nbsp; q 2.6648</span></div><span class="cropnote">cropped &times;1.8 &mdash; the render drew into 54.1% of its frame. Click for the untouched original.</span><a href="../2026-07-27/facet-05.png" target="_blank" title="open the full uncropped render"><img src="crops/old-facet-05.png" loading="lazy"></a></div></div><div class="side"><div class="pane"><div class="panehead">NEW facet 5<span class="pmeta">main &nbsp;|&nbsp; pitch 21.36&deg; &nbsp;|&nbsp; 669,484 pts &nbsp;|&nbsp; q 2.6648</span></div><span class="cropnote">cropped &times;1.8 &mdash; the render drew into 54.1% of its frame. Click for the untouched original.</span><a href="facet-05.png" target="_blank" title="open the full uncropped render"><img src="crops/new-facet-05.png" loading="lazy"></a></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="facet-row-5:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
-    <textarea id="facet-row-5:verdict" placeholder=""></textarea>
-    <div class="rej" id="facet-row-5:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row 1-to-1" id="facet-row-6">
-  <h2>1-TO-1 &nbsp; old [6] &rarr; new [6]</h2>
-  <div class="hovwrap"><span class="hov">6&rarr;6 &nbsp;of old 1.00000000000000000 &nbsp;of new 1.00000000000000000</span></div>
-  <div class="casenote">one old facet, one new facet</div>
-  <div class="diff changed"><b>hash: DIFFERENT</b> (1b5daa727c88 &rarr; 146cb59a544c) &nbsp; 127,457 of 3,217,500 pixels differ (3.96%), max channel delta 255, mean |delta| 1.72</div>
-  <div class="caveatfire">Overlap is 1.0000 in both directions: these two facets own <b>exactly the same points</b>. The pixel difference above is annotation, layout or labelling, not geometry. Nothing moved.</div>
-  <table class="ov"><tr><th>old</th><th>new</th><th>shared pts</th>
-    <th>fraction of old</th><th>fraction of new</th></tr><tr><td>old 6</td><td>new 6</td><td>403,109</td><td>1.0000</td><td>1.0000</td></tr></table>
-  
-  <div class="panes"><div class="side"><div class="pane"><div class="panehead">OLD facet 6<span class="pmeta">main &nbsp;|&nbsp; pitch 33.76&deg; &nbsp;|&nbsp; 403,109 pts &nbsp;|&nbsp; q 1.8218</span></div><span class="cropnote">cropped &times;3.3 &mdash; the render drew into 30.2% of its frame &middot; only 670&times;1137 real pixels of panel were drawn, so it enlarges soft. Click for the untouched original.</span><a href="../2026-07-27/facet-06.png" target="_blank" title="open the full uncropped render"><img src="crops/old-facet-06.png" loading="lazy"></a></div></div><div class="side"><div class="pane"><div class="panehead">NEW facet 6<span class="pmeta">main &nbsp;|&nbsp; pitch 33.76&deg; &nbsp;|&nbsp; 403,109 pts &nbsp;|&nbsp; q 1.8218</span></div><span class="cropnote">cropped &times;3.4 &mdash; the render drew into 29.3% of its frame &middot; only 651&times;1137 real pixels of panel were drawn, so it enlarges soft. Click for the untouched original.</span><a href="facet-06.png" target="_blank" title="open the full uncropped render"><img src="crops/new-facet-06.png" loading="lazy"></a></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="facet-row-6:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
-    <textarea id="facet-row-6:verdict" placeholder=""></textarea>
-    <div class="rej" id="facet-row-6:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row 1-to-1" id="facet-row-7">
-  <h2>1-TO-1 &nbsp; old [7] &rarr; new [7]</h2>
-  <div class="hovwrap"><span class="hov">7&rarr;7 &nbsp;of old 1.00000000000000000 &nbsp;of new 1.00000000000000000</span></div>
-  <div class="casenote">one old facet, one new facet</div>
-  <div class="diff changed"><b>hash: DIFFERENT</b> (ab84ab35f919 &rarr; 911af0984a05) &nbsp; 146,928 of 3,217,500 pixels differ (4.57%), max channel delta 255, mean |delta| 1.88</div>
-  <div class="caveatfire">Overlap is 1.0000 in both directions: these two facets own <b>exactly the same points</b>. The pixel difference above is annotation, layout or labelling, not geometry. Nothing moved.</div>
-  <table class="ov"><tr><th>old</th><th>new</th><th>shared pts</th>
-    <th>fraction of old</th><th>fraction of new</th></tr><tr><td>old 7</td><td>new 7</td><td>297,583</td><td>1.0000</td><td>1.0000</td></tr></table>
-  
-  <div class="panes"><div class="side"><div class="pane"><div class="panehead">OLD facet 7<span class="pmeta">main &nbsp;|&nbsp; pitch 33.52&deg; &nbsp;|&nbsp; 297,583 pts &nbsp;|&nbsp; q 2.0741</span></div><span class="cropnote">cropped &times;2.3 &mdash; the render drew into 43.2% of its frame. Click for the untouched original.</span><a href="../2026-07-27/facet-07.png" target="_blank" title="open the full uncropped render"><img src="crops/old-facet-07.png" loading="lazy"></a></div></div><div class="side"><div class="pane"><div class="panehead">NEW facet 7<span class="pmeta">main &nbsp;|&nbsp; pitch 33.52&deg; &nbsp;|&nbsp; 297,583 pts &nbsp;|&nbsp; q 2.0741</span></div><span class="cropnote">cropped &times;2.3 &mdash; the render drew into 43.2% of its frame. Click for the untouched original.</span><a href="facet-07.png" target="_blank" title="open the full uncropped render"><img src="crops/new-facet-07.png" loading="lazy"></a></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="facet-row-7:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
-    <textarea id="facet-row-7:verdict" placeholder=""></textarea>
-    <div class="rej" id="facet-row-7:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row 1-to-1" id="facet-row-8">
-  <h2>1-TO-1 &nbsp; old [8] &rarr; new [8]</h2>
-  <div class="hovwrap"><span class="hov notone">8&rarr;8 &nbsp;of old 0.85790291491286730 &nbsp;of new 0.89971018677997916 &nbsp;NOT 1.0</span></div>
-  <div class="casenote">one old facet, one new facet</div>
-  <div class="diff changed"><b>hash: DIFFERENT</b> (38d8fc6f6964 &rarr; b33ab62f1f43) &nbsp; 841,252 of 3,217,500 pixels differ (26.15%), max channel delta 255, mean |delta| 9.04</div>
-  
-  <table class="ov"><tr><th>old</th><th>new</th><th>shared pts</th>
-    <th>fraction of old</th><th>fraction of new</th></tr><tr><td>old 8</td><td>new 8</td><td>87,235</td><td>0.8579</td><td>0.8997</td></tr><tr class="leak"><td>old 8</td><td>new 9</td><td>10,929</td><td>0.1075</td><td>0.1251</td></tr><tr class="leak"><td>old 8</td><td>new 10</td><td>1,029</td><td>0.0101</td><td>0.0356</td></tr></table>
-  <div class="leaknote">Rows below the line are overlaps with facets OUTSIDE this row. They are printed, never grouped; grouping is mutual best match and uses no cutoff.</div>
-  <div class="panes"><div class="side"><div class="pane"><div class="panehead">OLD facet 8<span class="pmeta">recovered &nbsp;|&nbsp; pitch 9.79&deg; &nbsp;|&nbsp; 101,684 pts &nbsp;|&nbsp; q 2.5989</span></div><span class="cropnote">cropped &times;1.5 &mdash; the render drew into 66.1% of its frame. Click for the untouched original.</span><a href="../2026-07-27/facet-08.png" target="_blank" title="open the full uncropped render"><img src="crops/old-facet-08.png" loading="lazy"></a></div></div><div class="side"><div class="pane"><div class="panehead">NEW facet 8<span class="pmeta">recovered &nbsp;|&nbsp; pitch 10.01&deg; &nbsp;|&nbsp; 96,959 pts &nbsp;|&nbsp; q 2.7682</span></div><span class="cropnote">cropped &times;1.5 &mdash; the render drew into 66.1% of its frame. Click for the untouched original.</span><a href="facet-08.png" target="_blank" title="open the full uncropped render"><img src="crops/new-facet-08.png" loading="lazy"></a></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="facet-row-8:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
-    <textarea id="facet-row-8:verdict" placeholder=""></textarea>
-    <div class="rej" id="facet-row-8:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row 1-to-1" id="facet-row-9">
-  <h2>1-TO-1 &nbsp; old [9] &rarr; new [9]</h2>
-  <div class="hovwrap"><span class="hov notone">9&rarr;9 &nbsp;of old 0.89337635411171501 &nbsp;of new 0.83334286989460193 &nbsp;NOT 1.0</span></div>
-  <div class="casenote">one old facet, one new facet</div>
-  <div class="diff changed"><b>hash: DIFFERENT</b> (c86bfdd0e06a &rarr; 86a11515705d) &nbsp; 1,304,386 of 3,217,500 pixels differ (40.54%), max channel delta 255, mean |delta| 17.29</div>
-  
-  <table class="ov"><tr><th>old</th><th>new</th><th>shared pts</th>
-    <th>fraction of old</th><th>fraction of new</th></tr><tr><td>old 9</td><td>new 9</td><td>72,820</td><td>0.8934</td><td>0.8333</td></tr><tr class="leak"><td>old 9</td><td>new 8</td><td>5,707</td><td>0.0700</td><td>0.0589</td></tr><tr class="leak"><td>old 9</td><td>new 10</td><td>893</td><td>0.0110</td><td>0.0309</td></tr></table>
-  <div class="leaknote">Rows below the line are overlaps with facets OUTSIDE this row. They are printed, never grouped; grouping is mutual best match and uses no cutoff.</div>
-  <div class="panes"><div class="side"><div class="pane"><div class="panehead">OLD facet 9<span class="pmeta">recovered &nbsp;|&nbsp; pitch 23.20&deg; &nbsp;|&nbsp; 81,511 pts &nbsp;|&nbsp; q 0.9523</span></div><span class="cropnote">cropped &times;1.7 &mdash; the render drew into 58.3% of its frame. Click for the untouched original.</span><a href="../2026-07-27/facet-09.png" target="_blank" title="open the full uncropped render"><img src="crops/old-facet-09.png" loading="lazy"></a></div></div><div class="side"><div class="pane"><div class="panehead">NEW facet 9<span class="pmeta">recovered &nbsp;|&nbsp; pitch 23.42&deg; &nbsp;|&nbsp; 87,383 pts &nbsp;|&nbsp; q 0.8655</span></div><span class="cropnote">cropped &times;1.7 &mdash; the render drew into 58.2% of its frame. Click for the untouched original.</span><a href="facet-09.png" target="_blank" title="open the full uncropped render"><img src="crops/new-facet-09.png" loading="lazy"></a></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="facet-row-9:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
-    <textarea id="facet-row-9:verdict" placeholder=""></textarea>
-    <div class="rej" id="facet-row-9:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row 1-to-1" id="facet-row-10">
-  <h2>1-TO-1 &nbsp; old [10] &rarr; new [10]</h2>
-  <div class="hovwrap"><span class="hov notone">10&rarr;10 &nbsp;of old 0.76034294053265228 &nbsp;of new 0.72012024463563806 &nbsp;NOT 1.0</span></div>
-  <div class="casenote">one old facet, one new facet</div>
-  <div class="diff changed"><b>hash: DIFFERENT</b> (8e4462d30416 &rarr; e9ee23b2bcee) &nbsp; 1,409,082 of 3,217,500 pixels differ (43.79%), max channel delta 255, mean |delta| 25.86</div>
-  
-  <table class="ov"><tr><th>old</th><th>new</th><th>shared pts</th>
-    <th>fraction of old</th><th>fraction of new</th></tr><tr><td>old 10</td><td>new 10</td><td>20,841</td><td>0.7603</td><td>0.7201</td></tr><tr class="leak"><td>old 10</td><td>new 8</td><td>885</td><td>0.0323</td><td>0.0091</td></tr><tr class="leak"><td>old 10</td><td>new 9</td><td>819</td><td>0.0299</td><td>0.0094</td></tr></table>
-  <div class="leaknote">Rows below the line are overlaps with facets OUTSIDE this row. They are printed, never grouped; grouping is mutual best match and uses no cutoff.</div>
-  <div class="panes"><div class="side"><div class="pane"><div class="panehead">OLD facet 10<span class="pmeta">recovered &nbsp;|&nbsp; pitch 38.91&deg; &nbsp;|&nbsp; 27,410 pts &nbsp;|&nbsp; q 1.5869</span></div><span class="cropnote">cropped &times;1.6 &mdash; the render drew into 62.7% of its frame. Click for the untouched original.</span><a href="../2026-07-27/facet-10.png" target="_blank" title="open the full uncropped render"><img src="crops/old-facet-10.png" loading="lazy"></a></div></div><div class="side"><div class="pane"><div class="panehead">NEW facet 10<span class="pmeta">recovered &nbsp;|&nbsp; pitch 39.60&deg; &nbsp;|&nbsp; 28,941 pts &nbsp;|&nbsp; q 1.1163</span></div><span class="cropnote">cropped &times;1.6 &mdash; the render drew into 61.9% of its frame. Click for the untouched original.</span><a href="facet-10.png" target="_blank" title="open the full uncropped render"><img src="crops/new-facet-10.png" loading="lazy"></a></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="facet-row-10:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
-    <textarea id="facet-row-10:verdict" placeholder=""></textarea>
-    <div class="rej" id="facet-row-10:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row 1-to-1" id="facet-row-11">
-  <h2>1-TO-1 &nbsp; old [11] &rarr; new [11]</h2>
-  <div class="hovwrap"><span class="hov notone">11&rarr;11 &nbsp;of old 0.98780675436572041 &nbsp;of new 0.97713263830758690 &nbsp;NOT 1.0</span></div>
-  <div class="casenote">one old facet, one new facet</div>
-  <div class="diff changed"><b>hash: DIFFERENT</b> (7b6de6430b63 &rarr; dcfca80c3b8f) &nbsp; 1,173,530 of 3,217,500 pixels differ (36.47%), max channel delta 255, mean |delta| 12.00</div>
-  
-  <table class="ov"><tr><th>old</th><th>new</th><th>shared pts</th>
-    <th>fraction of old</th><th>fraction of new</th></tr><tr><td>old 11</td><td>new 11</td><td>77,043</td><td>0.9878</td><td>0.9771</td></tr></table>
-  
-  <div class="panes"><div class="side"><div class="pane"><div class="panehead">OLD facet 11<span class="pmeta">recovered &nbsp;|&nbsp; pitch 22.15&deg; &nbsp;|&nbsp; 77,994 pts &nbsp;|&nbsp; q 1.2258</span></div><span class="cropnote">cropped &times;2.0 &mdash; the render drew into 50.4% of its frame. Click for the untouched original.</span><a href="../2026-07-27/facet-11.png" target="_blank" title="open the full uncropped render"><img src="crops/old-facet-11.png" loading="lazy"></a></div></div><div class="side"><div class="pane"><div class="panehead">NEW facet 11<span class="pmeta">recovered &nbsp;|&nbsp; pitch 22.15&deg; &nbsp;|&nbsp; 78,846 pts &nbsp;|&nbsp; q 1.2253</span></div><span class="cropnote">cropped &times;2.0 &mdash; the render drew into 51.0% of its frame. Click for the untouched original.</span><a href="facet-11.png" target="_blank" title="open the full uncropped render"><img src="crops/new-facet-11.png" loading="lazy"></a></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="facet-row-11:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
-    <textarea id="facet-row-11:verdict" placeholder=""></textarea>
-    <div class="rej" id="facet-row-11:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row 1-to-1" id="facet-row-12">
-  <h2>1-TO-1 &nbsp; old [12] &rarr; new [12]</h2>
-  <div class="hovwrap"><span class="hov notone">12&rarr;12 &nbsp;of old 0.96332763990756554 &nbsp;of new 0.90713846444959556 &nbsp;NOT 1.0</span></div>
-  <div class="casenote">one old facet, one new facet</div>
-  <div class="diff changed"><b>hash: DIFFERENT</b> (c6fc6f89e579 &rarr; 6f3ef8280608) &nbsp; 958,763 of 3,217,500 pixels differ (29.80%), max channel delta 255, mean |delta| 8.26</div>
-  
-  <table class="ov"><tr><th>old</th><th>new</th><th>shared pts</th>
-    <th>fraction of old</th><th>fraction of new</th></tr><tr><td>old 12</td><td>new 12</td><td>19,176</td><td>0.9633</td><td>0.9071</td></tr></table>
-  
-  <div class="panes"><div class="side"><div class="pane"><div class="panehead">OLD facet 12<span class="pmeta">recovered &nbsp;|&nbsp; pitch 22.67&deg; &nbsp;|&nbsp; 19,906 pts &nbsp;|&nbsp; q 0.8087</span></div><span class="cropnote">cropped &times;2.4 &mdash; the render drew into 42.5% of its frame. Click for the untouched original.</span><a href="../2026-07-27/facet-12.png" target="_blank" title="open the full uncropped render"><img src="crops/old-facet-12.png" loading="lazy"></a></div></div><div class="side"><div class="pane"><div class="panehead">NEW facet 12<span class="pmeta">recovered &nbsp;|&nbsp; pitch 22.69&deg; &nbsp;|&nbsp; 21,139 pts &nbsp;|&nbsp; q 0.8061</span></div><span class="cropnote">cropped &times;2.4 &mdash; the render drew into 42.4% of its frame. Click for the untouched original.</span><a href="facet-12.png" target="_blank" title="open the full uncropped render"><img src="crops/new-facet-12.png" loading="lazy"></a></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="facet-row-12:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
-    <textarea id="facet-row-12:verdict" placeholder=""></textarea>
-    <div class="rej" id="facet-row-12:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row 1-to-1" id="facet-row-13">
-  <h2>1-TO-1 &nbsp; old [13] &rarr; new [13]</h2>
-  <div class="hovwrap"><span class="hov notone">13&rarr;13 &nbsp;of old 0.97741912310528967 &nbsp;of new 0.95340200406418607 &nbsp;NOT 1.0</span></div>
-  <div class="casenote">one old facet, one new facet</div>
-  <div class="diff changed"><b>hash: DIFFERENT</b> (051f463603ed &rarr; 0287f80cfdc0) &nbsp; 810,990 of 3,217,500 pixels differ (25.21%), max channel delta 255, mean |delta| 6.90</div>
-  
-  <table class="ov"><tr><th>old</th><th>new</th><th>shared pts</th>
-    <th>fraction of old</th><th>fraction of new</th></tr><tr><td>old 13</td><td>new 13</td><td>40,818</td><td>0.9774</td><td>0.9534</td></tr></table>
-  
-  <div class="panes"><div class="side"><div class="pane"><div class="panehead">OLD facet 13<span class="pmeta">recovered &nbsp;|&nbsp; pitch 35.14&deg; &nbsp;|&nbsp; 41,761 pts &nbsp;|&nbsp; q 0.8511</span></div><span class="cropnote">cropped &times;2.5 &mdash; the render drew into 39.2% of its frame. Click for the untouched original.</span><a href="../2026-07-27/facet-13.png" target="_blank" title="open the full uncropped render"><img src="crops/old-facet-13.png" loading="lazy"></a></div></div><div class="side"><div class="pane"><div class="panehead">NEW facet 13<span class="pmeta">recovered &nbsp;|&nbsp; pitch 35.16&deg; &nbsp;|&nbsp; 42,813 pts &nbsp;|&nbsp; q 0.8580</span></div><span class="cropnote">cropped &times;2.6 &mdash; the render drew into 39.0% of its frame. Click for the untouched original.</span><a href="facet-13.png" target="_blank" title="open the full uncropped render"><img src="crops/new-facet-13.png" loading="lazy"></a></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="facet-row-13:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
-    <textarea id="facet-row-13:verdict" placeholder=""></textarea>
-    <div class="rej" id="facet-row-13:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row 1-to-1" id="facet-row-14">
-  <h2>1-TO-1 &nbsp; old [14] &rarr; new [14]</h2>
-  <div class="hovwrap"><span class="hov notone">14&rarr;14 &nbsp;of old 0.96047252615125644 &nbsp;of new 0.93356122359540716 &nbsp;NOT 1.0</span></div>
-  <div class="casenote">one old facet, one new facet</div>
-  <div class="diff changed"><b>hash: DIFFERENT</b> (c05414ef4e7f &rarr; 1ec26ce10367) &nbsp; 713,059 of 3,217,500 pixels differ (22.16%), max channel delta 255, mean |delta| 5.57</div>
-  
-  <table class="ov"><tr><th>old</th><th>new</th><th>shared pts</th>
-    <th>fraction of old</th><th>fraction of new</th></tr><tr><td>old 14</td><td>new 14</td><td>31,953</td><td>0.9605</td><td>0.9336</td></tr></table>
-  
-  <div class="panes"><div class="side"><div class="pane"><div class="panehead">OLD facet 14<span class="pmeta">recovered &nbsp;|&nbsp; pitch 34.67&deg; &nbsp;|&nbsp; 33,268 pts &nbsp;|&nbsp; q 0.9849</span></div><span class="cropnote">cropped &times;2.5 &mdash; the render drew into 39.8% of its frame. Click for the untouched original.</span><a href="../2026-07-27/facet-14.png" target="_blank" title="open the full uncropped render"><img src="crops/old-facet-14.png" loading="lazy"></a></div></div><div class="side"><div class="pane"><div class="panehead">NEW facet 14<span class="pmeta">recovered &nbsp;|&nbsp; pitch 34.68&deg; &nbsp;|&nbsp; 34,227 pts &nbsp;|&nbsp; q 0.9842</span></div><span class="cropnote">cropped &times;2.5 &mdash; the render drew into 39.7% of its frame. Click for the untouched original.</span><a href="facet-14.png" target="_blank" title="open the full uncropped render"><img src="crops/new-facet-14.png" loading="lazy"></a></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="facet-row-14:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
-    <textarea id="facet-row-14:verdict" placeholder=""></textarea>
-    <div class="rej" id="facet-row-14:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row 1-to-1" id="facet-row-15">
-  <h2>1-TO-1 &nbsp; old [15] &rarr; new [15]</h2>
-  <div class="hovwrap"><span class="hov notone">15&rarr;15 &nbsp;of old 0.98956516273003003 &nbsp;of new 0.98381376454964453 &nbsp;NOT 1.0</span></div>
-  <div class="casenote">one old facet, one new facet</div>
-  <div class="diff changed"><b>hash: DIFFERENT</b> (e00f87d0e38d &rarr; de9dcac88893) &nbsp; 380,542 of 3,217,500 pixels differ (11.83%), max channel delta 255, mean |delta| 3.82</div>
-  
-  <table class="ov"><tr><th>old</th><th>new</th><th>shared pts</th>
-    <th>fraction of old</th><th>fraction of new</th></tr><tr><td>old 15</td><td>new 15</td><td>62,969</td><td>0.9896</td><td>0.9838</td></tr></table>
-  
-  <div class="panes"><div class="side"><div class="pane"><div class="panehead">OLD facet 15<span class="pmeta">recovered &nbsp;|&nbsp; pitch 35.16&deg; &nbsp;|&nbsp; 63,633 pts &nbsp;|&nbsp; q 0.6488</span></div><span class="cropnote">cropped &times;2.6 &mdash; the render drew into 38.9% of its frame. Click for the untouched original.</span><a href="../2026-07-27/facet-15.png" target="_blank" title="open the full uncropped render"><img src="crops/old-facet-15.png" loading="lazy"></a></div></div><div class="side"><div class="pane"><div class="panehead">NEW facet 15<span class="pmeta">recovered &nbsp;|&nbsp; pitch 35.15&deg; &nbsp;|&nbsp; 64,005 pts &nbsp;|&nbsp; q 0.6511</span></div><span class="cropnote">cropped &times;2.6 &mdash; the render drew into 38.8% of its frame. Click for the untouched original.</span><a href="facet-15.png" target="_blank" title="open the full uncropped render"><img src="crops/new-facet-15.png" loading="lazy"></a></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="facet-row-15:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
-    <textarea id="facet-row-15:verdict" placeholder=""></textarea>
-    <div class="rej" id="facet-row-15:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row 1-to-1" id="facet-row-16">
-  <h2>1-TO-1 &nbsp; old [16] &rarr; new [16]</h2>
-  <div class="hovwrap"><span class="hov notone">16&rarr;16 &nbsp;of old 0.98130406885412746 &nbsp;of new 0.97265290905502311 &nbsp;NOT 1.0</span></div>
-  <div class="casenote">one old facet, one new facet</div>
-  <div class="diff changed"><b>hash: DIFFERENT</b> (198bcf1770c8 &rarr; 2c63d3acde92) &nbsp; 811,279 of 3,217,500 pixels differ (25.21%), max channel delta 255, mean |delta| 6.79</div>
-  
-  <table class="ov"><tr><th>old</th><th>new</th><th>shared pts</th>
-    <th>fraction of old</th><th>fraction of new</th></tr><tr><td>old 16</td><td>new 16</td><td>44,352</td><td>0.9813</td><td>0.9727</td></tr></table>
-  
-  <div class="panes"><div class="side"><div class="pane"><div class="panehead">OLD facet 16<span class="pmeta">recovered &nbsp;|&nbsp; pitch 34.11&deg; &nbsp;|&nbsp; 45,197 pts &nbsp;|&nbsp; q 0.8896</span></div><span class="cropnote">cropped &times;2.5 &mdash; the render drew into 39.2% of its frame. Click for the untouched original.</span><a href="../2026-07-27/facet-16.png" target="_blank" title="open the full uncropped render"><img src="crops/old-facet-16.png" loading="lazy"></a></div></div><div class="side"><div class="pane"><div class="panehead">NEW facet 16<span class="pmeta">recovered &nbsp;|&nbsp; pitch 34.12&deg; &nbsp;|&nbsp; 45,599 pts &nbsp;|&nbsp; q 0.8909</span></div><span class="cropnote">cropped &times;2.5 &mdash; the render drew into 39.4% of its frame. Click for the untouched original.</span><a href="facet-16.png" target="_blank" title="open the full uncropped render"><img src="crops/new-facet-16.png" loading="lazy"></a></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="facet-row-16:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
-    <textarea id="facet-row-16:verdict" placeholder=""></textarea>
-    <div class="rej" id="facet-row-16:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row 1-to-1" id="facet-row-17">
-  <h2>1-TO-1 &nbsp; old [17] &rarr; new [17]</h2>
-  <div class="hovwrap"><span class="hov notone">17&rarr;17 &nbsp;of old 0.99104102866490407 &nbsp;of new 0.97651579046012560 &nbsp;NOT 1.0</span></div>
-  <div class="casenote">one old facet, one new facet</div>
-  <div class="diff changed"><b>hash: DIFFERENT</b> (96175b625559 &rarr; 8fb9f17dab7e) &nbsp; 498,234 of 3,217,500 pixels differ (15.49%), max channel delta 255, mean |delta| 4.28</div>
-  
-  <table class="ov"><tr><th>old</th><th>new</th><th>shared pts</th>
-    <th>fraction of old</th><th>fraction of new</th></tr><tr><td>old 17</td><td>new 17</td><td>52,102</td><td>0.9910</td><td>0.9765</td></tr></table>
-  
-  <div class="panes"><div class="side"><div class="pane"><div class="panehead">OLD facet 17<span class="pmeta">recovered &nbsp;|&nbsp; pitch 35.17&deg; &nbsp;|&nbsp; 52,573 pts &nbsp;|&nbsp; q 0.7419</span></div><span class="cropnote">cropped &times;2.6 &mdash; the render drew into 38.3% of its frame. Click for the untouched original.</span><a href="../2026-07-27/facet-17.png" target="_blank" title="open the full uncropped render"><img src="crops/old-facet-17.png" loading="lazy"></a></div></div><div class="side"><div class="pane"><div class="panehead">NEW facet 17<span class="pmeta">recovered &nbsp;|&nbsp; pitch 35.18&deg; &nbsp;|&nbsp; 53,355 pts &nbsp;|&nbsp; q 0.7413</span></div><span class="cropnote">cropped &times;2.6 &mdash; the render drew into 38.4% of its frame. Click for the untouched original.</span><a href="facet-17.png" target="_blank" title="open the full uncropped render"><img src="crops/new-facet-17.png" loading="lazy"></a></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="facet-row-17:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
-    <textarea id="facet-row-17:verdict" placeholder=""></textarea>
-    <div class="rej" id="facet-row-17:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row 1-to-1" id="facet-row-18">
-  <h2>1-TO-1 &nbsp; old [18] &rarr; new [18]</h2>
-  <div class="hovwrap"><span class="hov notone">18&rarr;18 &nbsp;of old 0.95700029351335480 &nbsp;of new 0.97758788696499510 &nbsp;NOT 1.0</span></div>
-  <div class="casenote">one old facet, one new facet</div>
-  <div class="diff changed"><b>hash: DIFFERENT</b> (d56e78990762 &rarr; 3cf3d63586b3) &nbsp; 356,771 of 3,217,500 pixels differ (11.09%), max channel delta 255, mean |delta| 3.75</div>
-  
-  <table class="ov"><tr><th>old</th><th>new</th><th>shared pts</th>
-    <th>fraction of old</th><th>fraction of new</th></tr><tr><td>old 18</td><td>new 18</td><td>39,126</td><td>0.9570</td><td>0.9776</td></tr></table>
-  
-  <div class="panes"><div class="side"><div class="pane"><div class="panehead">OLD facet 18<span class="pmeta">recovered &nbsp;|&nbsp; pitch 33.97&deg; &nbsp;|&nbsp; 40,884 pts &nbsp;|&nbsp; q 0.6979</span></div><span class="cropnote">cropped &times;2.7 &mdash; the render drew into 37.0% of its frame &middot; only 695&times;1273 real pixels of panel were drawn, so it enlarges soft. Click for the untouched original.</span><a href="../2026-07-27/facet-18.png" target="_blank" title="open the full uncropped render"><img src="crops/old-facet-18.png" loading="lazy"></a></div></div><div class="side"><div class="pane"><div class="panehead">NEW facet 18<span class="pmeta">recovered &nbsp;|&nbsp; pitch 33.98&deg; &nbsp;|&nbsp; 40,023 pts &nbsp;|&nbsp; q 0.6947</span></div><span class="cropnote">cropped &times;2.7 &mdash; the render drew into 37.1% of its frame &middot; only 697&times;1273 real pixels of panel were drawn, so it enlarges soft. Click for the untouched original.</span><a href="facet-18.png" target="_blank" title="open the full uncropped render"><img src="crops/new-facet-18.png" loading="lazy"></a></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="facet-row-18:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
-    <textarea id="facet-row-18:verdict" placeholder=""></textarea>
-    <div class="rej" id="facet-row-18:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row 1-to-1" id="facet-row-19">
-  <h2>1-TO-1 &nbsp; old [19] &rarr; new [19]</h2>
-  <div class="hovwrap"><span class="hov notone">19&rarr;19 &nbsp;of old 0.98243639650941827 &nbsp;of new 0.97077697159733112 &nbsp;NOT 1.0</span></div>
-  <div class="casenote">one old facet, one new facet</div>
-  <div class="diff changed"><b>hash: DIFFERENT</b> (3b09832afb4b &rarr; 21e4f6b3416a) &nbsp; 832,768 of 3,217,500 pixels differ (25.88%), max channel delta 255, mean |delta| 7.48</div>
-  
-  <table class="ov"><tr><th>old</th><th>new</th><th>shared pts</th>
-    <th>fraction of old</th><th>fraction of new</th></tr><tr><td>old 19</td><td>new 19</td><td>53,251</td><td>0.9824</td><td>0.9708</td></tr></table>
-  
-  <div class="panes"><div class="side"><div class="pane"><div class="panehead">OLD facet 19<span class="pmeta">recovered &nbsp;|&nbsp; pitch 34.50&deg; &nbsp;|&nbsp; 54,203 pts &nbsp;|&nbsp; q 0.6553</span></div><span class="cropnote">cropped &times;2.6 &mdash; the render drew into 38.7% of its frame. Click for the untouched original.</span><a href="../2026-07-27/facet-19.png" target="_blank" title="open the full uncropped render"><img src="crops/old-facet-19.png" loading="lazy"></a></div></div><div class="side"><div class="pane"><div class="panehead">NEW facet 19<span class="pmeta">recovered &nbsp;|&nbsp; pitch 34.52&deg; &nbsp;|&nbsp; 54,854 pts &nbsp;|&nbsp; q 0.6687</span></div><span class="cropnote">cropped &times;2.6 &mdash; the render drew into 38.5% of its frame. Click for the untouched original.</span><a href="facet-19.png" target="_blank" title="open the full uncropped render"><img src="crops/new-facet-19.png" loading="lazy"></a></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="facet-row-19:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
-    <textarea id="facet-row-19:verdict" placeholder=""></textarea>
-    <div class="rej" id="facet-row-19:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row 1-to-1" id="facet-row-20">
-  <h2>1-TO-1 &nbsp; old [20] &rarr; new [20]</h2>
-  <div class="hovwrap"><span class="hov notone">20&rarr;20 &nbsp;of old 0.95258309509370753 &nbsp;of new 0.96141179213663253 &nbsp;NOT 1.0</span></div>
-  <div class="casenote">one old facet, one new facet</div>
-  <div class="diff changed"><b>hash: DIFFERENT</b> (b667d04dc224 &rarr; b0edc5b93606) &nbsp; 1,019,547 of 3,217,500 pixels differ (31.69%), max channel delta 255, mean |delta| 11.30</div>
-  
-  <table class="ov"><tr><th>old</th><th>new</th><th>shared pts</th>
-    <th>fraction of old</th><th>fraction of new</th></tr><tr><td>old 20</td><td>new 20</td><td>32,987</td><td>0.9526</td><td>0.9614</td></tr><tr class="leak"><td>old 20</td><td>new 19</td><td>492</td><td>0.0142</td><td>0.0090</td></tr></table>
-  <div class="leaknote">Rows below the line are overlaps with facets OUTSIDE this row. They are printed, never grouped; grouping is mutual best match and uses no cutoff.</div>
-  <div class="panes"><div class="side"><div class="pane"><div class="panehead">OLD facet 20<span class="pmeta">recovered &nbsp;|&nbsp; pitch 34.01&deg; &nbsp;|&nbsp; 34,629 pts &nbsp;|&nbsp; q 0.6002</span></div><span class="cropnote">cropped &times;2.4 &mdash; the render drew into 42.2% of its frame. Click for the untouched original.</span><a href="../2026-07-27/facet-20.png" target="_blank" title="open the full uncropped render"><img src="crops/old-facet-20.png" loading="lazy"></a></div></div><div class="side"><div class="pane"><div class="panehead">NEW facet 20<span class="pmeta">recovered &nbsp;|&nbsp; pitch 34.01&deg; &nbsp;|&nbsp; 34,311 pts &nbsp;|&nbsp; q 0.5993</span></div><span class="cropnote">cropped &times;2.3 &mdash; the render drew into 42.9% of its frame. Click for the untouched original.</span><a href="facet-20.png" target="_blank" title="open the full uncropped render"><img src="crops/new-facet-20.png" loading="lazy"></a></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="facet-row-20:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
-    <textarea id="facet-row-20:verdict" placeholder=""></textarea>
-    <div class="rej" id="facet-row-20:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row 1-to-1" id="facet-row-21">
-  <h2>1-TO-1 &nbsp; old [21] &rarr; new [21]</h2>
-  <div class="hovwrap"><span class="hov notone">21&rarr;21 &nbsp;of old 0.96020637515324891 &nbsp;of new 0.94452540073363145 &nbsp;NOT 1.0</span></div>
-  <div class="casenote">one old facet, one new facet</div>
-  <div class="diff changed"><b>hash: DIFFERENT</b> (c148f46d29ad &rarr; dac5d675bd58) &nbsp; 1,246,097 of 3,217,500 pixels differ (38.73%), max channel delta 255, mean |delta| 15.04</div>
-  
-  <table class="ov"><tr><th>old</th><th>new</th><th>shared pts</th>
-    <th>fraction of old</th><th>fraction of new</th></tr><tr><td>old 21</td><td>new 21</td><td>18,797</td><td>0.9602</td><td>0.9445</td></tr></table>
-  
-  <div class="panes"><div class="side"><div class="pane"><div class="panehead">OLD facet 21<span class="pmeta">recovered &nbsp;|&nbsp; pitch 33.35&deg; &nbsp;|&nbsp; 19,576 pts &nbsp;|&nbsp; q 0.9465</span></div><span class="cropnote">cropped &times;1.5 &mdash; the render drew into 65.6% of its frame. Click for the untouched original.</span><a href="../2026-07-27/facet-21.png" target="_blank" title="open the full uncropped render"><img src="crops/old-facet-21.png" loading="lazy"></a></div></div><div class="side"><div class="pane"><div class="panehead">NEW facet 21<span class="pmeta">recovered &nbsp;|&nbsp; pitch 33.35&deg; &nbsp;|&nbsp; 19,901 pts &nbsp;|&nbsp; q 0.9556</span></div><span class="cropnote">cropped &times;1.5 &mdash; the render drew into 66.2% of its frame. Click for the untouched original.</span><a href="facet-21.png" target="_blank" title="open the full uncropped render"><img src="crops/new-facet-21.png" loading="lazy"></a></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="facet-row-21:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
-    <textarea id="facet-row-21:verdict" placeholder=""></textarea>
-    <div class="rej" id="facet-row-21:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row 1-to-1" id="facet-row-22">
-  <h2>1-TO-1 &nbsp; old [22] &rarr; new [22]</h2>
-  <div class="hovwrap"><span class="hov notone">22&rarr;22 &nbsp;of old 0.96908029657674710 &nbsp;of new 0.96497015394282126 &nbsp;NOT 1.0</span></div>
-  <div class="casenote">one old facet, one new facet</div>
-  <div class="diff changed"><b>hash: DIFFERENT</b> (fab5737d4e8f &rarr; 564947f40fd9) &nbsp; 1,452,993 of 3,217,500 pixels differ (45.16%), max channel delta 255, mean |delta| 16.13</div>
-  
-  <table class="ov"><tr><th>old</th><th>new</th><th>shared pts</th>
-    <th>fraction of old</th><th>fraction of new</th></tr><tr><td>old 22</td><td>new 22</td><td>18,429</td><td>0.9691</td><td>0.9650</td></tr><tr class="leak"><td>old 22</td><td>new 21</td><td>221</td><td>0.0116</td><td>0.0111</td></tr></table>
-  <div class="leaknote">Rows below the line are overlaps with facets OUTSIDE this row. They are printed, never grouped; grouping is mutual best match and uses no cutoff.</div>
-  <div class="panes"><div class="side"><div class="pane"><div class="panehead">OLD facet 22<span class="pmeta">recovered &nbsp;|&nbsp; pitch 32.75&deg; &nbsp;|&nbsp; 19,017 pts &nbsp;|&nbsp; q 0.8168</span></div><span class="cropnote">cropped &times;1.6 &mdash; the render drew into 64.0% of its frame. Click for the untouched original.</span><a href="../2026-07-27/facet-22.png" target="_blank" title="open the full uncropped render"><img src="crops/old-facet-22.png" loading="lazy"></a></div></div><div class="side"><div class="pane"><div class="panehead">NEW facet 22<span class="pmeta">recovered &nbsp;|&nbsp; pitch 32.74&deg; &nbsp;|&nbsp; 19,098 pts &nbsp;|&nbsp; q 0.8251</span></div><span class="cropnote">cropped &times;1.6 &mdash; the render drew into 64.4% of its frame. Click for the untouched original.</span><a href="facet-22.png" target="_blank" title="open the full uncropped render"><img src="crops/new-facet-22.png" loading="lazy"></a></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="facet-row-22:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
-    <textarea id="facet-row-22:verdict" placeholder=""></textarea>
-    <div class="rej" id="facet-row-22:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row 1-to-1" id="facet-row-23">
-  <h2>1-TO-1 &nbsp; old [23] &rarr; new [23]</h2>
-  <div class="hovwrap"><span class="hov notone">23&rarr;23 &nbsp;of old 0.98013188073394497 &nbsp;of new 0.96320401205871575 &nbsp;NOT 1.0</span></div>
-  <div class="casenote">one old facet, one new facet</div>
-  <div class="diff changed"><b>hash: DIFFERENT</b> (980b0e151fae &rarr; 6196223f1694) &nbsp; 1,661,336 of 3,217,500 pixels differ (51.63%), max channel delta 255, mean |delta| 14.63</div>
-  
-  <table class="ov"><tr><th>old</th><th>new</th><th>shared pts</th>
-    <th>fraction of old</th><th>fraction of new</th></tr><tr><td>old 23</td><td>new 23</td><td>34,187</td><td>0.9801</td><td>0.9632</td></tr></table>
-  
-  <div class="panes"><div class="side"><div class="pane"><div class="panehead">OLD facet 23<span class="pmeta">recovered &nbsp;|&nbsp; pitch 8.49&deg; &nbsp;|&nbsp; 34,880 pts &nbsp;|&nbsp; q 1.5816</span></div><span class="cropnote">cropped &times;1.4 &mdash; the render drew into 72.5% of its frame. Click for the untouched original.</span><a href="../2026-07-27/facet-23.png" target="_blank" title="open the full uncropped render"><img src="crops/old-facet-23.png" loading="lazy"></a></div></div><div class="side"><div class="pane"><div class="panehead">NEW facet 23<span class="pmeta">recovered &nbsp;|&nbsp; pitch 8.49&deg; &nbsp;|&nbsp; 35,493 pts &nbsp;|&nbsp; q 1.5843</span></div><span class="cropnote">cropped &times;1.4 &mdash; the render drew into 71.9% of its frame. Click for the untouched original.</span><a href="facet-23.png" target="_blank" title="open the full uncropped render"><img src="crops/new-facet-23.png" loading="lazy"></a></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="facet-row-23:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
-    <textarea id="facet-row-23:verdict" placeholder=""></textarea>
-    <div class="rej" id="facet-row-23:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row 1-to-1" id="facet-row-24">
-  <h2>1-TO-1 &nbsp; old [24] &rarr; new [24]</h2>
-  <div class="hovwrap"><span class="hov notone">24&rarr;24 &nbsp;of old 0.94745884037222616 &nbsp;of new 0.89438475572673826 &nbsp;NOT 1.0</span></div>
-  <div class="casenote">one old facet, one new facet</div>
-  <div class="diff changed"><b>hash: DIFFERENT</b> (93b6f84c8bc6 &rarr; d5974d3ec0c0) &nbsp; 1,032,418 of 3,217,500 pixels differ (32.09%), max channel delta 255, mean |delta| 12.92</div>
-  
-  <table class="ov"><tr><th>old</th><th>new</th><th>shared pts</th>
-    <th>fraction of old</th><th>fraction of new</th></tr><tr><td>old 24</td><td>new 24</td><td>13,236</td><td>0.9475</td><td>0.8944</td></tr></table>
-  
-  <div class="panes"><div class="side"><div class="pane"><div class="panehead">OLD facet 24<span class="pmeta">recovered &nbsp;|&nbsp; pitch 21.57&deg; &nbsp;|&nbsp; 13,970 pts &nbsp;|&nbsp; q 2.0455</span></div><span class="cropnote">cropped &times;2.4 &mdash; the render drew into 41.2% of its frame. Click for the untouched original.</span><a href="../2026-07-27/facet-24.png" target="_blank" title="open the full uncropped render"><img src="crops/old-facet-24.png" loading="lazy"></a></div></div><div class="side"><div class="pane"><div class="panehead">NEW facet 24<span class="pmeta">recovered &nbsp;|&nbsp; pitch 21.60&deg; &nbsp;|&nbsp; 14,799 pts &nbsp;|&nbsp; q 2.0425</span></div><span class="cropnote">cropped &times;2.3 &mdash; the render drew into 43.2% of its frame. Click for the untouched original.</span><a href="facet-24.png" target="_blank" title="open the full uncropped render"><img src="crops/new-facet-24.png" loading="lazy"></a></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="facet-row-24:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
-    <textarea id="facet-row-24:verdict" placeholder=""></textarea>
-    <div class="rej" id="facet-row-24:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row 1-to-1" id="facet-row-25">
-  <h2>1-TO-1 &nbsp; old [25] &rarr; new [25]</h2>
-  <div class="hovwrap"><span class="hov notone">25&rarr;25 &nbsp;of old 0.84683402784835859 &nbsp;of new 0.84709231394875961 &nbsp;NOT 1.0</span></div>
-  <div class="casenote">one old facet, one new facet</div>
-  <div class="diff changed"><b>hash: DIFFERENT</b> (3da85f773296 &rarr; d299a417c3ab) &nbsp; 1,662,029 of 3,217,500 pixels differ (51.66%), max channel delta 255, mean |delta| 23.85</div>
-  
-  <table class="ov"><tr><th>old</th><th>new</th><th>shared pts</th>
-    <th>fraction of old</th><th>fraction of new</th></tr><tr><td>old 25</td><td>new 25</td><td>8,332</td><td>0.8468</td><td>0.8471</td></tr></table>
-  
-  <div class="panes"><div class="side"><div class="pane"><div class="panehead">OLD facet 25<span class="pmeta">recovered &nbsp;|&nbsp; pitch 32.79&deg; &nbsp;|&nbsp; 9,839 pts &nbsp;|&nbsp; q 1.7211</span></div><span class="cropnote">cropped &times;1.5 &mdash; the render drew into 68.1% of its frame. Click for the untouched original.</span><a href="../2026-07-27/facet-25.png" target="_blank" title="open the full uncropped render"><img src="crops/old-facet-25.png" loading="lazy"></a></div></div><div class="side"><div class="pane"><div class="panehead">NEW facet 25<span class="pmeta">recovered &nbsp;|&nbsp; pitch 32.79&deg; &nbsp;|&nbsp; 9,836 pts &nbsp;|&nbsp; q 1.7271</span></div><span class="cropnote">cropped &times;1.4 &mdash; the render drew into 70.1% of its frame. Click for the untouched original.</span><a href="facet-25.png" target="_blank" title="open the full uncropped render"><img src="crops/new-facet-25.png" loading="lazy"></a></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="facet-row-25:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
-    <textarea id="facet-row-25:verdict" placeholder=""></textarea>
-    <div class="rej" id="facet-row-25:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row 1-to-1" id="facet-row-26">
-  <h2>1-TO-1 &nbsp; old [26] &rarr; new [26]</h2>
-  <div class="hovwrap"><span class="hov notone">26&rarr;26 &nbsp;of old 0.92932489451476796 &nbsp;of new 0.88148971650917174 &nbsp;NOT 1.0</span></div>
-  <div class="casenote">one old facet, one new facet</div>
-  <div class="diff changed"><b>hash: DIFFERENT</b> (dba904df50a0 &rarr; 6f1d41182476) &nbsp; 1,581,375 of 3,217,500 pixels differ (49.15%), max channel delta 255, mean |delta| 19.62</div>
-  
-  <table class="ov"><tr><th>old</th><th>new</th><th>shared pts</th>
-    <th>fraction of old</th><th>fraction of new</th></tr><tr><td>old 26</td><td>new 26</td><td>7,929</td><td>0.9293</td><td>0.8815</td></tr></table>
-  
-  <div class="panes"><div class="side"><div class="pane"><div class="panehead">OLD facet 26<span class="pmeta">recovered &nbsp;|&nbsp; pitch 33.04&deg; &nbsp;|&nbsp; 8,532 pts &nbsp;|&nbsp; q 1.5408</span></div><span class="cropnote">cropped &times;1.3 &mdash; the render drew into 76.7% of its frame. Click for the untouched original.</span><a href="../2026-07-27/facet-26.png" target="_blank" title="open the full uncropped render"><img src="crops/old-facet-26.png" loading="lazy"></a></div></div><div class="side"><div class="pane"><div class="panehead">NEW facet 26<span class="pmeta">recovered &nbsp;|&nbsp; pitch 33.01&deg; &nbsp;|&nbsp; 8,995 pts &nbsp;|&nbsp; q 1.5007</span></div><span class="cropnote">cropped &times;1.3 &mdash; the render drew into 76.6% of its frame. Click for the untouched original.</span><a href="facet-26.png" target="_blank" title="open the full uncropped render"><img src="crops/new-facet-26.png" loading="lazy"></a></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="facet-row-26:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
-    <textarea id="facet-row-26:verdict" placeholder=""></textarea>
-    <div class="rej" id="facet-row-26:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row 1-to-1" id="facet-row-27">
-  <h2>1-TO-1 &nbsp; old [27] &rarr; new [27]</h2>
-  <div class="hovwrap"><span class="hov notone">27&rarr;27 &nbsp;of old 0.96665055582406956 &nbsp;of new 0.94957743804007222 &nbsp;NOT 1.0</span></div>
-  <div class="casenote">one old facet, one new facet</div>
-  <div class="diff changed"><b>hash: DIFFERENT</b> (dcbcb05f5dc2 &rarr; c34809d079b6) &nbsp; 1,584,402 of 3,217,500 pixels differ (49.24%), max channel delta 255, mean |delta| 19.58</div>
-  
-  <table class="ov"><tr><th>old</th><th>new</th><th>shared pts</th>
-    <th>fraction of old</th><th>fraction of new</th></tr><tr><td>old 27</td><td>new 27</td><td>10,000</td><td>0.9667</td><td>0.9496</td></tr></table>
-  
-  <div class="panes"><div class="side"><div class="pane"><div class="panehead">OLD facet 27<span class="pmeta">recovered &nbsp;|&nbsp; pitch 33.26&deg; &nbsp;|&nbsp; 10,345 pts &nbsp;|&nbsp; q 0.8299</span></div><span class="cropnote">cropped &times;1.5 &mdash; the render drew into 67.3% of its frame. Click for the untouched original.</span><a href="../2026-07-27/facet-27.png" target="_blank" title="open the full uncropped render"><img src="crops/old-facet-27.png" loading="lazy"></a></div></div><div class="side"><div class="pane"><div class="panehead">NEW facet 27<span class="pmeta">recovered &nbsp;|&nbsp; pitch 33.24&deg; &nbsp;|&nbsp; 10,531 pts &nbsp;|&nbsp; q 0.8452</span></div><span class="cropnote">cropped &times;1.5 &mdash; the render drew into 66.1% of its frame. Click for the untouched original.</span><a href="facet-27.png" target="_blank" title="open the full uncropped render"><img src="crops/new-facet-27.png" loading="lazy"></a></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="facet-row-27:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
-    <textarea id="facet-row-27:verdict" placeholder=""></textarea>
-    <div class="rej" id="facet-row-27:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row 1-to-1" id="facet-row-28">
-  <h2>1-TO-1 &nbsp; old [28] &rarr; new [28]</h2>
-  <div class="hovwrap"><span class="hov notone">28&rarr;28 &nbsp;of old 0.92695214105793455 &nbsp;of new 0.93211752786220869 &nbsp;NOT 1.0</span></div>
-  <div class="casenote">one old facet, one new facet</div>
-  <div class="diff changed"><b>hash: DIFFERENT</b> (23fa2589045b &rarr; 6c03c11594cf) &nbsp; 1,666,162 of 3,217,500 pixels differ (51.78%), max channel delta 255, mean |delta| 19.90</div>
-  
-  <table class="ov"><tr><th>old</th><th>new</th><th>shared pts</th>
-    <th>fraction of old</th><th>fraction of new</th></tr><tr><td>old 28</td><td>new 28</td><td>3,680</td><td>0.9270</td><td>0.9321</td></tr></table>
-  
-  <div class="panes"><div class="side"><div class="pane"><div class="panehead">OLD facet 28<span class="pmeta">recovered &nbsp;|&nbsp; pitch 33.23&deg; &nbsp;|&nbsp; 3,970 pts &nbsp;|&nbsp; q 1.1040</span></div><span class="cropnote">cropped &times;1.3 &mdash; the render drew into 75.0% of its frame. Click for the untouched original.</span><a href="../2026-07-27/facet-28.png" target="_blank" title="open the full uncropped render"><img src="crops/old-facet-28.png" loading="lazy"></a></div></div><div class="side"><div class="pane"><div class="panehead">NEW facet 28<span class="pmeta">recovered &nbsp;|&nbsp; pitch 33.12&deg; &nbsp;|&nbsp; 3,948 pts &nbsp;|&nbsp; q 1.1677</span></div><span class="cropnote">cropped &times;1.3 &mdash; the render drew into 75.3% of its frame. Click for the untouched original.</span><a href="facet-28.png" target="_blank" title="open the full uncropped render"><img src="crops/new-facet-28.png" loading="lazy"></a></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="facet-row-28:verdict">VERDICT &mdash; what this row shows about the roof, old against new (free text, required)</label>
-    <textarea id="facet-row-28:verdict" placeholder=""></textarea>
-    <div class="rej" id="facet-row-28:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row overview" id="overview-row">
-  <h2>OVERVIEW &nbsp; the whole roof, old against new</h2>
-  <div class="casenote">Reference for the 18 line rows below. A crease is a
-    property of the whole roof, so read the layout here first, then grade each line in its
-    own row. This panel is not graded and is not counted toward completeness.</div>
-  <div class="diff changed"><b>hash: DIFFERENT</b> (18febdb05287 &rarr; b97e3f4cd0da) &nbsp; 1,343,010 of 7,425,000 pixels differ (18.09%), max channel delta 255, mean |delta| 9.29</div>
-  <div class="panes"><div class="side"><div class="pane"><div class="panehead">OLD facet overview<span class="pmeta"></span></div><span class="cropnote">cropped &times;2.1 &mdash; the render drew into 46.8% of its frame. Click for the untouched original.</span><a href="../2026-07-27/overview.png" target="_blank" title="open the full uncropped render"><img src="crops/old-overview.png" loading="lazy"></a></div></div>
-    <div class="side"><div class="pane"><div class="panehead">NEW facet overview<span class="pmeta"></span></div><span class="cropnote">cropped &times;2.1 &mdash; the render drew into 46.6% of its frame. Click for the untouched original.</span><a href="overview.png" target="_blank" title="open the full uncropped render"><img src="crops/new-overview.png" loading="lazy"></a></div></div></div>
-</section>
-<section class="row line 1-to-1" id="line-row-0">
-  <h2>LINE &nbsp; 1-TO-1 &nbsp;
-    ridge between [1, 3]</h2>
-  <div class="casenote">Lines are paired through the computed facet correspondence,
-    not by line id. Grade the crease against the facet renders above.</div>
-  <div class="panes"><div class="side"><div class="pane lineinfo"><div class="panehead">OLD line 0</div><div class="linebody"><b>ridge</b> between facets [1, 3]<br>length 53.4 ft</div></div></div>
-    <div class="side"><div class="pane lineinfo"><div class="panehead">NEW line 0</div><div class="linebody"><b>ridge</b> between facets [1, 3]<br>length 53.4 ft</div></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="line-row-0:verdict">VERDICT &mdash; what this crease looks like, old against new (free text, required)</label>
-    <textarea id="line-row-0:verdict" placeholder=""></textarea>
-    <div class="rej" id="line-row-0:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row line 1-to-1" id="line-row-1">
-  <h2>LINE &nbsp; 1-TO-1 &nbsp;
-    valley between [0, 7]</h2>
-  <div class="casenote">Lines are paired through the computed facet correspondence,
-    not by line id. Grade the crease against the facet renders above.</div>
-  <div class="panes"><div class="side"><div class="pane lineinfo"><div class="panehead">OLD line 1</div><div class="linebody"><b>valley</b> between facets [0, 7]<br>length 32.9 ft</div></div></div>
-    <div class="side"><div class="pane lineinfo"><div class="panehead">NEW line 1</div><div class="linebody"><b>valley</b> between facets [0, 7]<br>length 32.9 ft</div></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="line-row-1:verdict">VERDICT &mdash; what this crease looks like, old against new (free text, required)</label>
-    <textarea id="line-row-1:verdict" placeholder=""></textarea>
-    <div class="rej" id="line-row-1:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row line 1-to-1" id="line-row-2">
-  <h2>LINE &nbsp; 1-TO-1 &nbsp;
-    ridge between [6, 7]</h2>
-  <div class="casenote">Lines are paired through the computed facet correspondence,
-    not by line id. Grade the crease against the facet renders above.</div>
-  <div class="panes"><div class="side"><div class="pane lineinfo"><div class="panehead">OLD line 2</div><div class="linebody"><b>ridge</b> between facets [6, 7]<br>length 20.5 ft</div></div></div>
-    <div class="side"><div class="pane lineinfo"><div class="panehead">NEW line 2</div><div class="linebody"><b>ridge</b> between facets [6, 7]<br>length 20.5 ft</div></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="line-row-2:verdict">VERDICT &mdash; what this crease looks like, old against new (free text, required)</label>
-    <textarea id="line-row-2:verdict" placeholder=""></textarea>
-    <div class="rej" id="line-row-2:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row line 1-to-1" id="line-row-3">
-  <h2>LINE &nbsp; 1-TO-1 &nbsp;
-    hip between [0, 4]</h2>
-  <div class="casenote">Lines are paired through the computed facet correspondence,
-    not by line id. Grade the crease against the facet renders above.</div>
-  <div class="panes"><div class="side"><div class="pane lineinfo"><div class="panehead">OLD line 3</div><div class="linebody"><b>hip</b> between facets [0, 4]<br>length 19.0 ft</div></div></div>
-    <div class="side"><div class="pane lineinfo"><div class="panehead">NEW line 3</div><div class="linebody"><b>hip</b> between facets [0, 4]<br>length 19.0 ft</div></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="line-row-3:verdict">VERDICT &mdash; what this crease looks like, old against new (free text, required)</label>
-    <textarea id="line-row-3:verdict" placeholder=""></textarea>
-    <div class="rej" id="line-row-3:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row line 1-to-1" id="line-row-4">
-  <h2>LINE &nbsp; 1-TO-1 &nbsp;
-    ridge between [0, 2]</h2>
-  <div class="casenote">Lines are paired through the computed facet correspondence,
-    not by line id. Grade the crease against the facet renders above.</div>
-  <div class="panes"><div class="side"><div class="pane lineinfo"><div class="panehead">OLD line 4</div><div class="linebody"><b>ridge</b> between facets [0, 2]<br>length 18.8 ft</div></div></div>
-    <div class="side"><div class="pane lineinfo"><div class="panehead">NEW line 4</div><div class="linebody"><b>ridge</b> between facets [0, 2]<br>length 18.8 ft</div></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="line-row-4:verdict">VERDICT &mdash; what this crease looks like, old against new (free text, required)</label>
-    <textarea id="line-row-4:verdict" placeholder=""></textarea>
-    <div class="rej" id="line-row-4:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row line 1-to-1" id="line-row-5">
-  <h2>LINE &nbsp; 1-TO-1 &nbsp;
-    hip between [2, 4]</h2>
-  <div class="casenote">Lines are paired through the computed facet correspondence,
-    not by line id. Grade the crease against the facet renders above.</div>
-  <div class="panes"><div class="side"><div class="pane lineinfo"><div class="panehead">OLD line 5</div><div class="linebody"><b>hip</b> between facets [2, 4]<br>length 18.6 ft</div></div></div>
-    <div class="side"><div class="pane lineinfo"><div class="panehead">NEW line 5</div><div class="linebody"><b>hip</b> between facets [2, 4]<br>length 18.6 ft</div></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="line-row-5:verdict">VERDICT &mdash; what this crease looks like, old against new (free text, required)</label>
-    <textarea id="line-row-5:verdict" placeholder=""></textarea>
-    <div class="rej" id="line-row-5:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row line 1-to-1" id="line-row-6">
-  <h2>LINE &nbsp; 1-TO-1 &nbsp;
-    ridge between [4, 5]</h2>
-  <div class="casenote">Lines are paired through the computed facet correspondence,
-    not by line id. Grade the crease against the facet renders above.</div>
-  <div class="panes"><div class="side"><div class="pane lineinfo"><div class="panehead">OLD line 9</div><div class="linebody"><b>ridge</b> between facets [4, 5]<br>length 10.8 ft</div></div></div>
-    <div class="side"><div class="pane lineinfo"><div class="panehead">NEW line 6</div><div class="linebody"><b>ridge</b> between facets [4, 5]<br>length 17.4 ft</div></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="line-row-6:verdict">VERDICT &mdash; what this crease looks like, old against new (free text, required)</label>
-    <textarea id="line-row-6:verdict" placeholder=""></textarea>
-    <div class="rej" id="line-row-6:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row line 1-to-1" id="line-row-7">
-  <h2>LINE &nbsp; 1-TO-1 &nbsp;
-    hip between [1, 7]</h2>
-  <div class="casenote">Lines are paired through the computed facet correspondence,
-    not by line id. Grade the crease against the facet renders above.</div>
-  <div class="panes"><div class="side"><div class="pane lineinfo"><div class="panehead">OLD line 6</div><div class="linebody"><b>hip</b> between facets [1, 7]<br>length 13.4 ft</div></div></div>
-    <div class="side"><div class="pane lineinfo"><div class="panehead">NEW line 7</div><div class="linebody"><b>hip</b> between facets [1, 7]<br>length 13.3 ft</div></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="line-row-7:verdict">VERDICT &mdash; what this crease looks like, old against new (free text, required)</label>
-    <textarea id="line-row-7:verdict" placeholder=""></textarea>
-    <div class="rej" id="line-row-7:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row line 1-to-1" id="line-row-8">
-  <h2>LINE &nbsp; 1-TO-1 &nbsp;
-    ridge between [2, 6]</h2>
-  <div class="casenote">Lines are paired through the computed facet correspondence,
-    not by line id. Grade the crease against the facet renders above.</div>
-  <div class="panes"><div class="side"><div class="pane lineinfo"><div class="panehead">OLD line 8</div><div class="linebody"><b>ridge</b> between facets [2, 6]<br>length 10.9 ft</div></div></div>
-    <div class="side"><div class="pane lineinfo"><div class="panehead">NEW line 8</div><div class="linebody"><b>ridge</b> between facets [2, 6]<br>length 10.9 ft</div></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="line-row-8:verdict">VERDICT &mdash; what this crease looks like, old against new (free text, required)</label>
-    <textarea id="line-row-8:verdict" placeholder=""></textarea>
-    <div class="rej" id="line-row-8:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row line 1-to-1" id="line-row-9">
-  <h2>LINE &nbsp; 1-TO-1 &nbsp;
-    hip between [1, 6]</h2>
-  <div class="casenote">Lines are paired through the computed facet correspondence,
-    not by line id. Grade the crease against the facet renders above.</div>
-  <div class="panes"><div class="side"><div class="pane lineinfo"><div class="panehead">OLD line 7</div><div class="linebody"><b>hip</b> between facets [1, 6]<br>length 12.5 ft</div></div></div>
-    <div class="side"><div class="pane lineinfo"><div class="panehead">NEW line 9</div><div class="linebody"><b>hip</b> between facets [1, 6]<br>length 10.5 ft</div></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="line-row-9:verdict">VERDICT &mdash; what this crease looks like, old against new (free text, required)</label>
-    <textarea id="line-row-9:verdict" placeholder=""></textarea>
-    <div class="rej" id="line-row-9:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row line 1-to-1" id="line-row-10">
-  <h2>LINE &nbsp; 1-TO-1 &nbsp;
-    valley between [0, 1]</h2>
-  <div class="casenote">Lines are paired through the computed facet correspondence,
-    not by line id. Grade the crease against the facet renders above.</div>
-  <div class="panes"><div class="side"><div class="pane lineinfo"><div class="panehead">OLD line 10</div><div class="linebody"><b>valley</b> between facets [0, 1]<br>length 10.4 ft</div></div></div>
-    <div class="side"><div class="pane lineinfo"><div class="panehead">NEW line 10</div><div class="linebody"><b>valley</b> between facets [0, 1]<br>length 10.4 ft</div></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="line-row-10:verdict">VERDICT &mdash; what this crease looks like, old against new (free text, required)</label>
-    <textarea id="line-row-10:verdict" placeholder=""></textarea>
-    <div class="rej" id="line-row-10:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row line 1-to-1" id="line-row-11">
-  <h2>LINE &nbsp; 1-TO-1 &nbsp;
-    ridge between [17, 18]</h2>
-  <div class="casenote">Lines are paired through the computed facet correspondence,
-    not by line id. Grade the crease against the facet renders above.</div>
-  <div class="panes"><div class="side"><div class="pane lineinfo"><div class="panehead">OLD line 12</div><div class="linebody"><b>ridge</b> between facets [17, 18]<br>length 9.4 ft</div></div></div>
-    <div class="side"><div class="pane lineinfo"><div class="panehead">NEW line 11</div><div class="linebody"><b>ridge</b> between facets [17, 18]<br>length 9.5 ft</div></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="line-row-11:verdict">VERDICT &mdash; what this crease looks like, old against new (free text, required)</label>
-    <textarea id="line-row-11:verdict" placeholder=""></textarea>
-    <div class="rej" id="line-row-11:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row line 1-to-1" id="line-row-12">
-  <h2>LINE &nbsp; 1-TO-1 &nbsp;
-    ridge between [13, 14]</h2>
-  <div class="casenote">Lines are paired through the computed facet correspondence,
-    not by line id. Grade the crease against the facet renders above.</div>
-  <div class="panes"><div class="side"><div class="pane lineinfo"><div class="panehead">OLD line 11</div><div class="linebody"><b>ridge</b> between facets [13, 14]<br>length 9.4 ft</div></div></div>
-    <div class="side"><div class="pane lineinfo"><div class="panehead">NEW line 13</div><div class="linebody"><b>ridge</b> between facets [13, 14]<br>length 9.4 ft</div></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="line-row-12:verdict">VERDICT &mdash; what this crease looks like, old against new (free text, required)</label>
-    <textarea id="line-row-12:verdict" placeholder=""></textarea>
-    <div class="rej" id="line-row-12:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row line 1-to-1" id="line-row-13">
-  <h2>LINE &nbsp; 1-TO-1 &nbsp;
-    ridge between [15, 16]</h2>
-  <div class="casenote">Lines are paired through the computed facet correspondence,
-    not by line id. Grade the crease against the facet renders above.</div>
-  <div class="panes"><div class="side"><div class="pane lineinfo"><div class="panehead">OLD line 13</div><div class="linebody"><b>ridge</b> between facets [15, 16]<br>length 9.4 ft</div></div></div>
-    <div class="side"><div class="pane lineinfo"><div class="panehead">NEW line 12</div><div class="linebody"><b>ridge</b> between facets [15, 16]<br>length 9.4 ft</div></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="line-row-13:verdict">VERDICT &mdash; what this crease looks like, old against new (free text, required)</label>
-    <textarea id="line-row-13:verdict" placeholder=""></textarea>
-    <div class="rej" id="line-row-13:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row line 1-to-1" id="line-row-14">
-  <h2>LINE &nbsp; 1-TO-1 &nbsp;
-    ridge between [11, 12]</h2>
-  <div class="casenote">Lines are paired through the computed facet correspondence,
-    not by line id. Grade the crease against the facet renders above.</div>
-  <div class="panes"><div class="side"><div class="pane lineinfo"><div class="panehead">OLD line 14</div><div class="linebody"><b>ridge</b> between facets [11, 12]<br>length 8.5 ft</div></div></div>
-    <div class="side"><div class="pane lineinfo"><div class="panehead">NEW line 14</div><div class="linebody"><b>ridge</b> between facets [11, 12]<br>length 8.4 ft</div></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="line-row-14:verdict">VERDICT &mdash; what this crease looks like, old against new (free text, required)</label>
-    <textarea id="line-row-14:verdict" placeholder=""></textarea>
-    <div class="rej" id="line-row-14:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row line 1-to-1" id="line-row-15">
-  <h2>LINE &nbsp; 1-TO-1 &nbsp;
-    ridge between [19, 20]</h2>
-  <div class="casenote">Lines are paired through the computed facet correspondence,
-    not by line id. Grade the crease against the facet renders above.</div>
-  <div class="panes"><div class="side"><div class="pane lineinfo"><div class="panehead">OLD line 15</div><div class="linebody"><b>ridge</b> between facets [19, 20]<br>length 6.5 ft</div></div></div>
-    <div class="side"><div class="pane lineinfo"><div class="panehead">NEW line 15</div><div class="linebody"><b>ridge</b> between facets [19, 20]<br>length 6.4 ft</div></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="line-row-15:verdict">VERDICT &mdash; what this crease looks like, old against new (free text, required)</label>
-    <textarea id="line-row-15:verdict" placeholder=""></textarea>
-    <div class="rej" id="line-row-15:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row line 1-to-1" id="line-row-16">
-  <h2>LINE &nbsp; 1-TO-1 &nbsp;
-    ridge between [21, 22]</h2>
-  <div class="casenote">Lines are paired through the computed facet correspondence,
-    not by line id. Grade the crease against the facet renders above.</div>
-  <div class="panes"><div class="side"><div class="pane lineinfo"><div class="panehead">OLD line 16</div><div class="linebody"><b>ridge</b> between facets [21, 22]<br>length 6.4 ft</div></div></div>
-    <div class="side"><div class="pane lineinfo"><div class="panehead">NEW line 16</div><div class="linebody"><b>ridge</b> between facets [21, 22]<br>length 6.3 ft</div></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="line-row-16:verdict">VERDICT &mdash; what this crease looks like, old against new (free text, required)</label>
-    <textarea id="line-row-16:verdict" placeholder=""></textarea>
-    <div class="rej" id="line-row-16:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section>
-<section class="row line 1-to-1" id="line-row-17">
-  <h2>LINE &nbsp; 1-TO-1 &nbsp;
-    hip between [9, 10]</h2>
-  <div class="casenote">Lines are paired through the computed facet correspondence,
-    not by line id. Grade the crease against the facet renders above.</div>
-  <div class="panes"><div class="side"><div class="pane lineinfo"><div class="panehead">OLD line 17</div><div class="linebody"><b>hip</b> between facets [9, 10]<br>length 1.3 ft</div></div></div>
-    <div class="side"><div class="pane lineinfo"><div class="panehead">NEW line 17</div><div class="linebody"><b>hip</b> between facets [9, 10]<br>length 1.2 ft</div></div></div></div>
-  
-<div class="vblock">
-  <div class="vfield">
-    <label for="line-row-17:verdict">VERDICT &mdash; what this crease looks like, old against new (free text, required)</label>
-    <textarea id="line-row-17:verdict" placeholder=""></textarea>
-    <div class="rej" id="line-row-17:rej"></div>
-    <div class="hint">Physical description only. No threshold, no parameter, no fix.</div>
-  </div>
-</div>
-</section></main>
+  <div id="stage"></div>
+  <aside id="panel"></aside>
+</main>
+<div id="big"><img></div>
+
 <script>
-const ROWS = ["facet-row-0", "facet-row-1", "facet-row-2", "facet-row-3", "facet-row-4", "facet-row-5", "facet-row-6", "facet-row-7", "facet-row-8", "facet-row-9", "facet-row-10", "facet-row-11", "facet-row-12", "facet-row-13", "facet-row-14", "facet-row-15", "facet-row-16", "facet-row-17", "facet-row-18", "facet-row-19", "facet-row-20", "facet-row-21", "facet-row-22", "facet-row-23", "facet-row-24", "facet-row-25", "facet-row-26", "facet-row-27", "facet-row-28", "line-row-0", "line-row-1", "line-row-2", "line-row-3", "line-row-4", "line-row-5", "line-row-6", "line-row-7", "line-row-8", "line-row-9", "line-row-10", "line-row-11", "line-row-12", "line-row-13", "line-row-14", "line-row-15", "line-row-16", "line-row-17"];
-const PRESETS = new Set(["all", "bad", "correct", "cut", "e", "fail", "fine", "good", "long", "major", "merge", "minor", "misplaced", "mistyped", "moderate", "multiple", "n", "ne", "no", "nw", "ok", "over", "pass", "ragged", "s", "se", "short", "split", "spurious", "sw", "tight", "unsure", "w", "yes"]);
-const KEY = "visualpass:r2-vs-grid-adopted";
-const N_FACET_ROWS = 29, N_LINE_ROWS = 18;
-const META = {
- "pass": "r2-vs-grid-adopted",
- "dataset": "big_house",
- "old_artifact": "2026-07-26-r2",
- "new_artifact": "2026-07-30-grid-adopted",
- "old_renders": "reports/big_house/review/2026-07-27",
- "new_renders": "reports/big_house/review/2026-07-30-grid-adopted",
- "old_render_commit": {
-  "known": true,
-  "sha": "2b2870419fc1538f1075cb11b844209f21d48e57",
-  "short": "2b2870419fc1",
-  "date": "2026-07-27",
-  "subject": "Pass 1 review, triage, and M1a pre-registration"
- },
- "new_render_commit": {
-  "known": true,
-  "sha": "7811b3bce38a1ce6758f8594d31bc58b6216aeab",
-  "short": "7811b3bce38a",
-  "date": "2026-07-30",
-  "subject": "ADOPTED: the grid fix is executed and scored. 5/5 predictions PASS, canonical moves to 2026-07-30-grid-adopted"
- },
- "blind": false,
- "blind_note": "side by side; the grader saw the old render and knew which was which. Not blind evidence.",
- "verdict_format": "free text only; no codes, no presets, no pass/fail",
- "panes_cropped": true,
- "crop_note": "panes are scaled to the drawn panel of each render; the originals are unmodified and linked from every pane",
- "n_facet_rows": 29,
- "n_line_rows": 18,
- "row_facets": {
-  "facet-row-0": {
-   "old": [
-    0
-   ],
-   "new": [
-    0
-   ],
-   "case": "1-to-1"
-  },
-  "facet-row-1": {
-   "old": [
-    1
-   ],
-   "new": [
-    1
-   ],
-   "case": "1-to-1"
-  },
-  "facet-row-2": {
-   "old": [
-    2
-   ],
-   "new": [
-    2
-   ],
-   "case": "1-to-1"
-  },
-  "facet-row-3": {
-   "old": [
-    3
-   ],
-   "new": [
-    3
-   ],
-   "case": "1-to-1"
-  },
-  "facet-row-4": {
-   "old": [
-    4
-   ],
-   "new": [
-    4
-   ],
-   "case": "1-to-1"
-  },
-  "facet-row-5": {
-   "old": [
-    5
-   ],
-   "new": [
-    5
-   ],
-   "case": "1-to-1"
-  },
-  "facet-row-6": {
-   "old": [
-    6
-   ],
-   "new": [
-    6
-   ],
-   "case": "1-to-1"
-  },
-  "facet-row-7": {
-   "old": [
-    7
-   ],
-   "new": [
-    7
-   ],
-   "case": "1-to-1"
-  },
-  "facet-row-8": {
-   "old": [
-    8
-   ],
-   "new": [
-    8
-   ],
-   "case": "1-to-1"
-  },
-  "facet-row-9": {
-   "old": [
-    9
-   ],
-   "new": [
-    9
-   ],
-   "case": "1-to-1"
-  },
-  "facet-row-10": {
-   "old": [
-    10
-   ],
-   "new": [
-    10
-   ],
-   "case": "1-to-1"
-  },
-  "facet-row-11": {
-   "old": [
-    11
-   ],
-   "new": [
-    11
-   ],
-   "case": "1-to-1"
-  },
-  "facet-row-12": {
-   "old": [
-    12
-   ],
-   "new": [
-    12
-   ],
-   "case": "1-to-1"
-  },
-  "facet-row-13": {
-   "old": [
-    13
-   ],
-   "new": [
-    13
-   ],
-   "case": "1-to-1"
-  },
-  "facet-row-14": {
-   "old": [
-    14
-   ],
-   "new": [
-    14
-   ],
-   "case": "1-to-1"
-  },
-  "facet-row-15": {
-   "old": [
-    15
-   ],
-   "new": [
-    15
-   ],
-   "case": "1-to-1"
-  },
-  "facet-row-16": {
-   "old": [
-    16
-   ],
-   "new": [
-    16
-   ],
-   "case": "1-to-1"
-  },
-  "facet-row-17": {
-   "old": [
-    17
-   ],
-   "new": [
-    17
-   ],
-   "case": "1-to-1"
-  },
-  "facet-row-18": {
-   "old": [
-    18
-   ],
-   "new": [
-    18
-   ],
-   "case": "1-to-1"
-  },
-  "facet-row-19": {
-   "old": [
-    19
-   ],
-   "new": [
-    19
-   ],
-   "case": "1-to-1"
-  },
-  "facet-row-20": {
-   "old": [
-    20
-   ],
-   "new": [
-    20
-   ],
-   "case": "1-to-1"
-  },
-  "facet-row-21": {
-   "old": [
-    21
-   ],
-   "new": [
-    21
-   ],
-   "case": "1-to-1"
-  },
-  "facet-row-22": {
-   "old": [
-    22
-   ],
-   "new": [
-    22
-   ],
-   "case": "1-to-1"
-  },
-  "facet-row-23": {
-   "old": [
-    23
-   ],
-   "new": [
-    23
-   ],
-   "case": "1-to-1"
-  },
-  "facet-row-24": {
-   "old": [
-    24
-   ],
-   "new": [
-    24
-   ],
-   "case": "1-to-1"
-  },
-  "facet-row-25": {
-   "old": [
-    25
-   ],
-   "new": [
-    25
-   ],
-   "case": "1-to-1"
-  },
-  "facet-row-26": {
-   "old": [
-    26
-   ],
-   "new": [
-    26
-   ],
-   "case": "1-to-1"
-  },
-  "facet-row-27": {
-   "old": [
-    27
-   ],
-   "new": [
-    27
-   ],
-   "case": "1-to-1"
-  },
-  "facet-row-28": {
-   "old": [
-    28
-   ],
-   "new": [
-    28
-   ],
-   "case": "1-to-1"
-  }
- },
- "row_lines": {
-  "line-row-0": {
-   "case": "1-to-1",
-   "kind": "ridge",
-   "between": [
-    1,
-    3
-   ],
-   "length_ft": 53.4
-  },
-  "line-row-1": {
-   "case": "1-to-1",
-   "kind": "valley",
-   "between": [
-    0,
-    7
-   ],
-   "length_ft": 32.9
-  },
-  "line-row-2": {
-   "case": "1-to-1",
-   "kind": "ridge",
-   "between": [
-    6,
-    7
-   ],
-   "length_ft": 20.5
-  },
-  "line-row-3": {
-   "case": "1-to-1",
-   "kind": "hip",
-   "between": [
-    0,
-    4
-   ],
-   "length_ft": 19.0
-  },
-  "line-row-4": {
-   "case": "1-to-1",
-   "kind": "ridge",
-   "between": [
-    0,
-    2
-   ],
-   "length_ft": 18.8
-  },
-  "line-row-5": {
-   "case": "1-to-1",
-   "kind": "hip",
-   "between": [
-    2,
-    4
-   ],
-   "length_ft": 18.6
-  },
-  "line-row-6": {
-   "case": "1-to-1",
-   "kind": "ridge",
-   "between": [
-    4,
-    5
-   ],
-   "length_ft": 17.4
-  },
-  "line-row-7": {
-   "case": "1-to-1",
-   "kind": "hip",
-   "between": [
-    1,
-    7
-   ],
-   "length_ft": 13.3
-  },
-  "line-row-8": {
-   "case": "1-to-1",
-   "kind": "ridge",
-   "between": [
-    2,
-    6
-   ],
-   "length_ft": 10.9
-  },
-  "line-row-9": {
-   "case": "1-to-1",
-   "kind": "hip",
-   "between": [
-    1,
-    6
-   ],
-   "length_ft": 10.5
-  },
-  "line-row-10": {
-   "case": "1-to-1",
-   "kind": "valley",
-   "between": [
-    0,
-    1
-   ],
-   "length_ft": 10.4
-  },
-  "line-row-11": {
-   "case": "1-to-1",
-   "kind": "ridge",
-   "between": [
-    17,
-    18
-   ],
-   "length_ft": 9.5
-  },
-  "line-row-12": {
-   "case": "1-to-1",
-   "kind": "ridge",
-   "between": [
-    13,
-    14
-   ],
-   "length_ft": 9.4
-  },
-  "line-row-13": {
-   "case": "1-to-1",
-   "kind": "ridge",
-   "between": [
-    15,
-    16
-   ],
-   "length_ft": 9.4
-  },
-  "line-row-14": {
-   "case": "1-to-1",
-   "kind": "ridge",
-   "between": [
-    11,
-    12
-   ],
-   "length_ft": 8.4
-  },
-  "line-row-15": {
-   "case": "1-to-1",
-   "kind": "ridge",
-   "between": [
-    19,
-    20
-   ],
-   "length_ft": 6.4
-  },
-  "line-row-16": {
-   "case": "1-to-1",
-   "kind": "ridge",
-   "between": [
-    21,
-    22
-   ],
-   "length_ft": 6.3
-  },
-  "line-row-17": {
-   "case": "1-to-1",
-   "kind": "hip",
-   "between": [
-    9,
-    10
-   ],
-   "length_ft": 1.2
-  }
- }
+const DATA = {"review_of": "canonical-2026-07-30-grid-adopted", "dataset": "big_house", "date": "2026-07-30-grid-adopted", "reviewer": "Emmett", "schema_version": 2, "site_role": "DEVELOPMENT site. See decisions/2026-07-27-development-vs-validation-split.md. No accuracy claim comes from this site. Visual review may establish THAT something is wrong and WHAT it is physically; it may never set a parameter value.", "renders": "reports/big_house/review/2026-07-30-grid-adopted", "top_level_observations": [{"observation": "Most facets are IDENTIFIED correctly. The errors are in LINE PLACEMENT, and they are NOT systematic.", "by": "Emmett", "from_": "overview pass, before the per-facet pass", "why_it_matters": "non-systematic placement error points at the segmentation boundary rather than at a global parameter, and it rules out a whole class of fixes before anyone proposes one: no single threshold, offset or erosion width can correct an error that is not consistent."}], "instructions": {"identity": {"correct": "this facet corresponds to one real roof plane", "merge": "this facet and another are ONE real plane split in two", "split": "this facet is TWO real planes fitted as one", "spurious": "no real roof plane here at all", "unsure": "cannot tell from the render"}, "boundary": {"tight": "outline follows the real roof edge", "short": "outline stops INSIDE the real roof edge; roof continues past it", "over": "outline extends PAST the real edge onto something that is not this facet", "ragged": "roughly right but jagged where the real edge is straight", "cut": "outline CROSSES a real roof feature (ridge, valley, dormer) instead of stopping at it", "unsure": "cannot tell from the render"}, "severity": {"minor": "estimated area impact under 5 pct", "moderate": "5 to 20 pct", "major": "over 20 pct"}, "location": "compass direction of the affected edge, per the north arrow on the render (N, NE, E, SE, S, SW, W, NW, or 'all' / 'multiple')", "note": "free text. Say what you SAW, not what the fix should be. A physical description travels to the next site; a suggested threshold does not."}, "facets": [{"facet": 0, "kind": "main", "pitch_deg": 21.19, "plan_ft2": 501.2, "n_points": 1538098, "quality": 1.3054, "render": "facet-00.png", "identity": "", "boundary": "", "severity": "", "location": "", "note": ""}, {"facet": 1, "kind": "main", "pitch_deg": 33.07, "plan_ft2": 909.4, "n_points": 1154335, "quality": 2.2951, "render": "facet-01.png", "identity": "", "boundary": "", "severity": "", "location": "", "note": ""}, {"facet": 2, "kind": "main", "pitch_deg": 22.72, "plan_ft2": 390.6, "n_points": 693991, "quality": 1.0069, "render": "facet-02.png", "identity": "", "boundary": "", "severity": "", "location": "", "note": ""}, {"facet": 3, "kind": "main", "pitch_deg": 34.01, "plan_ft2": 508.1, "n_points": 850268, "quality": 1.8003, "render": "facet-03.png", "identity": "", "boundary": "", "severity": "", "location": "", "note": ""}, {"facet": 4, "kind": "main", "pitch_deg": 20.99, "plan_ft2": 313.5, "n_points": 744303, "quality": 2.948, "render": "facet-04.png", "identity": "", "boundary": "", "severity": "", "location": "", "note": ""}, {"facet": 5, "kind": "main", "pitch_deg": 21.36, "plan_ft2": 208.2, "n_points": 669484, "quality": 2.6648, "render": "facet-05.png", "identity": "", "boundary": "", "severity": "", "location": "", "note": ""}, {"facet": 6, "kind": "main", "pitch_deg": 33.76, "plan_ft2": 353.7, "n_points": 403109, "quality": 1.8218, "render": "facet-06.png", "identity": "", "boundary": "", "severity": "", "location": "", "note": ""}, {"facet": 7, "kind": "main", "pitch_deg": 33.52, "plan_ft2": 407.9, "n_points": 297583, "quality": 2.0741, "render": "facet-07.png", "identity": "", "boundary": "", "severity": "", "location": "", "note": ""}, {"facet": 8, "kind": "recovered", "pitch_deg": 10.01, "plan_ft2": 46.5, "n_points": 96959, "quality": 2.7682, "render": "facet-08.png", "identity": "", "boundary": "", "severity": "", "location": "", "note": ""}, {"facet": 9, "kind": "recovered", "pitch_deg": 23.42, "plan_ft2": 41.2, "n_points": 87383, "quality": 0.8655, "render": "facet-09.png", "identity": "", "boundary": "", "severity": "", "location": "", "note": ""}, {"facet": 10, "kind": "recovered", "pitch_deg": 39.6, "plan_ft2": 20.9, "n_points": 28941, "quality": 1.1163, "render": "facet-10.png", "identity": "", "boundary": "", "severity": "", "location": "", "note": ""}, {"facet": 11, "kind": "recovered", "pitch_deg": 22.15, "plan_ft2": 29.7, "n_points": 78846, "quality": 1.2253, "render": "facet-11.png", "identity": "", "boundary": "", "severity": "", "location": "", "note": ""}, {"facet": 12, "kind": "recovered", "pitch_deg": 22.69, "plan_ft2": 14.7, "n_points": 21139, "quality": 0.8061, "render": "facet-12.png", "identity": "", "boundary": "", "severity": "", "location": "", "note": ""}, {"facet": 13, "kind": "recovered", "pitch_deg": 35.16, "plan_ft2": 18.4, "n_points": 42813, "quality": 0.858, "render": "facet-13.png", "identity": "", "boundary": "", "severity": "", "location": "", "note": ""}, {"facet": 14, "kind": "recovered", "pitch_deg": 34.68, "plan_ft2": 20.5, "n_points": 34227, "quality": 0.9842, "render": "facet-14.png", "identity": "", "boundary": "", "severity": "", "location": "", "note": ""}, {"facet": 15, "kind": "recovered", "pitch_deg": 35.15, "plan_ft2": 16.9, "n_points": 64005, "quality": 0.6511, "render": "facet-15.png", "identity": "", "boundary": "", "severity": "", "location": "", "note": ""}, {"facet": 16, "kind": "recovered", "pitch_deg": 34.12, "plan_ft2": 15.8, "n_points": 45599, "quality": 0.8909, "render": "facet-16.png", "identity": "", "boundary": "", "severity": "", "location": "", "note": ""}, {"facet": 17, "kind": "recovered", "pitch_deg": 35.18, "plan_ft2": 17.7, "n_points": 53355, "quality": 0.7413, "render": "facet-17.png", "identity": "", "boundary": "", "severity": "", "location": "", "note": ""}, {"facet": 18, "kind": "recovered", "pitch_deg": 33.98, "plan_ft2": 13.5, "n_points": 40023, "quality": 0.6947, "render": "facet-18.png", "identity": "", "boundary": "", "severity": "", "location": "", "note": ""}, {"facet": 19, "kind": "recovered", "pitch_deg": 34.52, "plan_ft2": 17.7, "n_points": 54854, "quality": 0.6687, "render": "facet-19.png", "identity": "", "boundary": "", "severity": "", "location": "", "note": ""}, {"facet": 20, "kind": "recovered", "pitch_deg": 34.01, "plan_ft2": 14.4, "n_points": 34311, "quality": 0.5993, "render": "facet-20.png", "identity": "", "boundary": "", "severity": "", "location": "", "note": ""}, {"facet": 21, "kind": "recovered", "pitch_deg": 33.35, "plan_ft2": 12.0, "n_points": 19901, "quality": 0.9556, "render": "facet-21.png", "identity": "", "boundary": "", "severity": "", "location": "", "note": ""}, {"facet": 22, "kind": "recovered", "pitch_deg": 32.74, "plan_ft2": 9.7, "n_points": 19098, "quality": 0.8251, "render": "facet-22.png", "identity": "", "boundary": "", "severity": "", "location": "", "note": ""}, {"facet": 23, "kind": "recovered", "pitch_deg": 8.49, "plan_ft2": 16.2, "n_points": 35493, "quality": 1.5843, "render": "facet-23.png", "identity": "", "boundary": "", "severity": "", "location": "", "note": ""}, {"facet": 24, "kind": "recovered", "pitch_deg": 21.6, "plan_ft2": 9.6, "n_points": 14799, "quality": 2.0425, "render": "facet-24.png", "identity": "", "boundary": "", "severity": "", "location": "", "note": ""}, {"facet": 25, "kind": "recovered", "pitch_deg": 32.79, "plan_ft2": 8.7, "n_points": 9836, "quality": 1.7271, "render": "facet-25.png", "identity": "", "boundary": "", "severity": "", "location": "", "note": ""}, {"facet": 26, "kind": "recovered", "pitch_deg": 33.01, "plan_ft2": 6.8, "n_points": 8995, "quality": 1.5007, "render": "facet-26.png", "identity": "", "boundary": "", "severity": "", "location": "", "note": ""}, {"facet": 27, "kind": "recovered", "pitch_deg": 33.24, "plan_ft2": 5.2, "n_points": 10531, "quality": 0.8452, "render": "facet-27.png", "identity": "", "boundary": "", "severity": "", "location": "", "note": ""}, {"facet": 28, "kind": "recovered", "pitch_deg": 33.12, "plan_ft2": 2.7, "n_points": 3948, "quality": 1.1677, "render": "facet-28.png", "identity": "", "boundary": "", "severity": "", "location": "", "note": ""}], "missing_facets": [], "intersection_lines": [{"id": 0, "kind": "ridge", "between": [1, 3], "length_ft": 53.4, "verdict": "", "note": ""}, {"id": 1, "kind": "valley", "between": [0, 7], "length_ft": 32.9, "verdict": "", "note": ""}, {"id": 2, "kind": "ridge", "between": [6, 7], "length_ft": 20.5, "verdict": "", "note": ""}, {"id": 3, "kind": "hip", "between": [0, 4], "length_ft": 19.0, "verdict": "", "note": ""}, {"id": 4, "kind": "ridge", "between": [0, 2], "length_ft": 18.8, "verdict": "", "note": ""}, {"id": 5, "kind": "hip", "between": [2, 4], "length_ft": 18.6, "verdict": "", "note": ""}, {"id": 6, "kind": "ridge", "between": [4, 5], "length_ft": 17.4, "verdict": "", "note": ""}, {"id": 7, "kind": "hip", "between": [1, 7], "length_ft": 13.3, "verdict": "", "note": ""}, {"id": 8, "kind": "ridge", "between": [2, 6], "length_ft": 10.9, "verdict": "", "note": ""}, {"id": 9, "kind": "hip", "between": [1, 6], "length_ft": 10.5, "verdict": "", "note": ""}, {"id": 10, "kind": "valley", "between": [0, 1], "length_ft": 10.4, "verdict": "", "note": ""}, {"id": 11, "kind": "ridge", "between": [17, 18], "length_ft": 9.5, "verdict": "", "note": ""}, {"id": 12, "kind": "ridge", "between": [15, 16], "length_ft": 9.4, "verdict": "", "note": ""}, {"id": 13, "kind": "ridge", "between": [13, 14], "length_ft": 9.4, "verdict": "", "note": ""}, {"id": 14, "kind": "ridge", "between": [11, 12], "length_ft": 8.4, "verdict": "", "note": ""}, {"id": 15, "kind": "ridge", "between": [19, 20], "length_ft": 6.4, "verdict": "", "note": ""}, {"id": 16, "kind": "ridge", "between": [21, 22], "length_ft": 6.3, "verdict": "", "note": ""}, {"id": 17, "kind": "hip", "between": [9, 10], "length_ft": 1.2, "verdict": "", "note": ""}], "missing_lines": [], "intersection_line_verdicts": {"correct": "the line is where the real crease is, and typed right", "mistyped": "right place, wrong type (a ridge called a valley, etc)", "misplaced": "wrong place on the roof", "spurious": "no real crease here", "short": "stops before the real crease ends", "long": "runs past where the real crease ends"}, "unassigned_footprint": {"segmentation_gap": {"cu2": 16.6195, "ft2": 188.9, "colour": "pink", "meaning": "real roof, enough points to test, NO facet claims it. A segmentation failure. This is the fringe finding."}, "capture_gap": {"cu2": 62.8314, "ft2": 714.1, "colour": "blue", "meaning": "under 2 points per cell, or outside the eroded interior. Nothing could have been fitted here; only a reflight changes it."}, "reconciliation": {"note": "reconciles the render's magenta against the coverage report. They differ because they are computed against different bases, not because either is wrong.", "render_layer_A_segmentation_gap": {"definition": "interior AND testable AND not explained", "cu2": 16.6195, "ft2": 188.9, "equals_coverage_unexplained": "this IS the 33.682 cu^2 that split_coverage reports as unexplained"}, "render_layer_B_capture_gap": {"definition": "everything else the old single layer covered: filled holes (under 2 points, untestable) plus the perimeter ring outside the eroded interior", "cu2": 62.8314, "ft2": 714.1, "of_which_filled_holes_cu2": 60.4024, "of_which_perimeter_ring_cu2": 2.429}, "old_single_layer": {"definition": "filled footprint AND not explained, the first render", "cu2": 79.4509, "ft2": 902.9}, "bases": {"filled_footprint_cu2": 362.105, "eroded_interior_cu2": 352.707, "density_testable_cu2": 290.256, "explained_cu2": 256.574, "coverage_unexplained_cu2": 33.682}}}};
+const CFG  = {"identity": [["correct", "1"], ["merge", "2"], ["split", "3"], ["spurious", "4"], ["unsure", "5"]], "boundary": [["tight", "q"], ["short", "w"], ["over", "e"], ["ragged", "r"], ["cut", "t"], ["unsure", "y"]], "severity": [["minor", "a"], ["moderate", "s"], ["major", "d"]], "location": [["N", "z"], ["NE", "x"], ["E", "c"], ["SE", "v"], ["S", "b"], ["SW", "n"], ["W", "m"], ["NW", ","], ["multiple", "."]], "lineVerdict": [["correct", "1"], ["mistyped", "2"], ["misplaced", "3"], ["spurious", "4"], ["short", "5"], ["long", "6"], ["unsure", "7"]]};
+const NF = 29, NL = 18;
+const KEY = "roofreview:" + DATA.dataset + ":" + DATA.date;
+
+// screens: 0..NF-1 facets, NF missing, NF+1 lines, NF+2 export
+const S_MISSING = NF, S_LINES = NF + 1, S_EXPORT = NF + 2;
+let scr = 0, showStats = false;
+
+const blank = () => ({identity:"",boundary:"",severity:"",location:"",note:""});
+let state = {
+  facets: DATA.facets.map(blank),
+  lines:  DATA.intersection_lines.map(() => ({verdict:"",note:""})),
+  missing: [],
+  missingLines: [],
+  observations: (DATA.top_level_observations||[]).map(o => ({...o})),
 };
-let served = false, saveTimer = null;
 
-function why(v){
-  const t = (v||"").trim();
-  if(!t) return "empty";
-  if(PRESETS.has(t.toLowerCase())) return "that is a pass-1 preset code used on its own. "
-    + "Free text only: say what you SAW.";
-  return null;
+// ---- autosave -------------------------------------------------------------
+// Local browser storage only. The page runs from disk in Emmett's own browser,
+// so nothing leaves the machine.
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+function load(){
+  try{
+    const s = localStorage.getItem(KEY);
+    if(!s) return;
+    const p = JSON.parse(s);
+    // Merge rather than replace, so a re-render that changes the facet count
+    // does not silently drop answers already given.
+    if(p.facets) p.facets.forEach((v,i)=>{ if(state.facets[i]) state.facets[i]=v; });
+    if(p.lines)  p.lines.forEach((v,i)=>{ if(state.lines[i]) state.lines[i]=v; });
+    state.missing = p.missing || [];
+    state.missingLines = p.missingLines || [];
+    if(p.observations && p.observations.length) state.observations = p.observations;
+  }catch(e){}
 }
+load();
 
-function state(){
-  const s = {};
-  for(const id of ROWS){
-    for(const k of ["verdict"]){
-      const el = document.getElementById(id+":"+k);
-      if(el) s[id+":"+k] = el.value;
-    }
-  }
-  return s;
-}
+// ---- helpers --------------------------------------------------------------
+// Built through <template>, NOT through a <div>. THIS WAS A REAL BUG and it
+// cost a review pass: the HTML parser DISCARDS <tr>, <td> and <th> when they
+// are assigned to a <div>, because a table row outside table context is not
+// valid content. `el("<tr>...")` therefore returned null, appendChild(null)
+// threw, and render() aborted halfway, so the "add a missing facet" and "add a
+// missing line" buttons silently did nothing. <template> content parses any
+// fragment, including table rows.
+//
+// It is exactly the failure the silent-failure standing rule describes: no
+// message to the user, output that looked fine, and a list that stayed empty
+// because nothing could be added to it rather than because there was nothing
+// to add. The guard added below is the independent check that would have
+// caught it.
+const el = (h) => { const t=document.createElement("template");
+                    t.innerHTML=h.trim();
+                    const n=t.content.firstElementChild;
+                    if(!n) throw new Error("el(): produced no element for: "
+                                           + h.slice(0,60));
+                    return n; };
+const esc = (s) => String(s==null?"":s).replace(/[&<>"]/g,
+  c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
 
-function refresh(){
-  const missing = [];
-  for(const id of ROWS){
-    const el = document.getElementById(id+":verdict");
-    const r = why(el.value);
-    const msg = document.getElementById(id+":rej");
-    el.classList.toggle("filled", !r);
-    el.classList.toggle("rejected", !!r && el.value.trim().length>0);
-    msg.textContent = (r && el.value.trim().length>0) ? ("REFUSED: "+r) : "";
-    if(r) missing.push(id.replace("facet-row-","facet row ").replace("line-row-","line row ")
-                        + (r==="empty" ? "" : " ("+r.split(".")[0]+")"));
-  }
-  const sv = document.getElementById("save");
-  sv.classList.toggle("partial", missing.length > 0);
-  sv.textContent = missing.length ? "save PARTIAL verdicts JSON" : "save verdicts JSON";
-  const st = document.getElementById("status");
-  if(missing.length===0){
-    st.className = "complete";
-    st.textContent = "COMPLETE \u2014 " + N_FACET_ROWS + " facet rows and "
-      + N_LINE_ROWS + " line rows all carry a verdict";
-    document.getElementById("missing").textContent = "";
-  } else {
-    st.className = "incomplete";
-    st.textContent = "NOT COMPLETE \u2014 " + missing.length + " of "
-      + ROWS.length + " rows lack an accepted verdict";
-    document.getElementById("missing").textContent = "missing: " + missing.join(", ");
-  }
-}
-
-function save(){
-  const s = state();
-  try { localStorage.setItem(KEY, JSON.stringify(s)); } catch(e) {}
-  if(!served) return;
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(() => {
-    fetch("__save__", {method:"POST", headers:{"Content-Type":"application/json"},
-      body: JSON.stringify(s)}).catch(()=>{});
-  }, 400);
-}
-
-function restore(){
-  let s = null;
-  try { s = JSON.parse(localStorage.getItem(KEY) || "null"); } catch(e) {}
-  if(!s) return;
-  for(const [k,v] of Object.entries(s)){
-    const el = document.getElementById(k);
-    if(el && !el.value) el.value = v;
-  }
-}
-
-fetch("__ping__").then(r => { served = r.ok; }).catch(()=>{});
-fetch("__load__").then(r => r.ok ? r.json() : null).then(s => {
-  if(s) for(const [k,v] of Object.entries(s)){
-    const el = document.getElementById(k);
-    if(el) el.value = v;
-  }
-}).catch(()=>{}).finally(() => { restore(); refresh(); });
-
-document.addEventListener("input", e => {
-  if(e.target.tagName === "TEXTAREA"){ refresh(); save(); }
-});
-
-// Build the record and hand it to the browser as a download. This is the whole
-// point of the file:// route: no server, no terminal, one button at the end.
-// Empty and bare-preset verdicts are separated out here exactly as the served
-// path separates them, so opening the file cannot launder a refused verdict
-// into an accepted one.
-function buildRecord(){
-  const entries = {}, refused = {};
-  for(const id of ROWS){
-    for(const k of ["verdict"]){
-      const el = document.getElementById(id+":"+k);
-      if(!el) continue;
-      const v = el.value;
-      if(k === "verdict"){
-        const r = why(v);
-        if(r){ refused[id+":"+k] = r; continue; }
-      }
-      entries[id+":"+k] = v;
-    }
-  }
-  const missing = ROWS.filter(id => why(document.getElementById(id+":verdict").value));
-  return Object.assign({}, META, {
-    saved_at: new Date().toISOString(),
-    complete: missing.length === 0,
-    rows_without_accepted_verdict: missing,
-    entries: entries,
-    refused: refused,
+function optRow(list, cur, onPick){
+  const wrap = el(`<div class="opts"></div>`);
+  list.forEach(([val,key])=>{
+    const b = el(`<button class="opt${cur===val?" on":""}" data-v="${val}">
+                    <span>${val}</span><kbd>${esc(key)}</kbd></button>`);
+    b.onclick = ()=>onPick(cur===val?"":val);   // click again to clear
+    wrap.appendChild(b);
   });
+  return wrap;
 }
 
-document.getElementById("save").addEventListener("click", () => {
-  const rec = buildRecord();
-  if(!rec.complete && !confirm(
-      rec.rows_without_accepted_verdict.length + " of " + ROWS.length +
-      " rows have no accepted verdict. Save this partial record anyway?")) return;
-  const name = "verdicts-" + META.pass + (rec.complete ? "" : "-PARTIAL") + ".json";
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(new Blob([JSON.stringify(rec, null, 1)],
-                                        {type:"application/json"}));
-  a.download = name;
-  a.click();
-  setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+function facetDone(i){
+  const a = state.facets[i];
+  return a.identity && a.boundary;              // severity/location optional
+}
+function progress(){
+  const done = state.facets.filter((_,i)=>facetDone(i)).length;
+  document.getElementById("prog").style.width = (100*done/NF) + "%";
+  document.getElementById("where").textContent =
+    scr < NF ? `facet ${scr} of ${NF-1}  (${done} done)`
+    : scr===S_MISSING ? "missing facets"
+    : scr===S_LINES ? "intersection lines"
+    : "export";
+}
+
+// ---- screens --------------------------------------------------------------
+function render(){
+  const stage = document.getElementById("stage");
+  const panel = document.getElementById("panel");
+  stage.innerHTML = ""; panel.innerHTML = "";
+  if(scr < NF) renderFacet(stage, panel);
+  else if(scr === S_MISSING) renderMissing(stage, panel);
+  else if(scr === S_LINES) renderLines(stage, panel);
+  else renderExport(stage, panel);
+  progress(); save();
+}
+
+function insetOverview(){
+  const d = el(`<div class="inset"><img src="overview.png" alt="overview"></div>`);
+  d.onclick = ()=>showBig("overview.png");
+  return d;
+}
+
+function renderFacet(stage, panel){
+  const f = DATA.facets[scr], a = state.facets[scr];
+  stage.appendChild(el(`<img class="big" src="${f.render}" alt="facet ${f.facet}">`));
+  panel.appendChild(el(`<h2>facet ${f.facet} <span class="pill ${facetDone(scr)?"done":"todo"}">${facetDone(scr)?"answered":"not answered"}</span></h2>`));
+  panel.appendChild(el(`<div class="sub">${f.kind} &middot; ${f.n_points.toLocaleString()} points</div>`));
+  panel.appendChild(insetOverview());
+
+  // Pitch and area, default hidden. See the note at the top of review_ui.py.
+  const st = el(`<div class="stats ${showStats?"":"hidden"}" id="stats">
+      pitch    ${f.pitch_deg.toFixed(2)} deg
+      <br>plan     ${f.plan_ft2} ft2 (PLAN, not slope)
+      <br>quality  ${f.quality}</div>`);
+  panel.appendChild(st);
+
+  const mk = (label, list, field) => {
+    const fs = el(`<fieldset><legend>${label}</legend></fieldset>`);
+    fs.appendChild(optRow(list, a[field], v=>{ a[field]=v; render(); }));
+    return fs;
+  };
+  panel.appendChild(mk("identity", CFG.identity, "identity"));
+  panel.appendChild(mk("boundary", CFG.boundary, "boundary"));
+  panel.appendChild(mk("severity (area impact)", CFG.severity, "severity"));
+  panel.appendChild(mk("location of the affected edge", CFG.location, "location"));
+
+  const nf = el(`<fieldset><legend>note</legend>
+     <textarea id="note" placeholder="What you SAW. A physical description travels to the next site; a suggested threshold does not."></textarea></fieldset>`);
+  panel.appendChild(nf);
+  const ta = nf.querySelector("textarea");
+  ta.value = a.note || "";
+  ta.oninput = ()=>{ a.note = ta.value; save(); };
+
+  panel.appendChild(el(`<div class="keyhelp">
+    <b>keys</b> &nbsp;identity <kbd>1</kbd>&ndash;<kbd>5</kbd> &nbsp;
+    boundary <kbd>q w e r t y</kbd> &nbsp; severity <kbd>a s d</kbd><br>
+    location <kbd>z x c v b n m , .</kbd> (N NE E SE S SW W NW multiple)<br>
+    note <kbd>/</kbd> &nbsp; blur <kbd>Esc</kbd> &nbsp;
+    next <kbd>&rarr;</kbd> or <kbd>space</kbd> &nbsp; prev <kbd>&larr;</kbd> &nbsp;
+    stats <kbd>#</kbd><br>
+    Click a selected option again to clear it.
+  </div>`));
+}
+
+function renderMissing(stage, panel){
+  stage.appendChild(el(`<img class="big" src="overview.png" alt="overview">`));
+  panel.appendChild(el(`<h2>missing facets</h2>`));
+  panel.appendChild(el(`<div class="sub">Real roof sections with NO outline at all. Described by location, since there is no id to attach them to.</div>`));
+  panel.appendChild(el(`<div class="warnbox">Pink on the render is testable roof no facet claims: <b>${DATA.unassigned_footprint.segmentation_gap.ft2} ft&sup2;</b>. Blue is untestable capture gap: <b>${DATA.unassigned_footprint.capture_gap.ft2} ft&sup2;</b>. A missing facet should sit under PINK.</div>`));
+  const tbl = el(`<table><thead><tr><th>where</th><th>what</th><th>approx ft2</th><th></th></tr></thead><tbody></tbody></table>`);
+  const tb = tbl.querySelector("tbody");
+  state.missing.forEach((m,i)=>{
+    const tr = el(`<tr>
+      <td><input value="${esc(m.where)}" style="width:100%"></td>
+      <td><input value="${esc(m.what)}" style="width:100%"></td>
+      <td><input value="${esc(m.approx_ft2)}" style="width:70px"></td>
+      <td><button class="ghost">del</button></td></tr>`);
+    const [w,wt,ar] = tr.querySelectorAll("input");
+    w.oninput=()=>{m.where=w.value;save()};
+    wt.oninput=()=>{m.what=wt.value;save()};
+    ar.oninput=()=>{m.approx_ft2=ar.value;save()};
+    tr.querySelector("button").onclick=()=>{state.missing.splice(i,1);render()};
+    tb.appendChild(tr);
+  });
+  panel.appendChild(tbl);
+  const add = el(`<button class="ghost" style="margin-top:10px">+ add a missing facet</button>`);
+  add.onclick = ()=>{
+    const before = state.missing.length;
+    state.missing.push({where:"",what:"",approx_ft2:""});
+    render();
+    // INDEPENDENT CHECK: the row count on screen must match the array. The
+    // first version failed silently here; a mismatch now says so out loud.
+    const shown = document.querySelectorAll("#panel tbody tr").length;
+    if(shown !== before + 1)
+      alert("BUG: " + (before+1) + " missing-facet rows in state but " + shown +
+            " on screen. Your entry would not have been saved. Tell Claude.");
+  };
+  panel.appendChild(add);
+  panel.appendChild(el(`<div class="note">Inputs autosave. Click the overview to enlarge it.</div>`));
+  stage.firstChild.onclick = ()=>showBig("overview.png");
+  stage.firstChild.style.cursor = "zoom-in";
+}
+
+function renderLines(stage, panel){
+  stage.appendChild(el(`<img class="big" src="overview.png" alt="overview">`));
+  stage.firstChild.onclick = ()=>showBig("overview.png");
+  stage.firstChild.style.cursor = "zoom-in";
+  panel.appendChild(el(`<h2>intersection lines</h2>`));
+  panel.appendChild(el(`<div class="sub">${NL} lines, labelled <b>L0</b>&ndash;<b>L${NL-1}</b> on the overview. These are INFERRED geometry and have never been validated; they are part of what you are judging.</div>`));
+  DATA.intersection_lines.forEach((ln,i)=>{
+    const a = state.lines[i];
+    const fs = el(`<fieldset><legend>L${ln.id} &middot; ${ln.kind} &middot; facets ${ln.between[0]}&ndash;${ln.between[1]} &middot; ${ln.length_ft} ft</legend></fieldset>`);
+    fs.appendChild(optRow(CFG.lineVerdict, a.verdict, v=>{ a.verdict=v; render(); }));
+    const ta = el(`<textarea placeholder="note (optional)" style="min-height:44px;margin-top:7px"></textarea>`);
+    ta.value = a.note||""; ta.oninput=()=>{a.note=ta.value;save()};
+    fs.appendChild(ta);
+    panel.appendChild(fs);
+  });
+  panel.appendChild(el(`<h2 style="margin-top:16px">missing lines</h2>`));
+  const tbl = el(`<table><thead><tr><th>where</th><th>type</th><th></th></tr></thead><tbody></tbody></table>`);
+  const tb = tbl.querySelector("tbody");
+  state.missingLines.forEach((m,i)=>{
+    const tr = el(`<tr><td><input value="${esc(m.where)}" style="width:100%"></td>
+      <td><input value="${esc(m.type)}" style="width:90px" placeholder="ridge/hip/valley"></td>
+      <td><button class="ghost">del</button></td></tr>`);
+    const [w,t] = tr.querySelectorAll("input");
+    w.oninput=()=>{m.where=w.value;save()}; t.oninput=()=>{m.type=t.value;save()};
+    tr.querySelector("button").onclick=()=>{state.missingLines.splice(i,1);render()};
+    tb.appendChild(tr);
+  });
+  panel.appendChild(tbl);
+  const add = el(`<button class="ghost" style="margin-top:10px">+ add a missing line</button>`);
+  add.onclick = ()=>{
+    const before = state.missingLines.length;
+    state.missingLines.push({where:"",type:""});
+    render();
+    const shown = document.querySelectorAll("#panel tbody tr").length;
+    if(shown !== before + 1)
+      alert("BUG: " + (before+1) + " missing-line rows in state but " + shown +
+            " on screen. Your entry would not have been saved. Tell Claude.");
+  };
+  panel.appendChild(add);
+}
+
+function buildOutput(){
+  const out = JSON.parse(JSON.stringify(DATA));
+  out.completed_utc = new Date().toISOString();
+  out.facets = DATA.facets.map((f,i)=>({...f, ...state.facets[i]}));
+  out.intersection_lines = DATA.intersection_lines.map((l,i)=>({...l, ...state.lines[i]}));
+  out.missing_facets = state.missing.filter(m=>m.where||m.what);
+  out.missing_lines = state.missingLines.filter(m=>m.where||m.type);
+  out.top_level_observations = state.observations.filter(o=>o.observation);
+  const unanswered = out.facets.filter(f=>!f.identity||!f.boundary)
+                               .map(f=>f.facet);
+  // Recorded rather than hidden: a partial pass is still evidence, but a
+  // reader has to be able to tell a blank from a considered answer.
+  out.completeness = {
+    facets_total: NF,
+    facets_answered: NF - unanswered.length,
+    facets_unanswered: unanswered,
+    lines_total: NL,
+    lines_answered: out.intersection_lines.filter(l=>l.verdict).length,
+  };
+  return out;
+}
+
+function renderExport(stage, panel){
+  const out = buildOutput();
+  stage.appendChild(el(`<pre style="color:#9fb3c8;font:12px/1.5 ui-monospace,Consolas,monospace;white-space:pre-wrap;max-width:900px;padding:14px">${esc(JSON.stringify(out,null,2))}</pre>`));
+  panel.appendChild(el(`<h2>export</h2>`));
+  panel.appendChild(el(`<div class="sub">Save this into <code>reviews/big_house/review-2026-07-30-grid-adopted.json</code> and commit it.</div>`));
+  const c = out.completeness;
+  panel.appendChild(el(`<div class="stats">facets answered  ${c.facets_answered} / ${c.facets_total}
+<br>lines answered   ${c.lines_answered} / ${c.lines_total}
+<br>missing facets   ${out.missing_facets.length}
+<br>missing lines    ${out.missing_lines.length}${c.facets_unanswered.length?`
+<br><br>unanswered: ${c.facets_unanswered.join(", ")}`:""}</div>`));
+
+  panel.appendChild(el(`<h2 style="font-size:14px;margin-top:6px">top-level observations</h2>`));
+  state.observations.forEach((o,i)=>{
+    const fs = el(`<fieldset><legend>observation ${i+1}</legend></fieldset>`);
+    const ta = el(`<textarea style="min-height:60px"></textarea>`);
+    ta.value = o.observation||""; ta.oninput=()=>{o.observation=ta.value;save()};
+    fs.appendChild(ta);
+    const del = el(`<button class="ghost" style="margin-top:6px">del</button>`);
+    del.onclick=()=>{state.observations.splice(i,1);render()};
+    fs.appendChild(del);
+    panel.appendChild(fs);
+  });
+  const addo = el(`<button class="ghost">+ add observation</button>`);
+  addo.onclick=()=>{state.observations.push({observation:"",by:"Emmett"});render()};
+  panel.appendChild(addo);
+
+  const dl = el(`<div style="margin-top:16px"><a class="dl" id="dl">download review JSON</a></div>`);
+  panel.appendChild(dl);
+  const a = dl.querySelector("a");
+  const blob = new Blob([JSON.stringify(out,null,2)], {type:"application/json"});
+  a.href = URL.createObjectURL(blob);
+  a.download = "review-" + DATA.date + ".json";
+
+  const clr = el(`<div style="margin-top:22px"><button class="ghost">clear saved progress</button></div>`);
+  clr.querySelector("button").onclick = ()=>{
+    if(confirm("Erase this browser's saved progress for this review?")){
+      localStorage.removeItem(KEY);
+      state.facets = DATA.facets.map(blank);
+      state.lines = DATA.intersection_lines.map(()=>({verdict:"",note:""}));
+      state.missing = []; state.missingLines = [];
+      render();
+    }};
+  panel.appendChild(clr);
+}
+
+// ---- navigation and keys --------------------------------------------------
+function go(n){ scr = Math.max(0, Math.min(S_EXPORT, n)); window.scrollTo(0,0);
+                document.getElementById("stage").scrollTop = 0; render(); }
+document.getElementById("next").onclick = ()=>go(scr+1);
+document.getElementById("prev").onclick = ()=>go(scr-1);
+document.getElementById("tglStats").onclick = ()=>{
+  showStats = !showStats;
+  document.getElementById("tglStats").textContent =
+    (showStats?"hide":"show") + " pitch / area (#)";
+  render();
+};
+function showBig(src){
+  const b = document.getElementById("big");
+  b.querySelector("img").src = src; b.style.display="flex";
+}
+document.getElementById("big").onclick = (e)=>{ e.currentTarget.style.display="none"; };
+
+document.addEventListener("keydown", (e)=>{
+  const t = e.target.tagName;
+  if(t==="TEXTAREA" || t==="INPUT"){
+    if(e.key==="Escape") e.target.blur();
+    return;                                  // never steal keys while typing
+  }
+  if(e.key==="ArrowRight" || e.key===" "){ e.preventDefault(); go(scr+1); return; }
+  if(e.key==="ArrowLeft"){ e.preventDefault(); go(scr-1); return; }
+  if(e.key==="#"){ document.getElementById("tglStats").click(); return; }
+  if(e.key==="/"){ e.preventDefault();
+    const n=document.getElementById("note"); if(n){n.focus();} return; }
+  if(scr < NF){
+    const a = state.facets[scr];
+    for(const [field,list] of [["identity",CFG.identity],["boundary",CFG.boundary],
+                               ["severity",CFG.severity],["location",CFG.location]]){
+      const hit = list.find(([v,k])=>k===e.key);
+      if(hit){ a[field] = (a[field]===hit[0] ? "" : hit[0]); render(); return; }
+    }
+  }
 });
 
-// The header carries standing caveats that must be present, but present is not
-// the same as shouting: three fixed banners ate the top of every scroll. They
-// collapse to one terse line and expand on demand, and the choice sticks.
-const HKEY = KEY + ":hdr";
-const detail = document.getElementById("detail");
-const terse = document.getElementById("terse");
-const toggle = document.getElementById("toggle");
-function setHdr(open){
-  detail.classList.toggle("hidden", !open);
-  terse.style.display = open ? "none" : "";
-  toggle.textContent = open ? "hide details" : "details";
-  try { localStorage.setItem(HKEY, open ? "1" : "0"); } catch(e) {}
-}
-toggle.addEventListener("click", () => setHdr(detail.classList.contains("hidden")));
-let hopen = false;
-try { hopen = localStorage.getItem(HKEY) === "1"; } catch(e) {}
-setHdr(hopen);
-</script>
+render();
+</script></body></html>
