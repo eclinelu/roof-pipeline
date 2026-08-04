@@ -1,0 +1,556 @@
+{
+ "pass": "r2-vs-grid-adopted",
+ "dataset": "big_house",
+ "old_artifact": "2026-07-26-r2",
+ "new_artifact": "2026-07-30-grid-adopted",
+ "old_renders": "reports/big_house/review/2026-07-27",
+ "new_renders": "reports/big_house/review/2026-07-30-grid-adopted",
+ "old_render_commit": {
+  "known": true,
+  "sha": "2b2870419fc1538f1075cb11b844209f21d48e57",
+  "short": "2b2870419fc1",
+  "date": "2026-07-27",
+  "subject": "Pass 1 review, triage, and M1a pre-registration"
+ },
+ "new_render_commit": {
+  "known": true,
+  "sha": "7811b3bce38a1ce6758f8594d31bc58b6216aeab",
+  "short": "7811b3bce38a",
+  "date": "2026-07-30",
+  "subject": "ADOPTED: the grid fix is executed and scored. 5/5 predictions PASS, canonical moves to 2026-07-30-grid-adopted"
+ },
+ "blind": false,
+ "blind_note": "side by side; the grader saw the old render and knew which was which. Not blind evidence.",
+ "verdict_format": "free text only; no codes, no presets, no pass/fail",
+ "panes_cropped": true,
+ "crop_note": "panes are scaled to the drawn panel of each render; the originals are unmodified and linked from every pane",
+ "n_facet_rows": 29,
+ "n_line_rows": 18,
+ "row_facets": {
+  "facet-row-0": {
+   "old": [
+    0
+   ],
+   "new": [
+    0
+   ],
+   "case": "1-to-1"
+  },
+  "facet-row-1": {
+   "old": [
+    1
+   ],
+   "new": [
+    1
+   ],
+   "case": "1-to-1"
+  },
+  "facet-row-2": {
+   "old": [
+    2
+   ],
+   "new": [
+    2
+   ],
+   "case": "1-to-1"
+  },
+  "facet-row-3": {
+   "old": [
+    3
+   ],
+   "new": [
+    3
+   ],
+   "case": "1-to-1"
+  },
+  "facet-row-4": {
+   "old": [
+    4
+   ],
+   "new": [
+    4
+   ],
+   "case": "1-to-1"
+  },
+  "facet-row-5": {
+   "old": [
+    5
+   ],
+   "new": [
+    5
+   ],
+   "case": "1-to-1"
+  },
+  "facet-row-6": {
+   "old": [
+    6
+   ],
+   "new": [
+    6
+   ],
+   "case": "1-to-1"
+  },
+  "facet-row-7": {
+   "old": [
+    7
+   ],
+   "new": [
+    7
+   ],
+   "case": "1-to-1"
+  },
+  "facet-row-8": {
+   "old": [
+    8
+   ],
+   "new": [
+    8
+   ],
+   "case": "1-to-1"
+  },
+  "facet-row-9": {
+   "old": [
+    9
+   ],
+   "new": [
+    9
+   ],
+   "case": "1-to-1"
+  },
+  "facet-row-10": {
+   "old": [
+    10
+   ],
+   "new": [
+    10
+   ],
+   "case": "1-to-1"
+  },
+  "facet-row-11": {
+   "old": [
+    11
+   ],
+   "new": [
+    11
+   ],
+   "case": "1-to-1"
+  },
+  "facet-row-12": {
+   "old": [
+    12
+   ],
+   "new": [
+    12
+   ],
+   "case": "1-to-1"
+  },
+  "facet-row-13": {
+   "old": [
+    13
+   ],
+   "new": [
+    13
+   ],
+   "case": "1-to-1"
+  },
+  "facet-row-14": {
+   "old": [
+    14
+   ],
+   "new": [
+    14
+   ],
+   "case": "1-to-1"
+  },
+  "facet-row-15": {
+   "old": [
+    15
+   ],
+   "new": [
+    15
+   ],
+   "case": "1-to-1"
+  },
+  "facet-row-16": {
+   "old": [
+    16
+   ],
+   "new": [
+    16
+   ],
+   "case": "1-to-1"
+  },
+  "facet-row-17": {
+   "old": [
+    17
+   ],
+   "new": [
+    17
+   ],
+   "case": "1-to-1"
+  },
+  "facet-row-18": {
+   "old": [
+    18
+   ],
+   "new": [
+    18
+   ],
+   "case": "1-to-1"
+  },
+  "facet-row-19": {
+   "old": [
+    19
+   ],
+   "new": [
+    19
+   ],
+   "case": "1-to-1"
+  },
+  "facet-row-20": {
+   "old": [
+    20
+   ],
+   "new": [
+    20
+   ],
+   "case": "1-to-1"
+  },
+  "facet-row-21": {
+   "old": [
+    21
+   ],
+   "new": [
+    21
+   ],
+   "case": "1-to-1"
+  },
+  "facet-row-22": {
+   "old": [
+    22
+   ],
+   "new": [
+    22
+   ],
+   "case": "1-to-1"
+  },
+  "facet-row-23": {
+   "old": [
+    23
+   ],
+   "new": [
+    23
+   ],
+   "case": "1-to-1"
+  },
+  "facet-row-24": {
+   "old": [
+    24
+   ],
+   "new": [
+    24
+   ],
+   "case": "1-to-1"
+  },
+  "facet-row-25": {
+   "old": [
+    25
+   ],
+   "new": [
+    25
+   ],
+   "case": "1-to-1"
+  },
+  "facet-row-26": {
+   "old": [
+    26
+   ],
+   "new": [
+    26
+   ],
+   "case": "1-to-1"
+  },
+  "facet-row-27": {
+   "old": [
+    27
+   ],
+   "new": [
+    27
+   ],
+   "case": "1-to-1"
+  },
+  "facet-row-28": {
+   "old": [
+    28
+   ],
+   "new": [
+    28
+   ],
+   "case": "1-to-1"
+  }
+ },
+ "row_lines": {
+  "line-row-0": {
+   "case": "1-to-1",
+   "kind": "ridge",
+   "between": [
+    1,
+    3
+   ],
+   "length_ft": 53.4
+  },
+  "line-row-1": {
+   "case": "1-to-1",
+   "kind": "valley",
+   "between": [
+    0,
+    7
+   ],
+   "length_ft": 32.9
+  },
+  "line-row-2": {
+   "case": "1-to-1",
+   "kind": "ridge",
+   "between": [
+    6,
+    7
+   ],
+   "length_ft": 20.5
+  },
+  "line-row-3": {
+   "case": "1-to-1",
+   "kind": "hip",
+   "between": [
+    0,
+    4
+   ],
+   "length_ft": 19
+  },
+  "line-row-4": {
+   "case": "1-to-1",
+   "kind": "ridge",
+   "between": [
+    0,
+    2
+   ],
+   "length_ft": 18.8
+  },
+  "line-row-5": {
+   "case": "1-to-1",
+   "kind": "hip",
+   "between": [
+    2,
+    4
+   ],
+   "length_ft": 18.6
+  },
+  "line-row-6": {
+   "case": "1-to-1",
+   "kind": "ridge",
+   "between": [
+    4,
+    5
+   ],
+   "length_ft": 17.4
+  },
+  "line-row-7": {
+   "case": "1-to-1",
+   "kind": "hip",
+   "between": [
+    1,
+    7
+   ],
+   "length_ft": 13.3
+  },
+  "line-row-8": {
+   "case": "1-to-1",
+   "kind": "ridge",
+   "between": [
+    2,
+    6
+   ],
+   "length_ft": 10.9
+  },
+  "line-row-9": {
+   "case": "1-to-1",
+   "kind": "hip",
+   "between": [
+    1,
+    6
+   ],
+   "length_ft": 10.5
+  },
+  "line-row-10": {
+   "case": "1-to-1",
+   "kind": "valley",
+   "between": [
+    0,
+    1
+   ],
+   "length_ft": 10.4
+  },
+  "line-row-11": {
+   "case": "1-to-1",
+   "kind": "ridge",
+   "between": [
+    17,
+    18
+   ],
+   "length_ft": 9.5
+  },
+  "line-row-12": {
+   "case": "1-to-1",
+   "kind": "ridge",
+   "between": [
+    13,
+    14
+   ],
+   "length_ft": 9.4
+  },
+  "line-row-13": {
+   "case": "1-to-1",
+   "kind": "ridge",
+   "between": [
+    15,
+    16
+   ],
+   "length_ft": 9.4
+  },
+  "line-row-14": {
+   "case": "1-to-1",
+   "kind": "ridge",
+   "between": [
+    11,
+    12
+   ],
+   "length_ft": 8.4
+  },
+  "line-row-15": {
+   "case": "1-to-1",
+   "kind": "ridge",
+   "between": [
+    19,
+    20
+   ],
+   "length_ft": 6.4
+  },
+  "line-row-16": {
+   "case": "1-to-1",
+   "kind": "ridge",
+   "between": [
+    21,
+    22
+   ],
+   "length_ft": 6.3
+  },
+  "line-row-17": {
+   "case": "1-to-1",
+   "kind": "hip",
+   "between": [
+    9,
+    10
+   ],
+   "length_ft": 1.2
+  }
+ },
+ "saved_at": "2026-07-31T11:16:00.006Z",
+ "complete": true,
+ "rows_without_accepted_verdict": [],
+ "entries": {
+  "facet-row-0:verdict": "identical images, nothing changes when bin-pitch was fixed.",
+  "facet-row-0:compare": "",
+  "facet-row-1:verdict": "identical images, nothing changes when bin-pitch was fixed.",
+  "facet-row-1:compare": "",
+  "facet-row-2:verdict": "identical images, nothing changes when bin-pitch was fixed.",
+  "facet-row-2:compare": "",
+  "facet-row-3:verdict": "identical images, nothing changes when bin-pitch was fixed.",
+  "facet-row-3:compare": "",
+  "facet-row-4:verdict": "still not visible - it is a cropped version of the entire generated png, so when it is zoomed in to the correct frame, the resolution is horrible and labels cover most of the image.",
+  "facet-row-4:compare": "",
+  "facet-row-5:verdict": "identical images, nothing changes when bin-pitch was fixed.",
+  "facet-row-5:compare": "",
+  "facet-row-6:verdict": "identical images, nothing changes when bin-pitch was fixed.",
+  "facet-row-6:compare": "",
+  "facet-row-7:verdict": "identical images, nothing changes when bin-pitch was fixed.",
+  "facet-row-7:compare": "",
+  "facet-row-8:verdict": "boundary has shifted, but neither in a good or bad way. the facet is still split in half.",
+  "facet-row-8:compare": "",
+  "facet-row-9:verdict": "boundary has slightly shifted, but neither in a good or bad way. ",
+  "facet-row-9:compare": "",
+  "facet-row-10:verdict": "boundary has slightly shifted, but neither in a good or bad way. ",
+  "facet-row-10:compare": "",
+  "facet-row-11:verdict": "boundary has slightly shifted, but neither in a good or bad way. ",
+  "facet-row-11:compare": "",
+  "facet-row-12:verdict": "boundary has shifted, but neither in a good or bad way. the facet is still split in half.",
+  "facet-row-12:compare": "",
+  "facet-row-13:verdict": "boundary has slightly shifted, but neither in a good or bad way. ",
+  "facet-row-13:compare": "",
+  "facet-row-14:verdict": "boundary has slightly shifted, but neither in a good or bad way. ",
+  "facet-row-14:compare": "",
+  "facet-row-15:verdict": "boundary has slightly shifted, but neither in a good or bad way. ",
+  "facet-row-15:compare": "",
+  "facet-row-16:verdict": "boundary has slightly shifted, but neither in a good or bad way. ",
+  "facet-row-16:compare": "",
+  "facet-row-17:verdict": "boundary has slightly shifted, but neither in a good or bad way. ",
+  "facet-row-17:compare": "",
+  "facet-row-18:verdict": "boundary has slightly shifted, but neither in a good or bad way. ",
+  "facet-row-18:compare": "",
+  "facet-row-19:verdict": "boundary has slightly shifted, but neither in a good or bad way. ",
+  "facet-row-19:compare": "",
+  "facet-row-20:verdict": "boundary has slightly shifted, but neither in a good or bad way. ",
+  "facet-row-20:compare": "",
+  "facet-row-21:verdict": "boundary has shifted, but neither in a good or bad way. the facet is still split in half.",
+  "facet-row-21:compare": "",
+  "facet-row-22:verdict": "boundary has shifted, but neither in a good or bad way. the facet is still split in half.",
+  "facet-row-22:compare": "",
+  "facet-row-23:verdict": "boundary has shifted, but neither in a good or bad way. the facet is still split in half.",
+  "facet-row-23:compare": "",
+  "facet-row-24:verdict": "boundary has shifted, but neither in a good or bad way. the facet is still split in half.",
+  "facet-row-24:compare": "",
+  "facet-row-25:verdict": "boundary has shifted, but neither in a good or bad way. the facet is still split in half.",
+  "facet-row-25:compare": "",
+  "facet-row-26:verdict": "boundary has shifted, but neither in a good or bad way. the facet is still split in half.",
+  "facet-row-26:compare": "",
+  "facet-row-27:verdict": "boundary has shifted, but neither in a good or bad way. the facet is still split in half.",
+  "facet-row-27:compare": "",
+  "facet-row-28:verdict": "boundary has shifted, but neither in a good or bad way. the facet is still split in half.",
+  "facet-row-28:compare": "",
+  "line-row-0:verdict": "still too short",
+  "line-row-0:compare": "",
+  "line-row-1:verdict": "still doesnt exist",
+  "line-row-1:compare": "",
+  "line-row-2:verdict": "still too short",
+  "line-row-2:compare": "",
+  "line-row-3:verdict": "still doesnt exist",
+  "line-row-3:compare": "",
+  "line-row-4:verdict": "still too short",
+  "line-row-4:compare": "",
+  "line-row-5:verdict": "still doesnt exist",
+  "line-row-5:compare": "",
+  "line-row-6:verdict": "still too short",
+  "line-row-6:compare": "grew a little",
+  "line-row-7:verdict": "still doesnt exist",
+  "line-row-7:compare": "",
+  "line-row-8:verdict": "still doesnt exist",
+  "line-row-8:compare": "",
+  "line-row-9:verdict": "still doesnt exist",
+  "line-row-9:compare": "",
+  "line-row-10:verdict": "still too short",
+  "line-row-10:compare": "",
+  "line-row-11:verdict": "still good",
+  "line-row-11:compare": "",
+  "line-row-12:verdict": "still good",
+  "line-row-12:compare": "",
+  "line-row-13:verdict": "still good",
+  "line-row-13:compare": "",
+  "line-row-14:verdict": "still good",
+  "line-row-14:compare": "",
+  "line-row-15:verdict": "still good",
+  "line-row-15:compare": "",
+  "line-row-16:verdict": "slightly too short - I might now have noticed this last time",
+  "line-row-16:compare": "",
+  "line-row-17:verdict": "doesn't exist",
+  "line-row-17:compare": ""
+ },
+ "refused": {}
+}

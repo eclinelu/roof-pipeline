@@ -1,0 +1,282 @@
+{
+ "record": "per-facet point-set overlap, pass r2-vs-grid-adopted",
+ "dataset": "big_house",
+ "old_artifact": "2026-07-26-r2",
+ "new_artifact": "2026-07-30-grid-adopted",
+ "authoritative_pass_record": "reviews/big_house/pass-r2-vs-grid-adopted.json",
+ "why_this_file_exists": "These fractions were rendered only into reports/big_house/review/2026-07-30-grid-adopted/review.html, which is inside the frozen grid-adopted artifact directory and was reverted to its main version. The main version carries no overlap data at all. Extracted here verbatim so the evidence outlives that revert.",
+ "source_file": "reports/big_house/review/2026-07-30-grid-adopted/review.html",
+ "source_commit": "3fd06b5ae875c973c4526c75bfdd482a6f614054",
+ "source_commit_subject": "Land the completed pass, add the overview comparison, drop the comparison field",
+ "extracted_at_commit": "3fd06b5ae875c973c4526c75bfdd482a6f614054",
+ "extraction": "verbatim from the harness hover spans in the source file; values are full float repr, not rounded, not recomputed",
+ "definition": {
+  "overlap_old": "shared points / points in the OLD facet",
+  "overlap_new": "shared points / points in the NEW facet",
+  "pairing": "mutual best match on point-set overlap; no cutoff"
+ },
+ "n_facets": 29,
+ "facets": [
+  {
+   "facet": 0,
+   "overlap_old": 1.0,
+   "overlap_new": 1.0,
+   "overlap_old_str": "1.00000000000000000",
+   "overlap_new_str": "1.00000000000000000",
+   "case": "1-to-1",
+   "exact_1_0": true
+  },
+  {
+   "facet": 1,
+   "overlap_old": 1.0,
+   "overlap_new": 1.0,
+   "overlap_old_str": "1.00000000000000000",
+   "overlap_new_str": "1.00000000000000000",
+   "case": "1-to-1",
+   "exact_1_0": true
+  },
+  {
+   "facet": 2,
+   "overlap_old": 1.0,
+   "overlap_new": 1.0,
+   "overlap_old_str": "1.00000000000000000",
+   "overlap_new_str": "1.00000000000000000",
+   "case": "1-to-1",
+   "exact_1_0": true
+  },
+  {
+   "facet": 3,
+   "overlap_old": 1.0,
+   "overlap_new": 1.0,
+   "overlap_old_str": "1.00000000000000000",
+   "overlap_new_str": "1.00000000000000000",
+   "case": "1-to-1",
+   "exact_1_0": true
+  },
+  {
+   "facet": 4,
+   "overlap_old": 1.0,
+   "overlap_new": 1.0,
+   "overlap_old_str": "1.00000000000000000",
+   "overlap_new_str": "1.00000000000000000",
+   "case": "1-to-1",
+   "exact_1_0": true
+  },
+  {
+   "facet": 5,
+   "overlap_old": 1.0,
+   "overlap_new": 1.0,
+   "overlap_old_str": "1.00000000000000000",
+   "overlap_new_str": "1.00000000000000000",
+   "case": "1-to-1",
+   "exact_1_0": true
+  },
+  {
+   "facet": 6,
+   "overlap_old": 1.0,
+   "overlap_new": 1.0,
+   "overlap_old_str": "1.00000000000000000",
+   "overlap_new_str": "1.00000000000000000",
+   "case": "1-to-1",
+   "exact_1_0": true
+  },
+  {
+   "facet": 7,
+   "overlap_old": 1.0,
+   "overlap_new": 1.0,
+   "overlap_old_str": "1.00000000000000000",
+   "overlap_new_str": "1.00000000000000000",
+   "case": "1-to-1",
+   "exact_1_0": true
+  },
+  {
+   "facet": 8,
+   "overlap_old": 0.8579029149128673,
+   "overlap_new": 0.8997101867799792,
+   "overlap_old_str": "0.85790291491286730",
+   "overlap_new_str": "0.89971018677997916",
+   "case": "1-to-1",
+   "exact_1_0": false
+  },
+  {
+   "facet": 9,
+   "overlap_old": 0.893376354111715,
+   "overlap_new": 0.8333428698946019,
+   "overlap_old_str": "0.89337635411171501",
+   "overlap_new_str": "0.83334286989460193",
+   "case": "1-to-1",
+   "exact_1_0": false
+  },
+  {
+   "facet": 10,
+   "overlap_old": 0.7603429405326523,
+   "overlap_new": 0.7201202446356381,
+   "overlap_old_str": "0.76034294053265228",
+   "overlap_new_str": "0.72012024463563806",
+   "case": "1-to-1",
+   "exact_1_0": false
+  },
+  {
+   "facet": 11,
+   "overlap_old": 0.9878067543657204,
+   "overlap_new": 0.9771326383075869,
+   "overlap_old_str": "0.98780675436572041",
+   "overlap_new_str": "0.97713263830758690",
+   "case": "1-to-1",
+   "exact_1_0": false
+  },
+  {
+   "facet": 12,
+   "overlap_old": 0.9633276399075655,
+   "overlap_new": 0.9071384644495956,
+   "overlap_old_str": "0.96332763990756554",
+   "overlap_new_str": "0.90713846444959556",
+   "case": "1-to-1",
+   "exact_1_0": false
+  },
+  {
+   "facet": 13,
+   "overlap_old": 0.9774191231052897,
+   "overlap_new": 0.9534020040641861,
+   "overlap_old_str": "0.97741912310528967",
+   "overlap_new_str": "0.95340200406418607",
+   "case": "1-to-1",
+   "exact_1_0": false
+  },
+  {
+   "facet": 14,
+   "overlap_old": 0.9604725261512564,
+   "overlap_new": 0.9335612235954072,
+   "overlap_old_str": "0.96047252615125644",
+   "overlap_new_str": "0.93356122359540716",
+   "case": "1-to-1",
+   "exact_1_0": false
+  },
+  {
+   "facet": 15,
+   "overlap_old": 0.98956516273003,
+   "overlap_new": 0.9838137645496445,
+   "overlap_old_str": "0.98956516273003003",
+   "overlap_new_str": "0.98381376454964453",
+   "case": "1-to-1",
+   "exact_1_0": false
+  },
+  {
+   "facet": 16,
+   "overlap_old": 0.9813040688541275,
+   "overlap_new": 0.9726529090550231,
+   "overlap_old_str": "0.98130406885412746",
+   "overlap_new_str": "0.97265290905502311",
+   "case": "1-to-1",
+   "exact_1_0": false
+  },
+  {
+   "facet": 17,
+   "overlap_old": 0.9910410286649041,
+   "overlap_new": 0.9765157904601256,
+   "overlap_old_str": "0.99104102866490407",
+   "overlap_new_str": "0.97651579046012560",
+   "case": "1-to-1",
+   "exact_1_0": false
+  },
+  {
+   "facet": 18,
+   "overlap_old": 0.9570002935133548,
+   "overlap_new": 0.9775878869649951,
+   "overlap_old_str": "0.95700029351335480",
+   "overlap_new_str": "0.97758788696499510",
+   "case": "1-to-1",
+   "exact_1_0": false
+  },
+  {
+   "facet": 19,
+   "overlap_old": 0.9824363965094183,
+   "overlap_new": 0.9707769715973311,
+   "overlap_old_str": "0.98243639650941827",
+   "overlap_new_str": "0.97077697159733112",
+   "case": "1-to-1",
+   "exact_1_0": false
+  },
+  {
+   "facet": 20,
+   "overlap_old": 0.9525830950937075,
+   "overlap_new": 0.9614117921366325,
+   "overlap_old_str": "0.95258309509370753",
+   "overlap_new_str": "0.96141179213663253",
+   "case": "1-to-1",
+   "exact_1_0": false
+  },
+  {
+   "facet": 21,
+   "overlap_old": 0.9602063751532489,
+   "overlap_new": 0.9445254007336314,
+   "overlap_old_str": "0.96020637515324891",
+   "overlap_new_str": "0.94452540073363145",
+   "case": "1-to-1",
+   "exact_1_0": false
+  },
+  {
+   "facet": 22,
+   "overlap_old": 0.9690802965767471,
+   "overlap_new": 0.9649701539428213,
+   "overlap_old_str": "0.96908029657674710",
+   "overlap_new_str": "0.96497015394282126",
+   "case": "1-to-1",
+   "exact_1_0": false
+  },
+  {
+   "facet": 23,
+   "overlap_old": 0.980131880733945,
+   "overlap_new": 0.9632040120587158,
+   "overlap_old_str": "0.98013188073394497",
+   "overlap_new_str": "0.96320401205871575",
+   "case": "1-to-1",
+   "exact_1_0": false
+  },
+  {
+   "facet": 24,
+   "overlap_old": 0.9474588403722262,
+   "overlap_new": 0.8943847557267383,
+   "overlap_old_str": "0.94745884037222616",
+   "overlap_new_str": "0.89438475572673826",
+   "case": "1-to-1",
+   "exact_1_0": false
+  },
+  {
+   "facet": 25,
+   "overlap_old": 0.8468340278483586,
+   "overlap_new": 0.8470923139487596,
+   "overlap_old_str": "0.84683402784835859",
+   "overlap_new_str": "0.84709231394875961",
+   "case": "1-to-1",
+   "exact_1_0": false
+  },
+  {
+   "facet": 26,
+   "overlap_old": 0.929324894514768,
+   "overlap_new": 0.8814897165091717,
+   "overlap_old_str": "0.92932489451476796",
+   "overlap_new_str": "0.88148971650917174",
+   "case": "1-to-1",
+   "exact_1_0": false
+  },
+  {
+   "facet": 27,
+   "overlap_old": 0.9666505558240696,
+   "overlap_new": 0.9495774380400722,
+   "overlap_old_str": "0.96665055582406956",
+   "overlap_new_str": "0.94957743804007222",
+   "case": "1-to-1",
+   "exact_1_0": false
+  },
+  {
+   "facet": 28,
+   "overlap_old": 0.9269521410579346,
+   "overlap_new": 0.9321175278622087,
+   "overlap_old_str": "0.92695214105793455",
+   "overlap_new_str": "0.93211752786220869",
+   "case": "1-to-1",
+   "exact_1_0": false
+  }
+ ]
+}

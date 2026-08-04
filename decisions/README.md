@@ -4,6 +4,9 @@ _Append only. Newest at the top. Past entries are never edited. A reversal is a 
 
 ## Entries (newest first)
 
+- [2026-08-03: CONSTRAINT DISCOVERED THE HARD WAY: the review harness wrote INTO the frozen artifact directory it was reviewing. Reverted, and the guard test postdates the commit that did it](2026-08-03-harness-wrote-into-frozen-artifact-directory.md)
+- [2026-08-03: PASS RESULT r2-vs-grid-adopted: the 8 main facets are untouched to the bit, and ALL 21 recovered facets shifted membership. Worst overlap 0.7603](2026-08-03-pass-r2-vs-grid-adopted-result.md)
+- [2026-08-03: The visual pass computes facet correspondence from POINT-SET OVERLAP by mutual best match, never from indices and never from a tuned threshold](2026-08-03-visual-pass-correspondence-by-overlap.md)
 - [2026-08-03: `--pc-quality ultra` COMPLETED, and the default is conditional on the WSL2 memory configuration, which is now part of the reconstruction environment](2026-08-03-ultra-is-conditional-on-the-memory-configuration.md)
 - [2026-07-30: CORRECTION: big_house was reconstructed at `pc_quality=medium`, not `high`, and the 67.14 / 60.10 capture comparison is confounded by that](2026-07-30-correction-big-house-was-medium-not-high.md)
 - [2026-07-30: `--pc-quality ultra` becomes the ODM default, both held-out sites are rebuilt on it, and a defect that vanishes on a denser cloud is DENSITY-DEPENDENT rather than fixed](2026-07-30-ultra-becomes-the-odm-default.md)
