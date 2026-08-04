@@ -1,4 +1,4 @@
-# 2026-08-03: `--pc-quality ultra` COMPLETED, and the default is conditional on the WSL2 memory configuration, which is now part of the reconstruction environment
+### 2026-08-03: `--pc-quality ultra` COMPLETED, and the default is conditional on the WSL2 memory configuration, which is now part of the reconstruction environment
 
 `decisions/2026-07-30-ultra-becomes-the-odm-default.md` made ultra the ODM
 default. It is not edited, and it is not wrong. This entry adds the condition
