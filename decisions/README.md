@@ -4,6 +4,9 @@ _Append only. Newest at the top. Past entries are never edited. A reversal is a 
 
 ## Entries (newest first)
 
+- [2026-08-03: CONSTRAINT DISCOVERED THE HARD WAY: the review harness wrote INTO the frozen artifact directory it was reviewing. Reverted, and the guard test postdates the commit that did it](2026-08-03-harness-wrote-into-frozen-artifact-directory.md)
+- [2026-08-03: PASS RESULT r2-vs-grid-adopted: the 8 main facets are untouched to the bit, and ALL 21 recovered facets shifted membership. Worst overlap 0.7603](2026-08-03-pass-r2-vs-grid-adopted-result.md)
+- [2026-08-03: The visual pass computes facet correspondence from POINT-SET OVERLAP by mutual best match, never from indices and never from a tuned threshold](2026-08-03-visual-pass-correspondence-by-overlap.md)
 - [2026-07-30: CONSTRAINT DISCOVERED: the published per-facet areas do not recompute today, on facets that are provably identical. Reported, not fixed](2026-07-30-published-areas-do-not-recompute.md)
 - [2026-07-30: RESULT: the grid adoption is EXECUTED and ADOPTED. Five of five predictions PASS, and the run reproduces the 2026-07-28 artifact bit for bit](2026-07-30-grid-adoption-executed-and-scored.md)
 - [2026-07-30: PRE-REGISTRATION: executing the approved grid adoption, and the five values that decide whether it worked](2026-07-30-preregistration-grid-adoption-execution.md)
