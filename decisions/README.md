@@ -4,6 +4,10 @@ _Append only. Newest at the top. Past entries are never edited. A reversal is a 
 
 ## Entries (newest first)
 
+- [2026-08-03: KNOWN RECURRING COST: every branch that adds a decision entry conflicts on `decisions/README.md`. Structural, not accidental, and left unaddressed on purpose](2026-08-03-decisions-index-conflicts-are-structural.md)
+- [2026-08-03: OPEN DEFECT: part of the reconstruction configuration lives OUTSIDE version control, and one success at 95.4 pct of the memory cap does not establish reproducibility](2026-08-03-reconstruction-config-outside-version-control.md)
+- [2026-08-03: OPEN DEFECT: the ultra-against-medium density comparison is CONFOUNDED. The pair differs in `pc_quality` AND in run continuity, so 4.23x is not attributable to quality alone](2026-08-03-ultra-medium-comparison-is-confounded-by-run-continuity.md)
+- [2026-08-03: OPEN DEFECT: `CLAUDE.md` requires `--skip-3dmodel` on every ODM run, and the canonical medium artifact was built without it. UNRESOLVED, and neither is changed here](2026-08-03-skip-3dmodel-rule-contradicts-the-canonical-artifact.md)
 - [2026-08-03: CONSTRAINT DISCOVERED THE HARD WAY: the review harness wrote INTO the frozen artifact directory it was reviewing. Reverted, and the guard test postdates the commit that did it](2026-08-03-harness-wrote-into-frozen-artifact-directory.md)
 - [2026-08-03: PASS RESULT r2-vs-grid-adopted: the 8 main facets are untouched to the bit, and ALL 21 recovered facets shifted membership. Worst overlap 0.7603](2026-08-03-pass-r2-vs-grid-adopted-result.md)
 - [2026-08-03: The visual pass computes facet correspondence from POINT-SET OVERLAP by mutual best match, never from indices and never from a tuned threshold](2026-08-03-visual-pass-correspondence-by-overlap.md)
