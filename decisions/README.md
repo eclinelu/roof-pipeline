@@ -4,6 +4,8 @@ _Append only. Newest at the top. Past entries are never edited. A reversal is a 
 
 ## Entries (newest first)
 
+- [2026-08-05: The visual pass's point-index correspondence is INVALID between artifacts from different clouds, and it fails silently. A guard is required; a geometric basis is approved but unbuilt](2026-08-05-cross-cloud-correspondence-needs-a-different-basis.md)
+- [2026-08-05: OPEN DEFECT, and a STOP: the planarity score leaves its documented range on 41 pct of the input and depends on neighbour enumeration order. The ultra analysis pass is HELD](2026-08-05-planarity-score-leaves-its-range-and-depends-on-enumeration-order.md)
 - [2026-08-03: KNOWN RECURRING COST: every branch that adds a decision entry conflicts on `decisions/README.md`. Structural, not accidental, and left unaddressed on purpose](2026-08-03-decisions-index-conflicts-are-structural.md)
 - [2026-08-03: OPEN DEFECT: part of the reconstruction configuration lives OUTSIDE version control, and one success at 95.4 pct of the memory cap does not establish reproducibility](2026-08-03-reconstruction-config-outside-version-control.md)
 - [2026-08-03: OPEN DEFECT: the ultra-against-medium density comparison is CONFOUNDED. The pair differs in `pc_quality` AND in run continuity, so 4.23x is not attributable to quality alone](2026-08-03-ultra-medium-comparison-is-confounded-by-run-continuity.md)

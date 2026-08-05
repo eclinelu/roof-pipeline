@@ -1,0 +1,64 @@
+{
+  "probe": "planarity score range and order dependence",
+  "dataset": "big_house",
+  "date": "2026-08-05",
+  "fixed": false,
+  "note": "MEASUREMENT ONLY. No parameter changed. score_max, radius_mult and max_nn remain the production configuration.",
+  "anti_null": {
+    "claim": "the chain driven here IS the production stage 0-4 path",
+    "evidence": "clean_outliers(planarity_filter(...)) == roof.npy, bit for bit",
+    "passed": true,
+    "roof_npy_points": 9293239
+  },
+  "stage_counts": {
+    "raw": 21325293,
+    "after_crop": 21308532,
+    "after_height": 17303825,
+    "after_color": 16885409
+  },
+  "params": {
+    "radius_mult": 5.0,
+    "score_max": 0.05,
+    "max_nn": 30,
+    "spacing": 0.004472135698852009,
+    "radius": 0.022360678494260045
+  },
+  "documented_range": [
+    0.0,
+    0.3333333333333333
+  ],
+  "observed_range": [
+    -33554435.06249986,
+    0.3333333333333333
+  ],
+  "counts": {
+    "planarity_input": 16885409,
+    "kept_by_filter": 9470646,
+    "negative_score": 6965577,
+    "above_one_third": 0,
+    "out_of_documented_range": 6965577,
+    "kept_and_out_of_range": 6965577
+  },
+  "fractions_pct": {
+    "input_out_of_range": 41.25204784793783,
+    "of_kept_points_admitted_out_of_range": 73.54912220349065
+  },
+  "neighbourhood_vs_max_nn": {
+    "sampled_points": 5000,
+    "median_neighbours_in_radius": 59,
+    "p90_neighbours_in_radius": 121,
+    "max_nn_cap": 30,
+    "pct_sampled_over_cap": 78.97999999999999,
+    "reading": "where this exceeds the cap the covariance is built from an arbitrary subset chosen by KD-tree traversal order"
+  },
+  "order_dependence": {
+    "how": "same points, same radius, reordered by spatial tiling with a halo of exactly the search radius; tiling cannot change a local operator's support, only the enumeration order",
+    "subset_points": 2000000,
+    "tiles": 8,
+    "score_changed": 3622,
+    "keep_decision_flips": 598,
+    "keep_decision_flips_with_both_scores_in_range": 101,
+    "reading": "non-zero flips mean the roof membership depends on point enumeration order, not only on geometry"
+  },
+  "why_it_blocks_the_ultra_pass": "both effects are driven by neighbour count inside the radius, which is a function of point density -- the one variable a medium-vs-ultra pass exists to isolate. A facet diff across the two clouds would mix this defect's density response with the roof's, inseparably."
+}
