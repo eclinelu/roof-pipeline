@@ -1,0 +1,82 @@
+{
+  "probe": "planarity negative-eigenvalue clamp: does it change any decision",
+  "kind": "diagnostic",
+  "dataset": "big_house",
+  "date": "2026-08-05",
+  "mechanism": "1 of 2 (negative smallest eigenvalue). Mechanism 2 (max_nn enumeration order) is measured elsewhere and is untouched here.",
+  "production_unchanged": true,
+  "note": "The clamp exists only inside scripts/probe_planarity_clamp_check.py. roofkit/ is unmodified, no production path is wired to it, and no artifact was read or rewritten.",
+  "anti_null": {
+    "claim": "the eigenvalues used here are the ones production uses",
+    "evidence": "reconstructed production score == planarity_scores(), np.array_equal over every point",
+    "passed": true,
+    "points_checked": 16885409
+  },
+  "params_read_not_changed": {
+    "score_max": 0.05,
+    "radius_mult": 5.0,
+    "max_nn": 30,
+    "degenerate_total_guard": 1e-12,
+    "spacing": 0.004472135698852009,
+    "radius": 0.022360678494260045
+  },
+  "stage_counts": {
+    "raw": 21325293,
+    "after_crop": 21308532,
+    "after_height": 17303825,
+    "after_color": 16885409
+  },
+  "totals": {
+    "total_points": 16885409,
+    "negative_smallest_eigenvalue": 14164015,
+    "negative_pct": 83.88316208390333,
+    "kept_by_production": 9470646,
+    "kept_by_clamped": 16164841
+  },
+  "flips": {
+    "total": 6694195,
+    "kept_by_production_discarded_by_clamped": 0,
+    "discarded_by_production_kept_by_clamped": 6694195,
+    "pct_of_all_points": 39.644849585816964,
+    "pct_of_negative_score_points": 47.26198750848541,
+    "structurally_possible_directions": "only discarded->kept; a nonzero kept->discarded count would mean the clamp reasoning or this implementation is wrong"
+  },
+  "clamped_score_range": [
+    0.0,
+    0.3333333333333333
+  ],
+  "production_score_range": [
+    -33554435.06249986,
+    0.3333333333333333
+  ],
+  "clamp_convention_check": {
+    "question": "does rebuilding the total from clamped eigenvalues differ from leaving the original sum",
+    "points_differing": 6694195,
+    "flips_convention_recompute_total": 6694195,
+    "flips_convention_keep_original_total": 0,
+    "reading": "the score is 0/total either way; only the 1e-12 degeneracy guard can distinguish them. If these two flip counts differ, the answer to 'does the clamp change anything' is a property of the chosen fix, not of the defect."
+  },
+  "flip_set_scale": {
+    "total_variance_median": -0.003953995154006405,
+    "total_variance_p99": -2.618623650050702e-05,
+    "total_variance_max": 0.0,
+    "as_fraction_of_radius_squared_median": -7.907991213894339,
+    "as_fraction_of_radius_squared_max": 0.0,
+    "abs_eig0_over_sum_other_two_median": 36.981550734083704,
+    "reading": "these neighbourhoods' total variance against the scale a full neighbourhood would have. A ratio near zero means the covariance is numerical noise, and the eigen-decomposition of noise is what the two conventions disagree about."
+  },
+  "covariance_validity": {
+    "why": "a covariance's diagonal entries are variances and cannot be negative; a negative one proves the matrix is not a covariance",
+    "points_with_a_negative_variance_on_the_diagonal": 8623218,
+    "pct_with_a_negative_variance": 51.06905020778591,
+    "points_with_negative_trace": 7198421,
+    "coordinate_centre": [
+      553485.8898119978,
+      4543297.743849299,
+      248.91496865144268
+    ],
+    "coordinate_magnitude_note": "cloud is georeferenced UTM and is NOT centred before the covariance is accumulated; x**2 and y**2 reach ~3e11 and ~2e13 while the variances being recovered are ~1e-4",
+    "cancellation_digits_estimate": 17.31474239824892,
+    "reading": "if this count is large, the negative smallest eigenvalue is a SYMPTOM. The clamp addresses the eigenvalue, not the lost precision that produced it."
+  }
+}
