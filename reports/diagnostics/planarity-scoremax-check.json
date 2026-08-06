@@ -1,0 +1,105 @@
+{
+  "probe": "what the existing score_max keeps once the covariance is centred",
+  "kind": "diagnostic",
+  "dataset": "big_house",
+  "date": "2026-08-05",
+  "production_unchanged": true,
+  "proposes_a_new_threshold": false,
+  "note": "roofkit/ unmodified, no production path wired to this, score_max/radius_mult/max_nn read only, no artifact read or rewritten. Mechanism 2 left intact. No replacement score_max is searched for, reported, or implied: choosing a threshold is a separate decision needing its own justification.",
+  "anti_nulls": {
+    "production_score_is_productions_own": {
+      "evidence": "reconstructed score == planarity_scores(), array_equal",
+      "points_checked": 16885409,
+      "passed": true
+    },
+    "flag_set_matches_prior_probes": {
+      "negative_diagonal": 8623218,
+      "recorded": 8623218,
+      "negative_trace": 7198421,
+      "recorded_trace": 7198421,
+      "passed": true
+    },
+    "neighbourhood_fidelity": {
+      "evidence": "uncentred rebuild from re-gathered neighbours reproduces Open3D's covariance",
+      "sampled_points": 2000,
+      "identity_fallbacks_excluded_from_sample": 23,
+      "max_abs_deviation": 0.0,
+      "passed": true,
+      "note": "Open3D returns the identity matrix for neighbourhoods too small to define a covariance (k=1, k=2). Excluded here because it is a documented fallback rather than a neighbour-selection difference, and counted below because those points flip for a reason unrelated to centring."
+    }
+  },
+  "params_read_not_changed": {
+    "score_max": 0.05,
+    "radius_mult": 5.0,
+    "max_nn": 30,
+    "spacing": 0.004472135698852009,
+    "radius": 0.022360678494260045
+  },
+  "stage_counts": {
+    "raw": 21325293,
+    "after_crop": 21308532,
+    "after_height": 17303825,
+    "after_color": 16885409
+  },
+  "corrected_score_distribution": {
+    "min": -4.194145004409512e-16,
+    "max": 0.3333333333333333,
+    "percentiles": {
+      "1": 1.2560921441476897e-16,
+      "5": 0.0043311415058384425,
+      "10": 0.009248099336166693,
+      "25": 0.031001280666118593,
+      "50": 0.07405745978693155,
+      "75": 0.1280662457162926,
+      "90": 0.1844938419246364,
+      "95": 0.22022182858985234,
+      "99": 0.2817611359081847
+    },
+    "valid_range_note": "a correctly computed score lies in 0 .. 1/3",
+    "outside_valid_range": 81895
+  },
+  "production_score_distribution": {
+    "min": -33554435.06249986,
+    "max": 0.3333333333333333,
+    "percentiles": {
+      "1": -40.10582214294613,
+      "5": -5.7141676513371085,
+      "10": -1.950371765078205,
+      "25": -0.015443046532548322,
+      "50": 0.0033766662305271,
+      "75": 0.3333333333333333,
+      "90": 0.3333333333333333,
+      "95": 0.3333333333333333,
+      "99": 0.3333333333333333
+    }
+  },
+  "under_existing_score_max": {
+    "score_max": 0.05,
+    "kept_by_production": 9470646,
+    "kept_by_corrected": 6129425,
+    "change_in_kept": -3341221,
+    "total_flips": 8653847,
+    "kept_to_discarded": 5997534,
+    "discarded_to_kept": 2656313,
+    "pct_of_all_points_flipping": 51.25044350421124,
+    "identity_fallback_points_cloud_wide": 216320,
+    "identity_fallback_note": "these carry Open3D's identity matrix, so their production score is the degenerate 1/3 for a reason unrelated to centring; they are included in the counts above and reported here so they can be netted out"
+  },
+  "breakdown": {
+    "previously_flagged_negative_diagonal": {
+      "flips": 3495070,
+      "kept_to_discarded": 939458,
+      "discarded_to_kept": 2555612,
+      "population": 8623218,
+      "pct_of_population_flipping": 40.53092476613719
+    },
+    "previously_unflagged": {
+      "flips": 5158777,
+      "kept_to_discarded": 5058076,
+      "discarded_to_kept": 100701,
+      "population": 8262191,
+      "pct_of_population_flipping": 62.4383653198044
+    },
+    "reading": "if the flip rate is comparable in both, the corrected computation's impact is BROAD, and the visible negative diagonal was never a good indicator of which points were affected"
+  }
+}
