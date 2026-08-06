@@ -1,0 +1,81 @@
+{
+  "probe": "does centring each neighbourhood remove the negative-variance defect",
+  "kind": "diagnostic",
+  "dataset": "big_house",
+  "date": "2026-08-05",
+  "production_unchanged": true,
+  "note": "roofkit/ unmodified, no production path wired to this, score_max/radius_mult/max_nn read only, no artifact read or rewritten. Mechanism 2 (arbitrary 30 of a larger neighbourhood) is left intact on purpose.",
+  "hypothesis": "the covariance is accumulated as E[ab]-E[a]E[b] on raw UTM coordinates, costing ~17.3 digits of cancellation against float64's ~16; subtracting the neighbourhood centroid first removes the large common offset before any product forms",
+  "anti_nulls": {
+    "flag_set_matches_prior_probe": {
+      "recomputed_negative_diagonal": 8623218,
+      "recorded_negative_diagonal": 8623218,
+      "recomputed_negative_trace": 7198421,
+      "recorded_negative_trace": 7198421,
+      "passed": true,
+      "note": "the prior probe stored counts, not indices, so the set was recomputed deterministically and checked against them"
+    },
+    "neighbourhood_fidelity": {
+      "claim": "the re-gathered neighbourhoods are the ones production used",
+      "evidence": "rebuilding the UNCENTRED covariance from them with Open3D's own cumulant form reproduces Open3D's matrices",
+      "sampled_points": 2000,
+      "max_abs_deviation": 0.0,
+      "matrix_scale": 0.02734375,
+      "passed": true
+    }
+  },
+  "params_read_not_changed": {
+    "score_max": 0.05,
+    "radius_mult": 5.0,
+    "max_nn": 30,
+    "degenerate_total_guard": 1e-12,
+    "spacing": 0.004472135698852009,
+    "radius": 0.022360678494260045
+  },
+  "stage_counts": {
+    "raw": 21325293,
+    "after_crop": 21308532,
+    "after_height": 17303825,
+    "after_color": 16885409
+  },
+  "flagged_points": {
+    "total": 8623218,
+    "fully_resolved_after_centring": 8623218,
+    "still_broken_after_centring": 0,
+    "improved_but_not_resolved": 0,
+    "pct_fully_resolved": 100.0,
+    "definition": "fully resolved = every diagonal entry >= 0 AND trace >= 0"
+  },
+  "residual_after_centring": {
+    "negative_diagonal": 0,
+    "negative_trace": 0,
+    "negative_smallest_eigenvalue": 7066,
+    "note": "a negative smallest eigenvalue can survive on a matrix whose diagonal and trace are both fine; it is reported separately rather than folded into the resolved count"
+  },
+  "control_group": {
+    "points": 50000,
+    "selection": "uniform without replacement from points NOT flagged",
+    "max_abs_score_deviation": 1051.300508214534,
+    "median_abs_score_deviation": 0.125332741045741,
+    "keep_discard_flips": 31322,
+    "reading": "centring changes the arithmetic path, so exact equality is not expected; what matters is that healthy points do not move"
+  },
+  "third_method_adjudication": {
+    "why": "the control group only settles anything if it is clear WHICH computation is right when the two disagree, so a subsample is recomputed with numpy's covariance, which centres internally and shares no code with either path",
+    "sampled_points": 2000,
+    "max_dev_numpy_vs_centred": 5.421010862427522e-20,
+    "max_dev_numpy_vs_production": 0.023396254443361422,
+    "median_dev_numpy_vs_production": 0.0038549315307697275,
+    "production_matrix_scale": 0.0234375,
+    "identity_fallbacks_excluded": {
+      "count": 38,
+      "neighbour_counts_seen": [
+        1,
+        2
+      ],
+      "why": "Open3D returns the identity matrix when a neighbourhood is too small to define a covariance. That is a documented fallback, not a cancellation error, so these rows are excluded from the deviation statistics rather than inflating the maximum to exactly 1.0"
+    },
+    "verdict": "numpy agrees with the CENTRED computation and disagrees with production",
+    "consequence": "the unflagged points were not healthy either; a non-negative diagonal is a weaker check than a correct covariance, so the control group does not isolate the effect of centring the way it was intended to"
+  }
+}
