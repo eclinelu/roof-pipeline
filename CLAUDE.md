@@ -102,3 +102,24 @@ Standing rule on commits. At the end of every task, commit and push. Do not leav
 - Any frozen artifact is committed before any comparison to ground truth.
 - Everything else: commit at the end of the task, one message naming what was done.
 - Report the hash and confirm the push succeeded. If you cannot push, say so loudly rather than leaving it silent.
+
+## Agent skills
+
+Configuration the engineering skills read. These files describe where work items
+live and how docs are laid out. They do NOT override the precedence rule at the
+top of this file: `decisions/` remains the authority on what was decided.
+
+### Issue tracker
+
+GitHub Issues in `eclinelu/roof-pipeline`, driven by the `gh` CLI, which is not
+installed yet. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+The five default label strings, unchanged: `needs-triage`, `needs-info`,
+`ready-for-agent`, `ready-for-human`, `wontfix`. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: one root `CONTEXT.md` plus `docs/adr/`, neither created yet.
+See `docs/agents/domain.md`.
