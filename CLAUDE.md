@@ -111,13 +111,15 @@ top of this file: `decisions/` remains the authority on what was decided.
 
 ### Issue tracker
 
-GitHub Issues in `eclinelu/roof-pipeline`, driven by the `gh` CLI, which is not
-installed yet. See `docs/agents/issue-tracker.md`.
+GitHub Issues in `eclinelu/roof-pipeline`, driven by the `gh` CLI, installed and
+authenticated 2026-08-18. See `docs/agents/issue-tracker.md`, including the PATH
+caveat for shells started before the install.
 
 ### Triage labels
 
 The five default label strings, unchanged: `needs-triage`, `needs-info`,
-`ready-for-agent`, `ready-for-human`, `wontfix`. See `docs/agents/triage-labels.md`.
+`ready-for-agent`, `ready-for-human`, `wontfix`. All five exist in the GitHub repo
+as of 2026-08-18. See `docs/agents/triage-labels.md`.
 
 ### Domain docs
 

@@ -14,6 +14,9 @@ roles to the actual label strings used in this repo's issue tracker.
 When a skill mentions a role (for example "apply the AFK-ready triage label"),
 use the corresponding label string from this table.
 
-Edit the right-hand column to match whatever vocabulary you actually use. The
-labels do not exist in the GitHub repo yet; the first `gh issue edit --add-label`
-will need them created, either in the GitHub UI or with `gh label create`.
+Edit the right-hand column to match whatever vocabulary you actually use.
+
+All five labels EXIST in `eclinelu/roof-pipeline` as of 2026-08-18, verified with
+`gh label list`. `wontfix` is GitHub's default label with its description reset to
+"Will not be actioned"; the other four were created for this scheme. No
+`gh label create` step is needed before applying them.

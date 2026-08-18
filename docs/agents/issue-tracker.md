@@ -5,10 +5,21 @@ Use the `gh` CLI for all operations.
 
 ## Prerequisite
 
-`gh` is NOT installed on this machine as of 2026-08-18. Install it and run
-`gh auth login` before any skill tries to read or write the tracker. Without it
-every command below fails with "command not found", which is a tooling gap, not
-a repo problem.
+`gh` is installed and authenticated as of 2026-08-18: version 2.97.0 at
+`C:\Program Files\GitHub CLI\gh.exe`, logged in as `eclinelu` with scopes
+`gist, read:org, repo, workflow`. Run from inside this clone it resolves
+`eclinelu/roof-pipeline` on its own.
+
+**PATH caveat.** The installer wrote `C:\Program Files\GitHub CLI` to the
+MACHINE PATH only. Any shell whose parent process started before the install
+still has the old environment and will fail with "command not found". That is a
+stale-environment problem, not a missing install. Two fixes:
+
+- Restart the shell (and Claude Code, if it is the parent) to pick up the new PATH, or
+- call it by full path: `"/c/Program Files/GitHub CLI/gh.exe" issue list` in Bash.
+
+Check which case you are in with `command -v gh` before concluding anything is
+broken.
 
 ## Conventions
 
