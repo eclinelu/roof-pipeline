@@ -11,15 +11,37 @@ Use the `gh` CLI for all operations.
 `eclinelu/roof-pipeline` on its own.
 
 **PATH caveat.** The installer wrote `C:\Program Files\GitHub CLI` to the
-MACHINE PATH only. Any shell whose parent process started before the install
-still has the old environment and will fail with "command not found". That is a
-stale-environment problem, not a missing install. Two fixes:
+MACHINE PATH only. A process inherits its environment at launch and never
+refreshes it, so any process that started before the install, AND everything it
+spawns afterwards, still fails with "command not found". That is a
+stale-environment problem, not a missing install.
 
-- Restart the shell (and Claude Code, if it is the parent) to pick up the new PATH, or
-- call it by full path: `"/c/Program Files/GitHub CLI/gh.exe" issue list` in Bash.
+The stale link is usually NOT the shell and NOT Claude Code. It is whatever
+long-lived app owns the terminal. Observed 2026-08-18: `gh` installed 18:26,
+a new VS Code terminal opened 18:31 and Claude Code restarted 18:32 both still
+lacked it, because `Code.exe` had been running since 2026-08-13 and handed its
+2026-08-13 environment down the whole chain.
 
-Check which case you are in with `command -v gh` before concluding anything is
-broken.
+Diagnose by walking the ancestry and comparing start times against the install:
+
+```powershell
+$id = $PID
+for ($i=0; $i -lt 8 -and $id; $i++) {
+  $p = Get-CimInstance Win32_Process -Filter "ProcessId=$id"
+  if (-not $p) { break }
+  "{0,-22} pid={1,-7} started={2}" -f $p.Name, $id, (Get-Process -Id $id).StartTime
+  $id = $p.ParentProcessId
+}
+```
+
+The oldest ancestor that predates the install is the one to restart, fully
+(`File > Exit` for VS Code, not "Reload Window", which reuses the process). If a
+full restart still does not take, the environment-change broadcast missed
+Explorer too; sign out and back in, or reboot.
+
+Until then, call it by full path: `"/c/Program Files/GitHub CLI/gh.exe" issue list`
+in Bash. Check which case you are in with `command -v gh` before concluding
+anything is broken.
 
 ## Conventions
 
