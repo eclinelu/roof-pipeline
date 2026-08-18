@@ -4,6 +4,7 @@ _Append only. Newest at the top. Past entries are never edited. A reversal is a 
 
 ## Entries (newest first)
 
+- [2026-08-18: TOOLING RESET: the superpowers skill set, `graphify`, `task-observer` and `session-closeout` are removed at every level, and the instructions that invoked them are deleted](2026-08-18-skill-environment-reset.md)
 - [2026-08-05: DECIDED: the covariance computation is corrected BEFORE bungalow's ultra reconstruction, and `score_max` is re-derived independently rather than tuned to preserve the frozen figure](2026-08-05-fix-the-covariance-before-bungalow-and-rederive-score-max.md)
 - [2026-08-05: SCALE OF THE DEFECT: correcting the covariance flips the keep/discard decision for 51.25 pct of points under the unchanged threshold, and the effect is BROAD rather than concentrated](2026-08-05-corrected-covariance-flips-a-majority-of-keep-decisions.md)
 - [2026-08-05: ROOT CAUSE: the planarity covariance is accumulated on RAW UTM coordinates, and the negative-diagonal symptom is not the scope of the damage](2026-08-05-covariance-accumulated-on-uncentred-utm-coordinates.md)

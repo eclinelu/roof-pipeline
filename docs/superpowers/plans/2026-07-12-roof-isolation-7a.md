@@ -1,6 +1,6 @@
 # Roof Isolation Through Stage 7a Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** Implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** A dataset-agnostic pipeline that isolates a roof from vegetation and ground, segments its facets, gates the vertical reference, and reports per-facet pitch and polygon area (stage 7a of the approved design). Validated first on big_house.
 

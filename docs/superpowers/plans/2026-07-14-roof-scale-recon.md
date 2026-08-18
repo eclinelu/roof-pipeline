@@ -1,6 +1,6 @@
 # Roof-Derived Scale Reconnaissance Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** Implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Derive and rank every roof-based scale-span candidate for big_house from fitted geometry alone, with bias and noise reported separately, before any tape measurement.
 
